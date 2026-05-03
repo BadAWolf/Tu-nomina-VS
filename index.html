@@ -279,7 +279,7 @@ function calcular(){
     document.getElementById("resultado").style.display="none";
     return;
   }
-  if((hNoc+hFest)>hTotal){
+  if(hNoc>hTotal||hFest>hTotal){
     err.textContent="Las horas nocturnas y festivas no pueden superar el total.";
     err.style.display="block";
     document.getElementById("resultado").style.display="none";
