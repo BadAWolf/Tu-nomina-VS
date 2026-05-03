@@ -125,11 +125,12 @@ input[type=number]::placeholder{color:var(--subtle);}
 <div class="field">
 <div class="field-label">De esas, horas nocturnas<span class="field-badge" id="badge-noc">+1,26 EUR/h</span></div>
 <input type="number" id="hNoc" placeholder="0" min="0" inputmode="decimal">
-<div class="field-hint">Entre las 22:00 y las 06:00</div>
+<div class="field-hint">Entre las 22:00 y las 06:00 - pueden coincidir con festivas</div>
 </div>
 <div class="field">
 <div class="field-label">De esas, horas festivas<span class="field-badge">+1,02 EUR/h</span></div>
 <input type="number" id="hFest" placeholder="0" min="0" inputmode="decimal">
+<div class="field-hint">Si son festivas y nocturnas a la vez, se cobran los dos plus</div>
 </div>
 </div>
 
@@ -185,7 +186,6 @@ Herramienta orientativa - compara siempre con tu nomina real
 </div>
 
 </div>
-
 <script>
 var CATS = {
   sin_arma: {salBase:1161.28, pelig:24.08,  trans:137.81, vest:112.28, nocH:1.26, horaExtra:9.98},
@@ -193,7 +193,6 @@ var CATS = {
   fondos:   {salBase:1227.74, pelig:191.59, trans:137.81, vest:113.27, nocH:1.36, horaExtra:14.10},
   escolta:  {salBase:1161.28, pelig:177.15, trans:137.81, vest:115.67, nocH:1.26, horaExtra:9.98}
 };
-
 var N_PAGAS = 3;
 var PLUS_FEST = 1.02;
 var SS_PCT = 0.0647;
@@ -202,145 +201,148 @@ var catActual = "sin_arma";
 var jornActual = "completa";
 
 function r2(n){ return Math.round(n*100)/100; }
-function fmt(n){ return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" EUR"; }
+function fmt(n){ return n.toLocaleString(“es-ES”,{minimumFractionDigits:2,maximumFractionDigits:2})+” EUR”; }
 
 function showRow(rowId,lblId,valId,label,val){
-  var row = document.getElementById(rowId);
-  if(val>0.005){
-    row.style.display="flex";
-    document.getElementById(lblId).textContent=label;
-    document.getElementById(valId).textContent="+"+fmt(val);
-  } else {
-    row.style.display="none";
-  }
+var row = document.getElementById(rowId);
+if(val>0.005){
+row.style.display=“flex”;
+document.getElementById(lblId).textContent=label;
+document.getElementById(valId).textContent=”+”+fmt(val);
+} else {
+row.style.display=“none”;
+}
 }
 
-document.getElementById("btn-sin_arma").addEventListener("click", function(){ selCat("sin_arma"); });
-document.getElementById("btn-con_arma").addEventListener("click", function(){ selCat("con_arma"); });
-document.getElementById("btn-fondos").addEventListener("click",   function(){ selCat("fondos"); });
-document.getElementById("btn-escolta").addEventListener("click",  function(){ selCat("escolta"); });
+document.getElementById(“btn-sin_arma”).addEventListener(“click”,function(){ selCat(“sin_arma”); });
+document.getElementById(“btn-con_arma”).addEventListener(“click”,function(){ selCat(“con_arma”); });
+document.getElementById(“btn-fondos”).addEventListener(“click”,function(){ selCat(“fondos”); });
+document.getElementById(“btn-escolta”).addEventListener(“click”,function(){ selCat(“escolta”); });
 
 function selCat(cat){
-  document.querySelectorAll(".cat-btn").forEach(function(b){ b.classList.remove("active"); });
-  document.getElementById("btn-"+cat).classList.add("active");
-  catActual = cat;
-  document.getElementById("badge-noc").textContent = "+"+CATS[cat].nocH.toFixed(2).replace(".",",")+" EUR/h";
+document.querySelectorAll(”.cat-btn”).forEach(function(b){ b.classList.remove(“active”); });
+document.getElementById(“btn-”+cat).classList.add(“active”);
+catActual = cat;
+document.getElementById(“badge-noc”).textContent = “+”+CATS[cat].nocH.toFixed(2).replace(”.”,”,”)+” EUR/h”;
 }
 
-document.getElementById("jorn-completa").addEventListener("click", function(){ selJornada("completa"); });
-document.getElementById("jorn-parcial").addEventListener("click",  function(){ selJornada("parcial"); });
+document.getElementById(“jorn-completa”).addEventListener(“click”,function(){ selJornada(“completa”); });
+document.getElementById(“jorn-parcial”).addEventListener(“click”,function(){ selJornada(“parcial”); });
 
 function selJornada(tipo){
-  jornActual = tipo;
-  document.getElementById("jorn-completa").classList.toggle("active", tipo==="completa");
-  document.getElementById("jorn-parcial").classList.toggle("active",  tipo==="parcial");
-  document.getElementById("parcial-field").style.display = tipo==="parcial" ? "block" : "none";
-  document.getElementById("hint-extras").textContent = tipo==="completa"
-    ? "Si superas 162 h, el exceso se cobra como hora extra"
-    : "Si superas tus horas pactadas, el exceso se cobra como hora extra";
+jornActual = tipo;
+document.getElementById(“jorn-completa”).classList.toggle(“active”,tipo===“completa”);
+document.getElementById(“jorn-parcial”).classList.toggle(“active”,tipo===“parcial”);
+document.getElementById(“parcial-field”).style.display = tipo===“parcial” ? “block” : “none”;
+document.getElementById(“hint-extras”).textContent = tipo===“completa”
+? “Si superas 162 h, el exceso se cobra como hora extra”
+: “Si superas tus horas pactadas, el exceso se cobra como hora extra”;
 }
 
-document.getElementById("paga-julio").addEventListener("click", function(){ togglePaga(this); });
-document.getElementById("paga-dic").addEventListener("click",   function(){ togglePaga(this); });
-document.getElementById("paga-mar").addEventListener("click",   function(){ togglePaga(this); });
+document.getElementById(“paga-julio”).addEventListener(“click”,function(){ togglePaga(this); });
+document.getElementById(“paga-dic”).addEventListener(“click”,function(){ togglePaga(this); });
+document.getElementById(“paga-mar”).addEventListener(“click”,function(){ togglePaga(this); });
 
 function togglePaga(el){
-  el.classList.toggle("active");
-  el.querySelector(".paga-sub").textContent = el.classList.contains("active") ? "activa" : "inactiva";
+el.classList.toggle(“active”);
+el.querySelector(”.paga-sub”).textContent = el.classList.contains(“active”) ? “activa” : “inactiva”;
 }
 
-document.getElementById("btnCalc").addEventListener("click", function(){ calcular(); });
+document.getElementById(“btnCalc”).addEventListener(“click”,function(){ calcular(); });
 
 function calcular(){
-  var cat     = CATS[catActual];
-  var hTotal  = parseFloat(document.getElementById("hTotal").value)  || 0;
-  var hNoc    = parseFloat(document.getElementById("hNoc").value)    || 0;
-  var hFest   = parseFloat(document.getElementById("hFest").value)   || 0;
-  var irpfPct = parseFloat(document.getElementById("irpf").value)    || 0;
-  var hPact   = jornActual==="completa" ? JORNADA : (parseFloat(document.getElementById("hPactadas").value)||0);
+var cat     = CATS[catActual];
+var hTotal  = parseFloat(document.getElementById(“hTotal”).value)  || 0;
+var hNoc    = parseFloat(document.getElementById(“hNoc”).value)    || 0;
+var hFest   = parseFloat(document.getElementById(“hFest”).value)   || 0;
+var irpfPct = parseFloat(document.getElementById(“irpf”).value)    || 0;
+var hPact   = jornActual===“completa” ? JORNADA : (parseFloat(document.getElementById(“hPactadas”).value)||0);
+var err = document.getElementById(“errorBox”);
 
-  var err = document.getElementById("errorBox");
+if(hTotal<=0){
+err.textContent=“Introduce las horas totales trabajadas.”;
+err.style.display=“block”;
+document.getElementById(“resultado”).style.display=“none”;
+return;
+}
+if(jornActual===“parcial” && hPact<=0){
+err.textContent=“Introduce las horas pactadas en tu contrato.”;
+err.style.display=“block”;
+document.getElementById(“resultado”).style.display=“none”;
+return;
+}
+if(jornActual===“parcial” && hPact>=JORNADA){
+err.textContent=“Las horas pactadas deben ser menos de 162.”;
+err.style.display=“block”;
+document.getElementById(“resultado”).style.display=“none”;
+return;
+}
+if(hNoc>hTotal){
+err.textContent=“Las horas nocturnas no pueden superar el total de horas.”;
+err.style.display=“block”;
+document.getElementById(“resultado”).style.display=“none”;
+return;
+}
+if(hFest>hTotal){
+err.textContent=“Las horas festivas no pueden superar el total de horas.”;
+err.style.display=“block”;
+document.getElementById(“resultado”).style.display=“none”;
+return;
+}
+err.style.display=“none”;
 
-  if(hTotal<=0){
-    err.textContent="Introduce las horas totales trabajadas.";
-    err.style.display="block";
-    document.getElementById("resultado").style.display="none";
-    return;
-  }
-  if(jornActual==="parcial" && hPact<=0){
-    err.textContent="Introduce las horas pactadas en tu contrato.";
-    err.style.display="block";
-    document.getElementById("resultado").style.display="none";
-    return;
-  }
-  if(jornActual==="parcial" && hPact>=JORNADA){
-    err.textContent="Las horas pactadas deben ser menos de 162.";
-    err.style.display="block";
-    document.getElementById("resultado").style.display="none";
-    return;
-  }
-  if(hNoc>hTotal||hFest>hTotal){
-    err.textContent="Las horas nocturnas y festivas no pueden superar el total.";
-    err.style.display="block";
-    document.getElementById("resultado").style.display="none";
-    return;
-  }
-  err.style.display="none";
+var ratio = hPact/JORNADA;
+var salBase = r2(cat.salBase*ratio);
+var pelig   = r2(cat.pelig*ratio);
+var trans   = r2(cat.trans*ratio);
+var vest    = r2(cat.vest*ratio);
+var hExtra  = Math.max(0,hTotal-hPact);
+var pagoExtra = r2(hExtra*cat.horaExtra);
+var pagoNoc   = r2(hNoc*cat.nocH);
+var pagoFest  = r2(hFest*PLUS_FEST);
+var pagasActivas = document.querySelectorAll(”.paga-btn.active”).length;
+var basePaga = r2((cat.salBase+cat.pelig)*ratio);
+var pagoProrr = r2((pagasActivas*basePaga)/12);
+var bruto = r2(salBase+pelig+trans+vest+pagoExtra+pagoNoc+pagoFest+pagoProrr);
+var pagasNoProrr = N_PAGAS-pagasActivas;
+var ssBase = r2(bruto+r2(pagasNoProrr*basePaga/12));
+var deducSS = r2(ssBase*SS_PCT);
+var deducIRPF = r2(bruto*irpfPct/100);
+var neto = r2(bruto-deducSS-deducIRPF);
 
-  var ratio = hPact/JORNADA;
-  var salBase = r2(cat.salBase*ratio);
-  var pelig   = r2(cat.pelig*ratio);
-  var trans   = r2(cat.trans*ratio);
-  var vest    = r2(cat.vest*ratio);
-  var hExtra  = Math.max(0,hTotal-hPact);
-  var pagoExtra = r2(hExtra*cat.horaExtra);
-  var pagoNoc   = r2(hNoc*cat.nocH);
-  var pagoFest  = r2(hFest*PLUS_FEST);
+var sufijo = jornActual===“parcial” ? “ (”+hPact+“h/162h)” : “”;
+document.getElementById(“lbl-base”).textContent  = “Salario base”+sufijo;
+document.getElementById(“lbl-pelig”).textContent = “Plus peligrosidad”+sufijo;
+document.getElementById(“r-base”).textContent  = “+”+fmt(salBase);
+document.getElementById(“r-pelig”).textContent = “+”+fmt(pelig);
+document.getElementById(“r-trans”).textContent = “+”+fmt(trans);
+document.getElementById(“r-vest”).textContent  = “+”+fmt(vest);
 
-  var pagasActivas = document.querySelectorAll(".paga-btn.active").length;
-  var basePaga = r2((cat.salBase+cat.pelig)*ratio);
-  var pagoProrr = r2((pagasActivas*basePaga)/12);
+showRow(“row-extra”,“lbl-extra”,“r-extra”,“Horas extra - “+hExtra+“h x “+cat.horaExtra.toFixed(2)+” EUR”,pagoExtra);
+showRow(“row-noc”,“lbl-noc”,“r-noc”,“Plus nocturnidad - “+hNoc+“h x “+cat.nocH.toFixed(2)+” EUR”,pagoNoc);
+showRow(“row-fest”,“lbl-fest”,“r-fest”,“Plus festivos - “+hFest+“h x 1,02 EUR”,pagoFest);
+showRow(“row-prorr”,“lbl-prorr”,“r-prorr”,pagasActivas+” paga(s) extra prorrateada(s)”,pagoProrr);
 
-  var bruto = r2(salBase+pelig+trans+vest+pagoExtra+pagoNoc+pagoFest+pagoProrr);
-  var pagasNoProrr = N_PAGAS-pagasActivas;
-  var ssBase = r2(bruto+r2(pagasNoProrr*basePaga/12));
-  var deducSS = r2(ssBase*SS_PCT);
-  var deducIRPF = r2(bruto*irpfPct/100);
-  var neto = r2(bruto-deducSS-deducIRPF);
+document.getElementById(“r-bruto”).textContent = fmt(bruto);
+document.getElementById(“r-ss”).textContent = “-”+fmt(deducSS);
 
-  var sufijo = jornActual==="parcial" ? " ("+hPact+"h/162h)" : "";
-  document.getElementById("lbl-base").textContent  = "Salario base"+sufijo;
-  document.getElementById("lbl-pelig").textContent = "Plus peligrosidad"+sufijo;
-  document.getElementById("r-base").textContent  = "+"+fmt(salBase);
-  document.getElementById("r-pelig").textContent = "+"+fmt(pelig);
-  document.getElementById("r-trans").textContent = "+"+fmt(trans);
-  document.getElementById("r-vest").textContent  = "+"+fmt(vest);
+var rowIrpf     = document.getElementById(“row-irpf”);
+var rowIrpfCero = document.getElementById(“row-irpf-cero”);
+if(irpfPct>0){
+rowIrpf.style.display=“flex”;
+rowIrpfCero.style.display=“none”;
+document.getElementById(“lbl-irpf”).textContent = “Retencion IRPF (”+irpfPct+”%)”;
+document.getElementById(“r-irpf”).textContent   = “-”+fmt(deducIRPF);
+} else {
+rowIrpf.style.display=“none”;
+rowIrpfCero.style.display=“flex”;
+}
 
-  showRow("row-extra","lbl-extra","r-extra","Horas extra - "+hExtra+"h x "+cat.horaExtra.toFixed(2)+" EUR",pagoExtra);
-  showRow("row-noc","lbl-noc","r-noc","Plus nocturnidad - "+hNoc+"h x "+cat.nocH.toFixed(2)+" EUR",pagoNoc);
-  showRow("row-fest","lbl-fest","r-fest","Plus festivos - "+hFest+"h x 1,02 EUR",pagoFest);
-  showRow("row-prorr","lbl-prorr","r-prorr",pagasActivas+" paga(s) extra prorrateada(s)",pagoProrr);
-
-  document.getElementById("r-bruto").textContent = fmt(bruto);
-  document.getElementById("r-ss").textContent = "-"+fmt(deducSS);
-
-  var rowIrpf     = document.getElementById("row-irpf");
-  var rowIrpfCero = document.getElementById("row-irpf-cero");
-  if(irpfPct>0){
-    rowIrpf.style.display="flex";
-    rowIrpfCero.style.display="none";
-    document.getElementById("lbl-irpf").textContent = "Retencion IRPF ("+irpfPct+"%)";
-    document.getElementById("r-irpf").textContent   = "-"+fmt(deducIRPF);
-  } else {
-    rowIrpf.style.display="none";
-    rowIrpfCero.style.display="flex";
-  }
-
-  document.getElementById("r-neto").textContent = fmt(neto);
-  document.getElementById("resultado").style.display="block";
-  setTimeout(function(){
-    document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});
-  },60);
+document.getElementById(“r-neto”).textContent = fmt(neto);
+document.getElementById(“resultado”).style.display=“block”;
+setTimeout(function(){
+document.getElementById(“resultado”).scrollIntoView({behavior:“smooth”,block:“nearest”});
+},60);
 }
 </script>
 
