@@ -5,8 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nómina Vigilante 2026</title>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445"
-     crossorigin="anonymous"></script>
+<meta name="google-adsense-account" content="ca-pub-6334238097806445">
 
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B"></script>
 <script>
@@ -545,7 +544,7 @@ function calcNomina(){
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas in tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
@@ -828,6 +827,7 @@ function calcBaja(){
     else{pct03=0.00; pct420=0.60;}
 
     var d=dias;
+
     var t03=Math.min(3,d);
     if(t03>0){
       if(pct03>0){
@@ -840,7 +840,7 @@ function calcBaja(){
     }
 
     if(d>3){
-      var d4=Math.min(20,d), n=d4-3;
+      var d4=Math.min(20,d);
       totalBruto+=tramoRow("brow-t1","blbl-t1","br-t1",4,d4,pct420,brDiario,"Días 4-"+d4+" ("+Math.round(pct420*100)+"% base reguladora"+(nbaja>=4?", SS general":", convenio")+")");
     }
 
