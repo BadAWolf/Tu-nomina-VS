@@ -4,6 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nómina Vigilante 2026</title>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445"
+     crossorigin="anonymous"></script>
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,6 +15,7 @@
   gtag('js', new Date());
   gtag('config', 'G-NMM3MRRZ6B');
 </script>
+
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
@@ -113,7 +118,6 @@ input:checked + .slider:before{transform:translateX(20px);}
 .exento-box strong{color:var(--blue);}
 .disclaimer{font-size:0.6rem;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
 
-/* Estilos para el nuevo Pie de Página de Privacidad */
 .privacy-footer{margin-top:2.5rem;padding-top:1.2rem;border-top:1px dashed var(--border2);text-align:center;}
 .privacy-title{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;font-weight:600;}
 .privacy-text{font-size:0.63rem;color:var(--muted);line-height:1.6;padding:0 0.5rem;}
@@ -161,7 +165,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="card-label">Horas trabajadas este mes</div>
 <div class="field">
 <div class="field-label">Horas totales</div>
-<input type="number" id="hTotal" placeholder="0" min="0" max="300" inputmode="decimal">
+<input type="number" id="hTTotal" placeholder="0" min="0" max="300" inputmode="decimal">
 <div class="field-hint" id="hint-extras">Si superas 162 h, el exceso se cobra como hora extra</div>
 </div>
 <div class="field">
@@ -216,8 +220,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="error-box" id="errorBox"></div>
 <button class="btn-calc" id="btnCalc">CALCULAR NÓMINA</button>
 
-<div class="ads-placeholder" id="ad-nomina">
-  </div>
+<div class="ads-placeholder" id="ad-nomina"></div>
 
 <div id="resultado">
 <div class="res-top">
@@ -302,14 +305,13 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="field" style="margin-bottom:0">
 <div class="field-label">% de retención</div>
 <input type="number" id="f-irpf" placeholder="0" min="0" max="47" step="0.1" inputmode="decimal">
-<div class="field-hint">Solo se aplica a vacaciones y pagas pendientes — la indemnización está exenta por ley</div>
+<div class="field-hint">Solo se aplica a vacaciones y pagas pendientes — la indemnización está exenta de IRPF por ley</div>
 </div>
 </div>
 <div class="error-box" id="f-errorBox"></div>
 <button class="btn-calc" id="btnCalcFiniquito">CALCULAR FINIQUITO</button>
 
-<div class="ads-placeholder" id="ad-finiquito">
-  </div>
+<div class="ads-placeholder" id="ad-finiquito"></div>
 
 <div id="resultado-finiquito">
 <div class="info-box" id="f-info-duracion"></div>
@@ -462,9 +464,6 @@ var PLUS_FEST=1.02, DIAS_VACAS=31, H_DIA_VACAS=5.226;
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", bcatActual="sin_arma";
 
-// ═══════════════════════════════
-// UTILIDADES
-// ═══════════════════════════════
 function r2(n){return Math.round(n*100)/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
 function calcAntig(a,cat){return r2(Math.floor(a/5)*QUINQUENIO[cat]);}
@@ -537,7 +536,7 @@ document.getElementById("btnCalc").addEventListener("click",function(){calcNomin
 
 function calcNomina(){
   var cat=CATS[catActual];
-  var hT=parseFloat(document.getElementById("hTotal").value)||0;
+  var hT=parseFloat(document.getElementById("hTTotal").value)||0;
   var hN=parseFloat(document.getElementById("hNoc").value)||0;
   var hF=parseFloat(document.getElementById("hFest").value)||0;
   var ip=parseFloat(document.getElementById("irpf").value)||0;
@@ -546,7 +545,7 @@ function calcNomina(){
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas in tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
@@ -791,22 +790,16 @@ function calcBaja(){
   err.style.display="none";
 
   var ant=calcAntig(an,bcatActual);
-
-  // Capturar el valor de la nueva casilla de base de cotización manual opcional
   var baseManual = parseFloat(document.getElementById("b-baseManual").value) || 0;
   
   var baseCotizMens;
   if(baseManual > 0) {
-    // Si el usuario mete un valor manual, usamos ese valor tal cual como base mensual
     baseCotizMens = baseManual;
   } else {
-    // Si lo deja a 0 o vacío, se aplica el cálculo mínimo automático de convenio
     baseCotizMens = r2(cat.salBase+cat.pelig+cat.trans+cat.vest+ant);
   }
   
   var brDiario=r2(baseCotizMens/30);
-
-  // La base para Accidente Laboral (AT/EP) va fija según tabla salarial por convenio y no se altera manualmente
   var baseATMens=r2(cat.salBase+cat.pelig+ant);
   var brATDiario=r2(baseATMens/30);
 
@@ -835,7 +828,6 @@ function calcBaja(){
     else{pct03=0.00; pct420=0.60;}
 
     var d=dias;
-
     var t03=Math.min(3,d);
     if(t03>0){
       if(pct03>0){
