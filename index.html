@@ -5,8 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nómina Vigilante 2026</title>
 
-<meta name="google-adsense-account" content="ca-pub-6334238097806445">
-
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -755,7 +753,7 @@ function calcFiniquito(){
   });
 });
 document.getElementById("b-tipo").addEventListener("change",function(){
-  var es=document.getElementById("b-field-nbaja");
+  var es.style.display="block";
   if(this.value==="comun"){
     es.style.display="block";
     document.getElementById("b-hint-nbaja").textContent="El convenio complementa en las 3 primeras bajas del año";
@@ -826,9 +824,7 @@ function calcBaja(){
     else if(nbaja<=3){pct03=0.00; pct420=0.80;}
     else{pct03=0.00; pct420=0.60;}
 
-    var d=dias;
-
-    var t03=Math.min(3,d);
+    var t03=Math.min(3,dias);
     if(t03>0){
       if(pct03>0){
         totalBruto+=tramoRow("brow-t0","blbl-t0","br-t0",1,t03,pct03,brDiario,"Días 1-"+t03+" ("+Math.round(pct03*100)+"% base reguladora)");
@@ -839,18 +835,18 @@ function calcBaja(){
       }
     }
 
-    if(d>3){
-      var d4=Math.min(20,d);
+    if(dias>3){
+      var d4=Math.min(20,dias);
       totalBruto+=tramoRow("brow-t1","blbl-t1","br-t1",4,d4,pct420,brDiario,"Días 4-"+d4+" ("+Math.round(pct420*100)+"% base reguladora"+(nbaja>=4?", SS general":", convenio")+")");
     }
 
     if(nbaja>=4){
-      if(d>20){totalBruto+=tramoRow("brow-t2","blbl-t2","br-t2",21,d,0.75,brDiario,"Días 21-"+d+" (75% SS general)");}
+      if(dias>20){totalBruto+=tramoRow("brow-t2","blbl-t2","br-t2",21,dias,0.75,brDiario,"Días 21-"+dias+" (75% SS general)");}
     } else {
-      if(d>20){var d20=Math.min(40,d);totalBruto+=tramoRow("brow-t2","blbl-t2","br-t2",21,d20,1.00,brDiario,"Días 21-"+d20+" (100% — art. 51 convenio)");}
-      if(d>40){var d40=Math.min(60,d);totalBruto+=tramoRow("brow-t3","blbl-t3","br-t3",41,d40,0.90,brDiario,"Días 41-"+d40+" (90% — art. 51 convenio)");}
-      if(d>60){var d60=Math.min(100,d);totalBruto+=tramoRow("brow-t4","blbl-t4","br-t4",61,d60,0.80,brDiario,"Días 61-"+d60+" (80% — art. 51 convenio/mejora 91-100)");}
-      if(d>100){totalBruto+=tramoRow("brow-t5","blbl-t5","br-t5",101,d,0.75,brDiario,"Días 101-"+d+" (75% SS general)");}
+      if(dias>20){var d20=Math.min(40,dias);totalBruto+=tramoRow("brow-t2","blbl-t2","br-t2",21,d20,1.00,brDiario,"Días 21-"+d20+" (100% — art. 51 convenio)");}
+      if(dias>40){var d40=Math.min(60,dias);totalBruto+=tramoRow("brow-t3","blbl-t3","br-t3",41,d40,0.90,brDiario,"Días 41-"+d40+" (90% — art. 51 convenio)");}
+      if(dias>60){var d60=Math.min(100,dias);totalBruto+=tramoRow("brow-t4","blbl-t4","br-t4",61,d60,0.80,brDiario,"Días 61-"+d60+" (80% — art. 51 convenio/mejora 91-100)");}
+      if(dias>100){totalBruto+=tramoRow("brow-t5","blbl-t5","br-t5",101,dias,0.75,brDiario,"Días 101-"+dias+" (75% SS general)");}
     }
   }
 
