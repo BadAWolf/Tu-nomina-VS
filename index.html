@@ -37,11 +37,19 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 body{display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 4rem;}
 .wrap{width:100%;max-width:420px;}
 
-header{text-align:center;padding:1.5rem 0 1.75rem;}
-.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.6rem;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:2.7rem;letter-spacing:0.05em;line-height:1;color:var(--text);}
+header{text-align:center;padding:1.25rem 0 1.25rem;}
+.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.5rem;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:2.5rem;letter-spacing:0.05em;line-height:1;color:var(--text);}
 h1 em{color:var(--gold2);font-style:normal;}
-.header-sub{font-size:0.73rem;color:var(--muted);margin-top:0.45rem;}
+.header-sub{font-size:0.72rem;color:var(--muted);margin-top:0.4rem;}
+
+.tab-selector{display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:4px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
+.tab-btn{background:transparent;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:500;padding:0.65rem 0.5rem;cursor:pointer;color:var(--muted);transition:all 0.2s;text-align:center;line-height:1.3;}
+.tab-btn.active{background:var(--goldbg);color:var(--gold);font-weight:700;box-shadow:0 1px 3px rgba(180,120,10,0.15);}
+.tab-btn-sub{display:block;font-size:0.6rem;font-weight:400;margin-top:0.1rem;opacity:0.8;}
+
+#view-nomina{display:block;}
+#view-finiquito{display:none;}
 
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.65rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
 .card-label{font-family:'DM Mono',monospace;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.85rem;}
@@ -63,11 +71,15 @@ h1 em{color:var(--gold2);font-style:normal;}
 .field:last-child{margin-bottom:0;}
 .field-label{font-size:0.71rem;font-weight:600;color:var(--text2);margin-bottom:0.32rem;display:flex;align-items:center;gap:0.45rem;}
 .field-badge{font-family:'DM Mono',monospace;font-size:0.57rem;color:var(--gold);background:var(--goldbg);border:1px solid var(--goldline);border-radius:4px;padding:0.1rem 0.4rem;}
-input[type=number]{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Mono',monospace;font-size:1.05rem;padding:0.58rem 0.8rem;outline:none;transition:border-color 0.15s,background 0.15s;-webkit-appearance:none;appearance:none;}
-input[type=number]:focus{border-color:var(--gold2);background:var(--goldbg);}
+input[type=number],input[type=date],select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:0.58rem 0.8rem;outline:none;transition:border-color 0.15s,background 0.15s;-webkit-appearance:none;appearance:none;}
+input[type=number]{font-family:'DM Mono',monospace;font-size:1.05rem;}
+input[type=number]:focus,input[type=date]:focus,select:focus{border-color:var(--gold2);background:var(--goldbg);}
 input[type=number]::-webkit-inner-spin-button{display:none;}
-input[type=number]::placeholder{color:var(--subtle);}
+input::placeholder{color:var(--subtle);}
+select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a65' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;padding-right:2.2rem;cursor:pointer;}
+select option{background:var(--card);}
 .field-hint{font-size:0.61rem;color:var(--muted);margin-top:0.28rem;}
+.date-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;}
 
 .paga-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.45rem;}
 .paga-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.71rem;font-weight:500;padding:0.58rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.15s;user-select:none;line-height:1.3;width:100%;}
@@ -94,26 +106,36 @@ input:checked + .slider:before{transform:translateX(20px);}
 .error-box{background:var(--redbg);border:1px solid #e8b4b4;border-radius:7px;padding:0.62rem 0.85rem;font-size:0.73rem;color:var(--red);display:none;margin-top:0.5rem;}
 
 #resultado{display:none;margin-top:0.65rem;}
+#resultado-finiquito{display:none;margin-top:0.65rem;}
+
 .res-top{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;margin-bottom:0.55rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
 .res-section-label{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.38rem;margin-top:0.7rem;font-weight:600;}
 .res-section-label:first-child{margin-top:0;}
 .res-section-label.green{color:var(--green);}
 .res-section-label.red{color:var(--red);}
+.res-section-label.blue{color:#3a6fa8;}
 .res-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.4rem 0;border-bottom:1px solid var(--border);}
 .res-row:last-child{border-bottom:none;}
 .res-concept{font-size:0.76rem;color:var(--muted);flex:1;padding-right:0.5rem;}
 .res-val{font-family:'DM Mono',monospace;font-size:0.83rem;font-weight:500;white-space:nowrap;}
 .res-val.up{color:var(--green);}
 .res-val.down{color:var(--red);}
+.res-val.neu{color:var(--text);}
+.res-val.exento{color:#3a6fa8;}
 .res-divider{height:1px;background:var(--border);margin:0.45rem 0;}
 .bruto-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0 0.2rem;}
 .bruto-label{font-size:0.83rem;font-weight:700;color:var(--text);}
 .bruto-val{font-family:'DM Mono',monospace;font-size:1.08rem;font-weight:700;color:var(--text);}
 
-.neto-box{background:var(--goldbg);border:1.5px solid var(--goldline);border-radius:10px;padding:1.15rem 1.2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(180,120,10,0.1);}
+.neto-box{background:var(--goldbg);border:1.5px solid var(--goldline);border-radius:10px;padding:1.15rem 1.2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(180,120,10,0.1);margin-bottom:0.55rem;}
 .neto-label{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--gold);}
 .neto-label span{display:block;font-family:'DM Sans',sans-serif;font-size:0.63rem;font-weight:400;letter-spacing:0;color:var(--muted);margin-top:0.1rem;}
 .neto-val{font-family:'DM Mono',monospace;font-size:1.9rem;font-weight:700;color:var(--gold);}
+
+.info-box{background:var(--greenbg);border:1px solid #b4d8bc;border-radius:7px;padding:0.7rem 0.9rem;font-size:0.7rem;color:#2d5a35;line-height:1.55;margin-bottom:0.55rem;}
+.info-box strong{color:var(--green);}
+.exento-box{background:#eef4fc;border:1px solid #b4c8e0;border-radius:7px;padding:0.7rem 0.9rem;font-size:0.7rem;color:#2a4a6a;line-height:1.55;margin-bottom:0.55rem;}
+.exento-box strong{color:#3a6fa8;}
 
 .disclaimer{font-size:0.6rem;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
 </style>
@@ -124,8 +146,16 @@ input:checked + .slider:before{transform:translateX(20px);}
 <header>
 <div class="header-label">Convenio Colectivo - Seguridad Privada 2026</div>
 <h1>NOMINA<br><em>VIGILANTE</em></h1>
-<p class="header-sub">Calcula lo que te tienen que pagar</p>
+<p class="header-sub">Herramienta para vigilantes de seguridad</p>
 </header>
+
+<div class="tab-selector">
+<button class="tab-btn active" id="tab-nomina">Calcular Nomina<span class="tab-btn-sub">Mensual</span></button>
+<button class="tab-btn" id="tab-finiquito">Finiquito / Despido<span class="tab-btn-sub">Liquidacion</span></button>
+</div>
+
+<!-- NOMINA -->
+<div id="view-nomina">
 
 <div class="card">
 <div class="card-label">Categoria profesional</div>
@@ -215,7 +245,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 
 <div class="error-box" id="errorBox"></div>
-<button class="btn-calc" id="btnCalc">CALCULAR</button>
+<button class="btn-calc" id="btnCalc">CALCULAR NOMINA</button>
 
 <div id="resultado">
 <div class="res-top">
@@ -242,16 +272,111 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="neto-val" id="r-neto">-</div>
 </div>
 </div>
+</div>
+
+<!-- FINIQUITO -->
+<div id="view-finiquito">
+
+<div class="card">
+<div class="card-label">Categoria profesional</div>
+<div class="cat-grid">
+<button class="cat-btn active" id="fbtn-sin_arma">VS Sin Arma<span class="cat-salary">1.161,28 EUR/mes</span></button>
+<button class="cat-btn" id="fbtn-con_arma">VS Con Arma<span class="cat-salary">1.161,28 EUR/mes</span></button>
+<button class="cat-btn" id="fbtn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 EUR/mes</span></button>
+<button class="cat-btn" id="fbtn-escolta">Escolta<span class="cat-salary">1.161,28 EUR/mes</span></button>
+</div>
+</div>
+
+<div class="card">
+<div class="card-label">Fechas del contrato</div>
+<div class="date-grid">
+<div class="field" style="margin-bottom:0">
+<div class="field-label">Fecha de inicio</div>
+<input type="date" id="f-inicio">
+</div>
+<div class="field" style="margin-bottom:0">
+<div class="field-label">Fecha de fin</div>
+<input type="date" id="f-fin">
+</div>
+</div>
+<div class="field-hint" style="margin-top:0.5rem;" id="f-hint-fechas">Introduce las fechas para calcular la duracion y la antiguedad automaticamente</div>
+</div>
+
+<div class="card">
+<div class="card-label">Vacaciones pendientes</div>
+<div class="field" style="margin-bottom:0">
+<div class="field-label">Dias de vacaciones que no has disfrutado</div>
+<input type="number" id="f-vacas" placeholder="0" min="0" max="31" inputmode="decimal" value="0">
+<div class="field-hint">Solo los pendientes este ano - el convenio da 31 dias naturales al ano</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-label">Pagas extra - marca las que YA cobras prorrateadas</div>
+<div class="paga-row">
+<div class="paga-btn" id="fpaga-julio">Paga Julio<span class="paga-sub">no prorrateada</span></div>
+<div class="paga-btn" id="fpaga-dic">Paga Diciembre<span class="paga-sub">no prorrateada</span></div>
+<div class="paga-btn" id="fpaga-mar">Paga Marzo<span class="paga-sub">no prorrateada</span></div>
+</div>
+<div class="field-hint" style="margin-top:0.6rem;">Las que NO marques se calcularan como pendientes en el finiquito y llevaran IRPF</div>
+</div>
+
+<div class="card">
+<div class="card-label">Tipo de baja o despido</div>
+<div class="field" style="margin-bottom:0">
+<select id="f-tipodespido">
+<option value="voluntaria">Baja Voluntaria (sin indemnizacion)</option>
+<option value="objetivo">Fin de Contrato / Despido Objetivo (20 dias/ano)</option>
+<option value="improcedente">Despido Improcedente (33 dias/ano)</option>
+</select>
+</div>
+</div>
+
+<div class="card">
+<div class="card-label">Retencion IRPF</div>
+<div class="field" style="margin-bottom:0">
+<div class="field-label">% de retencion</div>
+<input type="number" id="f-irpf" placeholder="0" min="0" max="47" step="0.1" inputmode="decimal">
+<div class="field-hint">Solo se aplica a vacaciones y pagas pendientes - la indemnizacion esta exenta por ley</div>
+</div>
+</div>
+
+<div class="error-box" id="f-errorBox"></div>
+<button class="btn-calc" id="btnCalcFiniquito">CALCULAR FINIQUITO</button>
+
+<div id="resultado-finiquito">
+<div class="info-box" id="f-info-duracion"></div>
+<div class="res-top">
+<div class="res-section-label green">LIQUIDACION (tributa como salario)</div>
+<div class="res-row" id="frow-vacas" style="display:none"><span class="res-concept" id="flbl-vacas">Vacaciones no disfrutadas</span><span class="res-val up" id="fr-vacas">-</span></div>
+<div class="res-row" id="frow-pagas" style="display:none"><span class="res-concept" id="flbl-pagas">Pagas proporcionales pendientes</span><span class="res-val up" id="fr-pagas">-</span></div>
+<div class="res-row"><span class="res-concept">Total liquidacion bruta</span><span class="res-val neu" id="fr-liq-bruta">-</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social (6,47%)</span><span class="res-val down" id="fr-ss-liq">-</span></div>
+<div class="res-row" id="frow-irpf-liq" style="display:none"><span class="res-concept" id="flbl-irpf-liq">Retencion IRPF</span><span class="res-val down" id="fr-irpf-liq">-</span></div>
+<div class="res-divider"></div>
+<div class="bruto-row"><span class="bruto-label">Neto liquidacion</span><span class="bruto-val" id="fr-liq-neto">-</span></div>
+<div class="res-section-label blue" id="frow-indem-label" style="display:none">INDEMNIZACION (exenta de IRPF por ley)</div>
+<div class="res-row" id="frow-indem" style="display:none"><span class="res-concept" id="flbl-indem">Indemnizacion por despido</span><span class="res-val exento" id="fr-indem">-</span></div>
+</div>
+<div class="exento-box" id="f-exento-info" style="display:none">
+<strong>Indemnizacion exenta de IRPF:</strong> Va integra a tu cuenta bancaria. La ley la declara exenta hasta el limite legal (33 dias/ano max. 24 meses para improcedente / 20 dias/ano max. 12 meses para objetivo).
+</div>
+<div class="neto-box">
+<div class="neto-label">TOTAL NETO<span>Lo que entra en tu cuenta</span></div>
+<div class="neto-val" id="fr-total-neto">-</div>
+</div>
+</div>
+</div>
 
 <div class="disclaimer">
 Convenio Colectivo Estatal de Empresas de Seguridad - Tablas 2026<br>
-Jornada 162 h/mes - Quinquenio VS: 45,86 EUR cada 5 anos<br>
+Jornada 162 h/mes - 31 dias vacaciones - Quinquenio VS: 45,86 EUR cada 5 anos<br>
 Herramienta orientativa - compara siempre con tu nomina real
 </div>
-
 </div>
+
 <script>
-var CATS = {
+var CATS={
   sin_arma:{salBase:1161.28,pelig:24.08, trans:137.81,vest:112.28,nocH:1.26},
   con_arma:{salBase:1161.28,pelig:179.90,trans:137.81,vest:112.28,nocH:1.26},
   fondos:  {salBase:1227.74,pelig:191.59,trans:137.81,vest:113.27,nocH:1.36},
@@ -259,152 +384,302 @@ var CATS = {
 };
 var QUINQUENIO={sin_arma:45.86,con_arma:45.86,fondos:50.23,escolta:45.86};
 var N_PAGAS=3,PLUS_FEST=1.02,SS_PCT=0.0647,JORNADA=162,HORAS_ANUALES=1782;
-var catActual="sin_arma",jornActual="completa";
+var DIAS_VACAS=31,HORAS_DIA_VACAS=5.226;
+var catActual="sin_arma",jornActual="completa",fcatActual="sin_arma";
 
 function r2(n){return Math.round(n*100)/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" EUR";}
 function calcAntig(anios,cat){return r2(Math.floor(anios/5)*QUINQUENIO[cat]);}
 function calcHoraExtra(salBase,pelig,antig){return r2((salBase+pelig+antig)*15/HORAS_ANUALES);}
 
-function showRow(rowId,lblId,valId,label,val){
-var row=document.getElementById(rowId);
-if(val>0.005){
-row.style.display="flex";
-if(lblId){document.getElementById(lblId).textContent=label;}
-document.getElementById(valId).textContent="+" + fmt(val);
-} else {row.style.display="none";}
+function showRow(rowId,lblId,valId,label,val,cls){
+  var row=document.getElementById(rowId);
+  cls=cls||"up";
+  if(val>0.005){
+    row.style.display="flex";
+    if(lblId){document.getElementById(lblId).textContent=label;}
+    document.getElementById(valId).textContent=(cls==="down"?"-":"+")+fmt(val);
+    document.getElementById(valId).className="res-val "+cls;
+  } else {row.style.display="none";}
 }
 
+// TABS
+document.getElementById("tab-nomina").addEventListener("click",function(){
+  document.getElementById("tab-nomina").classList.add("active");
+  document.getElementById("tab-finiquito").classList.remove("active");
+  document.getElementById("view-nomina").style.display="block";
+  document.getElementById("view-finiquito").style.display="none";
+});
+document.getElementById("tab-finiquito").addEventListener("click",function(){
+  document.getElementById("tab-finiquito").classList.add("active");
+  document.getElementById("tab-nomina").classList.remove("active");
+  document.getElementById("view-finiquito").style.display="block";
+  document.getElementById("view-nomina").style.display="none";
+});
+
+// NOMINA
 document.getElementById("aniosAntiguedad").addEventListener("input",function(){
-var anios=parseInt(this.value)||0;
-var q=Math.floor(anios/5);
-var imp=r2(q*QUINQUENIO[catActual]);
-var hint=document.getElementById("hint-antiguedad");
-hint.textContent=anios<5
-?"Sin antiguedad - el plus aplica cada 5 anos (45,86 EUR por quinquenio)"
-:q+" quinquenio"+(q>1?"s":"")+" = +" + fmt(imp)+"/mes";
+  var anios=parseInt(this.value)||0;
+  var q=Math.floor(anios/5);
+  var imp=r2(q*QUINQUENIO[catActual]);
+  document.getElementById("hint-antiguedad").textContent=anios<5
+    ?"Sin antiguedad - el plus aplica cada 5 anos (45,86 EUR por quinquenio)"
+    :q+" quinquenio"+(q>1?"s":"")+" = +"+fmt(imp)+"/mes";
 });
-
 document.getElementById("switchPlus").addEventListener("change",function(){
-document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
+  document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
+});
+["sin_arma","con_arma","fondos","escolta"].forEach(function(cat){
+  document.getElementById("btn-"+cat).addEventListener("click",function(){
+    document.querySelectorAll("#view-nomina .cat-btn").forEach(function(b){b.classList.remove("active");});
+    document.getElementById("btn-"+cat).classList.add("active");
+    catActual=cat;
+    document.getElementById("badge-noc").textContent="+"+CATS[cat].nocH.toFixed(2).replace(".",",")+" EUR/h";
+  });
+});
+document.getElementById("jorn-completa").addEventListener("click",function(){
+  jornActual="completa";
+  document.getElementById("jorn-completa").classList.add("active");
+  document.getElementById("jorn-parcial").classList.remove("active");
+  document.getElementById("parcial-field").style.display="none";
+  document.getElementById("hint-extras").textContent="Si superas 162 h, el exceso se cobra como hora extra";
+});
+document.getElementById("jorn-parcial").addEventListener("click",function(){
+  jornActual="parcial";
+  document.getElementById("jorn-parcial").classList.add("active");
+  document.getElementById("jorn-completa").classList.remove("active");
+  document.getElementById("parcial-field").style.display="block";
+  document.getElementById("hint-extras").textContent="Si superas tus horas pactadas, el exceso se cobra como hora extra";
+});
+["paga-julio","paga-dic","paga-mar"].forEach(function(id){
+  document.getElementById(id).addEventListener("click",function(){
+    this.classList.toggle("active");
+    this.querySelector(".paga-sub").textContent=this.classList.contains("active")?"activa":"inactiva";
+  });
+});
+document.getElementById("btnCalc").addEventListener("click",function(){calcularNomina();});
+
+function calcularNomina(){
+  var cat=CATS[catActual];
+  var hTotal=parseFloat(document.getElementById("hTotal").value)||0;
+  var hNoc=parseFloat(document.getElementById("hNoc").value)||0;
+  var hFest=parseFloat(document.getElementById("hFest").value)||0;
+  var irpfPct=parseFloat(document.getElementById("irpf").value)||0;
+  var anios=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
+  var plusServ=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
+  var hPact=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
+  var err=document.getElementById("errorBox");
+  if(hTotal<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(jornActual==="parcial"&&hPact<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(jornActual==="parcial"&&hPact>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(hNoc>hTotal){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(hFest>hTotal){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  err.style.display="none";
+  var ratio=hPact/JORNADA;
+  var salBase=r2(cat.salBase*ratio);
+  var pelig=r2(cat.pelig*ratio);
+  var trans=r2(cat.trans*ratio);
+  var vest=r2(cat.vest*ratio);
+  var antigTotal=calcAntig(anios,catActual);
+  var antigMes=r2(antigTotal*ratio);
+  var quinquenios=Math.floor(anios/5);
+  var horaExtraVal=calcHoraExtra(cat.salBase,cat.pelig,antigTotal);
+  var hExtra=Math.max(0,hTotal-hPact);
+  var pagoExtra=r2(hExtra*horaExtraVal);
+  var pagoNoc=r2(hNoc*cat.nocH);
+  var pagoFest=r2(hFest*PLUS_FEST);
+  var pagasActivas=document.querySelectorAll("#view-nomina .paga-btn.active").length;
+  var basePaga=r2((cat.salBase+cat.pelig+antigTotal)*ratio);
+  var pagoProrr=r2((pagasActivas*basePaga)/12);
+  var bruto=r2(salBase+pelig+trans+vest+antigMes+plusServ+pagoExtra+pagoNoc+pagoFest+pagoProrr);
+  var pagasNoProrr=N_PAGAS-pagasActivas;
+  var ssBase=r2(bruto+r2(pagasNoProrr*basePaga/12));
+  var deducSS=r2(ssBase*SS_PCT);
+  var deducIRPF=r2(bruto*irpfPct/100);
+  var neto=r2(bruto-deducSS-deducIRPF);
+  var sufijo=jornActual==="parcial"?" ("+hPact+"h/162h)":"";
+  document.getElementById("lbl-base").textContent="Salario base"+sufijo;
+  document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+sufijo;
+  document.getElementById("r-base").textContent="+"+fmt(salBase);
+  document.getElementById("r-pelig").textContent="+"+fmt(pelig);
+  document.getElementById("r-trans").textContent="+"+fmt(trans);
+  document.getElementById("r-vest").textContent="+"+fmt(vest);
+  if(antigMes>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antiguedad ("+quinquenios+" quinquenio"+(quinquenios>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antigMes);}
+  else{document.getElementById("row-antig").style.display="none";}
+  if(plusServ>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(plusServ);}
+  else{document.getElementById("row-plusserv").style.display="none";}
+  showRow("row-extra","lbl-extra","r-extra","Horas extra - "+hExtra+"h x "+horaExtraVal.toFixed(2)+" EUR",pagoExtra,"up");
+  showRow("row-noc","lbl-noc","r-noc","Plus nocturnidad - "+hNoc+"h x "+cat.nocH.toFixed(2)+" EUR",pagoNoc,"up");
+  showRow("row-fest","lbl-fest","r-fest","Plus festivos - "+hFest+"h x 1,02 EUR",pagoFest,"up");
+  showRow("row-prorr","lbl-prorr","r-prorr",pagasActivas+" paga(s) extra prorrateada(s)",pagoProrr,"up");
+  document.getElementById("r-bruto").textContent=fmt(bruto);
+  document.getElementById("r-ss").textContent="-"+fmt(deducSS);
+  if(irpfPct>0){document.getElementById("row-irpf").style.display="flex";document.getElementById("row-irpf-cero").style.display="none";document.getElementById("lbl-irpf").textContent="Retencion IRPF ("+irpfPct+"%)";document.getElementById("r-irpf").textContent="-"+fmt(deducIRPF);}
+  else{document.getElementById("row-irpf").style.display="none";document.getElementById("row-irpf-cero").style.display="flex";}
+  document.getElementById("r-neto").textContent=fmt(neto);
+  document.getElementById("resultado").style.display="block";
+  gtag('event','calcular_nomina',{categoria:catActual});
+  setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+}
+
+// FINIQUITO
+["sin_arma","con_arma","fondos","escolta"].forEach(function(cat){
+  document.getElementById("fbtn-"+cat).addEventListener("click",function(){
+    document.querySelectorAll("#view-finiquito .cat-btn").forEach(function(b){b.classList.remove("active");});
+    document.getElementById("fbtn-"+cat).classList.add("active");
+    fcatActual=cat;
+  });
 });
 
-document.getElementById("btn-sin_arma").addEventListener("click",function(){selCat("sin_arma");});
-document.getElementById("btn-con_arma").addEventListener("click",function(){selCat("con_arma");});
-document.getElementById("btn-fondos").addEventListener("click",function(){selCat("fondos");});
-document.getElementById("btn-escolta").addEventListener("click",function(){selCat("escolta");});
-
-function selCat(cat){
-document.querySelectorAll(".cat-btn").forEach(function(b){b.classList.remove("active");});
-document.getElementById("btn-"+cat).classList.add("active");
-catActual=cat;
-document.getElementById("badge-noc").textContent="+" + CATS[cat].nocH.toFixed(2).replace(".",",")+" EUR/h";
+function actualizarFechas(){
+  var ini=document.getElementById("f-inicio").value;
+  var fin=document.getElementById("f-fin").value;
+  if(ini&&fin){
+    var d1=new Date(ini),d2=new Date(fin);
+    if(d2>d1){
+      var totalDias=Math.round((d2-d1)/(1000*60*60*24));
+      var anosN=Math.floor(totalDias/365);
+      var mesesN=Math.floor((totalDias%365)/30);
+      var diasN=(totalDias%365)%30;
+      var quinquenios=Math.floor(anosN/5);
+      var txt="Duracion: ";
+      if(anosN>0)txt+=anosN+" ano"+(anosN>1?"s":"")+" ";
+      if(mesesN>0)txt+=mesesN+" mes"+(mesesN>1?"es":"")+" ";
+      if(diasN>0)txt+=diasN+" dia"+(diasN>1?"s":"");
+      if(quinquenios>0)txt+=" | "+quinquenios+" quinquenio"+(quinquenios>1?"s":"")+" de antiguedad";
+      document.getElementById("f-hint-fechas").textContent=txt.trim();
+    }
+  }
 }
+document.getElementById("f-inicio").addEventListener("change",actualizarFechas);
+document.getElementById("f-fin").addEventListener("change",actualizarFechas);
 
-document.getElementById("jorn-completa").addEventListener("click",function(){selJornada("completa");});
-document.getElementById("jorn-parcial").addEventListener("click",function(){selJornada("parcial");});
+["fpaga-julio","fpaga-dic","fpaga-mar"].forEach(function(id){
+  document.getElementById(id).addEventListener("click",function(){
+    this.classList.toggle("active");
+    this.querySelector(".paga-sub").textContent=this.classList.contains("active")?"prorrateada":"no prorrateada";
+  });
+});
 
-function selJornada(tipo){
-jornActual=tipo;
-document.getElementById("jorn-completa").classList.toggle("active",tipo==="completa");
-document.getElementById("jorn-parcial").classList.toggle("active",tipo==="parcial");
-document.getElementById("parcial-field").style.display=tipo==="parcial"?"block":"none";
-document.getElementById("hint-extras").textContent=tipo==="completa"
-?"Si superas 162 h, el exceso se cobra como hora extra"
-:"Si superas tus horas pactadas, el exceso se cobra como hora extra";
-}
+document.getElementById("btnCalcFiniquito").addEventListener("click",function(){calcularFiniquito();});
 
-document.getElementById("paga-julio").addEventListener("click",function(){togglePaga(this);});
-document.getElementById("paga-dic").addEventListener("click",function(){togglePaga(this);});
-document.getElementById("paga-mar").addEventListener("click",function(){togglePaga(this);});
+function calcularFiniquito(){
+  var cat=CATS[fcatActual];
+  var diasVacas=parseFloat(document.getElementById("f-vacas").value)||0;
+  var irpfPct=parseFloat(document.getElementById("f-irpf").value)||0;
+  var tipoDespido=document.getElementById("f-tipodespido").value;
+  var ini=document.getElementById("f-inicio").value;
+  var fin=document.getElementById("f-fin").value;
+  var err=document.getElementById("f-errorBox");
 
-function togglePaga(el){
-el.classList.toggle("active");
-el.querySelector(".paga-sub").textContent=el.classList.contains("active")?"activa":"inactiva";
-}
+  if(!ini||!fin){err.textContent="Introduce las fechas de inicio y fin del contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
+  var d1=new Date(ini),d2=new Date(fin);
+  if(d2<=d1){err.textContent="La fecha de fin debe ser posterior a la de inicio.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
+  err.style.display="none";
 
-document.getElementById("btnCalc").addEventListener("click",function(){calcular();});
+  // Duracion exacta
+  var totalDias=Math.round((d2-d1)/(1000*60*60*24));
+  var anosExactos=totalDias/365;
+  var anosCompletos=Math.floor(anosExactos);
+  var fraccionAno=Math.min(1,totalDias/365);
 
-function calcular(){
-var cat=CATS[catActual];
-var hTotal=parseFloat(document.getElementById("hTotal").value)||0;
-var hNoc=parseFloat(document.getElementById("hNoc").value)||0;
-var hFest=parseFloat(document.getElementById("hFest").value)||0;
-var irpfPct=parseFloat(document.getElementById("irpf").value)||0;
-var anios=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
-var plusServ=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
-var hPact=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
-var err=document.getElementById("errorBox");
+  // Antiguedad calculada automaticamente desde las fechas
+  var antigTotal=calcAntig(anosCompletos,fcatActual);
+  var quinquenios=Math.floor(anosCompletos/5);
 
-if(hTotal<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-if(jornActual==="parcial"&&hPact<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-if(jornActual==="parcial"&&hPact>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-if(hNoc>hTotal){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-if(hFest>hTotal){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-err.style.display="none";
+  // Valor dia vacaciones
+  var valorHora=r2((cat.salBase+cat.pelig+antigTotal)/JORNADA);
+  var valorDiaVacas=r2(HORAS_DIA_VACAS*valorHora);
+  var totalVacas=r2(diasVacas*valorDiaVacas);
 
-var ratio=hPact/JORNADA;
-var salBase=r2(cat.salBase*ratio);
-var pelig=r2(cat.pelig*ratio);
-var trans=r2(cat.trans*ratio);
-var vest=r2(cat.vest*ratio);
-var antigTotal=calcAntig(anios,catActual);
-var antigMes=r2(antigTotal*ratio);
-var quinquenios=Math.floor(anios/5);
-var horaExtraVal=calcHoraExtra(cat.salBase,cat.pelig,antigTotal);
-var hExtra=Math.max(0,hTotal-hPact);
-var pagoExtra=r2(hExtra*horaExtraVal);
-var pagoNoc=r2(hNoc*cat.nocH);
-var pagoFest=r2(hFest*PLUS_FEST);
-var pagasActivas=document.querySelectorAll(".paga-btn.active").length;
-var basePaga=r2((cat.salBase+cat.pelig+antigTotal)*ratio);
-var pagoProrr=r2((pagasActivas*basePaga)/12);
-var bruto=r2(salBase+pelig+trans+vest+antigMes+plusServ+pagoExtra+pagoNoc+pagoFest+pagoProrr);
-var pagasNoProrr=N_PAGAS-pagasActivas;
-var ssBase=r2(bruto+r2(pagasNoProrr*basePaga/12));
-var deducSS=r2(ssBase*SS_PCT);
-var deducIRPF=r2(bruto*irpfPct/100);
-var neto=r2(bruto-deducSS-deducIRPF);
+  // Pagas proporcionales pendientes
+  var basePaga=r2(cat.salBase+cat.pelig+antigTotal);
+  var pagasProrrateadas=document.querySelectorAll("#view-finiquito .paga-btn.active").length;
+  var pagasPendientes=N_PAGAS-pagasProrrateadas;
+  var pagasProp=r2(pagasPendientes*basePaga*fraccionAno);
 
-var sufijo=jornActual==="parcial"?" ("+hPact+"h/162h)":"";
-document.getElementById("lbl-base").textContent="Salario base"+sufijo;
-document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+sufijo;
-document.getElementById("r-base").textContent="+" + fmt(salBase);
-document.getElementById("r-pelig").textContent="+" + fmt(pelig);
-document.getElementById("r-trans").textContent="+" + fmt(trans);
-document.getElementById("r-vest").textContent="+" + fmt(vest);
+  // Liquidacion bruta (tributa IRPF + SS)
+  var liqBruta=r2(totalVacas+pagasProp);
+  var ssLiq=r2(liqBruta*SS_PCT);
+  var irpfLiq=r2(liqBruta*irpfPct/100);
+  var liqNeto=r2(liqBruta-ssLiq-irpfLiq);
 
-if(antigMes>0){
-document.getElementById("row-antig").style.display="flex";
-document.getElementById("lbl-antig").textContent="Antiguedad ("+quinquenios+" quinquenio"+(quinquenios>1?"s":"")+")";
-document.getElementById("r-antig").textContent="+" + fmt(antigMes);
-} else {document.getElementById("row-antig").style.display="none";}
+  // Indemnizacion (exenta IRPF)
+  var indem=0;
+  var diasIndem=0,maxMeses=0;
+  if(tipoDespido==="objetivo"){diasIndem=20;maxMeses=12;}
+  else if(tipoDespido==="improcedente"){diasIndem=33;maxMeses=24;}
 
-if(plusServ>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+" + fmt(plusServ);}
-else{document.getElementById("row-plusserv").style.display="none";}
+  if(diasIndem>0){
+    var salMensual=r2(cat.salBase+cat.pelig+cat.trans+cat.vest+antigTotal);
+    var salDiario=r2(salMensual/30);
+    var indemBruta=r2(diasIndem*salDiario*anosExactos);
+    var topeLegal=r2(salMensual*maxMeses);
+    indem=r2(Math.min(indemBruta,topeLegal));
+  }
 
-showRow("row-extra","lbl-extra","r-extra","Horas extra - "+hExtra+"h x "+horaExtraVal.toFixed(2)+" EUR",pagoExtra);
-showRow("row-noc","lbl-noc","r-noc","Plus nocturnidad - "+hNoc+"h x "+cat.nocH.toFixed(2)+" EUR",pagoNoc);
-showRow("row-fest","lbl-fest","r-fest","Plus festivos - "+hFest+"h x 1,02 EUR",pagoFest);
-showRow("row-prorr","lbl-prorr","r-prorr",pagasActivas+" paga(s) extra prorrateada(s)",pagoProrr);
+  var totalNeto=r2(liqNeto+indem);
 
-document.getElementById("r-bruto").textContent=fmt(bruto);
-document.getElementById("r-ss").textContent="-" + fmt(deducSS);
+  // RENDER info
+  var anosN=Math.floor(totalDias/365);
+  var mesesN=Math.floor((totalDias%365)/30);
+  var diasN=(totalDias%365)%30;
+  var durTxt="";
+  if(anosN>0)durTxt+=anosN+" ano"+(anosN>1?"s":"")+" ";
+  if(mesesN>0)durTxt+=mesesN+" mes"+(mesesN>1?"es":"")+" ";
+  if(diasN>0)durTxt+=diasN+" dia"+(diasN>1?"s":"");
 
-var rowIrpf=document.getElementById("row-irpf");
-var rowIrpfCero=document.getElementById("row-irpf-cero");
-if(irpfPct>0){
-rowIrpf.style.display="flex";rowIrpfCero.style.display="none";
-document.getElementById("lbl-irpf").textContent="Retencion IRPF ("+irpfPct+"%)";
-document.getElementById("r-irpf").textContent="-" + fmt(deducIRPF);
-} else {rowIrpf.style.display="none";rowIrpfCero.style.display="flex";}
+  document.getElementById("f-info-duracion").innerHTML=
+    "<strong>Duracion:</strong> "+durTxt.trim()+" ("+totalDias+" dias)"+
+    " | <strong>Antiguedad:</strong> "+anosCompletos+" ano"+(anosCompletos!==1?"s":"")+
+    (quinquenios>0?" | <strong>"+quinquenios+" quinquenio"+(quinquenios>1?"s":"")+"</strong>":"");
 
-document.getElementById("r-neto").textContent=fmt(neto);
-document.getElementById("resultado").style.display="block";
-gtag('event','calcular',{categoria:catActual,jornada:jornActual,quinquenios:quinquenios});
-setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+  // Vacaciones
+  if(totalVacas>0){
+    document.getElementById("frow-vacas").style.display="flex";
+    document.getElementById("flbl-vacas").textContent="Vacaciones ("+diasVacas+" dias x "+fmt(valorDiaVacas)+")";
+    document.getElementById("fr-vacas").textContent="+"+fmt(totalVacas);
+    document.getElementById("fr-vacas").className="res-val up";
+  } else {document.getElementById("frow-vacas").style.display="none";}
+
+  // Pagas
+  if(pagasProp>0){
+    document.getElementById("frow-pagas").style.display="flex";
+    document.getElementById("flbl-pagas").textContent="Pagas pendientes ("+pagasPendientes+" x "+Math.round(fraccionAno*100)+"% del ano)";
+    document.getElementById("fr-pagas").textContent="+"+fmt(pagasProp);
+    document.getElementById("fr-pagas").className="res-val up";
+  } else {document.getElementById("frow-pagas").style.display="none";}
+
+  document.getElementById("fr-liq-bruta").textContent=fmt(liqBruta);
+  document.getElementById("fr-ss-liq").textContent="-"+fmt(ssLiq);
+
+  if(irpfPct>0){
+    document.getElementById("frow-irpf-liq").style.display="flex";
+    document.getElementById("flbl-irpf-liq").textContent="Retencion IRPF ("+irpfPct+"%)";
+    document.getElementById("fr-irpf-liq").textContent="-"+fmt(irpfLiq);
+  } else {document.getElementById("frow-irpf-liq").style.display="none";}
+
+  document.getElementById("fr-liq-neto").textContent=fmt(liqNeto);
+
+  if(indem>0){
+    document.getElementById("frow-indem-label").style.display="block";
+    document.getElementById("frow-indem").style.display="flex";
+    document.getElementById("flbl-indem").textContent=tipoDespido==="improcedente"
+      ?"Despido improcedente (33 dias/ano, max. 24 meses)"
+      :"Fin contrato / objetivo (20 dias/ano, max. 12 meses)";
+    document.getElementById("fr-indem").textContent="+"+fmt(indem);
+    document.getElementById("f-exento-info").style.display="block";
+  } else {
+    document.getElementById("frow-indem-label").style.display="none";
+    document.getElementById("frow-indem").style.display="none";
+    document.getElementById("f-exento-info").style.display="none";
+  }
+
+  document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
+  document.getElementById("resultado-finiquito").style.display="block";
+  gtag('event','calcular_finiquito',{tipo:tipoDespido,categoria:fcatActual});
+  setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 </script>
-
 </body>
 </html>
