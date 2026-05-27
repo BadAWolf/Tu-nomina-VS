@@ -5,6 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nómina Vigilante 2026</title>
 
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445"
+     crossorigin="anonymous"></script>
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -352,7 +355,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="field" style="margin-bottom:0">
 <div class="field-label">Importe de tu base de cotización (€)</div>
 <input type="number" id="b-baseManual" placeholder="ej. 1450" min="0" step="0.01" inputmode="decimal">
-<div class="field-hint">Búscalo en tu nómina del mes anterior como "Base Contingencias Comunes". Si lo dejas vacío o en 0, se calculará automáticamente el mínimo garantizado por convenio.</div>
+<div class="field-hint">Introduce la casilla <strong>"Base Contingencias Comunes"</strong> de tu nómina del mes anterior a la baja. Recuerda que las horas extras no computan para este cálculo y la prorrata de las pagas extras ya viene incluida por ley dentro de esa base. Si lo dejas en 0, usará el mínimo del convenio.</div>
 </div>
 </div>
 
@@ -420,11 +423,11 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row" id="brow-irpf0" style="display:none"><span class="res-concept">Retención IRPF (0%)</span><span class="res-val down">0,00 €</span></div>
 </div>
 <div class="neto-box">
-<div class="neto-label">NETO BAJA<span>Lo que recibes en tu cuenta</span></div>
+<div class="neto-label">NETO BAJA<span>Lo que recibe en tu cuenta</span></div>
 <div class="neto-val" id="br-neto">—</div>
 </div>
 <div class="info-box" style="margin-top:0">
-<strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días.
+<strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días. <br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
 </div>
 </div>
 </div>
@@ -542,7 +545,7 @@ function calcNomina(){
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas in tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
@@ -575,7 +578,7 @@ function calcNomina(){
   if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
   else{document.getElementById("row-plusserv").style.display="none";}
   showR("row-extra","lbl-extra","r-extra","Horas extra — "+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
-  showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN,"up");
+  showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN("up"));
   showR("row-fest","lbl-fest","r-fest","Plus festivos — "+hF+"h × 1,02 €",pFe,"up");
   showR("row-prorr","lbl-prorr","r-prorr",pa+" paga"+(pa!==1?"s":"")+" extra prorrateada"+(pa!==1?"s":""),pP,"up");
   document.getElementById("r-bruto").textContent=fmt(bruto);
@@ -753,7 +756,7 @@ function calcFiniquito(){
   });
 });
 document.getElementById("b-tipo").addEventListener("change",function(){
-  var es.style.display="block";
+  var es=document.getElementById("b-field-nbaja");
   if(this.value==="comun"){
     es.style.display="block";
     document.getElementById("b-hint-nbaja").textContent="El convenio complementa en las 3 primeras bajas del año";
