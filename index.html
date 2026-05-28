@@ -5,15 +5,91 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Nómina Vigilante 2026</title>
 
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445"
-     crossorigin="anonymous"></script>
+<style>
+#cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 1rem;
+  text-align: center;
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  z-index: 9999;
+  font-size: 0.75rem;
+  color: var(--text2);
+  display: none; /* Se oculta por defecto hasta que JS lo evalúe */
+}
+.cookie-buttons {
+  margin-top: 0.8rem;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+.btn-cookie {
+  border: none;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.btn-accept {
+  background: var(--gold2);
+  color: #fff;
+}
+.btn-accept:hover { background: var(--gold); }
+.btn-reject {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+}
+.btn-reject:hover { background: var(--border); }
+</style>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-NMM3MRRZ6B');
+  function loadGoogleScripts() {
+    // Carga Analytics
+    var s1 = document.createElement('script');
+    s1.src = "https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B";
+    s1.async = true;
+    document.head.appendChild(s1);
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-NMM3MRRZ6B');
+    
+    // Carga AdSense
+    var s2 = document.createElement('script');
+    s2.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445";
+    s2.async = true;
+    s2.setAttribute('crossorigin', 'anonymous');
+    document.head.appendChild(s2);
+  }
+
+  function acceptCookies() {
+    localStorage.setItem('cookies_status', 'accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+    loadGoogleScripts();
+  }
+
+  function rejectCookies() {
+    localStorage.setItem('cookies_status', 'rejected');
+    document.getElementById('cookie-banner').style.display = 'none';
+  }
+
+  // Comprobar estado al cargar la página
+  window.addEventListener('DOMContentLoaded', (event) => {
+    var status = localStorage.getItem('cookies_status');
+    if (status === 'accepted') {
+      loadGoogleScripts();
+    } else if (status !== 'rejected') {
+      document.getElementById('cookie-banner').style.display = 'block';
+    }
+  });
 </script>
 
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
@@ -124,6 +200,15 @@ input:checked + .slider:before{transform:translateX(20px);}
 </style>
 </head>
 <body>
+
+<div id="cookie-banner">
+  <p>Esta calculadora orientativa utiliza cookies de terceros (Google Analytics y AdSense) para analizar el tráfico y mostrar publicidad. Ningún dato personal o salario se guarda en nuestros servidores (todo se calcula en tu dispositivo). ¿Aceptas el uso de estas cookies?</p>
+  <div class="cookie-buttons">
+    <button class="btn-cookie btn-reject" onclick="rejectCookies()">Rechazar</button>
+    <button class="btn-cookie btn-accept" onclick="acceptCookies()">Aceptar</button>
+  </div>
+</div>
+
 <div class="wrap">
 
 <header>
@@ -579,7 +664,7 @@ function calcNomina(){
   else{document.getElementById("row-irpf").style.display="none";document.getElementById("row-irpf0").style.display="flex";}
   document.getElementById("r-neto").textContent=fmt(neto);
   document.getElementById("resultado").style.display="block";
-  gtag("event","calcular_nomina",{categoria:catActual});
+  if(typeof gtag !== 'undefined'){gtag("event","calcular_nomina",{categoria:catActual});}
   setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 
@@ -722,7 +807,7 @@ function calcFiniquito(){
   else{document.getElementById("frow-indem-label").style.display="none";document.getElementById("frow-indem").style.display="none";document.getElementById("f-exento-info").style.display="none";}
   document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
   document.getElementById("resultado-finiquito").style.display="block";
-  gtag("event","calcular_finiquito",{tipo:tipo,categoria:fcatActual});
+  if(typeof gtag !== 'undefined'){gtag("event","calcular_finiquito",{tipo:tipo,categoria:fcatActual});}
   setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 
@@ -825,7 +910,7 @@ function calcBaja(){
   else{document.getElementById("brow-irpf").style.display="none";document.getElementById("brow-irpf0").style.display="flex";}
   document.getElementById("br-neto").textContent=fmt(neto);
   document.getElementById("resultado-baja").style.display="block";
-  gtag("event","calcular_baja",{tipo:tipo,dias:dias,categoria:bcatActual});
+  if(typeof gtag !== 'undefined'){gtag("event","calcular_baja",{tipo:tipo,dias:dias,categoria:bcatActual});}
   setTimeout(function(){document.getElementById("resultado-baja").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 </script>
