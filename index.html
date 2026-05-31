@@ -19,7 +19,7 @@
   z-index: 9999;
   font-size: 0.75rem;
   color: var(--text2);
-  display: none; /* Se oculta por defecto hasta que JS lo evalúe */
+  display: none;
 }
 .cookie-buttons {
   margin-top: 0.8rem;
@@ -52,7 +52,6 @@
 
 <script>
   function loadGoogleScripts() {
-    // Carga Analytics
     var s1 = document.createElement('script');
     s1.src = "https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B";
     s1.async = true;
@@ -61,8 +60,7 @@
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-NMM3MRRZ6B');
-    
-    // Carga AdSense
+
     var s2 = document.createElement('script');
     s2.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445";
     s2.async = true;
@@ -77,16 +75,15 @@
   }
 
   function rejectCookies() {
-    localStorage.setItem('cookies_status', 'rejected');
-    document.getElementById('cookie-banner').style.display = 'none';
+    alert("Para utilizar esta calculadora gratuita es necesario aceptar las cookies publicitarias que financian el proyecto. Si no estás de acuerdo, puedes abandonar la web.");
+    window.location.href = "https://www.google.es";
   }
 
-  // Comprobar estado al cargar la página
   window.addEventListener('DOMContentLoaded', (event) => {
     var status = localStorage.getItem('cookies_status');
     if (status === 'accepted') {
       loadGoogleScripts();
-    } else if (status !== 'rejected') {
+    } else {
       document.getElementById('cookie-banner').style.display = 'block';
     }
   });
@@ -516,7 +513,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="neto-val" id="br-neto">—</div>
 </div>
 <div class="info-box" style="margin-top:0">
-<strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días. <br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
+<strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días.<br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
 </div>
 </div>
 </div>
@@ -531,6 +528,22 @@ Herramienta orientativa — compara siempre con tu nómina real
   <div class="privacy-title">Política de Privacidad y Confidencialidad</div>
   <p class="privacy-text">
     Esta calculadora es una herramienta 100% privada. Los cálculos se realizan de forma local e interna dentro de tu propio navegador móvil o dispositivo. Ningún dato personal, salario, fecha o porcentaje introducido es almacenado, guardado ni enviado a ningún servidor externo. Cumplimos estrictamente con las normativas europeas de protección de datos (RGPD) garantizando el anonimato absoluto de todos los vigilantes.
+  </p>
+</div>
+
+<div class="privacy-footer">
+  <div class="privacy-title">Quiénes somos</div>
+  <p class="privacy-text">
+    Soy un vigilante de seguridad privada que, cansado de la falta de transparencia, decidí crear esta herramienta de forma completamente gratuita para ayudar al colectivo. Nómina Vigilante nació para revisar las nóminas mensuales, pero ha crecido con un único objetivo: acompañar al vigilante en toda su vida laboral para saber con claridad y precisión lo que te corresponde ganar. Aplico el Convenio Colectivo Estatal de forma rigurosa para que cualquier compañero pueda calcular en segundos una estimación muy aproximada de su salario mensual, su liquidación y finiquito en caso de despido, o la prestación que le corresponde estando de baja por incapacidad (IT). La web se financia exclusivamente mediante anuncios para poder cubrir los costes de mantenimiento y seguir ofreciendo el servicio gratis a todos. Esta calculadora es una guía de orientación que no sustituye el asesoramiento laboral profesional, pero sí te da el conocimiento para defender tus derechos.
+  </p>
+</div>
+
+<div class="privacy-footer">
+  <div class="privacy-title">Contacto</div>
+  <p class="privacy-text">
+    ¿Tienes alguna duda, has detectado un error o quieres sugerirnos una mejora? Escríbenos, leemos todos los mensajes.<br><br>
+    <strong>Correo electrónico:</strong><br>
+    <a href="mailto:BadAWolfprivado@gmail.com" style="color:var(--gold2);font-weight:600;">BadAWolfprivado@gmail.com</a>
   </p>
 </div>
 
@@ -668,7 +681,6 @@ function calcNomina(){
   setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 
-// ---------------- LÓGICA FINIQUITO ----------------
 ["sin_arma","con_arma","fondos","escolta"].forEach(function(c){
   document.getElementById("fbtn-"+c).addEventListener("click",function(){
     document.querySelectorAll("#view-finiquito .cat-btn").forEach(function(b){b.classList.remove("active");});
@@ -688,7 +700,6 @@ document.getElementById("fjorn-parcial").addEventListener("click",function(){
   document.getElementById("fjorn-completa").classList.remove("active");
   document.getElementById("f-parcial-field").style.display="block";
 });
-
 function actuFechas(){
   var i=document.getElementById("f-inicio").value, f=document.getElementById("f-fin").value;
   if(!i||!f)return;
@@ -737,7 +748,6 @@ function propPaga(d1,d2,paga){
   var sol=solapamiento(d1,d2,ds,de);
   return Math.min(1,sol/devDias);
 }
-
 function calcFiniquito(){
   var cat=CATS[fcatActual];
   var dv=parseFloat(document.getElementById("f-vacas").value)||0;
@@ -745,37 +755,29 @@ function calcFiniquito(){
   var tipo=document.getElementById("f-tipodespido").value;
   var si=document.getElementById("f-inicio").value, sf=document.getElementById("f-fin").value;
   var err=document.getElementById("f-errorBox");
-  
   if(!si||!sf){err.textContent="Introduce las fechas de inicio y fin del contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
   var d1=new Date(si),d2=new Date(sf);
   if(d2<=d1){err.textContent="La fecha de fin debe ser posterior a la de inicio.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  
   var fhp=fjornActual==="completa"?JORNADA:(parseFloat(document.getElementById("fhPactadas").value)||0);
   if(fjornActual==="parcial"&&fhp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
   if(fjornActual==="parcial"&&fhp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  
   err.style.display="none";
-  
-  var ratio = fhp / JORNADA;
+  var ratio=fhp/JORNADA;
   var dias=Math.round((d2-d1)/864e5);
   var anosEx=dias/365, anosC=Math.floor(anosEx), q=Math.floor(anosC/5);
   var ant=calcAntig(anosC,fcatActual);
-  
-  var sMens = r2((cat.salBase + cat.pelig + cat.trans + cat.vest + ant) * ratio);
-  var bPaga = r2((cat.salBase + cat.pelig + ant) * ratio);
-  var vDia = r2(sMens / 30);
-  var totVacas = r2(dv * vDia);
-  
+  var sMens=r2((cat.salBase+cat.pelig+cat.trans+cat.vest+ant)*ratio);
+  var bPaga=r2((cat.salBase+cat.pelig+ant)*ratio);
+  var vDia=r2(sMens/30);
+  var totVacas=r2(dv*vDia);
   var pJulio=document.getElementById("fpaga-julio").classList.contains("active");
   var pDic=document.getElementById("fpaga-dic").classList.contains("active");
   var pMar=document.getElementById("fpaga-mar").classList.contains("active");
-  
   var impJulio=0,impNavidad=0,impMarzo=0;
   var pJulTxt="",pNavTxt="",pMarTxt="";
   if(!pJulio){var pr=propPaga(d1,d2,"julio");impJulio=r2(bPaga*pr);pJulTxt="Paga Julio proporcional ("+Math.round(pr*100)+"% del periodo)";}
   if(!pDic){var pr2=propPaga(d1,d2,"navidad");impNavidad=r2(bPaga*pr2);pNavTxt="Paga Navidad proporcional ("+Math.round(pr2*100)+"% del periodo)";}
   if(!pMar){var pr3=propPaga(d1,d2,"marzo");impMarzo=r2(bPaga*pr3);pMarTxt="Paga Marzo proporcional ("+Math.round(pr3*100)+"% del periodo)";}
-  
   var liqBruta=r2(totVacas+impJulio+impNavidad+impMarzo);
   var ssLiq=r2(liqBruta*SS_PCT);
   var irpfLiq=r2(liqBruta*ip/100);
@@ -792,7 +794,6 @@ function calcFiniquito(){
   if(mN>0)dur+=mN+" mes"+(mN>1?"es":"")+" ";
   if(dN>0)dur+=dN+" día"+(dN>1?"s":"");
   var sufRatio=fjornActual==="parcial"?" (Ajuste parcial: "+fhp+"h)":"";
-  
   document.getElementById("f-info-duracion").innerHTML="<strong>Duración:</strong> "+dur.trim()+" ("+dias+" días exactos) | <strong>Antigüedad:</strong> "+anosC+" año"+(anosC!==1?"s":"")+(q>0?" | <strong>"+q+" quinquenio"+(q>1?"s":"")+"</strong>":"");
   showR("frow-vacas","flbl-vacas","fr-vacas","Vacaciones ("+dv+" días × "+fmt(vDia)+")"+sufRatio,totVacas,"up");
   showR("frow-julio","flbl-julio","fr-julio",pJulTxt,impJulio,"up");
@@ -811,7 +812,6 @@ function calcFiniquito(){
   setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 
-// ---------------- LÓGICA BAJAS IT ----------------
 ["sin_arma","con_arma","fondos","escolta"].forEach(function(c){
   document.getElementById("bbtn-"+c).addEventListener("click",function(){
     document.querySelectorAll("#view-baja .cat-btn").forEach(function(b){b.classList.remove("active");});
@@ -848,22 +848,15 @@ function calcBaja(){
   if(dias<=0){err.textContent="Introduce el número de días de baja.";err.style.display="block";document.getElementById("resultado-baja").style.display="none";return;}
   if(dias>545){err.textContent="El máximo legal son 545 días de baja.";err.style.display="block";document.getElementById("resultado-baja").style.display="none";return;}
   err.style.display="none";
-  
   var ant=calcAntig(an,bcatActual);
   var baseManual=parseFloat(document.getElementById("b-baseManual").value)||0;
+  var prorrata=r2((cat.salBase+cat.pelig+ant)*3/12);
   var baseCotizMens;
-  var prorrata = r2((cat.salBase + cat.pelig + ant) * 3 / 12);
-  
-  if(baseManual>0){
-    baseCotizMens=baseManual;
-  } else {
-    baseCotizMens=r2(cat.salBase + cat.pelig + cat.trans + cat.vest + ant + prorrata);
-  }
+  if(baseManual>0){baseCotizMens=baseManual;}
+  else{baseCotizMens=r2(cat.salBase+cat.pelig+cat.trans+cat.vest+ant+prorrata);}
   var brDiario=r2(baseCotizMens/30);
-  
-  var baseATMens = r2(cat.salBase + cat.pelig + cat.trans + cat.vest + ant + prorrata);
+  var baseATMens=r2(cat.salBase+cat.pelig+cat.trans+cat.vest+ant+prorrata);
   var brATDiario=r2(baseATMens/30);
-  
   for(var i=0;i<=6;i++){document.getElementById("brow-t"+i).style.display="none";}
   var totalBruto=0;
   if(tipo==="hospitalizacion"){
@@ -896,13 +889,10 @@ function calcBaja(){
     }
   }
   totalBruto=r2(totalBruto);
-  
-  var baseParaSS = r2((tipo === "laboral" ? brATDiario : brDiario) * dias);
+  var baseParaSS=r2((tipo==="laboral"?brATDiario:brDiario)*dias);
   var dSS=r2(baseParaSS*SS_PCT);
   var dIP=r2(totalBruto*ip/100);
-  
   var neto=r2(totalBruto-dSS-dIP);
-  
   document.getElementById("b-info-base").innerHTML="<strong>Base reguladora diaria:</strong> "+fmt(brDiario)+"/día (cotización "+fmt(baseCotizMens)+" ÷ 30)"+(ant>0&&baseManual===0?" | Antigüedad inc.: "+fmt(ant)+"/m":"");
   document.getElementById("br-total-bruto").textContent=fmt(totalBruto);
   document.getElementById("br-ss").textContent="-"+fmt(dSS);
