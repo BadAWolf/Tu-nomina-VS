@@ -636,41 +636,71 @@ function calcNomina(){
   var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
+  
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   err.style.display="none";
-  var ratio=hp/JORNADA;
-  var sb=r2(cat.salBase*ratio), pe=r2(cat.pelig*ratio), tr=r2(cat.trans*ratio), ve=r2(cat.vest*ratio);
-  var ant=calcAntig(an,catActual), antM=r2(ant*ratio), q=Math.floor(an/5);
+
+  // MODIFICACIÓN DE LA LÓGICA GENERAL DE HORAS
+  var ratioFijo = hp / JORNADA; // Ratio por tipo de contrato (completo = 1, parcial = menor a 1)
+  var factorH = 1;
+  var labelSufix = "";
+
+  if (jornActual === "completa" && hT < JORNADA) {
+    // Si es jornada completa pero no llega a 162h, calculamos proporcionalidad real de horas
+    factorH = hT / JORNADA;
+    labelSufix = " (Proporcional " + hT + "h/" + JORNADA + "h)";
+  } else if (jornActual === "parcial" && hT < hp) {
+    // Si es jornada parcial pero trabajó menos de sus horas contratadas
+    factorH = hT / hp;
+    labelSufix = " (Proporcional " + hT + "h/" + hp + "h)";
+  }
+
+  var sb=r2(cat.salBase * ratioFijo * factorH);
+  var pe=r2(cat.pelig * ratioFijo * factorH);
+  var tr=r2(cat.trans * ratioFijo * factorH);
+  var ve=r2(cat.vest * ratioFijo * factorH);
+  
+  var ant=calcAntig(an,catActual);
+  var antM=r2(ant * ratioFijo * factorH);
+  var q=Math.floor(an/5);
+  
+  // Las extras saltan si se supera el mínimo pactado/general
   var hev=calcHoraExtra(cat.salBase,cat.pelig,ant);
   var hEx=Math.max(0,hT-hp);
   var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=r2(hF*PLUS_FEST);
+  
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
-  var bP=r2((cat.salBase+cat.pelig+ant)*ratio);
-  var pP=r2((pa*bP)/12);
+  var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo); // La base de la paga extra va ligada al contrato, no a la penalización por faltar horas
+  var pP=r2((pa*bP*factorH)/12);
+  
   var bruto=r2(sb+pe+tr+ve+antM+ps+pEx+pN+pFe+pP);
   var pNP=3-pa;
-  var ssB=r2(bruto+r2(pNP*bP/12));
+  var ssB=r2(bruto+r2(pNP*bP*factorH/12));
   var dSS=r2(ssB*SS_PCT), dIP=r2(bruto*ip/100);
   var neto=r2(bruto-dSS-dIP);
-  var suf=jornActual==="parcial"?" ("+hp+"h/162h)":"";
+  
+  var suf=jornActual==="parcial" && labelSufix === "" ?" ("+hp+"h/162h)":labelSufix;
   document.getElementById("lbl-base").textContent="Salario base"+suf;
   document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+suf;
   document.getElementById("r-base").textContent="+"+fmt(sb);
   document.getElementById("r-pelig").textContent="+"+fmt(pe);
   document.getElementById("r-trans").textContent="+"+fmt(tr);
   document.getElementById("r-vest").textContent="+"+fmt(ve);
+  
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
   else{document.getElementById("row-antig").style.display="none";}
   if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
   else{document.getElementById("row-plusserv").style.display="none";}
+  
   showR("row-extra","lbl-extra","r-extra","Horas extra — "+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
   showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN,"up");
   showR("row-fest","lbl-fest","r-fest","Plus festivos — "+hF+"h × 1,02 €",pFe,"up");
   showR("row-prorr","lbl-prorr","r-prorr",pa+" paga"+(pa!==1?"s":"")+" extra prorrateada"+(pa!==1?"s":""),pP,"up");
+  
   document.getElementById("r-bruto").textContent=fmt(bruto);
   document.getElementById("r-ss").textContent="-"+fmt(dSS);
   if(ip>0){document.getElementById("row-irpf").style.display="flex";document.getElementById("row-irpf0").style.display="none";document.getElementById("lbl-irpf").textContent="Retención IRPF ("+ip+"%)";document.getElementById("r-irpf").textContent="-"+fmt(dIP);}
