@@ -76,15 +76,15 @@
   }
 
   function rejectCookies() {
-    alert("Para utilizar esta calculadora gratuita es necesario aceptar las cookies publicitarias que financian el proyecto. Si no estás de acuerdo, puedes abandonar la web.");
-    window.location.href = "https://www.google.es";
+    localStorage.setItem('cookies_status', 'rejected');
+    document.getElementById('cookie-banner').style.display = 'none';
   }
 
   window.addEventListener('DOMContentLoaded', (event) => {
     var status = localStorage.getItem('cookies_status');
     if (status === 'accepted') {
       loadGoogleScripts();
-    } else {
+    } else if (status !== 'rejected') {
       document.getElementById('cookie-banner').style.display = 'block';
     }
   });
@@ -193,7 +193,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .seo-section{margin-top:2.5rem;width:100%;}
 .seo-header{text-align:center;margin-bottom:1rem;}
 .seo-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;color:var(--text);line-height:1.1;}
-.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
+.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3--v-light-gray;}
 .seo-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.8rem;box-shadow:0 1px 4px rgba(44,36,22,0.05);}
 .seo-card h3{font-size:0.85rem;font-weight:700;color:var(--gold2);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.4rem;}
 .seo-card p{font-size:0.75rem;color:var(--text2);line-height:1.6;margin-bottom:0.6rem;font-weight:400;}
@@ -594,7 +594,7 @@ Herramienta orientativa — compara siempre con tu nómina real
 
 <div class="privacy-footer">
   <div class="privacy-title">Política de Privacidad y Confidencialidad</div>
-  <p class="privacy-text">Esta calculadora es una herramienta 100% privada. Los cálculos se realizan de forma local e interna dentro de tu propio navegador móvil o dispositivo. Ningún dato personal, salario, fecha o porcentaje introducido es almacenado, guardado ni enviado a ningún servidor externo. Cumplimos estrictamente con las normativas europeas de protección de datos (RGPD) garantizando el anonimato absoluto de todos los vigilantes.</p>
+  <p class="privacy-text">Esta calculadora es una herramienta 100% privada. Los cálculos se realizan de forma local e interna dentro de tu propio navegador móvil o dispositivo. Ningún dato personal, salario, fecha o porcentaje introducido es almacenado, guardado ni enviado a ningún servidor externo. Cumplimos estrictamente con las normativas europeas de protección de datos (RGPD) garantizando el anonimato absoluto de todos los vigilantes. Puedes consultar el documento extendido de nuestra <a href="privacidad.html" style="color:var(--gold2);font-weight:600;text-decoration:underline;">Política de Privacidad y Cookies</a>.</p>
 </div>
 
 <div class="privacy-footer">
