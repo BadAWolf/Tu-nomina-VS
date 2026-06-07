@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Nómina Vigilante 2026</title>
+<meta name="description" content="Calculadora de nómina, finiquito y bajas para Vigilantes de Seguridad Privada. Actualizada al Convenio 2026. Calcula tu salario neto, horas extras y pluses.">
+<title>Nómina Vigilante 2026 | Calculadora de Seguridad Privada</title>
 
 <style>
 #cookie-banner {
@@ -89,7 +90,7 @@
   });
 </script>
 
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -105,50 +106,50 @@ html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-seri
 body{display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 4rem;}
 .wrap{width:100%;max-width:420px;}
 header{text-align:center;padding:1.1rem 0 1.1rem;}
-.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.4rem;}
+.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.4rem;font-weight:600;}
 h1{font-family:'Bebas Neue',sans-serif;font-size:2.4rem;letter-spacing:0.05em;line-height:1;color:var(--text);}
 h1 em{color:var(--gold2);font-style:normal;}
-.header-sub{font-size:0.71rem;color:var(--muted);margin-top:0.35rem;}
+.header-sub{font-size:0.75rem;color:var(--muted);margin-top:0.35rem;font-weight:500;}
 .tab-selector{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:4px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
-.tab-btn{background:transparent;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:500;padding:0.6rem 0.3rem;cursor:pointer;color:var(--muted);transition:all 0.2s;text-align:center;line-height:1.25;}
-.tab-btn.active{background:var(--goldbg);color:var(--gold);font-weight:700;box-shadow:0 1px 3px rgba(180,120,10,0.15);}
-.tab-btn-sub{display:block;font-size:0.57rem;font-weight:400;margin-top:0.08rem;opacity:0.8;}
+.tab-btn{background:transparent;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;padding:0.6rem 0.3rem;cursor:pointer;color:var(--muted);transition:all 0.2s;text-align:center;line-height:1.25;}
+.tab-btn.active{background:var(--goldbg);color:var(--gold);box-shadow:0 1px 3px rgba(180,120,10,0.15);}
+.tab-btn-sub{display:block;font-size:0.57rem;font-weight:500;margin-top:0.08rem;opacity:0.8;}
 #view-nomina{display:block;}#view-finiquito{display:none;}#view-baja{display:none;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.65rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
-.card-label{font-family:'DM Mono',monospace;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.85rem;}
+.card-label{font-family:'DM Mono',monospace;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.85rem;font-weight:600;}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;}
-.cat-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:500;padding:0.65rem 0.4rem;text-align:center;cursor:pointer;transition:all 0.15s;line-height:1.3;width:100%;}
+.cat-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;padding:0.65rem 0.4rem;text-align:center;cursor:pointer;transition:all 0.15s;line-height:1.3;width:100%;}
 .cat-btn:hover{border-color:var(--gold2);color:var(--text2);background:var(--goldbg);}
-.cat-btn.active{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);font-weight:600;}
-.cat-salary{display:block;font-family:'DM Mono',monospace;font-size:0.59rem;margin-top:0.18rem;color:var(--subtle);}
+.cat-btn.active{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);}
+.cat-salary{display:block;font-family:'DM Mono',monospace;font-size:0.59rem;margin-top:0.18rem;color:var(--subtle);font-weight:500;}
 .cat-btn.active .cat-salary{color:var(--gold2);}
 .jornada-toggle{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;margin-bottom:0.8rem;}
-.jorn-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:500;padding:0.62rem;text-align:center;cursor:pointer;transition:all 0.15s;}
-.jorn-btn.active{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);font-weight:600;}
-.jorn-sub{display:block;font-size:0.61rem;margin-top:0.13rem;opacity:0.75;}
+.jorn-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:600;padding:0.62rem;text-align:center;cursor:pointer;transition:all 0.15s;}
+.jorn-btn.active{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);}
+.jorn-sub{display:block;font-size:0.61rem;margin-top:0.13rem;font-weight:500;opacity:0.8;}
 #parcial-field, #f-parcial-field{display:none;}
 .field{margin-bottom:0.8rem;}
 .field:last-child{margin-bottom:0;}
-.field-label{font-size:0.71rem;font-weight:600;color:var(--text2);margin-bottom:0.32rem;display:flex;align-items:center;gap:0.45rem;}
-.field-badge{font-family:'DM Mono',monospace;font-size:0.57rem;color:var(--gold);background:var(--goldbg);border:1px solid var(--goldline);border-radius:4px;padding:0.1rem 0.4rem;}
-input[type=number],input[type=date],select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;padding:0.58rem 0.8rem;outline:none;transition:border-color 0.15s,background 0.15s;-webkit-appearance:none;appearance:none;}
+.field-label{font-size:0.73rem;font-weight:700;color:var(--text2);margin-bottom:0.35rem;display:flex;align-items:center;gap:0.45rem;}
+.field-badge{font-family:'DM Mono',monospace;font-size:0.57rem;font-weight:600;color:var(--gold);background:var(--goldbg);border:1px solid var(--goldline);border-radius:4px;padding:0.1rem 0.4rem;}
+input[type=number],input[type=date],select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:500;padding:0.58rem 0.8rem;outline:none;transition:border-color 0.15s,background 0.15s;-webkit-appearance:none;appearance:none;}
 input[type=number]{font-family:'DM Mono',monospace;font-size:1.05rem;}
 input[type=number]:focus,input[type=date]:focus,select:focus{border-color:var(--gold2);background:var(--goldbg);}
 input[type=number]::-webkit-inner-spin-button{display:none;}
 input::placeholder{color:var(--subtle);}
 select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a65' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.8rem center;padding-right:2.2rem;cursor:pointer;}
 select option{background:var(--card);}
-.field-hint{font-size:0.61rem;color:var(--muted);margin-top:0.28rem;}
+.field-hint{font-size:0.63rem;color:var(--muted);margin-top:0.35rem;font-weight:500;line-height:1.4;}
 .date-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.45rem;}
 .paga-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:0.45rem;}
-.paga-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.71rem;font-weight:500;padding:0.58rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.15s;user-select:none;line-height:1.3;width:100%;}
+.paga-btn{background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:0.71rem;font-weight:600;padding:0.58rem 0.3rem;text-align:center;cursor:pointer;transition:all 0.15s;user-select:none;line-height:1.3;width:100%;}
 .paga-btn:hover{border-color:var(--gold2);background:var(--goldbg);}
-.paga-btn.active{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);font-weight:600;}
-.paga-sub{display:block;font-size:0.57rem;margin-top:0.1rem;color:var(--subtle);}
+.paga-btn.active{background:var(--goldbg);border-color:var(--gold2);color:var(--gold);}
+.paga-sub{display:block;font-size:0.57rem;margin-top:0.1rem;color:var(--subtle);font-weight:500;}
 .paga-btn.active .paga-sub{color:var(--gold2);}
 .switch-row{display:flex;align-items:center;justify-content:space-between;}
-.switch-text{font-size:0.71rem;font-weight:600;color:var(--text2);}
-.switch-sub{font-size:0.61rem;color:var(--muted);margin-top:0.08rem;}
+.switch-text{font-size:0.73rem;font-weight:700;color:var(--text2);}
+.switch-sub{font-size:0.63rem;color:var(--muted);margin-top:0.1rem;font-weight:500;}
 .switch{position:relative;width:44px;height:24px;flex-shrink:0;}
 .switch input{opacity:0;width:0;height:0;}
 .slider{position:absolute;cursor:pointer;inset:0;background:var(--border2);border-radius:24px;transition:0.2s;}
@@ -156,43 +157,55 @@ select option{background:var(--card);}
 input:checked + .slider{background:var(--gold2);}
 input:checked + .slider:before{transform:translateX(20px);}
 #plus-servicio-field{display:none;margin-top:0.8rem;}
-.btn-calc{width:100%;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.12em;padding:0.88rem;cursor:pointer;transition:background 0.15s;margin-top:0.65rem;box-shadow:0 2px 8px rgba(180,120,10,0.25);display:block;}
+.btn-calc{width:100%;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.12em;padding:0.88rem;cursor:pointer;transition:background 0.15s;margin-top:0.65rem;box-shadow:0 2px 8px rgba(180,120,10,0.25);display:block;}
 .btn-calc:hover{background:var(--gold);}
 .btn-calc:active{opacity:0.92;}
-.error-box{background:var(--redbg);border:1px solid #e8b4b4;border-radius:7px;padding:0.62rem 0.85rem;font-size:0.73rem;color:var(--red);display:none;margin-top:0.5rem;}
+.error-box{background:var(--redbg);border:1px solid #e8b4b4;border-radius:7px;padding:0.62rem 0.85rem;font-size:0.73rem;font-weight:600;color:var(--red);display:none;margin-top:0.5rem;}
 #resultado,#resultado-finiquito,#resultado-baja{display:none;margin-top:0.65rem;}
 .res-top{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;margin-bottom:0.55rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
-.res-top .res-section-label{font-family:'DM Mono',monospace;font-size:0.56rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.38rem;margin-top:0.7rem;font-weight:600;}
+.res-top .res-section-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.14em;text-transform:uppercase;margin-bottom:0.38rem;margin-top:0.7rem;font-weight:600;}
 .res-top .res-section-label:first-child{margin-top:0;}
 .res-section-label.green{color:var(--green);}
 .res-section-label.red{color:var(--red);}
 .res-section-label.blue{color:var(--blue);}
-.res-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.4rem 0;border-bottom:1px solid var(--border);}
+.res-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.45rem 0;border-bottom:1px solid var(--border);}
 .res-row:last-child{border-bottom:none;}
-.res-concept{font-size:0.76rem;color:var(--muted);flex:1;padding-right:0.5rem;}
-.res-val{font-family:'DM Mono',monospace;font-size:0.83rem;font-weight:500;white-space:nowrap;}
+.res-concept{font-size:0.76rem;font-weight:500;color:var(--muted);flex:1;padding-right:0.5rem;}
+.res-val{font-family:'DM Mono',monospace;font-size:0.83rem;font-weight:600;white-space:nowrap;}
 .res-val.up{color:var(--green);}
 .res-val.down{color:var(--red);}
 .res-val.neu{color:var(--text);}
 .res-val.exento{color:var(--blue);}
-.res-divider{height:1px;background:var(--border);margin:0.45rem 0;}
+.res-divider{height:1px;background:var(--border);margin:0.5rem 0;}
 .bruto-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0 0.2rem;}
-.bruto-label{font-size:0.83rem;font-weight:700;color:var(--text);}
-.bruto-val{font-family:'DM Mono',monospace;font-size:1.08rem;font-weight:700;color:var(--text);}
+.bruto-label{font-size:0.85rem;font-weight:700;color:var(--text);}
+.bruto-val{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--text);}
 .neto-box{background:var(--goldbg);border:1.5px solid var(--goldline);border-radius:10px;padding:1.15rem 1.2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(180,120,10,0.1);margin-bottom:0.55rem;}
-.neto-label{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--gold);}
-.neto-label span{display:block;font-family:'DM Sans',sans-serif;font-size:0.63rem;font-weight:400;letter-spacing:0;color:var(--muted);margin-top:0.1rem;}
+.neto-label{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.08em;color:var(--gold);}
+.neto-label span{display:block;font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;letter-spacing:0;color:var(--muted);margin-top:0.15rem;}
 .neto-val{font-family:'DM Mono',monospace;font-size:1.9rem;font-weight:700;color:var(--gold);}
-.info-box{background:var(--greenbg);border:1px solid #b4d8bc;border-radius:7px;padding:0.7rem 0.9rem;font-size:0.7rem;color:#2d5a35;line-height:1.55;margin-bottom:0.55rem;}
-.info-box strong{color:var(--green);}
+.info-box{background:var(--greenbg);border:1px solid #b4d8bc;border-radius:7px;padding:0.75rem 0.9rem;font-size:0.72rem;font-weight:500;color:#2d5a35;line-height:1.55;margin-bottom:0.55rem;}
+.info-box strong{color:var(--green);font-weight:700;}
 .info-box.blue{background:var(--bluebg);border-color:#b4c8e0;color:#1e3f6a;}
 .info-box.blue strong{color:var(--blue);}
-.exento-box{background:var(--bluebg);border:1px solid #b4c8e0;border-radius:7px;padding:0.7rem 0.9rem;font-size:0.7rem;color:#2a4a6a;line-height:1.55;margin-bottom:0.55rem;}
-.exento-box strong{color:var(--blue);}
-.disclaimer{font-size:0.6rem;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
-.privacy-footer{margin-top:2.5rem;padding-top:1.2rem;border-top:1px dashed var(--border2);text-align:center;}
-.privacy-title{font-family:'DM Mono',monospace;font-size:0.65rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.4rem;font-weight:600;}
-.privacy-text{font-size:0.63rem;color:var(--muted);line-height:1.6;padding:0 0.5rem;}
+.exento-box{background:var(--bluebg);border:1px solid #b4c8e0;border-radius:7px;padding:0.75rem 0.9rem;font-size:0.72rem;font-weight:500;color:#2a4a6a;line-height:1.55;margin-bottom:0.55rem;}
+.exento-box strong{color:var(--blue);font-weight:700;}
+.seo-section{margin-top:2.5rem;width:100%;}
+.seo-header{text-align:center;margin-bottom:1rem;}
+.seo-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;color:var(--text);line-height:1.1;}
+.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
+.seo-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.8rem;box-shadow:0 1px 4px rgba(44,36,22,0.05);}
+.seo-card h3{font-size:0.85rem;font-weight:700;color:var(--gold2);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.4rem;}
+.seo-card p{font-size:0.75rem;color:var(--text2);line-height:1.6;margin-bottom:0.6rem;font-weight:400;}
+.seo-card p:last-child{margin-bottom:0;}
+.seo-card ul{margin-left:1.2rem;margin-bottom:0.6rem;font-size:0.75rem;color:var(--text2);line-height:1.6;}
+.seo-card ul li{margin-bottom:0.3rem;}
+.seo-card strong{color:var(--text);font-weight:600;}
+.disclaimer{font-size:0.62rem;font-weight:500;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
+.privacy-footer{margin-top:1.5rem;padding-top:1.2rem;border-top:1px dashed var(--border2);text-align:center;}
+.privacy-footer:first-of-type{margin-top:2.5rem;}
+.privacy-title{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;font-weight:600;}
+.privacy-text{font-size:0.7rem;font-weight:500;color:var(--muted);line-height:1.6;padding:0 0.5rem;}
 .ads-placeholder{width:100%;margin:1rem 0;text-align:center;display:block;}
 </style>
 </head>
@@ -518,6 +531,38 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 </div>
 
+<section class="seo-section">
+  <div class="seo-header">
+    <h2>Guía y Conceptos</h2>
+    <p>Aprende a interpretar tu nómina según el Convenio 2026</p>
+  </div>
+  <div class="seo-card">
+    <h3>📝 Novedad: Cálculo Proporcional Automático</h3>
+    <p><strong>Nuestra calculadora ahora es inteligente.</strong> Si acabas de empezar a trabajar en tu empresa a mitad de mes, has estado de baja o simplemente te han salido menos horas de lo normal en tu cuadrante mensual, ya no tienes que hacer cálculos manuales ni cambiar de jornada completa a jornada parcial.</p>
+    <p>Simplemente introduce en la casilla de <em>"Horas Totales"</em> las horas reales que has trabajado (por ejemplo, 140h). El sistema detectará automáticamente que no has llegado al mínimo exigido por el convenio (162 horas mensuales) y calculará de manera precisa la <strong>parte proporcional exacta</strong> de tu salario base, así como los pluses de peligrosidad, transporte y vestuario.</p>
+  </div>
+  <div class="seo-card">
+    <h3>💶 Entendiendo los Conceptos de tu Nómina</h3>
+    <p>El salario de un Vigilante de Seguridad en España se compone de varios conceptos regulados por el Convenio Colectivo Estatal de Empresas de Seguridad. Es importante conocerlos para asegurar que tus cobros sean correctos:</p>
+    <ul>
+      <li><strong>Salario Base:</strong> Es la retribución fija mensual que percibe el trabajador por su jornada ordinaria. Varía ligeramente dependiendo de si se trata de un vigilante con arma, sin arma, transporte de fondos o escolta.</li>
+      <li><strong>Plus de Peligrosidad:</strong> Un complemento económico mensual que compensa el riesgo inherente a la profesión. Para los vigilantes con arma, este plus es significativamente mayor.</li>
+      <li><strong>Pluses Extra-salariales:</strong> Aquí entran el Plus de Transporte y el Plus de Vestuario. Sirven para compensar los gastos de desplazamiento y mantenimiento del uniforme.</li>
+      <li><strong>Antigüedad (Quinquenios):</strong> Por cada 5 años trabajados de forma ininterrumpida en la misma empresa, se suma un importe fijo mensual a tu nómina.</li>
+    </ul>
+  </div>
+  <div class="seo-card">
+    <h3>⏱ Horas Extra, Nocturnidad y Festivos</h3>
+    <p>El Convenio de Seguridad Privada establece una jornada ordinaria de <strong>162 horas mensuales</strong> (equivalentes a 1.782 horas anuales en jornada completa). Todo lo que supere este umbral deberá ser abonado como hora extraordinaria al precio fijado en las tablas vigentes.</p>
+    <p>Además, existen dos pluses fundamentales por horario:</p>
+    <ul>
+      <li><strong>Plus de Nocturnidad:</strong> Se abona por cada hora trabajada entre las 22:00 de la noche y las 06:00 de la mañana.</li>
+      <li><strong>Plus de Festividad:</strong> Se cobra por cada hora trabajada en un día marcado como festivo nacional, autonómico o local. <em>Importante:</em> Si trabajas en un festivo de noche, <strong>ambos pluses son acumulables</strong> y se cobran juntos.</li>
+    </ul>
+    <p>Para la retención de IRPF, te recomendamos mirar el porcentaje exacto en tu última nómina entregada por la empresa, ya que este valor depende de tu situación personal, familiar y de si tienes otros ingresos o pagadores.</p>
+  </div>
+</section>
+
 <div class="disclaimer">
 Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026)<br>
 Art. 51 IT · Art. 45 Pagas extras · Art. 57 Vacaciones · Art. 42 Antigüedad<br>
@@ -526,25 +571,19 @@ Herramienta orientativa — compara siempre con tu nómina real
 
 <div class="privacy-footer">
   <div class="privacy-title">Política de Privacidad y Confidencialidad</div>
-  <p class="privacy-text">
-    Esta calculadora es una herramienta 100% privada. Los cálculos se realizan de forma local e interna dentro de tu propio navegador móvil o dispositivo. Ningún dato personal, salario, fecha o porcentaje introducido es almacenado, guardado ni enviado a ningún servidor externo. Cumplimos estrictamente con las normativas europeas de protección de datos (RGPD) garantizando el anonimato absoluto de todos los vigilantes.
-  </p>
+  <p class="privacy-text">Esta calculadora es una herramienta 100% privada. Los cálculos se realizan de forma local e interna dentro de tu propio navegador móvil o dispositivo. Ningún dato personal, salario, fecha o porcentaje introducido es almacenado, guardado ni enviado a ningún servidor externo. Cumplimos estrictamente con las normativas europeas de protección de datos (RGPD) garantizando el anonimato absoluto de todos los vigilantes.</p>
 </div>
 
 <div class="privacy-footer">
   <div class="privacy-title">Quiénes somos</div>
-  <p class="privacy-text">
-    Soy un vigilante de seguridad privada que, cansado de la falta de transparencia, decidí crear esta herramienta de forma completamente gratuita para ayudar al colectivo. Nómina Vigilante nació para revisar las nóminas mensuales, pero ha crecido con un único objetivo: acompañar al vigilante en toda su vida laboral para saber con claridad y precisión lo que te corresponde ganar. Aplico el Convenio Colectivo Estatal de forma rigurosa para que cualquier compañero pueda calcular en segundos una estimación muy aproximada de su salario mensual, su liquidación y finiquito en caso de despido, o la prestación que le corresponde estando de baja por incapacidad (IT). La web se financia exclusivamente mediante anuncios para poder cubrir los costes de mantenimiento y seguir ofreciendo el servicio gratis a todos. Esta calculadora es una guía de orientación que no sustituye el asesoramiento laboral profesional, pero sí te da el conocimiento para defender tus derechos.
-  </p>
+  <p class="privacy-text">Soy un vigilante de seguridad privada que, cansado de la falta de transparencia, decidí crear esta herramienta de forma completamente gratuita para ayudar al colectivo. Nómina Vigilante nació para revisar las nóminas mensuales, pero ha crecido con un único objetivo: acompañar al vigilante en toda su vida laboral para saber con claridad y precisión lo que te corresponde ganar. Aplico el Convenio Colectivo Estatal de forma rigurosa para que cualquier compañero pueda calcular en segundos una estimación muy aproximada de su salario mensual, su liquidación y finiquito en caso de despido, o la prestación que le corresponde estando de baja por incapacidad (IT). La web se financia exclusivamente mediante anuncios para poder cubrir los costes de mantenimiento y seguir ofreciendo el servicio gratis a todos. Esta calculadora es una guía de orientación que no sustituye el asesoramiento laboral profesional, pero sí te da el conocimiento para defender tus derechos.</p>
 </div>
 
 <div class="privacy-footer">
   <div class="privacy-title">Contacto</div>
-  <p class="privacy-text">
-    ¿Tienes alguna duda, has detectado un error o quieres sugerirnos una mejora? Escríbenos, leemos todos los mensajes.<br><br>
-    <strong>Correo electrónico:</strong><br>
-    <a href="mailto:BadAWolfprivado@gmail.com" style="color:var(--gold2);font-weight:600;">BadAWolfprivado@gmail.com</a>
-  </p>
+  <p class="privacy-text">¿Tienes alguna duda, has detectado un error o quieres sugerirnos una mejora? Escríbenos, leemos todos los mensajes.<br><br>
+  <strong>Correo electrónico:</strong><br>
+  <a href="mailto:BadAWolfprivado@gmail.com" style="color:var(--gold2);font-weight:600;">BadAWolfprivado@gmail.com</a></p>
 </div>
 
 </div>
@@ -636,7 +675,6 @@ function calcNomina(){
   var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
-  
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
@@ -644,63 +682,51 @@ function calcNomina(){
   if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   err.style.display="none";
 
-  // MODIFICACIÓN DE LA LÓGICA GENERAL DE HORAS
-  var ratioFijo = hp / JORNADA; // Ratio por tipo de contrato (completo = 1, parcial = menor a 1)
-  var factorH = 1;
-  var labelSufix = "";
-
-  if (jornActual === "completa" && hT < JORNADA) {
-    // Si es jornada completa pero no llega a 162h, calculamos proporcionalidad real de horas
-    factorH = hT / JORNADA;
-    labelSufix = " (Proporcional " + hT + "h/" + JORNADA + "h)";
-  } else if (jornActual === "parcial" && hT < hp) {
-    // Si es jornada parcial pero trabajó menos de sus horas contratadas
-    factorH = hT / hp;
-    labelSufix = " (Proporcional " + hT + "h/" + hp + "h)";
+  var ratioFijo=hp/JORNADA;
+  var factorH=1;
+  var labelSufix="";
+  if(jornActual==="completa"&&hT<JORNADA){
+    factorH=hT/JORNADA;
+    labelSufix=" (Proporcional "+hT+"h/"+JORNADA+"h)";
+  } else if(jornActual==="parcial"&&hT<hp){
+    factorH=hT/hp;
+    labelSufix=" (Proporcional "+hT+"h/"+hp+"h)";
   }
 
-  var sb=r2(cat.salBase * ratioFijo * factorH);
-  var pe=r2(cat.pelig * ratioFijo * factorH);
-  var tr=r2(cat.trans * ratioFijo * factorH);
-  var ve=r2(cat.vest * ratioFijo * factorH);
-  
+  var sb=r2(cat.salBase*ratioFijo*factorH);
+  var pe=r2(cat.pelig*ratioFijo*factorH);
+  var tr=r2(cat.trans*ratioFijo*factorH);
+  var ve=r2(cat.vest*ratioFijo*factorH);
   var ant=calcAntig(an,catActual);
-  var antM=r2(ant * ratioFijo * factorH);
+  var antM=r2(ant*ratioFijo*factorH);
   var q=Math.floor(an/5);
-  
-  // Las extras saltan si se supera el mínimo pactado/general
   var hev=calcHoraExtra(cat.salBase,cat.pelig,ant);
   var hEx=Math.max(0,hT-hp);
   var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=r2(hF*PLUS_FEST);
-  
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
-  var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo); // La base de la paga extra va ligada al contrato, no a la penalización por faltar horas
+  var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo);
   var pP=r2((pa*bP*factorH)/12);
-  
   var bruto=r2(sb+pe+tr+ve+antM+ps+pEx+pN+pFe+pP);
   var pNP=3-pa;
   var ssB=r2(bruto+r2(pNP*bP*factorH/12));
   var dSS=r2(ssB*SS_PCT), dIP=r2(bruto*ip/100);
   var neto=r2(bruto-dSS-dIP);
-  
-  var suf=jornActual==="parcial" && labelSufix === "" ?" ("+hp+"h/162h)":labelSufix;
+
+  var suf=jornActual==="parcial"&&labelSufix===""?" ("+hp+"h/162h)":labelSufix;
   document.getElementById("lbl-base").textContent="Salario base"+suf;
   document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+suf;
   document.getElementById("r-base").textContent="+"+fmt(sb);
   document.getElementById("r-pelig").textContent="+"+fmt(pe);
   document.getElementById("r-trans").textContent="+"+fmt(tr);
   document.getElementById("r-vest").textContent="+"+fmt(ve);
-  
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
   else{document.getElementById("row-antig").style.display="none";}
   if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
   else{document.getElementById("row-plusserv").style.display="none";}
-  
   showR("row-extra","lbl-extra","r-extra","Horas extra — "+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
   showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN,"up");
   showR("row-fest","lbl-fest","r-fest","Plus festivos — "+hF+"h × 1,02 €",pFe,"up");
   showR("row-prorr","lbl-prorr","r-prorr",pa+" paga"+(pa!==1?"s":"")+" extra prorrateada"+(pa!==1?"s":""),pP,"up");
-  
   document.getElementById("r-bruto").textContent=fmt(bruto);
   document.getElementById("r-ss").textContent="-"+fmt(dSS);
   if(ip>0){document.getElementById("row-irpf").style.display="flex";document.getElementById("row-irpf0").style.display="none";document.getElementById("lbl-irpf").textContent="Retención IRPF ("+ip+"%)";document.getElementById("r-irpf").textContent="-"+fmt(dIP);}
