@@ -4,7 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Calculadora de nómina, finiquito y bajas para Vigilantes de Seguridad Privada. Actualizada al Convenio 2026. Calcula tu salario neto, horas extras y pluses.">
+<link rel="canonical" href="https://calculadoravigilante.com/">
+<meta property="og:title" content="Nómina Vigilante 2026 | Calculadora de Seguridad Privada">
+<meta property="og:description" content="Calcula tu nómina, finiquito y baja IT según el Convenio de Seguridad Privada 2026. Gratis y sin registros.">
+<meta property="og:url" content="https://calculadoravigilante.com/">
+<meta property="og:type" content="website">
 <title>Nómina Vigilante 2026 | Calculadora de Seguridad Privada</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 
 <style>
 #cookie-banner {
@@ -58,7 +64,7 @@
     s1.async = true;
     document.head.appendChild(s1);
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    window.gtag = function(){dataLayer.push(arguments);};
     gtag('js', new Date());
     gtag('config', 'G-NMM3MRRZ6B');
 
@@ -193,7 +199,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .seo-section{margin-top:2.5rem;width:100%;}
 .seo-header{text-align:center;margin-bottom:1rem;}
 .seo-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;color:var(--text);line-height:1.1;}
-.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3--v-light-gray;}
+.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
 .seo-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.8rem;box-shadow:0 1px 4px rgba(44,36,22,0.05);}
 .seo-card h3{font-size:0.85rem;font-weight:700;color:var(--gold2);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.4rem;}
 .seo-card p{font-size:0.75rem;color:var(--text2);line-height:1.6;margin-bottom:0.6rem;font-weight:400;}
@@ -330,7 +336,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-divider"></div>
 <div class="bruto-row"><span class="bruto-label">Salario bruto</span><span class="bruto-val" id="r-bruto">—</span></div>
 <div class="res-section-label red">DEDUCCIONES</div>
-<div class="res-row"><span class="res-concept">Seguridad Social (6,47%) — fija por ley</span><span class="res-val down" id="r-ss">—</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social (6,50%) — fija por ley</span><span class="res-val down" id="r-ss">—</span></div>
 <div class="res-row" id="row-irpf" style="display:none"><span class="res-concept" id="lbl-irpf">Retención IRPF</span><span class="res-val down" id="r-irpf">—</span></div>
 <div class="res-row" id="row-irpf0" style="display:none"><span class="res-concept">Retención IRPF (0%)</span><span class="res-val down">0,00 €</span></div>
 </div>
@@ -423,7 +429,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row" id="frow-navidad" style="display:none"><span class="res-concept" id="flbl-navidad">Paga Navidad proporcional</span><span class="res-val up" id="fr-navidad">—</span></div>
 <div class="res-row" id="frow-marzo" style="display:none"><span class="res-concept" id="flbl-marzo">Paga Marzo proporcional</span><span class="res-val up" id="fr-marzo">—</span></div>
 <div class="res-row"><span class="res-concept">Total liquidación bruta</span><span class="res-val neu" id="fr-liq-bruta">—</span></div>
-<div class="res-row"><span class="res-concept">Seguridad Social (6,47%)</span><span class="res-val down" id="fr-ss-liq">—</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social (6,50%)</span><span class="res-val down" id="fr-ss-liq">—</span></div>
 <div class="res-row" id="frow-irpf-liq" style="display:none"><span class="res-concept" id="flbl-irpf-liq">Retención IRPF</span><span class="res-val down" id="fr-irpf-liq">—</span></div>
 <div class="res-divider"></div>
 <div class="bruto-row"><span class="bruto-label">Neto liquidación</span><span class="bruto-val" id="fr-liq-neto">—</span></div>
@@ -517,7 +523,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-divider"></div>
 <div class="bruto-row"><span class="bruto-label">Total prestación bruta</span><span class="bruto-val" id="br-total-bruto">—</span></div>
 <div class="res-section-label red">DEDUCCIONES</div>
-<div class="res-row"><span class="res-concept">Seguridad Social (6,47% de la base cotizada)</span><span class="res-val down" id="br-ss">—</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social (6,50% de la base cotizada)</span><span class="res-val down" id="br-ss">—</span></div>
 <div class="res-row" id="brow-irpf" style="display:none"><span class="res-concept" id="blbl-irpf">Retención IRPF</span><span class="res-val down" id="br-irpf">—</span></div>
 <div class="res-row" id="brow-irpf0" style="display:none"><span class="res-concept">Retención IRPF (0%)</span><span class="res-val down">0,00 €</span></div>
 </div>
@@ -619,7 +625,7 @@ var CATS = {
   escolta: {salBase:1161.28,pelig:177.15,trans:137.81,vest:115.67,nocH:1.26}
 };
 var QUINQUENIO = {sin_arma:45.86,con_arma:45.86,fondos:50.23,escolta:45.86};
-var SS_PCT=0.0647, JORNADA=162, HORAS_ANUALES=1782;
+var SS_PCT=0.0650, JORNADA=162, HORAS_ANUALES=1782;
 var PLUS_FEST=1.02, DIAS_VACAS=31, H_DIA_VACAS=5.226;
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
