@@ -200,13 +200,13 @@ input:checked + .slider:before{transform:translateX(20px);}
 .seo-header{text-align:center;margin-bottom:1rem;}
 .seo-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;color:var(--text);line-height:1.1;}
 .seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
-.seo-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.8rem;box-shadow:0 1px 4px rgba(44,36,22,0.05);}
-.seo-card h3{font-size:0.85rem;font-weight:700;color:var(--gold2);margin-bottom:0.6rem;display:flex;align-items:center;gap:0.4rem;}
-.seo-card p{font-size:0.75rem;color:var(--text2);line-height:1.6;margin-bottom:0.6rem;font-weight:400;}
-.seo-card p:last-child{margin-bottom:0;}
-.seo-card ul{margin-left:1.2rem;margin-bottom:0.6rem;font-size:0.75rem;color:var(--text2);line-height:1.6;}
-.seo-card ul li{margin-bottom:0.3rem;}
-.seo-card strong{color:var(--text);font-weight:600;}
+.guide-card{display:flex;align-items:center;gap:0.9rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.65rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);text-decoration:none;transition:border-color 0.15s,box-shadow 0.15s;}
+.guide-card:hover{border-color:var(--gold2);box-shadow:0 2px 8px rgba(180,120,10,0.12);}
+.guide-icon{font-size:1.5rem;flex-shrink:0;}
+.guide-body{flex:1;}
+.guide-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;}
+.guide-desc{font-size:0.68rem;color:var(--muted);line-height:1.4;font-weight:500;}
+.guide-arrow{font-size:1.4rem;color:var(--gold2);font-weight:300;flex-shrink:0;}
 .disclaimer{font-size:0.62rem;font-weight:500;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
 .privacy-footer{margin-top:1.5rem;padding-top:1.2rem;border-top:1px dashed var(--border2);text-align:center;}
 .privacy-footer:first-of-type{margin-top:2.5rem;}
@@ -539,57 +539,33 @@ input:checked + .slider:before{transform:translateX(20px);}
 
 <section class="seo-section">
   <div class="seo-header">
-    <h2>Preguntas Frecuentes</h2>
-    <p>Todo lo que necesitas saber sobre tu nómina según el Convenio 2026</p>
+    <h2>Guías del Sector</h2>
+    <p>Documentación completa sobre el Convenio y tus derechos</p>
   </div>
-
-  <div class="seo-card">
-    <h3>💶 ¿Cuánto cobra un vigilante de seguridad en 2026?</h3>
-    <p>Según el Convenio Colectivo Estatal de Empresas de Seguridad (BOE 18/04/2026), el salario base de un Vigilante de Seguridad es de <strong>1.161,28 € brutos al mes</strong> para jornada completa de 162 horas. Sin embargo, el sueldo neto real que entra en cuenta depende de varios factores: si se trabaja con arma o sin arma, las horas nocturnas y festivas trabajadas, los años de antigüedad en la empresa y el porcentaje de retención de IRPF.</p>
-    <p>Un vigilante sin arma a jornada completa, sin antigüedad y sin horas extras puede esperar cobrar entre <strong>1.150 € y 1.280 € netos al mes</strong>, dependiendo de su IRPF. Un vigilante con arma, gracias al plus de peligrosidad de 179,90 €, puede superar los <strong>1.400 € netos</strong> en condiciones similares.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>🔫 ¿Cuánto es el plus de peligrosidad en seguridad privada?</h3>
-    <p>El plus de peligrosidad varía según la categoría profesional. Para el <strong>Vigilante de Seguridad Sin Arma</strong> es de 24,08 €/mes. Para el <strong>Vigilante con Arma</strong> asciende a 179,90 €/mes, una diferencia significativa que compensa el riesgo adicional del uso de arma de fuego. El <strong>Vigilante de Transporte de Fondos</strong> percibe 191,59 €/mes y el <strong>Escolta</strong> cobra 177,15 €/mes.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>⏳ ¿Qué es el quinquenio y cuánto son los años de antigüedad?</h3>
-    <p>El quinquenio es el complemento salarial que premia la antigüedad en la misma empresa. Por cada <strong>5 años trabajados de forma ininterrumpida</strong> en la misma empresa de seguridad, el vigilante tiene derecho a cobrar un complemento adicional mensual de <strong>45,86 €</strong> (para VS sin arma, con arma y escolta) o de <strong>50,23 €</strong> (para VS de transporte de fondos).</p>
-    <p>Por ejemplo, un vigilante con 10 años en la misma empresa acumula 2 quinquenios: 91,72 € adicionales al mes. Con 15 años, 3 quinquenios: 137,58 € extra. Este importe también se incluye en la base de cálculo de las horas extraordinarias y de las pagas extra.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>🌙 ¿Cómo se calculan las horas nocturnas y festivas?</h3>
-    <p>El Convenio fija un plus de <strong>1,26 €/hora</strong> para las horas trabajadas en horario nocturno (entre las 22:00 y las 06:00 horas). Las horas festivas se compensan con un plus adicional de <strong>1,02 €/hora</strong>. Ambos pluses son <strong>perfectamente acumulables</strong>: si trabajas en festivo de noche, recibes ambos a la vez (2,28 €/hora extra sobre tu tarifa base).</p>
-    <p>La jornada ordinaria del convenio es de <strong>162 horas mensuales</strong> (1.782 horas anuales). Todo lo que superes se cobra como hora extra, calculada según la fórmula: (Salario Base + Peligrosidad + Antigüedad) × 15 ÷ 1.782.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>🏥 ¿Cuánto se cobra de baja por enfermedad siendo vigilante?</h3>
-    <p>El Convenio de Seguridad Privada mejora significativamente la prestación general de la Seguridad Social. En la <strong>primera baja del año</strong> por enfermedad común, los días 1 al 3 se cobran al 50% de la base reguladora (frente al 0% de la ley general). Del día 4 al 20 se cobra el <strong>80%</strong> (vs. 60% general). Los días 21 al 40 suben al <strong>100%</strong>, los días 41-60 al 90%, y los días 61-100 al 80%.</p>
-    <p>En caso de <strong>accidente laboral</strong>, el convenio obliga a la empresa a complementar hasta el <strong>100% del salario</strong> desde el día siguiente al accidente, sin periodos de carencia.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>📄 ¿Qué incluye el finiquito de un vigilante de seguridad?</h3>
-    <p>El finiquito es la liquidación económica que la empresa debe pagar al trabajador cuando finaliza la relación laboral, independientemente del motivo. Se compone de tres elementos principales: los <strong>días de vacaciones</strong> que no se han disfrutado, la <strong>parte proporcional de las pagas extra</strong> que se han generado y aún no se han cobrado, y la <strong>indemnización por despido</strong> si corresponde.</p>
-    <p>La indemnización varía según el tipo de extinción: en <strong>despido improcedente</strong> son 33 días de salario por año trabajado (máximo 24 mensualidades), y en <strong>despido objetivo o fin de contrato</strong> son 20 días por año (máximo 12 mensualidades). La <strong>baja voluntaria</strong> no genera indemnización. Importante: la indemnización por despido está <strong>exenta de IRPF</strong> hasta los límites legales.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>📅 ¿Cuántos días de vacaciones tiene un vigilante?</h3>
-    <p>El Convenio Colectivo de Seguridad Privada establece un período de vacaciones de <strong>31 días naturales al año</strong> para jornada completa (art. 57 del convenio). Si el trabajador no ha completado el año en la empresa, le corresponden vacaciones proporcionales al tiempo trabajado: aproximadamente <strong>2,58 días por mes trabajado</strong>.</p>
-    <p>Las vacaciones no disfrutadas al finalizar el contrato deben ser abonadas en el finiquito. Su valor se calcula dividiendo el salario mensual completo entre 30, lo que incluye todos los pluses salariales correspondientes.</p>
-  </div>
-
-  <div class="seo-card">
-    <h3>📊 ¿Cómo funciona el cálculo proporcional de horas?</h3>
-    <p>Si un mes trabajas menos de 162 horas por haber empezado a mitad de mes, haber tenido días de baja o cualquier otra causa, tu salario base y pluses se calculan de forma proporcional a las horas realmente trabajadas. Por ejemplo, si trabajas 120 horas en un mes de jornada completa, recibirás el 74% (120÷162) del salario base, peligrosidad, transporte y vestuario.</p>
-    <p>Esta calculadora lo detecta automáticamente: introduce simplemente las horas reales trabajadas y el sistema aplica la proporción correcta sin que tengas que hacer ningún cálculo adicional.</p>
-  </div>
-
+  <a href="convenio-2026.html" class="guide-card">
+    <div class="guide-icon">📋</div>
+    <div class="guide-body">
+      <div class="guide-title">Convenio Colectivo 2026–2030</div>
+      <div class="guide-desc">Tablas salariales completas, jornada, pagas extras, vacaciones y todos los artículos clave del BOE 18/04/2026</div>
+    </div>
+    <div class="guide-arrow">›</div>
+  </a>
+  <a href="derechos-vigilante.html" class="guide-card">
+    <div class="guide-icon">⚖️</div>
+    <div class="guide-body">
+      <div class="guide-title">Derechos del Vigilante de Seguridad</div>
+      <div class="guide-desc">Horas extra, descansos, uniforme, arma, categorías profesionales y cómo reclamar si tu empresa incumple</div>
+    </div>
+    <div class="guide-arrow">›</div>
+  </a>
+  <a href="guia-nomina-vigilante.html" class="guide-card">
+    <div class="guide-icon">🧾</div>
+    <div class="guide-body">
+      <div class="guide-title">Cómo leer tu nómina paso a paso</div>
+      <div class="guide-desc">Qué conceptos deben aparecer, cómo detectar errores y qué hacer si te están pagando de menos</div>
+    </div>
+    <div class="guide-arrow">›</div>
+  </a>
 </section>
 
 <div class="disclaimer">
