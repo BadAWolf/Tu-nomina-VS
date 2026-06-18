@@ -199,7 +199,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .seo-section{margin-top:2.5rem;width:100%;}
 .seo-header{text-align:center;margin-bottom:1rem;}
 .seo-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;color:var(--text);line-height:1.1;}
-.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3--rem;}
+.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
 .guide-card{display:flex;align-items:center;gap:0.9rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.65rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);text-decoration:none;transition:border-color 0.15s,box-shadow 0.15s;}
 .guide-card:hover{border-color:var(--gold2);box-shadow:0 2px 8px rgba(180,120,10,0.12);}
 .guide-icon{font-size:1.5rem;flex-shrink:0;}
@@ -207,16 +207,6 @@ input:checked + .slider:before{transform:translateX(20px);}
 .guide-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;}
 .guide-desc{font-size:0.68rem;color:var(--muted);line-height:1.4;font-weight:500;}
 .guide-arrow{font-size:1.4rem;color:var(--gold2);font-weight:300;flex-shrink:0;}
-
-/* NUEVOS ESTILOS PARA LA SECCIÓN DE PREGUNTAS FRECUENTES */
-.faq-section {margin-top: 2.5rem; width: 100%;}
-.faq-card {background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; margin-bottom: 0.65rem; box-shadow: 0 1px 4px rgba(44,36,22,0.07);}
-.faq-question {font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 0.45rem; line-height: 1.35; display: flex; align-items: flex-start; gap: 0.4rem;}
-.faq-answer {font-size: 0.72rem; color: var(--text2); line-height: 1.55; font-weight: 500;}
-.faq-answer strong {color: var(--gold); font-weight: 700;}
-.faq-answer ul {margin-top: 0.4rem; margin-left: 1.1rem; padding-left: 0;}
-.faq-answer li {margin-bottom: 0.3rem;}
-
 .disclaimer{font-size:0.62rem;font-weight:500;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
 .privacy-footer{margin-top:1.5rem;padding-top:1.2rem;border-top:1px dashed var(--border2);text-align:center;}
 .privacy-footer:first-of-type{margin-top:2.5rem;}
@@ -428,8 +418,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 </div>
 <div class="error-box" id="f-errorBox"></div>
-<button class="btn-calc" id="btnCalcFiniquito">CALCULAR FINIQUITO</button>
 <div class="ads-placeholder" id="ad-finiquito"></div>
+<button class="btn-calc" id="btnCalcFiniquito">CALCULAR FINIQUITO</button>
 <div id="resultado-finiquito">
 <div class="info-box" id="f-info-duracion"></div>
 <div class="res-top">
@@ -553,70 +543,29 @@ input:checked + .slider:before{transform:translateX(20px);}
     <p>Documentación completa sobre el Convenio y tus derechos</p>
   </div>
   <a href="convenio-2026.html" class="guide-card">
-    <div class="guide-icon">📋</div>
+    <div class="guide-icon">💵</div>
     <div class="guide-body">
-      <div class="guide-title">Convenio Colectivo 2026–2030</div>
+      <div class="guide-title">¿Cuánto cobra un vigilante?</div>
       <div class="guide-desc">Tablas salariales completas, jornada, pagas extras, vacaciones y todos los artículos clave del BOE 18/04/2026</div>
     </div>
     <div class="guide-arrow">›</div>
   </a>
   <a href="derechos-vigilante.html" class="guide-card">
-    <div class="guide-icon">⚖️</div>
+    <div class="guide-icon">⏰</div>
     <div class="guide-body">
-      <div class="guide-title">Derechos del Vigilante de Seguridad</div>
+      <div class="guide-title">¿A cuánto se paga la hora extra?</div>
       <div class="guide-desc">Horas extra, descansos, uniforme, arma, categorías profesionales y cómo reclamar si tu empresa incumple</div>
     </div>
     <div class="guide-arrow">›</div>
   </a>
   <a href="guia-nomina-vigilante.html" class="guide-card">
-    <div class="guide-icon">🧾</div>
+    <div class="guide-icon">📄</div>
     <div class="guide-body">
-      <div class="guide-title">Cómo leer tu nómina paso a paso</div>
+      <div class="guide-title">¿Cómo saber si mi nómina está mal?</div>
       <div class="guide-desc">Qué conceptos deben aparecer, cómo detectar errores y qué hacer si te están pagando de menos</div>
     </div>
     <div class="guide-arrow">›</div>
   </a>
-</section>
-
-<section class="faq-section">
-  <div class="seo-header">
-    <h2>Preguntas Frecuentes</h2>
-    <p>Resolvemos las dudas más comunes sobre el sueldo de seguridad privada</p>
-  </div>
-
-  <div class="faq-card">
-    <div class="faq-question">❓ ¿Cuánto cobra un vigilante de seguridad en 2026?</div>
-    <div class="faq-answer">
-      El Salario Base fijado por convenio para un Vigilante de Seguridad en 2026 es de <strong>1.161,28 € brutos al mes</strong> (en 15 pagas). Al sumarle los pluses fijos obligatorios mínimos (Transporte: 137,81 €, Vestuario: 112,28 € y Peligrosidad mínima sin arma: 24,08 €), el sueldo mensual bruto base se sitúa en unos <strong>1.435,45 €</strong> si cobras las pagas prorrateadas. A este importe debes añadirle los pluses por antigüedad y horas variables operativas de tu servicio.
-    </div>
-  </div>
-
-  <div class="faq-card">
-    <div class="faq-question">❓ ¿A cuánto se paga la hora extra, nocturna y festiva? ¿Se suman si coinciden?</div>
-    <div class="faq-answer">
-      Para un vigilante base (sin arma ni antigüedad) en 2026, los valores mínimos por hora son:
-      <ul>
-        <li><strong>Hora extraordinaria estándar:</strong> 9,98 € brutos.</li>
-        <li><strong>Plus de Nocturnidad (22h a 06h):</strong> +1,26 € brutos/hora.</li>
-        <li><strong>Plus de Fin de Semana o Festivo:</strong> +1,02 € brutos/hora.</li>
-      </ul>
-      <strong>Sí, son totalmente acumulables.</strong> Si realizas una hora extraordinaria que coincide dentro del horario nocturno y además cae en día festivo, los tres conceptos se suman obligatoriamente para esa hora específica: 9,98 € + 1,26 € + 1,02 € = <strong>12,26 € brutos por esa hora</strong> trabajada.
-    </div>
-  </div>
-
-  <div class="faq-card">
-    <div class="faq-question">❓ ¿Cómo puedo saber si mi nómina está mal calculada?</div>
-    <div class="faq-answer">
-      Para pillar errores de la empresa en tu nómina, debes comprobar siempre estos cuatro puntos:
-      <ul>
-        <li><strong>El cómputo de jornada:</strong> Tu contrato ordinario es de 162 horas mensuales. Cualquier hora de más que aparezca en tu cuadrante debe cobrarse estrictamente como hora extra.</li>
-        <li><strong>Los pluses variables:</strong> Cuenta las noches y festivos reales de tu cuadrante mensual y revisa que la nómina abone exactamente esa cantidad de horas.</li>
-        <li><strong>La antigüedad:</strong> Comprueba que tengan actualizado tu contador de antigüedad (cada quinquenio en 2026 suma 45,86 € fijos al mes).</li>
-        <li><strong>Las retenciones:</strong> Revisa que no te apliquen un porcentaje de IRPF incorrecto para tu situación personal.</li>
-      </ul>
-      Si tienes dudas, introduce los datos de tu cuadrante real en nuestra <strong>calculadora de nómina mensual</strong> arriba para validar lo que te corresponde cobrar.
-    </div>
-  </div>
 </section>
 
 <div class="disclaimer">
@@ -732,7 +681,7 @@ function calcNomina(){
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas in tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
