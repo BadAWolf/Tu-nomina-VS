@@ -3,162 +3,241 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Convenio Seguridad Privada 2026-2030 | Calculadora Vigilante</title>
-<meta name="description" content="Resumen claro del Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030: salarios, jornada, pagas extra, vacaciones, antigüedad, bajas y derechos del vigilante.">
+<meta name="description" content="Resumen completo del Convenio Colectivo de Seguridad Privada 2026-2030. Tablas salariales, jornada, pagas extras, vacaciones, IT y antigüedad. BOE 18/04/2026.">
+<title>Convenio Colectivo Seguridad Privada 2026-2030 | Nómina Vigilante</title>
 <link rel="canonical" href="https://calculadoravigilante.com/convenio-2026.html">
-
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
+*{margin:0;padding:0;box-sizing:border-box;}
 :root{
---bg:#f5f3ef;--card:#fff;--border:#e8e3da;--gold:#b8720a;--gold2:#d4860f;
---text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;
+--bg:#f5f3ef;--surface:#faf8f5;--card:#ffffff;
+--border:#e8e3da;--border2:#d6cfc4;
+--gold:#b8720a;--gold2:#d4860f;--goldbg:#fdf2e0;--goldline:#e8c87a;
+--text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;--subtle:#b5a898;
+--green:#2d7a3a;--greenbg:#edf7ef;
+--red:#b83232;--redbg:#fdf0f0;
+--blue:#2a5ea8;--bluebg:#eef4fc;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{font-family:Arial,sans-serif;background:var(--bg);color:var(--text);line-height:1.65;padding:1.2rem}
-.wrap{max-width:860px;margin:auto}
-header{text-align:center;margin-bottom:1.5rem}
-.badge{color:var(--gold2);font-weight:bold;text-transform:uppercase;font-size:.75rem;letter-spacing:.12em}
-h1{font-size:2rem;line-height:1.1;margin:.5rem 0;color:var(--text)}
-h2{margin-top:1.8rem;color:var(--gold)}
-h3{margin-top:1.2rem;color:var(--text2)}
-p,li{font-size:1rem;color:var(--text2)}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.2rem;margin:1rem 0;box-shadow:0 1px 5px rgba(44,36,22,.07)}
-.notice{background:#fff7e8;border-left:4px solid var(--gold2);padding:1rem;border-radius:8px;margin:1rem 0}
-a{color:var(--gold2);font-weight:bold;text-decoration:none}
-ul{padding-left:1.3rem;margin:.7rem 0}
-.nav{display:flex;flex-wrap:wrap;gap:.6rem;justify-content:center;margin:1rem 0 1.5rem}
-.nav a{background:#fff;border:1px solid var(--border);padding:.55rem .8rem;border-radius:8px}
-footer{text-align:center;margin-top:2rem;color:var(--muted);font-size:.85rem}
+html{scroll-behavior:smooth;}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+body{display:flex;flex-direction:column;align-items:center;padding:0 0 4rem;}
+
+/* Barra superior fina */
+.topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;}
+.brand{display:flex;align-items:center;gap:0.4rem;text-decoration:none;}
+.brand-icon{font-size:1rem;}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
+.brand-name em{color:var(--gold2);font-style:normal;}
+.topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(180,120,10,0.25);}
+.topbar-cta:hover{background:var(--gold);}
+
+.wrap{width:100%;max-width:680px;padding:1.5rem 1rem 0;}
+
+/* Migas discretas */
+.crumbs{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;color:var(--subtle);margin-bottom:1.2rem;}
+.crumbs a{color:var(--gold2);text-decoration:none;}
+.crumbs a:hover{text-decoration:underline;}
+
+header.page{text-align:center;padding:0.5rem 0 1.6rem;}
+.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.45rem;font-weight:600;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:2.1rem;letter-spacing:0.04em;line-height:1.08;color:var(--text);margin-bottom:0.5rem;}
+h1 em{color:var(--gold2);font-style:normal;}
+.header-sub{font-size:0.76rem;color:var(--muted);font-weight:500;max-width:480px;margin:0 auto;line-height:1.5;}
+
+h2{font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.04em;color:var(--text);margin:2rem 0 0.8rem;display:flex;align-items:center;gap:0.5rem;}
+h2 .h2-icon{font-size:1.1rem;}
+.art{font-family:'DM Mono',monospace;font-size:0.58rem;color:var(--gold2);font-weight:600;letter-spacing:0.12em;text-transform:uppercase;margin:-0.4rem 0 0.7rem;}
+p{font-size:0.79rem;color:var(--text2);line-height:1.7;margin-bottom:0.8rem;}
+p:last-child{margin-bottom:0;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:0.9rem;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
+.card h3{font-size:0.86rem;font-weight:700;color:var(--gold2);margin-bottom:0.65rem;}
+.tag{display:inline-block;font-family:'DM Mono',monospace;font-size:0.56rem;font-weight:600;color:var(--gold);background:var(--goldbg);border:1px solid var(--goldline);border-radius:4px;padding:0.12rem 0.5rem;margin-bottom:0.55rem;letter-spacing:0.05em;}
+ul{margin-left:1.2rem;margin-bottom:0.8rem;}
+ul li{font-size:0.79rem;color:var(--text2);line-height:1.65;margin-bottom:0.45rem;}
+ul li strong{color:var(--text);font-weight:700;}
+ul li::marker{color:var(--gold2);}
+
+.table-wrap{overflow-x:auto;margin-bottom:0.4rem;border-radius:8px;border:1px solid var(--border);}
+table{width:100%;border-collapse:collapse;font-size:0.74rem;background:var(--card);}
+thead th{padding:0.6rem 0.75rem;text-align:left;font-weight:700;color:var(--gold);font-family:'DM Mono',monospace;font-size:0.6rem;letter-spacing:0.06em;text-transform:uppercase;background:var(--goldbg);border-bottom:2px solid var(--goldline);white-space:nowrap;}
+tbody tr{border-bottom:1px solid var(--border);}
+tbody tr:nth-child(even){background:var(--surface);}
+tbody tr:last-child{border-bottom:none;}
+tbody td{padding:0.55rem 0.75rem;color:var(--text2);font-weight:500;}
+tbody td:first-child{font-weight:700;color:var(--text);}
+.num{font-family:'DM Mono',monospace;font-size:0.72rem;white-space:nowrap;}
+
+.highlight{background:var(--greenbg);border-left:3px solid var(--green);padding:0.75rem 0.95rem;border-radius:0 8px 8px 0;margin-bottom:0.9rem;font-size:0.77rem;color:#2d5a35;line-height:1.6;}
+.highlight strong{color:#2d7a3a;font-weight:700;}
+.alert{background:var(--redbg);border-left:3px solid var(--red);padding:0.75rem 0.95rem;border-radius:0 8px 8px 0;margin-bottom:0.9rem;font-size:0.77rem;color:#7a2020;line-height:1.6;}
+.alert strong{color:var(--red);font-weight:700;}
+.info{background:var(--bluebg);border-left:3px solid var(--blue);padding:0.75rem 0.95rem;border-radius:0 8px 8px 0;margin-bottom:0.9rem;font-size:0.77rem;color:#1e3f6a;line-height:1.6;}
+.info strong{color:var(--blue);font-weight:700;}
+
+.step{display:flex;gap:0.9rem;margin-bottom:1.05rem;align-items:flex-start;}
+.step-num{background:var(--gold2);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem;box-shadow:0 2px 5px rgba(180,120,10,0.3);}
+.step-body h4{font-size:0.83rem;font-weight:700;color:var(--text);margin-bottom:0.28rem;}
+.step-body p{font-size:0.76rem;margin-bottom:0;}
+
+.concept-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.48rem 0;border-bottom:1px solid var(--border);gap:0.5rem;}
+.concept-row:last-child{border-bottom:none;}
+.concept-name{font-size:0.76rem;color:var(--text2);font-weight:500;flex:1;}
+.concept-val{font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:600;color:var(--green);white-space:nowrap;}
+.concept-val.down{color:var(--red);}
+
+.cta-box{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);border-radius:12px;padding:1.4rem 1.2rem;text-align:center;margin-top:1.8rem;box-shadow:0 2px 10px rgba(180,120,10,0.12);}
+.cta-box p{font-size:0.8rem;color:var(--text2);margin-bottom:0.9rem;}
+.cta-btn{display:inline-block;background:var(--gold2);color:#fff;text-decoration:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;padding:0.72rem 1.6rem;box-shadow:0 2px 8px rgba(180,120,10,0.3);transition:background 0.15s;}
+.cta-btn:hover{background:var(--gold);}
+
+.rel-links{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1.6rem;}
+.rel-link{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;text-decoration:none;transition:border-color 0.15s;}
+.rel-link:hover{border-color:var(--gold2);}
+.rel-kicker{font-family:'DM Mono',monospace;font-size:0.53rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.2rem;}
+.rel-title{font-size:0.74rem;font-weight:700;color:var(--gold2);line-height:1.3;}
+@media(max-width:480px){.rel-links{grid-template-columns:1fr;}}
+
+.disclaimer{font-size:0.6rem;color:var(--subtle);text-align:center;margin-top:2.2rem;line-height:1.7;padding:0 1rem;}
 </style>
+
 </head>
-
 <body>
+<div class="topbar">
+<div class="topbar-inner">
+<a href="index.html" class="brand"><span class="brand-icon">🛡️</span><span class="brand-name">NÓMINA <em>VIGILANTE</em></span></a>
+<a href="index.html" class="topbar-cta">IR A LA CALCULADORA</a>
+</div>
+</div>
 <div class="wrap">
-
-<header>
-  <div class="badge">Guía del sector</div>
-  <h1>Convenio Colectivo de Seguridad Privada 2026-2030</h1>
-  <p>Resumen práctico para vigilantes de seguridad: salario, jornada, pagas extra, vacaciones, antigüedad, incapacidad temporal y derechos básicos.</p>
+<div class="crumbs"><a href="index.html">Inicio</a> › Convenio Colectivo 2026–2030</div>
+<header class="page">
+<div class="header-label">BOE 18/04/2026 · Vigencia 2026–2030</div>
+<h1>CONVENIO COLECTIVO<br><em>SEGURIDAD PRIVADA</em></h1>
+<p class="header-sub">Resumen práctico de las condiciones laborales del sector: salarios, jornada, pagas, vacaciones e incapacidad temporal</p>
 </header>
 
-<nav class="nav">
-  <a href="index.html">Calculadora</a>
-  <a href="derechos-vigilante.html">Derechos del vigilante</a>
-  <a href="guia-nomina-vigilante.html">Leer tu nómina</a>
-  <a href="privacidad.html">Privacidad</a>
-</nav>
-
-<div class="notice">
-  <strong>Aviso importante:</strong> Esta guía es orientativa y está pensada para ayudarte a entender mejor tu nómina. Para cualquier reclamación formal, compara siempre con tu nómina real, tu contrato, el convenio publicado en el BOE y, si es necesario, consulta con un profesional laboral o sindicato.
+<div class="info">
+<strong>Fuente oficial:</strong> Convenio Colectivo Estatal de Empresas de Seguridad publicado en el BOE el 18 de abril de 2026, con vigencia hasta el 31 de diciembre de 2030. Este resumen es orientativo — ante cualquier decisión legal, consulta el texto oficial o a un asesor laboral.
 </div>
 
-<section class="card">
-<h2>1. ¿Qué regula el convenio?</h2>
-<p>El Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 establece las condiciones laborales mínimas aplicables al sector de la seguridad privada en España. Afecta a empresas de seguridad y a trabajadores incluidos dentro de su ámbito: vigilantes de seguridad, vigilantes con arma, transporte de fondos, escoltas y otras categorías profesionales del sector.</p>
+<h2><span class="h2-icon">💶</span>Tablas Salariales 2026</h2>
+<div class="art">Artículo 35 — Retribuciones</div>
+<p>Estos son los importes mínimos garantizados para jornada completa de 162 horas mensuales. Ninguna empresa puede pagar por debajo de estas cifras, aunque sí puede mejorarlas.</p>
 
-<p>Este convenio sirve como base para calcular salarios, complementos, jornada, vacaciones, pagas extraordinarias, antigüedad, permisos, incapacidad temporal y otras condiciones laborales. Ninguna empresa debería aplicar condiciones inferiores a las fijadas en el convenio, salvo que exista una mejora más favorable para el trabajador.</p>
-</section>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>Categoría</th><th>Sal. Base</th><th>Peligrosidad</th><th>Transporte</th><th>Vestuario</th><th>Total</th></tr>
+</thead>
+<tbody>
+<tr><td>VS Sin Arma</td><td class="num">1.161,28 €</td><td class="num">24,08 €</td><td class="num">137,81 €</td><td class="num">112,28 €</td><td class="num"><strong>1.435,45 €</strong></td></tr>
+<tr><td>VS Con Arma</td><td class="num">1.161,28 €</td><td class="num">179,90 €</td><td class="num">137,81 €</td><td class="num">112,28 €</td><td class="num"><strong>1.591,27 €</strong></td></tr>
+<tr><td>VS Transp. Fondos</td><td class="num">1.227,74 €</td><td class="num">191,59 €</td><td class="num">137,81 €</td><td class="num">113,27 €</td><td class="num"><strong>1.670,41 €</strong></td></tr>
+<tr><td>Escolta Privado</td><td class="num">1.161,28 €</td><td class="num">177,15 €</td><td class="num">137,81 €</td><td class="num">115,67 €</td><td class="num"><strong>1.591,91 €</strong></td></tr>
+</tbody>
+</table>
+</div>
+<p style="font-size:0.66rem;color:var(--muted);margin-top:0.4rem;">* Cifras brutas mensuales, jornada completa. No incluyen antigüedad, horas extra ni pluses variables (nocturnidad, festivos, plus de servicio).</p>
 
-<section class="card">
-<h2>2. Conceptos habituales de la nómina</h2>
-<p>En una nómina de vigilante de seguridad suelen aparecer varios conceptos. Los más habituales son:</p>
+<h2><span class="h2-icon">⏱️</span>Jornada de Trabajo</h2>
+<div class="art">Artículo 38 — Jornada laboral</div>
+<p>La jornada ordinaria es de <strong>1.782 horas anuales</strong> — un promedio de <strong>162 horas mensuales</strong>. La empresa puede distribuirla de forma irregular a lo largo del año según las necesidades del servicio, respetando siempre los descansos legales.</p>
+
+<div class="highlight">
+<strong>Horas extra:</strong> Todo lo que supere las 162 h/mes (o tus horas pactadas en contrato parcial) es hora extraordinaria. Precio según convenio: (Salario Base + Peligrosidad + Antigüedad) × 15 ÷ 1.782.
+</div>
+
+<div class="card">
+<div class="tag">PLUS DE NOCTURNIDAD</div>
+<p>Las horas entre las <strong>22:00 y las 06:00</strong> se pagan con un plus de <strong>1,26 €/hora</strong> (1,36 €/hora en Transporte de Fondos).</p>
+<div class="tag" style="margin-top:0.7rem;">PLUS DE FESTIVIDAD</div>
+<p>Las horas en <strong>días festivos</strong> se compensan con <strong>1,02 €/hora</strong> adicional. Si el festivo cae de noche, <strong>ambos pluses se acumulan</strong> — cobras los dos a la vez.</p>
+</div>
+
+<h2><span class="h2-icon">📈</span>Antigüedad — Quinquenios</h2>
+<div class="art">Artículo 42 — Antigüedad</div>
+<p>Por cada <strong>5 años ininterrumpidos</strong> en la misma empresa se devenga un quinquenio, que suma un complemento fijo a la nómina mensual y también cuenta para el cálculo de horas extra y pagas.</p>
+
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th>Años en la empresa</th><th>Quinquenios</th><th>Plus VS / Escolta</th><th>Plus Fondos</th></tr>
+</thead>
+<tbody>
+<tr><td>0 – 4 años</td><td>—</td><td class="num">0,00 €</td><td class="num">0,00 €</td></tr>
+<tr><td>5 – 9 años</td><td>1</td><td class="num">45,86 €</td><td class="num">50,23 €</td></tr>
+<tr><td>10 – 14 años</td><td>2</td><td class="num">91,72 €</td><td class="num">100,46 €</td></tr>
+<tr><td>15 – 19 años</td><td>3</td><td class="num">137,58 €</td><td class="num">150,69 €</td></tr>
+<tr><td>20 – 24 años</td><td>4</td><td class="num">183,44 €</td><td class="num">200,92 €</td></tr>
+<tr><td>25 años o más</td><td>5</td><td class="num">229,30 €</td><td class="num">251,15 €</td></tr>
+</tbody>
+</table>
+</div>
+
+<h2><span class="h2-icon">🎁</span>Pagas Extraordinarias</h2>
+<div class="art">Artículo 45 — Gratificaciones</div>
+<p>El convenio garantiza <strong>tres pagas extras</strong> al año. Cada una equivale a un mes de salario base + peligrosidad + antigüedad:</p>
 <ul>
-  <li><strong>Salario base:</strong> cantidad principal asignada a la categoría profesional.</li>
-  <li><strong>Plus de peligrosidad:</strong> complemento propio del sector, con importes distintos según la categoría o servicio.</li>
-  <li><strong>Plus de transporte:</strong> compensación económica vinculada al desplazamiento.</li>
-  <li><strong>Plus de vestuario:</strong> cantidad destinada al mantenimiento o uso del uniforme.</li>
-  <li><strong>Antigüedad:</strong> plus que se genera por quinquenios, es decir, por cada cinco años en la empresa.</li>
-  <li><strong>Nocturnidad:</strong> complemento por horas trabajadas en horario nocturno.</li>
-  <li><strong>Festivos:</strong> complemento por trabajar en días festivos cuando corresponda.</li>
-  <li><strong>Horas extra:</strong> horas realizadas por encima de la jornada ordinaria aplicable.</li>
-  <li><strong>Pagas extraordinarias:</strong> pueden cobrarse en sus fechas correspondientes o prorrateadas mes a mes.</li>
+<li><strong>Paga de Julio</strong> — se devenga del 1 de julio del año anterior al 30 de junio. Se abona el 15 de julio.</li>
+<li><strong>Paga de Navidad</strong> — se devenga del 1 de enero al 31 de diciembre. Se abona el 20 de diciembre.</li>
+<li><strong>Paga de Marzo (beneficios)</strong> — se devenga durante el año natural anterior. Se abona el 15 de marzo.</li>
 </ul>
-</section>
+<div class="info">
+<strong>Prorrateo:</strong> Muchas empresas dividen las pagas en 12 partes y las incluyen en la nómina mensual. Es legal si aparece desglosado en el recibo. En ese caso, al finalizar el contrato no quedan pagas pendientes de cobro.
+</div>
 
-<section class="card">
-<h2>3. Jornada laboral</h2>
-<p>La jornada anual del sector debe respetar lo establecido en el convenio. En la calculadora se toma como referencia una jornada mensual ordinaria de 162 horas para jornada completa, utilizada como base práctica para estimar nóminas mensuales.</p>
+<h2><span class="h2-icon">🏖️</span>Vacaciones</h2>
+<div class="art">Artículo 57 — Vacaciones</div>
+<p>Corresponden <strong>31 días naturales al año</strong> en jornada completa. Si no completas el año, se calculan proporcionalmente (unos 2,58 días por mes trabajado). Los días no disfrutados al terminar el contrato se pagan en el finiquito, calculados sobre el salario mensual completo dividido entre 30.</p>
 
-<p>Si trabajas a jornada parcial, el salario debe calcularse proporcionalmente a las horas pactadas en contrato. Por ejemplo, una persona contratada a media jornada no cobra el salario completo, sino la parte proporcional de salario base y determinados pluses.</p>
+<h2><span class="h2-icon">🏥</span>Incapacidad Temporal (IT)</h2>
+<div class="art">Artículo 51 — Complemento IT</div>
+<p>El convenio mejora sustancialmente la prestación general de la Seguridad Social. Porcentajes sobre la base reguladora diaria:</p>
 
-<h3>Horas por encima de la jornada</h3>
-<p>Cuando se superan las horas pactadas o la jornada ordinaria, pueden aparecer horas complementarias o extraordinarias según el tipo de contrato y las circunstancias. Es importante revisar siempre el contrato, los cuadrantes y el registro horario.</p>
-</section>
+<div class="card">
+<div class="tag">1.ª BAJA DEL AÑO — ENFERMEDAD COMÚN / ACC. NO LABORAL</div>
+<div class="table-wrap" style="margin-top:0.5rem;">
+<table>
+<thead><tr><th>Días</th><th>Convenio</th><th>Régimen general</th></tr></thead>
+<tbody>
+<tr><td>1 – 3</td><td class="num">50%</td><td class="num">0%</td></tr>
+<tr><td>4 – 20</td><td class="num">80%</td><td class="num">60%</td></tr>
+<tr><td>21 – 40</td><td class="num">100%</td><td class="num">75%</td></tr>
+<tr><td>41 – 60</td><td class="num">90%</td><td class="num">75%</td></tr>
+<tr><td>61 – 100</td><td class="num">80%</td><td class="num">75%</td></tr>
+<tr><td>101 en adelante</td><td class="num">75%</td><td class="num">75%</td></tr>
+</tbody>
+</table>
+</div>
+</div>
 
-<section class="card">
-<h2>4. Pagas extraordinarias</h2>
-<p>El convenio contempla pagas extraordinarias que pueden abonarse en momentos concretos del año o prorratearse en la nómina mensual si así corresponde. En la práctica, muchos vigilantes tienen las pagas prorrateadas y ven una parte añadida cada mes en su nómina.</p>
+<div class="card">
+<div class="tag">ACCIDENTE LABORAL / ENFERMEDAD PROFESIONAL</div>
+<p>El día 1 lo paga la empresa como jornada ordinaria. Del <strong>día 2 en adelante: 100%</strong> de la base reguladora, sin límite de duración.</p>
+<div class="tag" style="margin-top:0.7rem;">HOSPITALIZACIÓN</div>
+<p>Bajas con ingreso hospitalario: <strong>100% durante los primeros 40 días</strong>. Desde el día 41, el 75% del régimen general.</p>
+</div>
 
-<p>Cuando las pagas están prorrateadas, el neto mensual suele ser más alto, pero no se recibe una paga completa adicional en el mes correspondiente. Cuando no están prorrateadas, el trabajador recibe nóminas ordinarias más bajas durante el año y pagas completas en las fechas establecidas.</p>
-</section>
+<div class="alert">
+<strong>2.ª y 3.ª baja del año:</strong> los días 1-3 no se cobran (0%); el resto de tramos se mantiene. A partir de la <strong>4.ª baja</strong> se aplica directamente el régimen general de la Seguridad Social, sin mejora de convenio.
+</div>
 
-<section class="card">
-<h2>5. Antigüedad</h2>
-<p>La antigüedad en el sector de seguridad privada suele calcularse por quinquenios. Cada quinquenio equivale a cinco años completos de prestación de servicios en la empresa.</p>
+<div class="cta-box">
+<p>¿Quieres saber exactamente cuánto te corresponde cobrar según estos datos?</p>
+<a href="index.html" class="cta-btn">CALCULA TU NÓMINA GRATIS</a>
+</div>
 
-<p>Por ejemplo, si un vigilante lleva 4 años en la empresa, todavía no habría generado un quinquenio completo. Si lleva 5 años, tendría derecho al primer quinquenio. Si lleva 10 años, tendría dos quinquenios, y así sucesivamente.</p>
+<div class="rel-links">
+<a href="derechos-vigilante.html" class="rel-link"><div class="rel-kicker">Guía relacionada</div><div class="rel-title">⚖️ Derechos del Vigilante de Seguridad</div></a>
+<a href="guia-nomina-vigilante.html" class="rel-link"><div class="rel-kicker">Guía relacionada</div><div class="rel-title">🧾 Cómo leer tu nómina paso a paso</div></a>
+</div>
 
-<p>Este complemento puede afectar también al cálculo de otros importes, como determinadas pagas o bases utilizadas para estimaciones salariales.</p>
-</section>
-
-<section class="card">
-<h2>6. Vacaciones</h2>
-<p>Las vacaciones son un derecho laboral básico. En el sector, la duración y forma de disfrute deben respetar lo indicado en el convenio y la normativa laboral aplicable.</p>
-
-<p>Si finaliza la relación laboral y quedan vacaciones pendientes, la empresa debe incluirlas en el finiquito. Por eso, en la calculadora de finiquito se permite introducir los días de vacaciones no disfrutados para estimar su importe.</p>
-</section>
-
-<section class="card">
-<h2>7. Bajas médicas e incapacidad temporal</h2>
-<p>La incapacidad temporal puede variar según el tipo de baja: enfermedad común, accidente no laboral, accidente laboral, enfermedad profesional u hospitalización. Cada caso puede tener reglas distintas de prestación y complemento.</p>
-
-<p>En seguridad privada, el convenio puede mejorar determinados tramos respecto a la prestación general, especialmente en las primeras bajas del año o en situaciones concretas. Por eso la calculadora incluye una sección específica de baja IT.</p>
-
-<p>La base de cotización del mes anterior es importante para estimar la prestación. Si el trabajador introduce esa base manualmente, el cálculo será más ajustado que usando una estimación por convenio.</p>
-</section>
-
-<section class="card">
-<h2>8. Finiquito e indemnización</h2>
-<p>El finiquito no es lo mismo que la indemnización. El finiquito incluye cantidades pendientes como vacaciones no disfrutadas, pagas proporcionales o salarios pendientes. La indemnización depende del tipo de extinción del contrato.</p>
-
-<ul>
-  <li><strong>Baja voluntaria:</strong> normalmente no genera indemnización, pero sí puede haber finiquito.</li>
-  <li><strong>Fin de contrato o despido objetivo:</strong> puede generar indemnización según los días por año que correspondan.</li>
-  <li><strong>Despido improcedente:</strong> puede generar una indemnización superior, con límites legales.</li>
-</ul>
-
-<p>La calculadora ofrece una estimación orientativa, pero cualquier despido o extinción contractual debe revisarse con documentación real.</p>
-</section>
-
-<section class="card">
-<h2>9. Cómo usar esta calculadora junto al convenio</h2>
-<p>Para obtener una estimación más precisa, te recomendamos tener delante tu última nómina y revisar estos datos:</p>
-
-<ul>
-  <li>Categoría profesional.</li>
-  <li>Horas trabajadas durante el mes.</li>
-  <li>Horas nocturnas.</li>
-  <li>Horas festivas.</li>
-  <li>Horas extra.</li>
-  <li>Antigüedad en la empresa.</li>
-  <li>Pagas prorrateadas o no prorrateadas.</li>
-  <li>Porcentaje de IRPF aplicado.</li>
-  <li>Base de cotización si vas a calcular una baja.</li>
-</ul>
-
-<p>Cuanto más exactos sean los datos introducidos, más útil será la estimación.</p>
-</section>
-
-<section class="card">
-<h2>10. Enlace a la fuente oficial</h2>
-<p>Puedes consultar el texto oficial del convenio en el Boletín Oficial del Estado:</p>
-<p><a href="https://www.boe.es/diario_boe/txt.php?id=BOE-A-2026-8569" target="_blank" rel="noopener">Ver convenio en el BOE</a></p>
-</section>
-
-<footer>
-  <p>Calculadora Vigilante · Herramienta orientativa para trabajadores de seguridad privada.</p>
-  <p><a href="index.html">Volver a la calculadora</a></p>
-</footer>
-
+<div class="disclaimer">
+Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 — BOE 18/04/2026<br>
+Documento orientativo. Consulta el texto oficial o a un asesor laboral ante cualquier duda.
+</div>
 </div>
 </body>
 </html>
