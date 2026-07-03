@@ -298,6 +298,16 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 </div>
 <div class="card">
+<div class="card-label">Jefe de Equipo</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Soy Jefe de Equipo</div>
+<div class="switch-sub">Plus del 10% del salario base según convenio</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchJefe"><span class="slider"></span></label>
+</div>
+</div>
+<div class="card">
 <div class="card-label">Plus de servicio</div>
 <div class="switch-row">
 <div>
@@ -338,6 +348,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row"><span class="res-concept">Plus transporte</span><span class="res-val up" id="r-trans">—</span></div>
 <div class="res-row"><span class="res-concept">Plus vestuario</span><span class="res-val up" id="r-vest">—</span></div>
 <div class="res-row" id="row-antig" style="display:none"><span class="res-concept" id="lbl-antig">Antigüedad</span><span class="res-val up" id="r-antig">—</span></div>
+<div class="res-row" id="row-jefe" style="display:none"><span class="res-concept" id="lbl-jefe">Plus Jefe de Equipo</span><span class="res-val up" id="r-jefe">—</span></div>
 <div class="res-row" id="row-plusserv" style="display:none"><span class="res-concept">Plus de servicio</span><span class="res-val up" id="r-plusserv">—</span></div>
 <div class="res-row" id="row-extra" style="display:none"><span class="res-concept" id="lbl-extra">—</span><span class="res-val up" id="r-extra">—</span></div>
 <div class="res-row" id="row-noc" style="display:none"><span class="res-concept" id="lbl-noc">—</span><span class="res-val up" id="r-noc">—</span></div>
@@ -729,6 +740,7 @@ function calcNomina(){
   var ip=parseFloat(document.getElementById("irpf").value)||0;
   var an=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
   var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
+  var esJefe=document.getElementById("switchJefe").checked;
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
   if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
@@ -755,6 +767,7 @@ function calcNomina(){
   var ve=r2(cat.vest*ratioFijo*factorH);
   var ant=calcAntig(an,catActual);
   var antM=r2(ant*ratioFijo*factorH);
+  var je=esJefe?r2(cat.salBase*0.10*ratioFijo*factorH):0;
   var q=Math.floor(an/5);
   var hev=calcHoraExtra(cat.salBase,cat.pelig,ant);
   var hEx=Math.max(0,hT-hp);
@@ -762,7 +775,7 @@ function calcNomina(){
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
   var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo);
   var pP=r2((pa*bP*factorH)/12);
-  var bruto=r2(sb+pe+tr+ve+antM+ps+pEx+pN+pFe+pP);
+  var bruto=r2(sb+pe+tr+ve+antM+je+ps+pEx+pN+pFe+pP);
   var pNP=3-pa;
   var ssB=r2(bruto+r2(pNP*bP*factorH/12));
   var dSS=r2(ssB*SS_PCT), dIP=r2(bruto*ip/100);
@@ -777,6 +790,7 @@ function calcNomina(){
   document.getElementById("r-vest").textContent="+"+fmt(ve);
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
   else{document.getElementById("row-antig").style.display="none";}
+  showR("row-jefe","lbl-jefe","r-jefe","Plus Jefe de Equipo (10% salario base)",je,"up");
   if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
   else{document.getElementById("row-plusserv").style.display="none";}
   showR("row-extra","lbl-extra","r-extra","Horas extra — "+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
