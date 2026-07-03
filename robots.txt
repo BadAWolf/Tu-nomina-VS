@@ -1,4 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://calculadoravigilante.com/
-sitemap.xml
+Sitemap: https://calculadoravigilante.com/sitemap.xml
