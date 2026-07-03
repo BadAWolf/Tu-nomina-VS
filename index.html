@@ -390,6 +390,16 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 </div>
 <div class="card">
+<div class="card-label">Jefe de Equipo</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Soy Jefe de Equipo</div>
+<div class="switch-sub">El plus del 10% cuenta para vacaciones e indemnización</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchJefeF"><span class="slider"></span></label>
+</div>
+</div>
+<div class="card">
 <div class="card-label">Fechas del contrato</div>
 <div class="date-grid">
 <div class="field" style="margin-bottom:0">
@@ -482,7 +492,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="field" style="margin-bottom:0">
 <div class="field-label">Importe de tu base de cotización (€)</div>
 <input type="number" id="b-baseManual" placeholder="ej. 1450" min="0" step="0.01" inputmode="decimal">
-<div class="field-hint">Introduce la casilla <strong>"Base Contingencias Comunes"</strong> de tu nómina del mes anterior a la baja. Recuerda que las horas extras no computan para este cálculo y la prorrata de las pagas extras ya viene incluida por ley dentro de esa base. Si lo dejas en 0, usará el mínimo del convenio prorrateado.</div>
+<div class="field-hint">Introduce la casilla <strong>"Base Contingencias Comunes"</strong> de tu nómina del mes anterior a la baja. Esa base ya incluye por ley todos tus pluses que cotizan (jefe de equipo, plus de servicio...) y la prorrata de las pagas extras — no hace falta añadir nada más. Las horas extras no computan. Si lo dejas en 0, usará el mínimo del convenio prorrateado.</div>
 </div>
 </div>
 <div class="card">
@@ -892,7 +902,8 @@ function calcFiniquito(){
   var dias=Math.round((d2-d1)/864e5);
   var anosEx=dias/365, anosC=Math.floor(anosEx), q=Math.floor(anosC/5);
   var ant=calcAntig(anosC,fcatActual);
-  var sMens=r2((cat.salBase+cat.pelig+cat.trans+cat.vest+ant)*ratio);
+  var esJefeF=document.getElementById("switchJefeF").checked;
+  var sMens=r2(((esJefeF?cat.salBase*1.10:cat.salBase)+cat.pelig+cat.trans+cat.vest+ant)*ratio);
   var bPaga=r2((cat.salBase+cat.pelig+ant)*ratio);
   var vDia=r2(sMens/30);
   var totVacas=r2(dv*vDia);
