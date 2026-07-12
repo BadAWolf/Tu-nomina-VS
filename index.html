@@ -230,6 +230,14 @@ input:checked + .slider:before{transform:translateX(20px);}
 .donate-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold2);color:#fff;text-decoration:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.7rem 1.5rem;box-shadow:0 2px 8px rgba(180,120,10,0.3);transition:background 0.15s;}
 .donate-btn:hover{background:var(--gold);}
 .donate-note{font-size:0.6rem;color:var(--muted);margin-top:0.6rem;font-weight:500;}
+
+.donate-btns{display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;}
+.donate-btn{border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.donate-btn.donate-bizum{background:#1f9ea8;}
+.donate-btn.donate-bizum:hover{background:#177d85;}
+.bizum-info{margin-top:0.85rem;font-size:0.85rem;color:var(--text);background:var(--card);border:1.5px dashed var(--goldline);border-radius:8px;padding:0.75rem;}
+.bizum-info strong{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--gold);letter-spacing:0.05em;}
+.bizum-info span{display:block;font-size:0.63rem;color:var(--muted);margin-top:0.35rem;font-weight:500;}
 </style>
 </head>
 <body>
@@ -376,8 +384,12 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
 <p class="donate-text">Esta calculadora es y será siempre <strong>gratuita</strong>. Si te ha ayudado a entender tu nómina o a reclamar lo tuyo, puedes invitarme a un café para el mantenimiento y las actualizaciones de cada convenio.</p>
-<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ Invítame a un café</a>
-<div class="donate-note">Pago seguro a través de PayPal — tú eliges la cantidad</div>
+<div class="donate-btns">
+<button type="button" class="donate-btn donate-bizum" onclick="mostrarBizum(this)">💸 Enviar Bizum</button>
+<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ PayPal</a>
+</div>
+<div class="bizum-info" style="display:none;">Bizum al <strong>651 813 672</strong><span>Número copiado ✓ — abre la app de tu banco, entra en Bizum y pégalo</span></div>
+<div class="donate-note">Tú eliges la cantidad — cualquier café suma</div>
 </div>
 </div>
 
@@ -491,8 +503,12 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
 <p class="donate-text">Esta calculadora es y será siempre <strong>gratuita</strong>. Si te ha ayudado a entender tu nómina o a reclamar lo tuyo, puedes invitarme a un café para el mantenimiento y las actualizaciones de cada convenio.</p>
-<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ Invítame a un café</a>
-<div class="donate-note">Pago seguro a través de PayPal — tú eliges la cantidad</div>
+<div class="donate-btns">
+<button type="button" class="donate-btn donate-bizum" onclick="mostrarBizum(this)">💸 Enviar Bizum</button>
+<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ PayPal</a>
+</div>
+<div class="bizum-info" style="display:none;">Bizum al <strong>651 813 672</strong><span>Número copiado ✓ — abre la app de tu banco, entra en Bizum y pégalo</span></div>
+<div class="donate-note">Tú eliges la cantidad — cualquier café suma</div>
 </div>
 </div>
 
@@ -588,8 +604,12 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
 <p class="donate-text">Esta calculadora es y será siempre <strong>gratuita</strong>. Si te ha ayudado a entender tu nómina o a reclamar lo tuyo, puedes invitarme a un café para el mantenimiento y las actualizaciones de cada convenio.</p>
-<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ Invítame a un café</a>
-<div class="donate-note">Pago seguro a través de PayPal — tú eliges la cantidad</div>
+<div class="donate-btns">
+<button type="button" class="donate-btn donate-bizum" onclick="mostrarBizum(this)">💸 Enviar Bizum</button>
+<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ PayPal</a>
+</div>
+<div class="bizum-info" style="display:none;">Bizum al <strong>651 813 672</strong><span>Número copiado ✓ — abre la app de tu banco, entra en Bizum y pégalo</span></div>
+<div class="donate-note">Tú eliges la cantidad — cualquier café suma</div>
 </div>
 </div>
 
@@ -691,6 +711,15 @@ Herramienta orientativa — compara siempre con tu nómina real
 </div>
 
 <script>
+function mostrarBizum(btn){
+  var box=btn.closest(".donate-box");
+  var info=box.querySelector(".bizum-info");
+  info.style.display="block";
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText("651813672").catch(function(){});}
+  btn.textContent="✓ Número copiado";
+  setTimeout(function(){btn.textContent="💸 Enviar Bizum";},2500);
+}
+
 var CATS = {
   sin_arma:{salBase:1161.28,pelig:24.08, trans:137.81,vest:112.28,nocH:1.26},
   con_arma:{salBase:1161.28,pelig:179.90,trans:137.81,vest:112.28,nocH:1.26},
