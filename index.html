@@ -3,13 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Calculadora de nómina, finiquito y bajas para Vigilantes de Seguridad Privada. Actualizada al Convenio 2026. Calcula tu salario neto, horas extras y pluses.">
+<meta name="description" content="Calculadora gratis de nómina para vigilantes de seguridad. Convenio 2026 actualizado: salario neto, horas extras, nocturnidad, festivos, finiquito y baja IT.">
 <link rel="canonical" href="https://calculadoravigilante.com/">
-<meta property="og:title" content="Nómina Vigilante 2026 | Calculadora de Seguridad Privada">
-<meta property="og:description" content="Calcula tu nómina, finiquito y baja IT según el Convenio de Seguridad Privada 2026. Gratis y sin registros.">
+<meta property="og:title" content="Calculadora Nómina Vigilante de Seguridad 2026 | Gratis">
+<meta property="og:description" content="Calcula gratis tu nómina de vigilante de seguridad: salario neto, horas extras, finiquito y baja IT. Convenio 2026.">
 <meta property="og:url" content="https://calculadoravigilante.com/">
 <meta property="og:type" content="website">
-<title>Nómina Vigilante 2026 | Calculadora de Seguridad Privada</title>
+<title>Calculadora Nómina Vigilante de Seguridad 2026 | Gratis</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 
 <style>
@@ -239,6 +239,31 @@ input:checked + .slider:before{transform:translateX(20px);}
 .bizum-info strong{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--gold);letter-spacing:0.05em;}
 .bizum-info span{display:block;font-size:0.63rem;color:var(--muted);margin-top:0.35rem;font-weight:500;}
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Calculadora Nómina Vigilante",
+  "url": "https://calculadoravigilante.com/",
+  "applicationCategory": "FinanceApplication",
+  "operatingSystem": "Web",
+  "inLanguage": "es-ES",
+  "description": "Calculadora gratis de nómina para vigilantes de seguridad. Convenio 2026 actualizado: salario neto, horas extras, nocturnidad, festivos, finiquito y baja IT.",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "featureList": [
+    "Cálculo de nómina mensual según Convenio de Seguridad Privada 2026",
+    "Cálculo de finiquito e indemnización por despido",
+    "Cálculo de prestación por baja por incapacidad temporal",
+    "Horas extra, nocturnidad y plus de festividad",
+    "Antigüedad por quinquenios y plus de Jefe de Equipo"
+  ],
+  "isAccessibleForFree": true
+}
+</script>
 </head>
 <body>
 
@@ -270,8 +295,20 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="cat-grid">
 <button class="cat-btn active" id="btn-sin_arma">VS Sin Arma<span class="cat-salary">1.161,28 €/mes</span></button>
 <button class="cat-btn" id="btn-con_arma">VS Con Arma<span class="cat-salary">1.161,28 €/mes</span></button>
-<button class="cat-btn" id="btn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
 <button class="cat-btn" id="btn-escolta">Escolta<span class="cat-salary">1.161,28 €/mes</span></button>
+<button class="cat-btn" id="btn-explosivos">VS Explosivos<span class="cat-salary">1.161,28 €/mes</span></button>
+<button class="cat-btn" id="btn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
+<button class="cat-btn" id="btn-tr_explo">VS Transp. Explosivos<span class="cat-salary">1.227,74 €/mes</span></button>
+</div>
+</div>
+<div class="card" id="card-cond" style="display:none">
+<div class="card-label">Función en el servicio</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Soy conductor</div>
+<div class="switch-sub">El conductor del vehículo tiene mayor salario base</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchCond"><span class="slider"></span></label>
 </div>
 </div>
 <div class="card">
@@ -360,6 +397,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-section-label green">DEVENGOS</div>
 <div class="res-row"><span class="res-concept" id="lbl-base">Salario base</span><span class="res-val up" id="r-base">—</span></div>
 <div class="res-row"><span class="res-concept" id="lbl-pelig">Plus peligrosidad</span><span class="res-val up" id="r-pelig">—</span></div>
+<div class="res-row" id="row-act" style="display:none"><span class="res-concept" id="lbl-act">Plus de actividad</span><span class="res-val up" id="r-act">—</span></div>
 <div class="res-row"><span class="res-concept">Plus transporte</span><span class="res-val up" id="r-trans">—</span></div>
 <div class="res-row"><span class="res-concept">Plus vestuario</span><span class="res-val up" id="r-vest">—</span></div>
 <div class="res-row" id="row-antig" style="display:none"><span class="res-concept" id="lbl-antig">Antigüedad</span><span class="res-val up" id="r-antig">—</span></div>
@@ -399,8 +437,20 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="cat-grid">
 <button class="cat-btn active" id="fbtn-sin_arma">VS Sin Arma<span class="cat-salary">1.161,28 €/mes</span></button>
 <button class="cat-btn" id="fbtn-con_arma">VS Con Arma<span class="cat-salary">1.161,28 €/mes</span></button>
-<button class="cat-btn" id="fbtn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
 <button class="cat-btn" id="fbtn-escolta">Escolta<span class="cat-salary">1.161,28 €/mes</span></button>
+<button class="cat-btn" id="fbtn-explosivos">VS Explosivos<span class="cat-salary">1.161,28 €/mes</span></button>
+<button class="cat-btn" id="fbtn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
+<button class="cat-btn" id="fbtn-tr_explo">VS Transp. Explosivos<span class="cat-salary">1.227,74 €/mes</span></button>
+</div>
+</div>
+<div class="card" id="card-condF" style="display:none">
+<div class="card-label">Función en el servicio</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Soy conductor</div>
+<div class="switch-sub">El conductor del vehículo tiene mayor salario base</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchCondF"><span class="slider"></span></label>
 </div>
 </div>
 <div class="card">
@@ -518,8 +568,20 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="cat-grid">
 <button class="cat-btn active" id="bbtn-sin_arma">VS Sin Arma<span class="cat-salary">1.161,28 €/mes</span></button>
 <button class="cat-btn" id="bbtn-con_arma">VS Con Arma<span class="cat-salary">1.161,28 €/mes</span></button>
-<button class="cat-btn" id="bbtn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
 <button class="cat-btn" id="bbtn-escolta">Escolta<span class="cat-salary">1.161,28 €/mes</span></button>
+<button class="cat-btn" id="bbtn-explosivos">VS Explosivos<span class="cat-salary">1.161,28 €/mes</span></button>
+<button class="cat-btn" id="bbtn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
+<button class="cat-btn" id="bbtn-tr_explo">VS Transp. Explosivos<span class="cat-salary">1.227,74 €/mes</span></button>
+</div>
+</div>
+<div class="card" id="card-condB" style="display:none">
+<div class="card-label">Función en el servicio</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Soy conductor</div>
+<div class="switch-sub">El conductor del vehículo tiene mayor salario base</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchCondB"><span class="slider"></span></label>
 </div>
 </div>
 <div class="card">
@@ -721,12 +783,21 @@ function mostrarBizum(btn){
 }
 
 var CATS = {
-  sin_arma:{salBase:1161.28,pelig:24.08, trans:137.81,vest:112.28,nocH:1.26},
-  con_arma:{salBase:1161.28,pelig:179.90,trans:137.81,vest:112.28,nocH:1.26},
-  fondos:  {salBase:1227.74,pelig:191.59,trans:137.81,vest:113.27,nocH:1.36},
-  escolta: {salBase:1161.28,pelig:177.15,trans:137.81,vest:115.67,nocH:1.26}
+  sin_arma:  {salBase:1161.28,pelig:24.08, act:0,     trans:137.81,vest:112.28,nocH:1.26},
+  con_arma:  {salBase:1161.28,pelig:179.90,act:0,     trans:137.81,vest:112.28,nocH:1.26},
+  escolta:   {salBase:1161.28,pelig:177.15,act:0,     trans:137.81,vest:115.67,nocH:1.26},
+  explosivos:{salBase:1161.28,pelig:210.55,act:40.17, trans:137.81,vest:113.27,nocH:1.26},
+  fondos:    {salBase:1227.74,pelig:179.90,act:210.19,trans:137.81,vest:113.27,nocH:1.36,cBase:1285.55,cVest:114.56},
+  tr_explo:  {salBase:1227.74,pelig:191.59,act:152.44,trans:137.81,vest:113.27,nocH:1.36,cBase:1285.55,cVest:114.56}
 };
-var QUINQUENIO = {sin_arma:45.86,con_arma:45.86,fondos:50.23,escolta:45.86};
+var QUINQUENIO = {sin_arma:45.86,con_arma:45.86,escolta:45.86,explosivos:45.86,fondos:50.23,tr_explo:50.23};
+
+// Devuelve la categoría efectiva aplicando la variante conductor si procede
+function catEf(k,esCond){
+  var c=CATS[k];
+  if(esCond&&c.cBase){return {salBase:c.cBase,pelig:c.pelig,act:c.act,trans:c.trans,vest:c.cVest,nocH:c.nocH};}
+  return c;
+}
 var SS_PCT=0.0650, JORNADA=162, HORAS_ANUALES=1782;
 var PLUS_FEST=1.02, DIAS_VACAS=31, H_DIA_VACAS=5.226;
 var catActual="sin_arma", jornActual="completa";
@@ -766,12 +837,15 @@ document.getElementById("aniosAntiguedad").addEventListener("input",function(){
 document.getElementById("switchPlus").addEventListener("change",function(){
   document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
 });
-["sin_arma","con_arma","fondos","escolta"].forEach(function(c){
+["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
   document.getElementById("btn-"+c).addEventListener("click",function(){
     document.querySelectorAll("#view-nomina .cat-btn").forEach(function(b){b.classList.remove("active");});
     document.getElementById("btn-"+c).classList.add("active");
     catActual=c;
     document.getElementById("badge-noc").textContent="+"+CATS[c].nocH.toFixed(2).replace(".",",")+" €/h";
+    var esC=!!CATS[c].cBase;
+    document.getElementById("card-cond").style.display=esC?"block":"none";
+    if(!esC)document.getElementById("switchCond").checked=false;
   });
 });
 document.getElementById("jorn-completa").addEventListener("click",function(){
@@ -797,7 +871,7 @@ document.getElementById("jorn-parcial").addEventListener("click",function(){
 document.getElementById("btnCalc").addEventListener("click",function(){calcNomina();});
 
 function calcNomina(){
-  var cat=CATS[catActual];
+  var cat=catEf(catActual,document.getElementById("switchCond").checked);
   var hT=parseFloat(document.getElementById("hTTotal").value)||0;
   var hN=parseFloat(document.getElementById("hNoc").value)||0;
   var hF=parseFloat(document.getElementById("hFest").value)||0;
@@ -827,6 +901,7 @@ function calcNomina(){
 
   var sb=r2(cat.salBase*ratioFijo*factorH);
   var pe=r2(cat.pelig*ratioFijo*factorH);
+  var ac=r2((cat.act||0)*ratioFijo*factorH);
   var tr=r2(cat.trans*ratioFijo*factorH);
   var ve=r2(cat.vest*ratioFijo*factorH);
   var ant=calcAntig(an,catActual);
@@ -839,7 +914,7 @@ function calcNomina(){
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
   var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo);
   var pP=r2((pa*bP*factorH)/12);
-  var bruto=r2(sb+pe+tr+ve+antM+je+ps+pEx+pN+pFe+pP);
+  var bruto=r2(sb+pe+ac+tr+ve+antM+je+ps+pEx+pN+pFe+pP);
   var pNP=3-pa;
   var ssB=r2(bruto+r2(pNP*bP*factorH/12));
   var dSS=r2(ssB*SS_PCT), dIP=r2(bruto*ip/100);
@@ -850,6 +925,7 @@ function calcNomina(){
   document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+suf;
   document.getElementById("r-base").textContent="+"+fmt(sb);
   document.getElementById("r-pelig").textContent="+"+fmt(pe);
+  showR("row-act","lbl-act","r-act","Plus de actividad"+suf,ac,"up");
   document.getElementById("r-trans").textContent="+"+fmt(tr);
   document.getElementById("r-vest").textContent="+"+fmt(ve);
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
@@ -871,11 +947,14 @@ function calcNomina(){
   setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 
-["sin_arma","con_arma","fondos","escolta"].forEach(function(c){
+["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
   document.getElementById("fbtn-"+c).addEventListener("click",function(){
     document.querySelectorAll("#view-finiquito .cat-btn").forEach(function(b){b.classList.remove("active");});
     document.getElementById("fbtn-"+c).classList.add("active");
     fcatActual=c;
+    var esCF=!!CATS[c].cBase;
+    document.getElementById("card-condF").style.display=esCF?"block":"none";
+    if(!esCF)document.getElementById("switchCondF").checked=false;
   });
 });
 document.getElementById("fjorn-completa").addEventListener("click",function(){
@@ -939,7 +1018,7 @@ function propPaga(d1,d2,paga){
   return Math.min(1,sol/devDias);
 }
 function calcFiniquito(){
-  var cat=CATS[fcatActual];
+  var cat=catEf(fcatActual,document.getElementById("switchCondF").checked);
   var dv=parseFloat(document.getElementById("f-vacas").value)||0;
   var ip=parseFloat(document.getElementById("f-irpf").value)||0;
   var tipo=document.getElementById("f-tipodespido").value;
@@ -957,7 +1036,7 @@ function calcFiniquito(){
   var anosEx=dias/365, anosC=Math.floor(anosEx), q=Math.floor(anosC/5);
   var ant=calcAntig(anosC,fcatActual);
   var esJefeF=document.getElementById("switchJefeF").checked;
-  var sMens=r2(((esJefeF?cat.salBase*1.10:cat.salBase)+cat.pelig+cat.trans+cat.vest+ant)*ratio);
+  var sMens=r2(((esJefeF?cat.salBase*1.10:cat.salBase)+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
   var bPaga=r2((cat.salBase+cat.pelig+ant)*ratio);
   var vDia=r2(sMens/30);
   var totVacas=r2(dv*vDia);
@@ -1003,12 +1082,15 @@ function calcFiniquito(){
   setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 
-["sin_arma","con_arma","fondos","escolta"].forEach(function(c){
+["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
   document.getElementById("bbtn-"+c).addEventListener("click",function(){
     document.querySelectorAll("#view-baja .cat-btn").forEach(function(b){b.classList.remove("active");});
     document.getElementById("bbtn-"+c).classList.add("active");
     bcatActual=c;
     document.getElementById("b-baseManual").value="";
+    var esCB=!!CATS[c].cBase;
+    document.getElementById("card-condB").style.display=esCB?"block":"none";
+    if(!esCB)document.getElementById("switchCondB").checked=false;
   });
 });
 document.getElementById("b-tipo").addEventListener("change",function(){
@@ -1029,7 +1111,7 @@ function tramoRow(rid,lid,vid,d1,d2,pct,base,lbl){
 }
 
 function calcBaja(){
-  var cat=CATS[bcatActual];
+  var cat=catEf(bcatActual,document.getElementById("switchCondB").checked);
   var an=parseFloat(document.getElementById("b-anios").value)||0;
   var dias=parseInt(document.getElementById("b-dias").value)||0;
   var ip=parseFloat(document.getElementById("b-irpf").value)||0;
@@ -1044,9 +1126,9 @@ function calcBaja(){
   var prorrata=r2((cat.salBase+cat.pelig+ant)*3/12);
   var baseCotizMens;
   if(baseManual>0){baseCotizMens=baseManual;}
-  else{baseCotizMens=r2(cat.salBase+cat.pelig+cat.trans+cat.vest+ant+prorrata);}
+  else{baseCotizMens=r2(cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant+prorrata);}
   var brDiario=r2(baseCotizMens/30);
-  var baseATMens=r2(cat.salBase+cat.pelig+cat.trans+cat.vest+ant+prorrata);
+  var baseATMens=r2(cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant+prorrata);
   var brATDiario=r2(baseATMens/30);
   for(var i=0;i<=6;i++){document.getElementById("brow-t"+i).style.display="none";}
   var totalBruto=0;
