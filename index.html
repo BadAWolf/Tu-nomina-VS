@@ -549,7 +549,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row" id="frow-indem" style="display:none"><span class="res-concept" id="flbl-indem">Indemnización por despido</span><span class="res-val exento" id="fr-indem">—</span></div>
 </div>
 <div class="exento-box" id="f-exento-info" style="display:none">
-<strong>Indemnización exenta de IRPF:</strong> Va íntegra a tu cuenta bancaria. Exenta hasta el límite legal: 33 días/año, máximo 24 meses para despido improcedente; 20 días/año, máximo 12 meses para despido objetivo.
+<strong>Indemnización exenta de IRPF:</strong> Va íntegra a tu cuenta bancaria. Exenta hasta el límite legal: 33 días/año, máximo 24 meses para despido improcedente; 20 días/año, máximo 12 meses para despido objetivo.<br><br><strong>Salario regulador aplicado:</strong> <span id="fr-salreg">—</span>/mes. Según la doctrina del Tribunal Supremo, la indemnización se calcula sobre los conceptos salariales más la prorrata de las pagas extras, excluyendo los pluses de transporte y vestuario por su naturaleza extrasalarial.
 </div>
 <div class="neto-box">
 <div class="neto-label">TOTAL NETO<span>Lo que entra en tu cuenta</span></div>
@@ -744,7 +744,7 @@ input:checked + .slider:before{transform:translateX(20px);}
       <ul>
         <li><strong>Hora extraordinaria estándar:</strong> 9,98 € brutos.</li>
         <li><strong>Plus de Nocturnidad (22h a 06h):</strong> +1,26 € brutos/hora.</li>
-        <li><strong>Plus de Fin de Semana o Festivo:</strong> +1,02 € brutos/hora.</li>
+        <li><strong>Plus de Festividad:</strong> +1,02 € brutos/hora. Se abona por las horas trabajadas en días declarados festivos (nacionales, autonómicos o locales), no por trabajar en sábado o domingo corrientes.</li>
       </ul>
       <strong>Sí, son totalmente acumulables.</strong> Si realizas una hora extraordinaria que coincide dentro del horario nocturno y además cae en día festivo, los tres conceptos se suman obligatoriamente para esa hora específica: 9,98 € + 1,26 € + 1,02 € = <strong>12,26 € brutos por esa hora</strong> trabajada.
     </div>
@@ -753,14 +753,14 @@ input:checked + .slider:before{transform:translateX(20px);}
   <div class="faq-card">
     <div class="faq-question">📃 ¿Cómo puedo saber si mi nómina está mal calculada?</div>
     <div class="faq-answer">
-      Para pillar errores de la empresa en tu nómina, debes comprobar siempre estos cuatro puntos:
+      Para reclamar errores de la empresa en tu nómina, primero debes comprobar estos cuatro puntos:
       <ul>
-        <li><strong>El cómputo de jornada:</strong> Tu contrato ordinario es de 162 horas mensuales. Cualquier hora de más que aparezca en tu cuadrante debe cobrarse estrictamente como hora extra.</li>
-        <li><strong>Los pluses variables:</strong> Cuenta las noches y festivos reales de tu cuadrante mensual y revisa que la nómina abone exactamente esa cantidad de horas.</li>
-        <li><strong>La antigüedad:</strong> Comprueba que tengan actualizado tu contador de antigüedad (cada quinquenio en 2026 suma 45,86 € fijos al mes).</li>
-        <li><strong>Las retenciones:</strong> Revisa que no te apliquen un porcentaje de IRPF incorrecto para tu situación personal.</li>
+        <li><strong>El cómputo de jornada:</strong> la jornada del convenio es de 1.782 horas anuales, con un promedio de 162 horas al mes. Ojo: en cuadrante anual cada mes puede oscilar entre 144 y 176 horas sin que varíe tu salario, así que un mes de 170 horas no significa automáticamente que tengas horas extra. Lo que hay que vigilar es el cómputo anual: lleva tu propio registro mensual y comprueba al cierre del año que no has superado las 1.782 horas.</li>
+        <li><strong>Los pluses variables:</strong> cuenta las noches y los festivos reales de tu cuadrante mensual y revisa que la nómina abone exactamente esa cantidad de horas.</li>
+        <li><strong>La antigüedad:</strong> comprueba que tengan actualizado tu contador de quinquenios. Cada quinquenio suma 45,86 € al mes (50,23 € en las categorías de transporte de fondos y explosivos), y muchas empresas no lo actualizan solas al cumplirse los 5, 10 o 15 años.</li>
+        <li><strong>Las retenciones:</strong> revisa que el porcentaje de IRPF se corresponde con tu situación personal y familiar, comunicada a la empresa mediante el modelo 145.</li>
       </ul>
-      Si tienes dudas, introduce los datos de tu cuadrante real en nuestra <strong>calculadora de nómina mensual</strong> arriba para validar lo que te corresponde cobrar.
+      Si tienes dudas, introduce los datos de tu cuadrante real en la <strong>calculadora de nómina mensual</strong> de arriba para validar lo que te corresponde cobrar.
     </div>
   </div>
 </section>
@@ -1054,8 +1054,13 @@ function calcFiniquito(){
   var anosEx=dias/365, anosC=Math.floor(anosEx), q=Math.floor(anosC/5);
   var ant=calcAntig(anosC,fcatActual);
   var esJefeF=document.getElementById("switchJefeF").checked;
-  var sMens=r2(((esJefeF?cat.salBase*1.10:cat.salBase)+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
+  var sbJE=esJefeF?r2(cat.salBase*1.10):cat.salBase;
+  // Salario mensual completo: se usa para valorar las vacaciones pendientes
+  var sMens=r2((sbJE+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
   var bPaga=r2((cat.salBase+cat.pelig+ant)*ratio);
+  // Salario regulador de la indemnización (doctrina TS): conceptos salariales
+  // + prorrata de pagas extras, excluyendo transporte y vestuario (extrasalariales)
+  var salReg=r2((sbJE+cat.pelig+(cat.act||0)+ant)*ratio+bPaga*3/12);
   var vDia=r2(sMens/30);
   var totVacas=r2(dv*vDia);
   var pJulio=document.getElementById("fpaga-julio").classList.contains("active");
@@ -1073,7 +1078,7 @@ function calcFiniquito(){
   var indem=0;
   if(tipo==="objetivo"||tipo==="improcedente"){
     var dI=tipo==="objetivo"?20:33, mM=tipo==="objetivo"?12:24;
-    indem=r2(Math.min(r2(dI*(sMens/30)*anosEx),r2(sMens*mM)));
+    indem=r2(Math.min(r2(dI*(salReg/30)*anosEx),r2(salReg*mM)));
   }
   var totalNeto=r2(liqNeto+indem);
   var anosN=Math.floor(dias/365),mN=Math.floor((dias%365)/30),dN=(dias%365)%30;
@@ -1092,7 +1097,7 @@ function calcFiniquito(){
   if(ip>0){document.getElementById("frow-irpf-liq").style.display="flex";document.getElementById("flbl-irpf-liq").textContent="Retención IRPF ("+ip+"%)";document.getElementById("fr-irpf-liq").textContent="-"+fmt(irpfLiq);}
   else{document.getElementById("frow-irpf-liq").style.display="none";}
   document.getElementById("fr-liq-neto").textContent=fmt(liqNeto);
-  if(indem>0){document.getElementById("frow-indem-label").style.display="block";document.getElementById("frow-indem").style.display="flex";document.getElementById("flbl-indem").textContent=(tipo==="improcedente"?"Despido improcedente (33 días/año, máx. 24 meses)":"Despido objetivo (20 días/año, máx. 12 meses)")+sufRatio;document.getElementById("fr-indem").textContent="+"+fmt(indem);document.getElementById("f-exento-info").style.display="block";}
+  if(indem>0){document.getElementById("frow-indem-label").style.display="block";document.getElementById("frow-indem").style.display="flex";document.getElementById("flbl-indem").textContent=(tipo==="improcedente"?"Despido improcedente (33 días/año, máx. 24 meses)":"Despido objetivo (20 días/año, máx. 12 meses)")+sufRatio;document.getElementById("fr-indem").textContent="+"+fmt(indem);document.getElementById("fr-salreg").textContent=fmt(salReg);document.getElementById("f-exento-info").style.display="block";}
   else{document.getElementById("frow-indem-label").style.display="none";document.getElementById("frow-indem").style.display="none";document.getElementById("f-exento-info").style.display="none";}
   document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
   document.getElementById("resultado-finiquito").style.display="block";
