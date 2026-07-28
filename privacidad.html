@@ -50,9 +50,24 @@ a{color:var(--gold2);font-weight:600;}
 .highlight{background:var(--greenbg);border-left:3px solid var(--green);padding:0.75rem 0.95rem;border-radius:0 8px 8px 0;margin-bottom:0.9rem;font-size:0.77rem;color:#2d5a35;line-height:1.6;}
 .highlight strong{color:#2d7a3a;font-weight:700;}
 .disclaimer{font-size:0.62rem;color:var(--subtle);text-align:center;margin-top:2.2rem;line-height:1.7;}
+
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:1rem;text-align:center;border-top:1px solid var(--border);box-shadow:0 -2px 10px rgba(0,0,0,0.05);z-index:9999;font-size:0.75rem;color:var(--text2);display:none;}
+#cookie-banner p{font-size:0.75rem;margin:0;line-height:1.55;}
+.cookie-buttons{margin-top:0.8rem;display:flex;justify-content:center;gap:10px;}
+.btn-cookie{border:none;border-radius:5px;padding:0.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;}
+.btn-accept{background:var(--gold2);color:#fff;}
+.btn-reject{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
 </style>
 </head>
 <body>
+<div id="cookie-banner">
+  <p>Esta web utiliza cookies de terceros (Google Analytics y AdSense) para analizar el tráfico y mostrar publicidad. Ningún dato personal se guarda en nuestros servidores. <a href="privacidad.html" style="color:var(--gold2);font-weight:600;">Más información</a></p>
+  <div class="cookie-buttons">
+    <button class="btn-cookie btn-reject" onclick="rejectCookies()">Rechazar</button>
+    <button class="btn-cookie btn-accept" onclick="acceptCookies()">Aceptar</button>
+  </div>
+</div>
+
 <div class="topbar">
 <div class="topbar-inner">
 <a href="index.html" class="brand"><span class="brand-icon">🛡️</span><span class="brand-name">NÓMINA <em>VIGILANTE</em></span></a>
@@ -102,5 +117,34 @@ Nómina Vigilante · calculadoravigilante.com<br>
 Herramienta gratuita e independiente para vigilantes de seguridad privada
 </div>
 </div>
+<script>
+function loadGoogleScripts(){
+  var s1=document.createElement('script');
+  s1.src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B";
+  s1.async=true; document.head.appendChild(s1);
+  window.dataLayer=window.dataLayer||[];
+  window.gtag=function(){dataLayer.push(arguments);};
+  gtag('js',new Date());
+  gtag('config','G-NMM3MRRZ6B');
+  var s2=document.createElement('script');
+  s2.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445";
+  s2.async=true; s2.setAttribute('crossorigin','anonymous');
+  document.head.appendChild(s2);
+}
+function acceptCookies(){
+  localStorage.setItem('cookies_status','accepted');
+  document.getElementById('cookie-banner').style.display='none';
+  loadGoogleScripts();
+}
+function rejectCookies(){
+  localStorage.setItem('cookies_status','rejected');
+  document.getElementById('cookie-banner').style.display='none';
+}
+window.addEventListener('DOMContentLoaded',function(){
+  var st=localStorage.getItem('cookies_status');
+  if(st==='accepted'){loadGoogleScripts();}
+  else if(st!=='rejected'){document.getElementById('cookie-banner').style.display='block';}
+});
+</script>
 </body>
 </html>
