@@ -3,35 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Política de Privacidad | Calculadora Nómina Vigilante</title>
+<meta name="description" content="Política de privacidad y cookies de Nómina Vigilante. Los cálculos se realizan en tu propio dispositivo: no almacenamos ningún dato personal.">
+<meta name="robots" content="noindex, follow">
+<title>Política de Privacidad y Cookies | Nómina Vigilante</title>
+<link rel="canonical" href="https://calculadoravigilante.com/privacidad.html">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-body{font-family:sans-serif;line-height:1.6;padding:2rem;max-width:800px;margin:0 auto;color:#333;background:#f5f3ef;}
-h1{color:#b8720a;}
-h2{color:#4a3f2f;margin-top:1.5rem;}
-a{color:#d4860f;text-decoration:none;font-weight:bold;}
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+--bg:#f5f3ef;--surface:#faf8f5;--card:#ffffff;
+--border:#e8e3da;--border2:#d6cfc4;
+--gold:#b8720a;--gold2:#d4860f;--goldbg:#fdf2e0;--goldline:#e8c87a;
+--text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;--subtle:#b5a898;
+--green:#2d7a3a;--greenbg:#edf7ef;
+}
+html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+body{display:flex;flex-direction:column;align-items:center;padding:0 0 4rem;}
+.topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;}
+.brand{display:flex;align-items:center;gap:0.4rem;text-decoration:none;}
+.brand-icon{font-size:1rem;}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
+.brand-name em{color:var(--gold2);font-style:normal;}
+.topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(180,120,10,0.25);}
+.topbar-cta:hover{background:var(--gold);}
+.wrap{width:100%;max-width:680px;padding:1.5rem 1rem 0;}
+.crumbs{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;color:var(--subtle);margin-bottom:1.2rem;}
+.crumbs a{color:var(--gold2);text-decoration:none;}
+.crumbs a:hover{text-decoration:underline;}
+header.page{text-align:center;padding:0.5rem 0 1.5rem;}
+.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.45rem;font-weight:600;}
+h1{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.04em;line-height:1.1;color:var(--text);margin-bottom:0.5rem;}
+h1 em{color:var(--gold2);font-style:normal;}
+.header-sub{font-size:0.75rem;color:var(--muted);font-weight:500;}
+h2{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:0.04em;color:var(--text);margin:1.8rem 0 0.7rem;display:flex;align-items:center;gap:0.5rem;}
+h2 span{font-size:1rem;}
+p{font-size:0.79rem;color:var(--text2);line-height:1.7;margin-bottom:0.8rem;}
+p:last-child{margin-bottom:0;}
+ul{margin-left:1.2rem;margin-bottom:0.8rem;}
+ul li{font-size:0.79rem;color:var(--text2);line-height:1.65;margin-bottom:0.5rem;}
+ul li strong{color:var(--text);font-weight:700;}
+ul li::marker{color:var(--gold2);}
+a{color:var(--gold2);font-weight:600;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:0.9rem;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
+.highlight{background:var(--greenbg);border-left:3px solid var(--green);padding:0.75rem 0.95rem;border-radius:0 8px 8px 0;margin-bottom:0.9rem;font-size:0.77rem;color:#2d5a35;line-height:1.6;}
+.highlight strong{color:#2d7a3a;font-weight:700;}
+.disclaimer{font-size:0.62rem;color:var(--subtle);text-align:center;margin-top:2.2rem;line-height:1.7;}
 </style>
 </head>
 <body>
-<h1>Política de Privacidad y Cookies</h1>
-<p><strong>Última actualización:</strong> Junio 2026</p>
-<p>Esta web cumple estrictamente con el Reglamento General de Protección de Datos (RGPD) de la Unión Europea. La privacidad de los usuarios es nuestra máxima prioridad.</p>
+<div class="topbar">
+<div class="topbar-inner">
+<a href="index.html" class="brand"><span class="brand-icon">🛡️</span><span class="brand-name">NÓMINA <em>VIGILANTE</em></span></a>
+<a href="index.html" class="topbar-cta">IR A LA CALCULADORA</a>
+</div>
+</div>
 
-<h2>1. Datos que recopilamos</h2>
-<p>Esta calculadora funciona de forma 100% local. Los salarios, horas, años de antigüedad y porcentajes de IRPF que introduces se calculan dentro de tu propio dispositivo. <strong>No almacenamos, guardamos ni enviamos ningún dato personal a ningún servidor externo.</strong></p>
+<div class="wrap">
+<div class="crumbs"><a href="index.html">Inicio</a> › Política de Privacidad</div>
 
-<h2>2. Cookies y Publicidad de Terceros</h2>
-<p>Para financiar los costes de mantenimiento, esta web utiliza herramientas de terceros:</p>
-<ul>
-<li><strong>Google AdSense:</strong> Google utiliza cookies para publicar anuncios basados en las visitas anteriores del usuario a este sitio web u otros sitios web. Los usuarios pueden inhabilitar la publicidad personalizada en la configuración de anuncios de Google.</li>
-<li><strong>Google Analytics:</strong> Recopila información estadística anónima sobre el número de visitas y las páginas más utilizadas para ayudarnos a mejorar la herramienta.</li>
+<header class="page">
+<div class="header-label">Última actualización: julio 2026</div>
+<h1>POLÍTICA DE<br><em>PRIVACIDAD Y COOKIES</em></h1>
+<p class="header-sub">Cumplimiento del Reglamento General de Protección de Datos (RGPD)</p>
+</header>
+
+<div class="highlight">
+<strong>En una línea:</strong> todos los cálculos se hacen dentro de tu propio dispositivo. Ni tu salario, ni tus horas, ni tu IRPF salen de tu móvil.
+</div>
+
+<h2><span>🔒</span>1. Datos que recopilamos</h2>
+<p>Esta calculadora funciona de forma <strong>100% local</strong>. Los salarios, horas, años de antigüedad y porcentajes de IRPF que introduces se procesan dentro de tu propio navegador. <strong>No almacenamos, guardamos ni enviamos ningún dato personal a ningún servidor externo.</strong></p>
+<p>Tampoco existe registro de usuarios: no pedimos nombre, correo electrónico ni ningún otro dato identificativo para utilizar la herramienta.</p>
+
+<h2><span>🍪</span>2. Cookies y publicidad de terceros</h2>
+<p>Para poder cubrir los costes de mantenimiento, esta web utiliza herramientas de terceros:</p>
+<div class="card">
+<ul style="margin-bottom:0;">
+<li><strong>Google AdSense:</strong> utiliza cookies para mostrar anuncios basados en las visitas anteriores del usuario a este u otros sitios web. Puedes inhabilitar la publicidad personalizada desde la <a href="https://adssettings.google.com" target="_blank" rel="noopener">configuración de anuncios de Google</a>.</li>
+<li><strong>Google Analytics:</strong> recopila información estadística y anónima sobre el número de visitas y las páginas más utilizadas, con el único fin de mejorar la herramienta.</li>
 </ul>
+</div>
+<p>Estas cookies <strong>solo se cargan si aceptas</strong> el banner de consentimiento. Si no lo aceptas, no se activa ninguna de las dos.</p>
 
-<h2>3. Consentimiento</h2>
-<p>El usuario puede aceptar o rechazar libremente el uso de estas cookies publicitarias a través del banner de consentimiento que aparece al entrar en la web.</p>
+<h2><span>✅</span>3. Consentimiento</h2>
+<p>Al entrar por primera vez aparece un banner donde puedes aceptar o rechazar libremente el uso de cookies publicitarias. Tu decisión se guarda en el almacenamiento local de tu propio navegador, no en ningún servidor.</p>
+<p>Puedes revocarla en cualquier momento borrando los datos de navegación de este sitio desde la configuración de tu navegador.</p>
 
-<h2>4. Contacto</h2>
-<p>Si tienes cualquier duda sobre esta política, puedes contactar al administrador en: <a href="mailto:BadAWolfprivado@gmail.com">BadAWolfprivado@gmail.com</a></p>
-<br>
-<p><a href="index.html">← Volver a la Calculadora</a></p>
+<h2><span>💾</span>4. Almacenamiento local</h2>
+<p>La web utiliza el almacenamiento local del navegador únicamente para recordar si has aceptado las cookies. No se guarda ningún dato de los cálculos que realices ni ninguna información que permita identificarte.</p>
+
+<h2><span>📧</span>5. Contacto</h2>
+<p>Si tienes cualquier duda sobre esta política, puedes escribir a <a href="mailto:BadAWolfprivado@gmail.com">BadAWolfprivado@gmail.com</a>.</p>
+
+<div class="disclaimer">
+Nómina Vigilante · calculadoravigilante.com<br>
+Herramienta gratuita e independiente para vigilantes de seguridad privada
+</div>
+</div>
 </body>
 </html>
