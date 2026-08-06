@@ -264,7 +264,7 @@ input:checked + .slider:before{transform:translateX(20px);}
     "Cálculo de nómina mensual según Convenio de Seguridad Privada 2026",
     "Cálculo de finiquito e indemnización por despido",
     "Cálculo de prestación por baja por incapacidad temporal",
-    "Horas extra, nocturnidad y plus de festividad",
+    "Horas extra, nocturnidad y plus de fin de semana y festivos",
     "Antigüedad por quinquenios y plus de Jefe de Equipo"
   ],
   "isAccessibleForFree": true
@@ -342,9 +342,9 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="field-hint">Entre las 22:00 y las 06:00 — pueden coincidir con festivas</div>
 </div>
 <div class="field">
-<div class="field-label">De esas, horas festivas<span class="field-badge">+1,02 €/h</span></div>
+<div class="field-label">De esas, horas de fin de semana o festivo<span class="field-badge">+1,02 €/h</span></div>
 <input type="number" id="hFest" placeholder="0" min="0" inputmode="decimal">
-<div class="field-hint">Si son festivas y nocturnas a la vez, se cobran los dos pluses</div>
+<div class="field-hint">Cuenta TODAS las horas trabajadas en sábado (desde las 00:00) y domingo (hasta las 24:00), más los festivos oficiales. Si además son nocturnas, se cobran los dos pluses</div>
 </div>
 </div>
 <div class="card">
@@ -744,7 +744,7 @@ input:checked + .slider:before{transform:translateX(20px);}
       <ul>
         <li><strong>Hora extraordinaria estándar:</strong> 9,98 € brutos.</li>
         <li><strong>Plus de Nocturnidad (22h a 06h):</strong> +1,26 € brutos/hora.</li>
-        <li><strong>Plus de Festividad:</strong> +1,02 € brutos/hora. Se abona por las horas trabajadas en días declarados festivos (nacionales, autonómicos o locales), no por trabajar en sábado o domingo corrientes.</li>
+        <li><strong>Plus de Fin de Semana y Festivos:</strong> +1,02 € brutos/hora (art. 43.h del convenio). Se abona por <strong>todas</strong> las horas trabajadas entre las 00:00 del sábado y las 24:00 del domingo, además de los días festivos oficiales (nacionales, autonómicos o locales). No hace falta que sea festivo: trabajar un sábado o domingo corriente ya genera este plus.</li>
       </ul>
       <strong>Sí, son totalmente acumulables.</strong> Si realizas una hora extraordinaria que coincide dentro del horario nocturno y además cae en día festivo, los tres conceptos se suman obligatoriamente para esa hora específica: 9,98 € + 1,26 € + 1,02 € = <strong>12,26 € brutos por esa hora</strong> trabajada.
     </div>
@@ -903,7 +903,7 @@ function calcNomina(){
   if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(hF>hT){err.textContent="Las horas festivas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(hF>hT){err.textContent="Las horas de fin de semana/festivo no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   err.style.display="none";
 
   var ratioFijo=hp/JORNADA;
@@ -953,7 +953,7 @@ function calcNomina(){
   else{document.getElementById("row-plusserv").style.display="none";}
   showR("row-extra","lbl-extra","r-extra","Horas extra — "+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
   showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN,"up");
-  showR("row-fest","lbl-fest","r-fest","Plus festivos — "+hF+"h × 1,02 €",pFe,"up");
+  showR("row-fest","lbl-fest","r-fest","Plus fin de semana/festivo — "+hF+"h × 1,02 €",pFe,"up");
   showR("row-prorr","lbl-prorr","r-prorr",pa+" paga"+(pa!==1?"s":"")+" extra prorrateada"+(pa!==1?"s":""),pP,"up");
   document.getElementById("r-bruto").textContent=fmt(bruto);
   document.getElementById("r-ss").textContent="-"+fmt(dSS);
