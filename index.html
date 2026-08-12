@@ -244,6 +244,10 @@ input:checked + .slider:before{transform:translateX(20px);}
 .guide-kicker{font-family:'DM Mono',monospace;font-size:0.53rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--gold2);font-weight:600;margin-bottom:0.15rem;}
 .guide-card.guide-destacada .guide-title{color:var(--gold);font-size:0.88rem;}
 .guide-card.guide-destacada .guide-icon{font-size:1.7rem;}
+
+.btn-pdf{width:100%;background:transparent;color:var(--gold);border:1.5px solid var(--goldline);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;padding:0.7rem;cursor:pointer;transition:all 0.15s;margin-top:0.55rem;display:flex;align-items:center;justify-content:center;gap:0.45rem;}
+.btn-pdf:hover{background:var(--goldbg);border-color:var(--gold2);}
+.btn-pdf:disabled{opacity:0.6;cursor:wait;}
 </style>
 <script type="application/ld+json">
 {
@@ -424,6 +428,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="neto-label">NETO A COBRAR<span>Lo que entra en tu cuenta</span></div>
 <div class="neto-val" id="r-neto">—</div>
 </div>
+<button type="button" class="btn-pdf" id="btnPdfNomina" onclick="exportarPDF('nomina',this)">📄 Descargar en PDF</button>
 </div>
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
@@ -555,6 +560,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="neto-label">TOTAL NETO<span>Lo que entra en tu cuenta</span></div>
 <div class="neto-val" id="fr-total-neto">—</div>
 </div>
+<button type="button" class="btn-pdf" id="btnPdfFiniquito" onclick="exportarPDF('finiquito',this)">📄 Descargar en PDF</button>
 </div>
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
@@ -668,6 +674,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="info-box" style="margin-top:0">
 <strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días.<br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
 </div>
+<button type="button" class="btn-pdf" id="btnPdfBaja" onclick="exportarPDF('baja',this)">📄 Descargar en PDF</button>
 </div>
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
@@ -798,6 +805,226 @@ function mostrarBizum(btn){
   if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText("651813672").catch(function(){});}
   btn.textContent="✓ Número copiado";
   setTimeout(function(){btn.textContent="💸 Enviar Bizum";},2500);
+}
+
+
+/* ══════════════════════════════════════════════════════════
+   EXPORTACIÓN A PDF
+   ══════════════════════════════════════════════════════════ */
+var ctxPDF = {nomina:null, finiquito:null, baja:null};
+
+var NOMBRES_CAT = {
+  sin_arma:"Vigilante de Seguridad sin arma",
+  con_arma:"Vigilante de Seguridad con arma",
+  escolta:"Escolta Privado",
+  explosivos:"Vigilante de Explosivos",
+  fondos:"Vigilante de Transporte de Fondos",
+  tr_explo:"Vigilante de Transporte de Explosivos"
+};
+function nombreCat(k,esCond){
+  return NOMBRES_CAT[k] + (esCond&&CATS[k].cBase ? " — Conductor" : "");
+}
+function fechaES(iso){
+  if(!iso) return "—";
+  var p=iso.split("-");
+  return p[2]+"/"+p[1]+"/"+p[0];
+}
+function hoyLargo(){
+  var M=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var d=new Date();
+  return d.getDate()+" de "+M[d.getMonth()]+" de "+d.getFullYear();
+}
+function sufijoArchivo(){
+  var d=new Date();
+  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+}
+
+/* Lee el bloque de resultados tal y como se ve en pantalla */
+function leerResultado(idContenedor){
+  var cont=document.getElementById(idContenedor);
+  var top=cont.querySelector(".res-top");
+  var bloques=[], actual=null;
+  Array.prototype.forEach.call(top.children,function(el){
+    if(el.style.display==="none") return;
+    if(el.classList.contains("res-section-label")){
+      actual={titulo:el.textContent.trim(),
+              color:el.classList.contains("red")?"rojo":(el.classList.contains("blue")?"azul":"verde"),
+              filas:[]};
+      bloques.push(actual);
+    } else if(el.classList.contains("res-row")){
+      var c=el.querySelector(".res-concept"), v=el.querySelector(".res-val");
+      if(!c||!v) return;
+      if(!actual){actual={titulo:"",color:"verde",filas:[]};bloques.push(actual);}
+      actual.filas.push({c:c.textContent.trim(), v:v.textContent.trim(),
+                         neg:v.className.indexOf("down")>=0, exento:v.className.indexOf("exento")>=0});
+    } else if(el.classList.contains("bruto-row")){
+      var lb=el.querySelector(".bruto-label"), vb=el.querySelector(".bruto-val");
+      if(!lb||!vb) return;
+      if(!actual){actual={titulo:"",color:"verde",filas:[]};bloques.push(actual);}
+      actual.filas.push({c:lb.textContent.trim(), v:vb.textContent.trim(), total:true});
+    }
+  });
+  return bloques;
+}
+
+function cargarJsPDF(cb){
+  if(window.jspdf&&window.jspdf.jsPDF){cb();return;}
+  var s=document.createElement("script");
+  s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
+  s.onload=cb;
+  s.onerror=function(){alert("No se ha podido cargar el generador de PDF. Comprueba tu conexión e inténtalo de nuevo.");};
+  document.head.appendChild(s);
+}
+
+function exportarPDF(tipo, btn){
+  var txt=btn.textContent;
+  btn.disabled=true; btn.textContent="Generando...";
+  cargarJsPDF(function(){
+    try{ construirPDF(tipo); }
+    catch(e){ alert("Ha ocurrido un error al generar el PDF."); }
+    btn.disabled=false; btn.textContent=txt;
+  });
+}
+
+function construirPDF(tipo){
+  var cfg={
+    nomina:   {titulo:"CÁLCULO DE NÓMINA MENSUAL", cont:"resultado",
+               netoId:"r-neto", netoLbl:"NETO A COBRAR", archivo:"nomina"},
+    finiquito:{titulo:"CÁLCULO DE FINIQUITO", cont:"resultado-finiquito",
+               netoId:"fr-total-neto", netoLbl:"TOTAL NETO", archivo:"finiquito"},
+    baja:     {titulo:"CÁLCULO DE PRESTACIÓN POR BAJA (IT)", cont:"resultado-baja",
+               netoId:"br-neto", netoLbl:"NETO DE LA BAJA", archivo:"baja-it"}
+  }[tipo];
+
+  var datos=ctxPDF[tipo];
+  if(!datos){alert("Primero pulsa el botón de calcular.");return;}
+
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({unit:"mm",format:"a4"});
+  var W=210, M=16, ancho=W-M*2;
+  var y=0;
+
+  var ORO=[184,114,10], ORO2=[212,134,15], ORObg=[253,242,224], OROline=[232,200,122];
+  var TXT=[44,36,22], TXT2=[74,63,47], MUT=[138,122,101];
+  var VER=[45,122,58], ROJ=[184,50,50], AZU=[42,94,168];
+  var LIN=[232,227,218], SURF=[250,248,245];
+
+  /* ── CABECERA ── */
+  doc.setFillColor(ORO2[0],ORO2[1],ORO2[2]);
+  doc.rect(0,0,W,26,"F");
+  doc.setTextColor(255,255,255);
+  doc.setFont("helvetica","bold"); doc.setFontSize(17);
+  doc.text("NOMINA VIGILANTE",M,13);
+  doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
+  doc.text("calculadoravigilante.com",M,19.5);
+  doc.setFontSize(8);
+  doc.text("Emitido el "+hoyLargo(),W-M,19.5,{align:"right"});
+  y=26;
+
+  /* ── TÍTULO ── */
+  doc.setFillColor(SURF[0],SURF[1],SURF[2]);
+  doc.rect(0,y,W,13,"F");
+  doc.setDrawColor(LIN[0],LIN[1],LIN[2]); doc.setLineWidth(0.3);
+  doc.line(0,y+13,W,y+13);
+  doc.setTextColor(TXT[0],TXT[1],TXT[2]);
+  doc.setFont("helvetica","bold"); doc.setFontSize(12);
+  doc.text(cfg.titulo,M,y+8.6);
+  y+=13+7;
+
+  /* ── DATOS DEL SUPUESTO ── */
+  doc.setTextColor(ORO[0],ORO[1],ORO[2]);
+  doc.setFont("helvetica","bold"); doc.setFontSize(8);
+  doc.text("DATOS DEL CALCULO",M,y);
+  y+=2.5;
+  var claves=Object.keys(datos);
+  var altoCaja=claves.length*5.2+5;
+  doc.setFillColor(SURF[0],SURF[1],SURF[2]);
+  doc.setDrawColor(LIN[0],LIN[1],LIN[2]);
+  doc.roundedRect(M,y,ancho,altoCaja,2,2,"FD");
+  y+=6;
+  claves.forEach(function(k){
+    doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
+    doc.setTextColor(MUT[0],MUT[1],MUT[2]);
+    doc.text(k,M+4,y);
+    doc.setFont("helvetica","bold");
+    doc.setTextColor(TXT2[0],TXT2[1],TXT2[2]);
+    doc.text(String(datos[k]),W-M-4,y,{align:"right"});
+    y+=5.2;
+  });
+  y+=6;
+
+  /* ── DESGLOSE ── */
+  var bloques=leerResultado(cfg.cont);
+  bloques.forEach(function(b){
+    if(b.titulo){
+      var col = b.color==="rojo"?ROJ:(b.color==="azul"?AZU:VER);
+      doc.setTextColor(col[0],col[1],col[2]);
+      doc.setFont("helvetica","bold"); doc.setFontSize(8);
+      doc.text(b.titulo,M,y);
+      y+=1.8;
+      doc.setDrawColor(col[0],col[1],col[2]); doc.setLineWidth(0.5);
+      doc.line(M,y,M+ancho,y);
+      y+=5;
+    }
+    b.filas.forEach(function(f){
+      if(y>262){doc.addPage();y=20;}
+      if(f.total){
+        y+=1;
+        doc.setDrawColor(LIN[0],LIN[1],LIN[2]); doc.setLineWidth(0.3);
+        doc.line(M,y-3.5,M+ancho,y-3.5);
+        doc.setFont("helvetica","bold"); doc.setFontSize(10);
+        doc.setTextColor(TXT[0],TXT[1],TXT[2]);
+        doc.text(f.c,M,y);
+        doc.text(f.v,W-M,y,{align:"right"});
+        y+=6.5;
+      } else {
+        doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
+        doc.setTextColor(TXT2[0],TXT2[1],TXT2[2]);
+        var concepto=doc.splitTextToSize(f.c,ancho-38);
+        doc.text(concepto[0],M,y);
+        var col = f.neg?ROJ:(f.exento?AZU:VER);
+        doc.setTextColor(col[0],col[1],col[2]);
+        doc.setFont("helvetica","bold");
+        doc.text(f.v,W-M,y,{align:"right"});
+        y+=5.4;
+      }
+    });
+    y+=3;
+  });
+
+  /* ── NETO ── */
+  if(y>242){doc.addPage();y=20;}
+  y+=2;
+  doc.setFillColor(ORObg[0],ORObg[1],ORObg[2]);
+  doc.setDrawColor(OROline[0],OROline[1],OROline[2]); doc.setLineWidth(0.6);
+  doc.roundedRect(M,y,ancho,20,2.5,2.5,"FD");
+  doc.setTextColor(ORO[0],ORO[1],ORO[2]);
+  doc.setFont("helvetica","bold"); doc.setFontSize(11);
+  doc.text(cfg.netoLbl,M+6,y+9);
+  doc.setFont("helvetica","normal"); doc.setFontSize(7.5);
+  doc.setTextColor(MUT[0],MUT[1],MUT[2]);
+  doc.text("Lo que entra en tu cuenta",M+6,y+14.5);
+  doc.setTextColor(ORO[0],ORO[1],ORO[2]);
+  doc.setFont("helvetica","bold"); doc.setFontSize(20);
+  doc.text(document.getElementById(cfg.netoId).textContent,W-M-6,y+13,{align:"right"});
+  y+=20+8;
+
+  /* ── PIE ── */
+  var pie=270;
+  doc.setDrawColor(LIN[0],LIN[1],LIN[2]); doc.setLineWidth(0.3);
+  doc.line(M,pie,W-M,pie);
+  doc.setFont("helvetica","normal"); doc.setFontSize(7);
+  doc.setTextColor(MUT[0],MUT[1],MUT[2]);
+  var legal=[
+    "Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026).",
+    "Documento orientativo generado automaticamente en calculadoravigilante.com. No sustituye a la nomina oficial",
+    "ni tiene validez contractual. Compara siempre con tu recibo de salario y consulta a un asesor laboral o a tu",
+    "representacion sindical ante cualquier discrepancia."
+  ];
+  var yy=pie+5;
+  legal.forEach(function(l){ doc.text(l,W/2,yy,{align:"center"}); yy+=3.6; });
+
+  doc.save("calculo-"+cfg.archivo+"-"+sufijoArchivo()+".pdf");
 }
 
 var CATS = {
@@ -961,6 +1188,17 @@ function calcNomina(){
   else{document.getElementById("row-irpf").style.display="none";document.getElementById("row-irpf0").style.display="flex";}
   document.getElementById("r-neto").textContent=fmt(neto);
   document.getElementById("resultado").style.display="block";
+  ctxPDF.nomina={
+    "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
+    "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)"),
+    "Horas trabajadas":hT+" h"+(hEx>0?"  (de las cuales "+hEx+" h extraordinarias)":""),
+    "Horas nocturnas":(hN>0?hN+" h  ×  "+cat.nocH.toFixed(2).replace(".",",")+" €":"Ninguna"),
+    "Horas fin de semana / festivo":(hF>0?hF+" h  ×  1,02 €":"Ninguna"),
+    "Antigüedad":(an>0?an+" años  ("+q+" quinquenio"+(q!==1?"s":"")+")":"Sin antigüedad"),
+    "Jefe de Equipo":(esJefe?"Sí (10% del salario base)":"No"),
+    "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
+    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
+  };
   if(typeof gtag !== 'undefined'){gtag("event","calcular_nomina",{categoria:catActual});}
   setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
@@ -1101,6 +1339,19 @@ function calcFiniquito(){
   else{document.getElementById("frow-indem-label").style.display="none";document.getElementById("frow-indem").style.display="none";document.getElementById("f-exento-info").style.display="none";}
   document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
   document.getElementById("resultado-finiquito").style.display="block";
+  ctxPDF.finiquito={
+    "Categoría":nombreCat(fcatActual,document.getElementById("switchCondF").checked),
+    "Tipo de jornada":(fjornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+fhp+" h/mes pactadas)"),
+    "Inicio del contrato":fechaES(si),
+    "Fin del contrato":fechaES(sf),
+    "Duración":dur.trim()+"  ("+dias+" días)",
+    "Antigüedad reconocida":anosC+" año"+(anosC!==1?"s":"")+(q>0?"  ("+q+" quinquenio"+(q!==1?"s":"")+")":""),
+    "Jefe de Equipo":(esJefeF?"Sí (10% del salario base)":"No"),
+    "Días de vacaciones pendientes":dv+" días",
+    "Motivo de la extinción":(tipo==="voluntaria"?"Baja voluntaria":(tipo==="objetivo"?"Fin de contrato / despido objetivo (20 días por año)":"Despido improcedente (33 días por año)")),
+    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
+  };
+  if(indem>0){ctxPDF.finiquito["Salario regulador"]=fmt(salReg)+"/mes";}
   if(typeof gtag !== 'undefined'){gtag("event","calcular_finiquito",{tipo:tipo,categoria:fcatActual});}
   setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
@@ -1196,6 +1447,16 @@ function calcBaja(){
   else{document.getElementById("brow-irpf").style.display="none";document.getElementById("brow-irpf0").style.display="flex";}
   document.getElementById("br-neto").textContent=fmt(neto);
   document.getElementById("resultado-baja").style.display="block";
+  ctxPDF.baja={
+    "Categoría":nombreCat(bcatActual,document.getElementById("switchCondB").checked),
+    "Tipo de baja":(tipo==="comun"?"Enfermedad común o accidente no laboral":(tipo==="laboral"?"Accidente laboral o enfermedad profesional":"Hospitalización")),
+    "Número de baja en el año":(tipo==="comun"?(nbaja===1?"1.ª del año":(nbaja===2?"2.ª o 3.ª del año":"4.ª o posterior")):"No aplica"),
+    "Duración de la baja":dias+" días",
+    "Antigüedad":(an>0?an+" años":"Sin antigüedad"),
+    "Base de cotización":(baseManual>0?fmt(baseManual)+"/mes  (introducida por el usuario)":fmt(baseCotizMens)+"/mes  (mínimo de convenio)"),
+    "Base reguladora diaria":fmt(brDiario)+"/día",
+    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
+  };
   if(typeof gtag !== 'undefined'){gtag("event","calcular_baja",{tipo:tipo,dias:dias,categoria:bcatActual});}
   setTimeout(function(){document.getElementById("resultado-baja").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
