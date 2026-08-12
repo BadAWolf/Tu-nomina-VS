@@ -880,7 +880,10 @@ function exportarPDF(tipo, btn){
   var txt=btn.textContent;
   btn.disabled=true; btn.textContent="Generando...";
   cargarJsPDF(function(){
-    try{ construirPDF(tipo); }
+    try{
+      construirPDF(tipo);
+      if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo});}
+    }
     catch(e){ alert("Ha ocurrido un error al generar el PDF."); }
     btn.disabled=false; btn.textContent=txt;
   });
