@@ -1054,7 +1054,7 @@ var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
 function r2(n){return Math.round(n*100)/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
 function calcAntig(a,cat){return r2(Math.floor(a/5)*QUINQUENIO[cat]);}
-function calcHoraExtra(sb,p,ant){return r2((sb+p+ant)*15/HORAS_ANUALES);}
+function calcHoraExtra(sb,p,act,ant){return r2((sb+p+act+ant)*15/HORAS_ANUALES);}
 
 function showR(rid,lid,vid,lbl,val,cls){
   var row=document.getElementById(rid);
@@ -1156,7 +1156,8 @@ function calcNomina(){
   var antM=r2(ant*ratioFijo*factorH);
   var je=esJefe?r2(cat.salBase*0.10*ratioFijo*factorH):0;
   var q=Math.floor(an/5);
-  var hev=calcHoraExtra(cat.salBase,cat.pelig,ant);
+  var sbHE=esJefe?r2(cat.salBase*1.10):cat.salBase;
+  var hev=calcHoraExtra(sbHE,cat.pelig,cat.act||0,ant);
   var hEx=Math.max(0,hT-hp);
   var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=r2(hF*PLUS_FEST);
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
