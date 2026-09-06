@@ -383,8 +383,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <button class="cat-btn" id="btn-fondos">VS Transp. Fondos<span class="cat-salary">1.227,74 €/mes</span></button>
 <button class="cat-btn" id="btn-tr_explo">VS Transp. Explosivos<span class="cat-salary">1.227,74 €/mes</span></button>
 </div>
-</div>
-<div class="card" id="card-cond" style="display:none">
+</div><div class="card" id="card-cond" style="display:none">
 <div class="card-label">Función en el servicio</div>
 <div class="switch-row">
 <div>
@@ -393,8 +392,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <label class="switch"><input type="checkbox" id="switchCond"><span class="slider"></span></label>
 </div>
-</div>
-<div class="card">
+</div><div class="card">
 <div class="card-label">Tipo de jornada</div>
 <div class="jornada-toggle">
 <div class="jorn-btn active" id="jorn-completa">Jornada completa<span class="jorn-sub">162 h/mes</span></div>
@@ -405,8 +403,36 @@ input:checked + .slider:before{transform:translateX(20px);}
 <input type="number" id="hPactadas" placeholder="ej. 80" min="1" max="161" inputmode="decimal">
 <div class="field-hint">Las extras empiezan a partir de tus horas pactadas</div>
 </div>
+</div><div class="card">
+<div class="card-label">Jefe de Equipo</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Soy Jefe de Equipo</div>
+<div class="switch-sub">Plus del 10% del salario base según convenio</div>
 </div>
-<div class="card">
+<label class="switch"><input type="checkbox" id="switchJefe"><span class="slider"></span></label>
+</div>
+</div><div class="card">
+<div class="card-label">Plus de servicio</div>
+<div class="switch-row">
+<div>
+<div class="switch-text">Tengo un plus de servicio</div>
+<div class="switch-sub">Metro, aeropuerto, servicio especial...</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchPlus"><span class="slider"></span></label>
+</div>
+<div id="plus-servicio-field" class="field">
+<div class="field-label">Importe del plus (€/mes)</div>
+<input type="number" id="plusServicio" placeholder="0" min="0" step="0.01" inputmode="decimal">
+</div>
+</div><div class="card">
+<div class="card-label">Antigüedad en la empresa</div>
+<div class="field" style="margin-bottom:0">
+<div class="field-label">Años trabajados en la misma empresa</div>
+<input type="number" id="aniosAntiguedad" placeholder="0" min="0" max="50" inputmode="decimal" value="0">
+<div class="field-hint" id="hint-antiguedad">Sin antigüedad — el plus aplica cada 5 años (45,86 €/quinquenio)</div>
+</div>
+</div><div class="card">
 <div class="card-label">Horas trabajadas este mes</div>
 <div class="jornada-toggle" style="margin-bottom:0.85rem">
 <div class="jorn-btn active" id="modo-manual">Escribir horas<span class="jorn-sub">Introducir totales</span></div>
@@ -447,56 +473,21 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="cal-resumen" id="cal-resumen"></div>
 <div class="field-hint" style="margin-top:0.55rem">Pulsa un día para introducir tus turnos. Los turnos que cruzan medianoche reparten las horas al día real que corresponde.</div>
 </div>
-</div>
-<div class="card">
-<div class="card-label">Antigüedad en la empresa</div>
-<div class="field" style="margin-bottom:0">
-<div class="field-label">Años trabajados en la misma empresa</div>
-<input type="number" id="aniosAntiguedad" placeholder="0" min="0" max="50" inputmode="decimal" value="0">
-<div class="field-hint" id="hint-antiguedad">Sin antigüedad — el plus aplica cada 5 años (45,86 €/quinquenio)</div>
-</div>
-</div>
-<div class="card">
-<div class="card-label">Jefe de Equipo</div>
-<div class="switch-row">
-<div>
-<div class="switch-text">Soy Jefe de Equipo</div>
-<div class="switch-sub">Plus del 10% del salario base según convenio</div>
-</div>
-<label class="switch"><input type="checkbox" id="switchJefe"><span class="slider"></span></label>
-</div>
-</div>
-<div class="card">
-<div class="card-label">Plus de servicio</div>
-<div class="switch-row">
-<div>
-<div class="switch-text">Tengo un plus de servicio</div>
-<div class="switch-sub">Metro, aeropuerto, servicio especial...</div>
-</div>
-<label class="switch"><input type="checkbox" id="switchPlus"><span class="slider"></span></label>
-</div>
-<div id="plus-servicio-field" class="field">
-<div class="field-label">Importe del plus (€/mes)</div>
-<input type="number" id="plusServicio" placeholder="0" min="0" step="0.01" inputmode="decimal">
-</div>
-</div>
-<div class="card">
+</div><div class="card">
 <div class="card-label">Pagas extra prorrateadas — activa las que tengas</div>
 <div class="paga-row">
 <div class="paga-btn" id="paga-julio">Paga Julio<span class="paga-sub">inactiva</span></div>
 <div class="paga-btn" id="paga-dic">Paga Diciembre<span class="paga-sub">inactiva</span></div>
 <div class="paga-btn" id="paga-mar">Paga Marzo<span class="paga-sub">inactiva</span></div>
 </div>
-</div>
-<div class="card">
+</div><div class="card">
 <div class="card-label">Retención IRPF</div>
 <div class="field" style="margin-bottom:0">
 <div class="field-label">% de retención</div>
 <input type="number" id="irpf" placeholder="0" min="0" max="47" step="0.1" inputmode="decimal">
 <div class="field-hint">Consúltalo en tu última nómina — varía según tu situación personal</div>
 </div>
-</div>
-<div class="error-box" id="errorBox"></div>
+</div><div class="error-box" id="errorBox"></div>
 <button class="btn-calc" id="btnCalc">CALCULAR NÓMINA</button>
 <div class="ads-placeholder" id="ad-nomina"></div>
 <div id="resultado">
@@ -1291,7 +1282,14 @@ function guardarOCompartir(doc, filename, tipo){
   var file=null;
   try{ file=new File([blob],filename,{type:"application/pdf"}); }catch(e){ file=null; }
 
-  if(file && navigator.canShare && navigator.canShare({files:[file]})){
+  /* En móvil/tablet abrimos el panel de compartir; en ordenador descargamos directamente */
+  var esTactil=false;
+  try{
+    esTactil = (navigator.maxTouchPoints||0)>0 &&
+               window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  }catch(e){ esTactil=false; }
+
+  if(esTactil && file && navigator.canShare && navigator.canShare({files:[file]})){
     navigator.share({files:[file], title:filename}).then(function(){
       if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo,metodo:"compartir"});}
     }).catch(function(err){
