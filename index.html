@@ -248,6 +248,79 @@ input:checked + .slider:before{transform:translateX(20px);}
 .btn-pdf{width:100%;background:transparent;color:var(--gold);border:1.5px solid var(--goldline);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.8rem;font-weight:700;padding:0.7rem;cursor:pointer;transition:all 0.15s;margin-top:0.55rem;display:flex;align-items:center;justify-content:center;gap:0.45rem;}
 .btn-pdf:hover{background:var(--goldbg);border-color:var(--gold2);}
 .btn-pdf:disabled{opacity:0.6;cursor:wait;}
+
+/* ═══ CUADRANTE ═══ */
+.cal-nav{display:flex;align-items:center;justify-content:space-between;gap:0.5rem;margin-bottom:0.7rem;}
+.cal-arrow{background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--gold2);font-size:1.35rem;line-height:1;width:2.3rem;height:2.3rem;cursor:pointer;font-family:'DM Sans',sans-serif;padding:0;transition:all 0.15s;}
+.cal-arrow:hover{background:var(--goldbg);border-color:var(--gold2);}
+.cal-mes{flex:1;text-align:center;font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:0.06em;color:var(--text);}
+.cal-dow{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;margin-bottom:3px;}
+.cal-dow span{text-align:center;font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:600;color:var(--subtle);letter-spacing:0.06em;padding:0.2rem 0;}
+.cal-dow span.fs{color:var(--gold2);}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-cell{aspect-ratio:1/1.25;background:var(--surface);border:1.5px solid var(--border);border-radius:6px;padding:0.15rem 0.1rem;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;transition:all 0.12s;overflow:hidden;min-height:44px;}
+.cal-cell:hover{border-color:var(--gold2);}
+.cal-cell.vacio{background:transparent;border-color:transparent;cursor:default;}
+.cal-cell.hoy{box-shadow:0 0 0 2px var(--goldline);}
+.cal-num{font-family:'DM Mono',monospace;font-size:0.62rem;font-weight:600;color:var(--muted);line-height:1.1;}
+.cal-cell.finde .cal-num{color:var(--gold2);}
+.cal-tag{font-family:'DM Mono',monospace;font-size:0.5rem;font-weight:600;line-height:1.25;text-align:center;margin-top:0.08rem;letter-spacing:-0.02em;}
+.cal-cell.trab{background:var(--greenbg);border-color:#b4d8bc;}
+.cal-cell.trab .cal-tag{color:var(--green);}
+.cal-cell.trab .cal-num{color:#2d5a35;}
+.cal-cell.vac{background:var(--bluebg);border-color:#b4c8e0;}
+.cal-cell.vac .cal-tag{color:var(--blue);font-size:0.7rem;}
+.cal-cell.vac .cal-num{color:#1e3f6a;}
+.cal-cell.festivo{background:var(--goldbg);border-color:var(--goldline);}
+.cal-cell.festivo.trab{background:linear-gradient(135deg,var(--greenbg),var(--goldbg));}
+.cal-hrs{font-family:'DM Mono',monospace;font-size:0.56rem;font-weight:700;color:var(--text2);margin-top:auto;}
+.cal-leyenda{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:0.6rem;}
+.cal-leyenda span{display:flex;align-items:center;gap:0.25rem;font-size:0.6rem;color:var(--muted);font-weight:500;}
+.lg{width:9px;height:9px;border-radius:2px;display:inline-block;border:1px solid;}
+.lg-trab{background:var(--greenbg);border-color:#b4d8bc;}
+.lg-vac{background:var(--bluebg);border-color:#b4c8e0;}
+.lg-fest{background:var(--goldbg);border-color:var(--goldline);}
+.cal-resumen{margin-top:0.75rem;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:0.75rem 0.85rem;}
+.cal-res-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.28rem 0;font-size:0.73rem;}
+.cal-res-row + .cal-res-row{border-top:1px solid var(--border);}
+.cal-res-lbl{color:var(--muted);font-weight:500;}
+.cal-res-val{font-family:'DM Mono',monospace;font-weight:700;color:var(--text);}
+.cal-res-row.destacada .cal-res-lbl{color:var(--text);font-weight:700;}
+.cal-res-row.destacada .cal-res-val{color:var(--gold);font-size:0.85rem;}
+.cal-vacio-msg{text-align:center;font-size:0.7rem;color:var(--muted);padding:0.5rem 0;font-weight:500;}
+
+/* ═══ DIÁLOGO ═══ */
+.dlg-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.5);z-index:10000;display:none;align-items:center;justify-content:center;padding:1rem;backdrop-filter:blur(2px);}
+.dlg-overlay.abierto{display:flex;}
+.dlg{background:var(--card);border-radius:14px;width:100%;max-width:400px;max-height:88vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(44,36,22,0.28);overflow:hidden;}
+.dlg-head{background:var(--goldbg);border-bottom:1.5px solid var(--goldline);padding:0.95rem 1.1rem;}
+.dlg-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.05em;color:var(--gold);}
+.dlg-sub{font-size:0.7rem;color:var(--muted);font-weight:500;margin-top:0.1rem;}
+.dlg-body{padding:1rem 1.1rem;overflow-y:auto;flex:1;}
+.dlg-label{font-family:'DM Mono',monospace;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.55rem;font-weight:600;}
+.tramo{display:flex;align-items:center;gap:0.4rem;margin-bottom:0.5rem;}
+.tramo input[type=time]{flex:1;background:var(--surface);border:1.5px solid var(--border);border-radius:7px;color:var(--text);font-family:'DM Mono',monospace;font-size:0.95rem;font-weight:600;padding:0.55rem 0.4rem;outline:none;text-align:center;-webkit-appearance:none;appearance:none;min-width:0;}
+.tramo input[type=time]:focus{border-color:var(--gold2);background:var(--goldbg);}
+.tramo-sep{font-size:0.75rem;color:var(--muted);font-weight:600;flex-shrink:0;}
+.tramo-del{background:var(--redbg);border:1px solid #e8b4b4;color:var(--red);border-radius:6px;width:1.9rem;height:1.9rem;font-size:1rem;line-height:1;cursor:pointer;flex-shrink:0;padding:0;font-family:'DM Sans',sans-serif;}
+.dlg-add{width:100%;background:transparent;border:1.5px dashed var(--border2);border-radius:7px;color:var(--gold2);font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;padding:0.55rem;cursor:pointer;margin-top:0.15rem;transition:all 0.15s;}
+.dlg-add:hover{border-color:var(--gold2);background:var(--goldbg);}
+.dlg-nota{font-size:0.65rem;color:var(--muted);line-height:1.5;margin-top:0.6rem;font-weight:500;min-height:1rem;}
+.dlg-nota b{color:var(--green);font-weight:700;}
+.dlg-switches{margin-top:1rem;padding-top:0.9rem;border-top:1px solid var(--border);}
+.dlg-foot{display:flex;gap:0.45rem;padding:0.85rem 1.1rem;border-top:1px solid var(--border);background:var(--surface);}
+.dlg-btn{flex:1;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.76rem;font-weight:700;padding:0.62rem 0.4rem;cursor:pointer;border:1.5px solid transparent;transition:all 0.15s;}
+.dlg-borrar{background:transparent;color:var(--red);border-color:#e8b4b4;}
+.dlg-borrar:hover{background:var(--redbg);}
+.dlg-cancelar{background:transparent;color:var(--muted);border-color:var(--border2);}
+.dlg-cancelar:hover{background:var(--border);}
+.dlg-guardar{background:var(--gold2);color:#fff;box-shadow:0 2px 6px rgba(180,120,10,0.25);}
+.dlg-guardar:hover{background:var(--gold);}
+@media(max-width:360px){
+  .cal-cell{min-height:40px;}
+  .cal-num{font-size:0.58rem;}
+  .cal-tag{font-size:0.46rem;}
+}
 </style>
 <script type="application/ld+json">
 {
@@ -335,6 +408,12 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <div class="card">
 <div class="card-label">Horas trabajadas este mes</div>
+<div class="jornada-toggle" style="margin-bottom:0.85rem">
+<div class="jorn-btn active" id="modo-manual">Escribir horas<span class="jorn-sub">Introducir totales</span></div>
+<div class="jorn-btn" id="modo-cuadrante">Usar cuadrante<span class="jorn-sub">Calendario del mes</span></div>
+</div>
+
+<div id="campos-manual">
 <div class="field">
 <div class="field-label">Horas totales</div>
 <input type="number" id="hTTotal" placeholder="0" min="0" max="300" inputmode="decimal">
@@ -345,10 +424,28 @@ input:checked + .slider:before{transform:translateX(20px);}
 <input type="number" id="hNoc" placeholder="0" min="0" inputmode="decimal">
 <div class="field-hint">Entre las 22:00 y las 06:00 — pueden coincidir con festivas</div>
 </div>
-<div class="field">
+<div class="field" style="margin-bottom:0">
 <div class="field-label">De esas, horas de fin de semana o festivo<span class="field-badge">+1,02 €/h</span></div>
 <input type="number" id="hFest" placeholder="0" min="0" inputmode="decimal">
 <div class="field-hint">Cuenta TODAS las horas trabajadas en sábado (desde las 00:00) y domingo (hasta las 24:00), más los festivos oficiales. Si además son nocturnas, se cobran los dos pluses</div>
+</div>
+</div>
+
+<div id="campos-cuadrante" style="display:none">
+<div class="cal-nav">
+<button type="button" class="cal-arrow" id="cal-prev" aria-label="Mes anterior">‹</button>
+<div class="cal-mes" id="cal-titulo">—</div>
+<button type="button" class="cal-arrow" id="cal-next" aria-label="Mes siguiente">›</button>
+</div>
+<div class="cal-dow"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span class="fs">S</span><span class="fs">D</span></div>
+<div class="cal-grid" id="cal-grid"></div>
+<div class="cal-leyenda">
+<span><i class="lg lg-trab"></i>Trabajado</span>
+<span><i class="lg lg-vac"></i>Vacaciones</span>
+<span><i class="lg lg-fest"></i>Festivo / finde</span>
+</div>
+<div class="cal-resumen" id="cal-resumen"></div>
+<div class="field-hint" style="margin-top:0.55rem">Pulsa un día para introducir tus turnos. Los turnos que cruzan medianoche reparten las horas al día real que corresponde.</div>
 </div>
 </div>
 <div class="card">
@@ -811,7 +908,7 @@ function mostrarBizum(btn){
 /* ══════════════════════════════════════════════════════════
    EXPORTACIÓN A PDF
    ══════════════════════════════════════════════════════════ */
-var ctxPDF = {nomina:null, finiquito:null, baja:null};
+var ctxPDF = {nomina:null, finiquito:null, baja:null, cuadrante:null};
 
 var NOMBRES_CAT = {
   sin_arma:"Vigilante de Seguridad sin arma",
@@ -901,133 +998,285 @@ function construirPDF(tipo){
   var datos=ctxPDF[tipo];
   if(!datos){alert("Primero pulsa el botón de calcular.");return;}
 
+  var conCuadrante = (tipo==="nomina" && !!ctxPDF.cuadrante);
+
   var jsPDF=window.jspdf.jsPDF;
-  var doc=new jsPDF({unit:"mm",format:"a4"});
-  var W=210, M=16, ancho=W-M*2;
-  var y=0;
+  /* A4 vertical con medidas explícitas en milímetros: 210 x 297 */
+  var A4_ANCHO = 210, A4_ALTO = 297;
+  var doc=new jsPDF({unit:"mm", format:[A4_ANCHO, A4_ALTO], orientation:"portrait", compress:true});
+  try{ doc.setProperties({title:"Calculo de nomina - Nomina Vigilante", creator:"calculadoravigilante.com"}); }catch(e){}
+  var W = A4_ANCHO, H = A4_ALTO;
+  var M = conCuadrante?10:16;
+  var ancho = W-M*2;
 
-  var ORO=[184,114,10], ORO2=[212,134,15], ORObg=[253,242,224], OROline=[232,200,122];
-  var TXT=[44,36,22], TXT2=[74,63,47], MUT=[138,122,101];
-  var VER=[45,122,58], ROJ=[184,50,50], AZU=[42,94,168];
-  var LIN=[232,227,218], SURF=[250,248,245];
+  var C={
+    ORO:[184,114,10], ORO2:[212,134,15], ORObg:[253,242,224], OROline:[232,200,122],
+    TXT:[44,36,22], TXT2:[74,63,47], MUT:[138,122,101],
+    VER:[45,122,58], ROJ:[184,50,50], AZU:[42,94,168],
+    LIN:[232,227,218], SURF:[250,248,245]
+  };
 
-  /* ── CABECERA ── */
-  doc.setFillColor(ORO2[0],ORO2[1],ORO2[2]);
-  doc.rect(0,0,W,26,"F");
-  doc.setTextColor(255,255,255);
-  doc.setFont("helvetica","bold"); doc.setFontSize(17);
-  doc.text("NOMINA VIGILANTE",M,13);
-  doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
-  doc.text("calculadoravigilante.com",M,19.5);
-  doc.setFontSize(8);
-  doc.text("Emitido el "+hoyLargo(),W-M,19.5,{align:"right"});
-  y=26;
+  /* ── Piezas reutilizables ── */
+  function cabecera(subtitulo){
+    var hb = conCuadrante?19:24;
+    doc.setFillColor(C.ORO2[0],C.ORO2[1],C.ORO2[2]);
+    doc.rect(0,0,W,hb,"F");
+    doc.setTextColor(255,255,255);
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?13:16);
+    doc.text("NOMINA VIGILANTE",M,conCuadrante?9.5:12.5);
+    doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7:8);
+    doc.text("calculadoravigilante.com",M,conCuadrante?15:18.5);
+    doc.text("Emitido el "+hoyLargo(),W-M,conCuadrante?15:18.5,{align:"right"});
+    var ht = conCuadrante?9:12;
+    doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
+    doc.rect(0,hb,W,ht,"F");
+    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
+    doc.line(0,hb+ht,W,hb+ht);
+    doc.setTextColor(C.TXT[0],C.TXT[1],C.TXT[2]);
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?9:11);
+    doc.text(subtitulo,M,hb+ht-2.6);
+    return hb+ht+(conCuadrante?5:7);
+  }
 
-  /* ── TÍTULO ── */
-  doc.setFillColor(SURF[0],SURF[1],SURF[2]);
-  doc.rect(0,y,W,13,"F");
-  doc.setDrawColor(LIN[0],LIN[1],LIN[2]); doc.setLineWidth(0.3);
-  doc.line(0,y+13,W,y+13);
-  doc.setTextColor(TXT[0],TXT[1],TXT[2]);
-  doc.setFont("helvetica","bold"); doc.setFontSize(12);
-  doc.text(cfg.titulo,M,y+8.6);
-  y+=13+7;
-
-  /* ── DATOS DEL SUPUESTO ── */
-  doc.setTextColor(ORO[0],ORO[1],ORO[2]);
-  doc.setFont("helvetica","bold"); doc.setFontSize(8);
-  doc.text("DATOS DEL CALCULO",M,y);
-  y+=2.5;
-  var claves=Object.keys(datos);
-  var altoCaja=claves.length*5.2+5;
-  doc.setFillColor(SURF[0],SURF[1],SURF[2]);
-  doc.setDrawColor(LIN[0],LIN[1],LIN[2]);
-  doc.roundedRect(M,y,ancho,altoCaja,2,2,"FD");
-  y+=6;
-  claves.forEach(function(k){
-    doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
-    doc.setTextColor(MUT[0],MUT[1],MUT[2]);
-    doc.text(k,M+4,y);
-    doc.setFont("helvetica","bold");
-    doc.setTextColor(TXT2[0],TXT2[1],TXT2[2]);
-    doc.text(String(datos[k]),W-M-4,y,{align:"right"});
-    y+=5.2;
-  });
-  y+=6;
-
-  /* ── DESGLOSE ── */
-  var bloques=leerResultado(cfg.cont);
-  bloques.forEach(function(b){
-    if(b.titulo){
-      var col = b.color==="rojo"?ROJ:(b.color==="azul"?AZU:VER);
-      doc.setTextColor(col[0],col[1],col[2]);
-      doc.setFont("helvetica","bold"); doc.setFontSize(8);
-      doc.text(b.titulo,M,y);
-      y+=1.8;
-      doc.setDrawColor(col[0],col[1],col[2]); doc.setLineWidth(0.5);
-      doc.line(M,y,M+ancho,y);
-      y+=5;
-    }
-    b.filas.forEach(function(f){
-      if(y>262){doc.addPage();y=20;}
-      if(f.total){
-        y+=1;
-        doc.setDrawColor(LIN[0],LIN[1],LIN[2]); doc.setLineWidth(0.3);
-        doc.line(M,y-3.5,M+ancho,y-3.5);
-        doc.setFont("helvetica","bold"); doc.setFontSize(10);
-        doc.setTextColor(TXT[0],TXT[1],TXT[2]);
-        doc.text(f.c,M,y);
-        doc.text(f.v,W-M,y,{align:"right"});
-        y+=6.5;
-      } else {
-        doc.setFont("helvetica","normal"); doc.setFontSize(8.5);
-        doc.setTextColor(TXT2[0],TXT2[1],TXT2[2]);
-        var concepto=doc.splitTextToSize(f.c,ancho-38);
-        doc.text(concepto[0],M,y);
-        var col = f.neg?ROJ:(f.exento?AZU:VER);
-        doc.setTextColor(col[0],col[1],col[2]);
-        doc.setFont("helvetica","bold");
-        doc.text(f.v,W-M,y,{align:"right"});
-        y+=5.4;
-      }
+  function bloqueDatos(x,y,an){
+    doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
+    doc.setFont("helvetica","bold"); doc.setFontSize(8);
+    doc.text("DATOS DEL CALCULO",x,y);
+    y+=2.5;
+    var claves=Object.keys(datos);
+    var paso = conCuadrante?4.6:5.2;
+    var alto=claves.length*paso+4.5;
+    doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
+    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
+    doc.roundedRect(x,y,an,alto,2,2,"FD");
+    y+=6;
+    claves.forEach(function(k){
+      doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?6.6:7.6);
+      doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
+      var kk=doc.splitTextToSize(k, an*0.5);
+      doc.text(kk[0],x+3,y);
+      doc.setFont("helvetica","bold");
+      doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
+      var val=doc.splitTextToSize(String(datos[k]), an*0.5);
+      doc.text(val[0],x+an-3,y,{align:"right"});
+      y+=paso;
     });
-    y+=3;
-  });
+    return y+5;
+  }
 
-  /* ── NETO ── */
-  if(y>242){doc.addPage();y=20;}
-  y+=2;
-  doc.setFillColor(ORObg[0],ORObg[1],ORObg[2]);
-  doc.setDrawColor(OROline[0],OROline[1],OROline[2]); doc.setLineWidth(0.6);
-  doc.roundedRect(M,y,ancho,20,2.5,2.5,"FD");
-  doc.setTextColor(ORO[0],ORO[1],ORO[2]);
-  doc.setFont("helvetica","bold"); doc.setFontSize(11);
-  doc.text(cfg.netoLbl,M+6,y+9);
-  doc.setFont("helvetica","normal"); doc.setFontSize(7.5);
-  doc.setTextColor(MUT[0],MUT[1],MUT[2]);
-  doc.text("Lo que entra en tu cuenta",M+6,y+14.5);
-  doc.setTextColor(ORO[0],ORO[1],ORO[2]);
-  doc.setFont("helvetica","bold"); doc.setFontSize(20);
-  doc.text(document.getElementById(cfg.netoId).textContent,W-M-6,y+13,{align:"right"});
-  y+=20+8;
+  function bloqueDesglose(x,y,an){
+    var bloques=leerResultado(cfg.cont);
+    bloques.forEach(function(b){
+      if(b.titulo){
+        var col = b.color==="rojo"?C.ROJ:(b.color==="azul"?C.AZU:C.VER);
+        doc.setTextColor(col[0],col[1],col[2]);
+        doc.setFont("helvetica","bold"); doc.setFontSize(8);
+        doc.text(b.titulo,x,y);
+        y+=1.8;
+        doc.setDrawColor(col[0],col[1],col[2]); doc.setLineWidth(0.5);
+        doc.line(x,y,x+an,y);
+        y+=5;
+      }
+      b.filas.forEach(function(f){
+        if(f.total){
+          y+=1;
+          doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
+          doc.line(x,y-3.5,x+an,y-3.5);
+          doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?8.4:10);
+          doc.setTextColor(C.TXT[0],C.TXT[1],C.TXT[2]);
+          doc.text(f.c,x,y);
+          doc.text(f.v,x+an,y,{align:"right"});
+          y+=conCuadrante?5.6:6.5;
+        } else {
+          doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?6.8:8);
+          doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
+          var concepto=doc.splitTextToSize(f.c, an-(conCuadrante?24:32));
+          doc.text(concepto[0],x,y);
+          var col = f.neg?C.ROJ:(f.exento?C.AZU:C.VER);
+          doc.setTextColor(col[0],col[1],col[2]);
+          doc.setFont("helvetica","bold");
+          doc.text(f.v,x+an,y,{align:"right"});
+          y+=conCuadrante?4.7:5.4;
+        }
+      });
+      y+=3;
+    });
+    return y;
+  }
 
-  /* ── PIE ── */
-  var pie=270;
-  doc.setDrawColor(LIN[0],LIN[1],LIN[2]); doc.setLineWidth(0.3);
-  doc.line(M,pie,W-M,pie);
-  doc.setFont("helvetica","normal"); doc.setFontSize(7);
-  doc.setTextColor(MUT[0],MUT[1],MUT[2]);
-  var legal=[
-    "Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026).",
-    "Documento orientativo generado automaticamente en calculadoravigilante.com. No sustituye a la nomina oficial",
-    "ni tiene validez contractual. Compara siempre con tu recibo de salario y consulta a un asesor laboral o a tu",
-    "representacion sindical ante cualquier discrepancia."
-  ];
-  var yy=pie+5;
-  legal.forEach(function(l){ doc.text(l,W/2,yy,{align:"center"}); yy+=3.6; });
+  function bloqueNeto(x,y,an){
+    var hn = conCuadrante?17:20;
+    doc.setFillColor(C.ORObg[0],C.ORObg[1],C.ORObg[2]);
+    doc.setDrawColor(C.OROline[0],C.OROline[1],C.OROline[2]); doc.setLineWidth(0.6);
+    doc.roundedRect(x,y,an,hn,2.5,2.5,"FD");
+    doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?10:11);
+    doc.text(cfg.netoLbl,x+6,y+(conCuadrante?7.6:9));
+    doc.setFont("helvetica","normal"); doc.setFontSize(7);
+    doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
+    doc.text("Lo que entra en tu cuenta",x+6,y+(conCuadrante?12.4:14.5));
+    doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?17:20);
+    doc.text(document.getElementById(cfg.netoId).textContent,x+an-6,y+(conCuadrante?11.2:13),{align:"right"});
+    return y+hn+7;
+  }
+
+  function pie(){
+    var yp=conCuadrante?H-18:H-24;
+    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
+    doc.line(M,yp,W-M,yp);
+    doc.setFont("helvetica","normal"); doc.setFontSize(6.8);
+    doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
+    var legal=[
+      "Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026).",
+      "Documento orientativo generado automaticamente en calculadoravigilante.com. No sustituye a la nomina oficial ni tiene validez contractual.",
+      "Compara siempre con tu recibo de salario y consulta a un asesor laboral o a tu representacion sindical ante cualquier discrepancia."
+    ];
+    var yy=yp+4.5;
+    legal.forEach(function(l){ doc.text(l,W/2,yy,{align:"center"}); yy+=3.6; });
+  }
+
+  /* ══ MAQUETACIÓN ══ */
+  if(conCuadrante){
+    /* ─── UNA SOLA HOJA VERTICAL: cuadrante arriba, desglose abajo ─── */
+    var y=cabecera(cfg.titulo+" — "+MESES_ES[ctxPDF.cuadrante.mes].toUpperCase()+" "+ctxPDF.cuadrante.anio);
+
+    /* Arriba: el cuadrante del mes */
+    y=dibujarCuadrantePDF(doc, y, M, ancho, W, ctxPDF.cuadrante.anio, ctxPDF.cuadrante.mes, C);
+
+    /* Abajo: dos columnas */
+    var colAn=(ancho-10)/2;
+    var xIzq=M, xDer=M+colAn+10;
+    var yIzq=bloqueDatos(xIzq, y, colAn);
+    var yDer=bloqueDesglose(xDer, y, colAn);
+
+    /* Y al pie, el neto a todo lo ancho */
+    var yN=Math.max(yIzq,yDer)+2;
+    if(yN>H-52) yN=H-52;
+    bloqueNeto(M, yN, ancho);
+    pie();
+  } else {
+    /* ─── HOJA ÚNICA VERTICAL (modo manual, finiquito y baja) ─── */
+    var yv=cabecera(cfg.titulo);
+    yv=bloqueDatos(M,yv,ancho);
+    yv=bloqueDesglose(M,yv,ancho);
+    if(yv>H-52){ doc.addPage([A4_ANCHO, A4_ALTO],"portrait"); yv=20; }
+    bloqueNeto(M,yv+2,ancho);
+    pie();
+  }
 
   var archivo="calculo-"+cfg.archivo+"-"+sufijoArchivo()+".pdf";
   guardarOCompartir(doc, archivo, tipo);
+}
+
+/* Dibuja el cuadrante del mes en la mitad superior de la hoja */
+function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
+  var t=totalesMes(anio,mes);
+  var cw=ancho/7;
+
+  var primeroTmp=new Date(anio,mes,1);
+  var offset=(primeroTmp.getDay()+6)%7;
+  var ultimo=new Date(anio,mes+1,0).getDate();
+  var filasMes=Math.ceil((offset+ultimo)/7);
+  var ch=(filasMes>=6)?11.4:13.2;
+
+  /* Título del mes */
+  doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
+  doc.setFont("helvetica","bold"); doc.setFontSize(8.5);
+  doc.text(MESES_ES[mes].toUpperCase()+" "+anio, W/2, y, {align:"center"});
+  y+=3.5;
+
+  /* Cabecera de días */
+  var DOW=["LUNES","MARTES","MIERCOLES","JUEVES","VIERNES","SABADO","DOMINGO"];
+  for(var i=0;i<7;i++){
+    var esFS=(i>=5);
+    doc.setFillColor(esFS?253:245, esFS?242:243, esFS?224:240);
+    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.25);
+    doc.rect(MG+cw*i, y, cw, 5, "FD");
+    doc.setFont("helvetica","bold"); doc.setFontSize(5.4);
+    doc.setTextColor(esFS?C.ORO[0]:C.MUT[0], esFS?C.ORO[1]:C.MUT[1], esFS?C.ORO[2]:C.MUT[2]);
+    doc.text(DOW[i], MG+cw*i+cw/2, y+3.4, {align:"center"});
+  }
+  y+=5;
+
+  var col=offset, fila=0;
+  for(var v=0; v<offset; v++){
+    doc.setFillColor(255,255,255);
+    doc.setDrawColor(240,238,234); doc.setLineWidth(0.15);
+    doc.rect(MG+cw*v, y, cw, ch, "FD");
+  }
+
+  for(var d=1; d<=ultimo; d++){
+    var x=MG+cw*col, yy=y+ch*fila;
+    var fecha=new Date(anio,mes,d);
+    var r=resumenDia(anio,mes,d);
+    var plus=diaConPlus(fecha);
+
+    if(r&&r.tipo==="trab"){ doc.setFillColor(237,247,239); }
+    else if(r&&r.tipo==="vac"){ doc.setFillColor(238,244,252); }
+    else if(plus){ doc.setFillColor(253,242,224); }
+    else { doc.setFillColor(250,248,245); }
+    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.25);
+    doc.rect(x, yy, cw, ch, "FD");
+
+    doc.setFont("helvetica","bold"); doc.setFontSize(6.2);
+    doc.setTextColor(plus?C.ORO[0]:C.MUT[0], plus?C.ORO[1]:C.MUT[1], plus?C.ORO[2]:C.MUT[2]);
+    doc.text(String(d), x+1.8, yy+3.6);
+
+    if(r&&r.tipo==="trab"){
+      doc.setFont("helvetica","normal"); doc.setFontSize(5.2);
+      doc.setTextColor(C.VER[0],C.VER[1],C.VER[2]);
+      var txt = (r.lineas.length===2) ? r.lineas[0]+"-"+r.lineas[1] : r.lineas[0];
+      doc.text(txt, x+cw/2, yy+7.4, {align:"center"});
+      doc.setFont("helvetica","bold"); doc.setFontSize(5.6);
+      doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
+      doc.text(String(r.horas).replace(".",",")+" h", x+cw/2, yy+ch-1.8, {align:"center"});
+    } else if(r&&r.tipo==="vac"){
+      doc.setFont("helvetica","bold"); doc.setFontSize(6.4);
+      doc.setTextColor(C.AZU[0],C.AZU[1],C.AZU[2]);
+      doc.text("VACAC.", x+cw/2, yy+ch/2+1.6, {align:"center"});
+    }
+
+    col++;
+    if(col>6){col=0;fila++;}
+  }
+  if(col>0){
+    for(var w=col; w<7; w++){
+      doc.setFillColor(255,255,255);
+      doc.setDrawColor(240,238,234); doc.setLineWidth(0.15);
+      doc.rect(MG+cw*w, y+ch*fila, cw, ch, "FD");
+    }
+    fila++;
+  }
+  y += ch*fila + 3.5;
+
+  /* Franja resumen del mes */
+  var hh=function(n){ return String(Math.round(n*100)/100).replace(".",",")+" h"; };
+  doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
+  doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.35);
+  doc.roundedRect(MG,y,ancho,15,2,2,"FD");
+  var items=[
+    ["Trabajados", String(t.diasTrab)+" dias", false],
+    ["Libres", String(t.diasLibres)+" dias", false],
+    ["Vacaciones", String(t.diasVac)+" dias", false],
+    ["Nocturnas", hh(t.noct), false],
+    ["Finde / festivo", hh(t.plus), false],
+    ["TOTAL", hh(t.horas), true]
+  ];
+  var celda=ancho/items.length;
+  items.forEach(function(it,i){
+    if(i>0){
+      doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.2);
+      doc.line(MG+celda*i, y+2.5, MG+celda*i, y+12.5);
+    }
+    doc.setFont("helvetica","normal"); doc.setFontSize(5.4);
+    doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
+    doc.text(it[0], MG+celda*i+celda/2, y+5.2, {align:"center"});
+    doc.setFont("helvetica","bold"); doc.setFontSize(it[2]?9:7.6);
+    doc.setTextColor(it[2]?C.ORO[0]:C.TXT[0], it[2]?C.ORO[1]:C.TXT[1], it[2]?C.ORO[2]:C.TXT[2]);
+    doc.text(it[1], MG+celda*i+celda/2, y+11, {align:"center"});
+  });
+  return y+15+6;
 }
 
 /* Comparte el PDF por el panel nativo del móvil (WhatsApp, Mail, Guardar...)
@@ -1060,6 +1309,345 @@ function descargarBlobDirecto(blob, filename, tipo){
   setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },150);
   if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo,metodo:"descarga"});}
 }
+
+/* ══════════════════════════════════════════════════════════
+   CUADRANTE MENSUAL
+   Calcula totales y los vuelca a los campos de horas.
+   No toca el motor de nómina: solo lo alimenta.
+   ══════════════════════════════════════════════════════════ */
+var CUAD = {};                 // { "2026-09": { "1": {tramos:[...], vac:bool, fest:bool} } }
+var calAnio, calMes;           // mes visible (mes 0-11)
+var dlgClave = null;           // "2026-09|1" del día que se está editando
+var MODO_HORAS = "manual";
+var H_VACACION = 5.226;        // 162 h ÷ 31 días de vacaciones (convenio)
+
+var MESES_ES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
+
+/* ── Festivos nacionales (Viernes Santo calculado con el algoritmo de Pascua) ── */
+function domingoPascua(a){
+  var A=a%19, B=Math.floor(a/100), C=a%100, D=Math.floor(B/4), E=B%4;
+  var F=Math.floor((B+8)/25), G=Math.floor((B-F+1)/3), H=(19*A+B-D-G+15)%30;
+  var I=Math.floor(C/4), K=C%4, L=(32+2*E+2*I-H-K)%7;
+  var M=Math.floor((A+11*H+22*L)/451);
+  var mes=Math.floor((H+L-7*M+114)/31), dia=((H+L-7*M+114)%31)+1;
+  return new Date(a,mes-1,dia);
+}
+function festivosNacionales(a){
+  var f={};
+  [[0,1],[0,6],[4,1],[7,15],[9,12],[10,1],[11,6],[11,8],[11,25]].forEach(function(p){
+    f[p[0]+"-"+p[1]]=true;
+  });
+  var vs=new Date(domingoPascua(a).getTime()-2*864e5);   // Viernes Santo
+  f[vs.getMonth()+"-"+vs.getDate()]=true;
+  return f;
+}
+var CACHE_FEST={};
+function esFestivoNacional(d){
+  var a=d.getFullYear();
+  if(!CACHE_FEST[a]) CACHE_FEST[a]=festivosNacionales(a);
+  return !!CACHE_FEST[a][d.getMonth()+"-"+d.getDate()];
+}
+
+/* ── Acceso a datos ── */
+function claveMes(a,m){ return a+"-"+String(m+1).padStart(2,"0"); }
+function datosDia(a,m,d){
+  var mm=CUAD[claveMes(a,m)];
+  return (mm&&mm[d])?mm[d]:null;
+}
+function guardarCuad(){
+  try{ localStorage.setItem("cuadrante_vigilante",JSON.stringify(CUAD)); }catch(e){}
+}
+function cargarCuad(){
+  try{ var s=localStorage.getItem("cuadrante_vigilante"); if(s) CUAD=JSON.parse(s)||{}; }catch(e){ CUAD={}; }
+}
+
+/* ── ¿Este día concreto genera plus de fin de semana / festivo? ── */
+function diaConPlus(fecha){
+  var dow=fecha.getDay();                    // 0 domingo, 6 sábado
+  if(dow===0||dow===6) return true;
+  if(esFestivoNacional(fecha)) return true;
+  var dd=datosDia(fecha.getFullYear(),fecha.getMonth(),fecha.getDate());
+  return !!(dd&&dd.fest);
+}
+
+/* ── Trocea un tramo en minutos y los reparte por día natural y franja ── */
+function trocearTramo(inicio, fin){
+  var res={total:0,noct:0,plus:0};
+  var cur=new Date(inicio.getTime()), FIN=fin.getTime();
+  var guardia=0;
+  while(cur.getTime()<FIN && guardia++<400){
+    var h=cur.getHours();
+    // siguiente frontera relevante: 06:00, 22:00 o medianoche
+    var lim=new Date(cur.getFullYear(),cur.getMonth(),cur.getDate(), h<6?6:(h<22?22:24), 0, 0, 0);
+    var next=Math.min(FIN, lim.getTime());
+    var mins=(next-cur.getTime())/60000;
+    if(mins>0){
+      res.total+=mins;
+      if(h<6||h>=22) res.noct+=mins;
+      if(diaConPlus(cur)) res.plus+=mins;
+    }
+    cur=new Date(next);
+  }
+  return res;
+}
+
+/* ── Convierte {i:"22:00", f:"06:00"} del día d en fechas reales ── */
+function tramoAFechas(a,m,d,t){
+  if(!t||!t.i||!t.f) return null;
+  var pi=t.i.split(":"), pf=t.f.split(":");
+  var ini=new Date(a,m,d,parseInt(pi[0],10),parseInt(pi[1],10),0,0);
+  var fin=new Date(a,m,d,parseInt(pf[0],10),parseInt(pf[1],10),0,0);
+  if(fin.getTime()<=ini.getTime()) fin=new Date(fin.getTime()+864e5);  // cruza medianoche
+  return {ini:ini,fin:fin};
+}
+
+/* ── Totales del mes visible ── */
+function totalesMes(a,m){
+  var t={horas:0,noct:0,plus:0,diasTrab:0,diasVac:0,diasLibres:0};
+  var ultimo=new Date(a,m+1,0).getDate();
+  for(var d=1; d<=ultimo; d++){
+    var dd=datosDia(a,m,d);
+    var trabajado=false;
+    if(dd&&dd.tramos&&dd.tramos.length){
+      dd.tramos.forEach(function(tr){
+        var ff=tramoAFechas(a,m,d,tr);
+        if(!ff) return;
+        var r=trocearTramo(ff.ini,ff.fin);
+        t.horas+=r.total; t.noct+=r.noct; t.plus+=r.plus;
+        trabajado=true;
+      });
+    }
+    if(trabajado){ t.diasTrab++; }
+    else if(dd&&dd.vac){ t.diasVac++; t.horas+=H_VACACION*60; }
+    else { t.diasLibres++; }
+  }
+  t.horas/=60; t.noct/=60; t.plus/=60;
+  t.horas=Math.round(t.horas*100)/100;
+  t.noct=Math.round(t.noct*100)/100;
+  t.plus=Math.round(t.plus*100)/100;
+  return t;
+}
+
+/* ── Resumen compacto de un día para la celda ── */
+function resumenDia(a,m,d){
+  var dd=datosDia(a,m,d);
+  if(!dd) return null;
+  if(dd.tramos&&dd.tramos.length){
+    var mins=0;
+    dd.tramos.forEach(function(tr){
+      var ff=tramoAFechas(a,m,d,tr);
+      if(ff) mins+=trocearTramo(ff.ini,ff.fin).total;
+    });
+    var lineas = dd.tramos.length===1
+      ? [dd.tramos[0].i, dd.tramos[0].f]
+      : [dd.tramos.length+" tramos"];
+    return {tipo:"trab", lineas:lineas, horas:Math.round(mins/60*100)/100, fest:!!dd.fest};
+  }
+  if(dd.vac) return {tipo:"vac", lineas:["V"], horas:H_VACACION, fest:!!dd.fest};
+  if(dd.fest) return {tipo:"libre", lineas:[], horas:0, fest:true};
+  return null;
+}
+
+/* ── Pintado del calendario ── */
+function pintarCalendario(){
+  var grid=document.getElementById("cal-grid");
+  if(!grid) return;
+  document.getElementById("cal-titulo").textContent=MESES_ES[calMes]+" "+calAnio;
+  var primero=new Date(calAnio,calMes,1);
+  var offset=(primero.getDay()+6)%7;              // lunes = 0
+  var ultimo=new Date(calAnio,calMes+1,0).getDate();
+  var hoy=new Date();
+  var h="";
+  for(var i=0;i<offset;i++) h+='<div class="cal-cell vacio"></div>';
+  for(var d=1; d<=ultimo; d++){
+    var fecha=new Date(calAnio,calMes,d);
+    var r=resumenDia(calAnio,calMes,d);
+    var cls="cal-cell";
+    if(diaConPlus(fecha)) cls+=" finde";
+    if(r&&r.tipo==="trab") cls+=" trab";
+    else if(r&&r.tipo==="vac") cls+=" vac";
+    if((r&&r.fest)||esFestivoNacional(fecha)) cls+=" festivo";
+    if(fecha.toDateString()===hoy.toDateString()) cls+=" hoy";
+    h+='<div class="'+cls+'" data-dia="'+d+'">';
+    h+='<span class="cal-num">'+d+'</span>';
+    if(r&&r.lineas&&r.lineas.length){
+      h+='<span class="cal-tag">'+r.lineas.join('<br>')+'</span>';
+    }
+    if(r&&r.horas>0&&r.tipo==="trab") h+='<span class="cal-hrs">'+String(r.horas).replace(".",",")+'h</span>';
+    h+='</div>';
+  }
+  grid.innerHTML=h;
+  Array.prototype.forEach.call(grid.querySelectorAll(".cal-cell[data-dia]"),function(c){
+    c.addEventListener("click",function(){ abrirDialogo(parseInt(c.getAttribute("data-dia"),10)); });
+  });
+  pintarResumen();
+}
+
+function pintarResumen(){
+  var t=totalesMes(calAnio,calMes);
+  var box=document.getElementById("cal-resumen");
+  if(!box) return;
+  if(t.horas===0&&t.diasTrab===0&&t.diasVac===0){
+    box.innerHTML='<div class="cal-vacio-msg">Aún no has introducido ningún turno de este mes.</div>';
+  } else {
+    function fila(l,v,dest){ return '<div class="cal-res-row'+(dest?' destacada':'')+'"><span class="cal-res-lbl">'+l+'</span><span class="cal-res-val">'+v+'</span></div>'; }
+    var hh=function(n){ return String(Math.round(n*100)/100).replace(".",",")+" h"; };
+    box.innerHTML =
+      fila("Días trabajados", t.diasTrab)+
+      fila("Días libres", t.diasLibres)+
+      (t.diasVac>0?fila("Días de vacaciones", t.diasVac):"")+
+      fila("Horas nocturnas", hh(t.noct))+
+      fila("Horas fin de semana / festivo", hh(t.plus))+
+      fila("Horas totales del mes", hh(t.horas), true);
+  }
+  volcarTotales(t);
+}
+
+/* Vuelca los totales a los campos que ya usa el motor de nómina */
+function volcarTotales(t){
+  if(MODO_HORAS!=="cuadrante") return;
+  document.getElementById("hTTotal").value = t.horas>0 ? t.horas : "";
+  document.getElementById("hNoc").value    = t.noct>0  ? t.noct  : "";
+  document.getElementById("hFest").value   = t.plus>0  ? t.plus  : "";
+}
+
+/* ── Diálogo de turnos ── */
+function filaTramo(i,f){
+  return '<div class="tramo">'+
+    '<input type="time" class="t-ini" value="'+(i||"")+'" step="300">'+
+    '<span class="tramo-sep">a</span>'+
+    '<input type="time" class="t-fin" value="'+(f||"")+'" step="300">'+
+    '<button type="button" class="tramo-del" aria-label="Quitar tramo">×</button></div>';
+}
+function engancharBorrarTramo(){
+  var cont=document.getElementById("dlg-tramos");
+  Array.prototype.forEach.call(cont.querySelectorAll(".tramo-del"),function(b){
+    b.onclick=function(){
+      b.parentNode.parentNode.removeChild(b.parentNode);
+      if(!cont.querySelector(".tramo")) cont.innerHTML=filaTramo("","");
+      engancharBorrarTramo(); actualizarNotaDlg();
+    };
+  });
+  Array.prototype.forEach.call(cont.querySelectorAll("input[type=time]"),function(inp){
+    inp.onchange=actualizarNotaDlg;
+  });
+}
+function actualizarNotaDlg(){
+  if(!dlgClave) return;
+  var p=dlgClave.split("|"), pm=p[0].split("-");
+  var a=parseInt(pm[0],10), m=parseInt(pm[1],10)-1, d=parseInt(p[1],10);
+  var tramos=leerTramosDlg();
+  if(!tramos.length){ document.getElementById("dlg-nota").innerHTML=""; return; }
+  var tot=0,noc=0,plus=0;
+  tramos.forEach(function(tr){
+    var ff=tramoAFechas(a,m,d,tr);
+    if(!ff) return;
+    var r=trocearTramo(ff.ini,ff.fin);
+    tot+=r.total; noc+=r.noct; plus+=r.plus;
+  });
+  var hh=function(n){ return String(Math.round(n/60*100)/100).replace(".",","); };
+  var txt="Total del día: <b>"+hh(tot)+" h</b>";
+  if(noc>0)  txt+=" · "+hh(noc)+" h nocturnas";
+  if(plus>0) txt+=" · "+hh(plus)+" h con plus de fin de semana/festivo";
+  document.getElementById("dlg-nota").innerHTML=txt;
+}
+function leerTramosDlg(){
+  var out=[];
+  Array.prototype.forEach.call(document.querySelectorAll("#dlg-tramos .tramo"),function(t){
+    var i=t.querySelector(".t-ini").value, f=t.querySelector(".t-fin").value;
+    if(i&&f) out.push({i:i,f:f});
+  });
+  return out;
+}
+
+function abrirDialogo(d){
+  dlgClave=claveMes(calAnio,calMes)+"|"+d;
+  var fecha=new Date(calAnio,calMes,d);
+  var DOW=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
+  document.getElementById("dlg-titulo").textContent="Turnos del día "+d;
+  var sub=DOW[fecha.getDay()]+", "+d+" de "+MESES_ES[calMes].toLowerCase()+" de "+calAnio;
+  if(esFestivoNacional(fecha)) sub+="  ·  Festivo nacional";
+  else if(fecha.getDay()===0||fecha.getDay()===6) sub+="  ·  Fin de semana";
+  document.getElementById("dlg-subtitulo").textContent=sub;
+
+  var dd=datosDia(calAnio,calMes,d);
+  var cont=document.getElementById("dlg-tramos");
+  if(dd&&dd.tramos&&dd.tramos.length){
+    cont.innerHTML=dd.tramos.map(function(t){return filaTramo(t.i,t.f);}).join("");
+  } else {
+    cont.innerHTML=filaTramo("","");
+  }
+  document.getElementById("dlg-vac").checked = !!(dd&&dd.vac);
+  document.getElementById("dlg-fest").checked = !!(dd&&dd.fest);
+  engancharBorrarTramo(); actualizarNotaDlg();
+  document.getElementById("dlg-overlay").classList.add("abierto");
+}
+function cerrarDialogo(){
+  document.getElementById("dlg-overlay").classList.remove("abierto");
+  dlgClave=null;
+}
+function guardarDialogo(){
+  if(!dlgClave) return;
+  var p=dlgClave.split("|"), mk=p[0], d=p[1];
+  var tramos=leerTramosDlg();
+  var vac=document.getElementById("dlg-vac").checked;
+  var fest=document.getElementById("dlg-fest").checked;
+  if(!CUAD[mk]) CUAD[mk]={};
+  if(!tramos.length&&!vac&&!fest){ delete CUAD[mk][d]; }
+  else { CUAD[mk][d]={tramos:tramos, vac:vac, fest:fest}; }
+  if(!Object.keys(CUAD[mk]).length) delete CUAD[mk];
+  guardarCuad(); cerrarDialogo(); pintarCalendario();
+}
+function borrarDialogo(){
+  if(!dlgClave) return;
+  var p=dlgClave.split("|"), mk=p[0], d=p[1];
+  if(CUAD[mk]){ delete CUAD[mk][d]; if(!Object.keys(CUAD[mk]).length) delete CUAD[mk]; }
+  guardarCuad(); cerrarDialogo(); pintarCalendario();
+}
+
+/* ── Arranque del cuadrante ── */
+(function initCuadrante(){
+  function listo(){
+    cargarCuad();
+    var hoy=new Date(); calAnio=hoy.getFullYear(); calMes=hoy.getMonth();
+
+    var bm=document.getElementById("modo-manual"), bc=document.getElementById("modo-cuadrante");
+    if(!bm||!bc) return;
+    bm.addEventListener("click",function(){
+      MODO_HORAS="manual";
+      bm.classList.add("active"); bc.classList.remove("active");
+      document.getElementById("campos-manual").style.display="block";
+      document.getElementById("campos-cuadrante").style.display="none";
+    });
+    bc.addEventListener("click",function(){
+      MODO_HORAS="cuadrante";
+      bc.classList.add("active"); bm.classList.remove("active");
+      document.getElementById("campos-manual").style.display="none";
+      document.getElementById("campos-cuadrante").style.display="block";
+      pintarCalendario();
+    });
+    document.getElementById("cal-prev").addEventListener("click",function(){
+      calMes--; if(calMes<0){calMes=11;calAnio--;} pintarCalendario();
+    });
+    document.getElementById("cal-next").addEventListener("click",function(){
+      calMes++; if(calMes>11){calMes=0;calAnio++;} pintarCalendario();
+    });
+    document.getElementById("dlg-add").addEventListener("click",function(){
+      document.getElementById("dlg-tramos").insertAdjacentHTML("beforeend",filaTramo("",""));
+      engancharBorrarTramo();
+    });
+    document.getElementById("dlg-guardar").addEventListener("click",guardarDialogo);
+    document.getElementById("dlg-borrar").addEventListener("click",borrarDialogo);
+    document.getElementById("dlg-cancelar").addEventListener("click",cerrarDialogo);
+    document.getElementById("dlg-overlay").addEventListener("click",function(e){
+      if(e.target===this) cerrarDialogo();
+    });
+    document.getElementById("dlg-vac").addEventListener("change",actualizarNotaDlg);
+    document.getElementById("dlg-fest").addEventListener("change",actualizarNotaDlg);
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",listo);
+  else listo();
+})();
 
 var CATS = {
   sin_arma:  {salBase:1161.28,pelig:24.08, act:0,     trans:137.81,vest:112.28,nocH:1.26},
@@ -1224,6 +1812,7 @@ function calcNomina(){
   document.getElementById("r-neto").textContent=fmt(neto);
   document.getElementById("resultado").style.display="block";
   cargarJsPDF(function(){});
+  ctxPDF.cuadrante = (MODO_HORAS==="cuadrante") ? {anio:calAnio, mes:calMes} : null;
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
     "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)"),
@@ -1499,5 +2088,41 @@ function calcBaja(){
   setTimeout(function(){document.getElementById("resultado-baja").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 </script>
+
+<div id="dlg-overlay" class="dlg-overlay">
+  <div class="dlg">
+    <div class="dlg-head">
+      <div class="dlg-title" id="dlg-titulo">Turno del día</div>
+      <div class="dlg-sub" id="dlg-subtitulo">—</div>
+    </div>
+    <div class="dlg-body">
+      <div class="dlg-label">Tramos horarios</div>
+      <div id="dlg-tramos"></div>
+      <button type="button" class="dlg-add" id="dlg-add">+ Añadir otro tramo</button>
+      <div class="dlg-nota" id="dlg-nota"></div>
+      <div class="dlg-switches">
+        <div class="switch-row">
+          <div>
+            <div class="switch-text">Día de vacaciones</div>
+            <div class="switch-sub">Computa 5,226 h de jornada</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="dlg-vac"><span class="slider"></span></label>
+        </div>
+        <div class="switch-row" style="margin-top:0.7rem">
+          <div>
+            <div class="switch-text">Día festivo</div>
+            <div class="switch-sub">Autonómico o local (los nacionales ya van marcados)</div>
+          </div>
+          <label class="switch"><input type="checkbox" id="dlg-fest"><span class="slider"></span></label>
+        </div>
+      </div>
+    </div>
+    <div class="dlg-foot">
+      <button type="button" class="dlg-btn dlg-borrar" id="dlg-borrar">Borrar día</button>
+      <button type="button" class="dlg-btn dlg-cancelar" id="dlg-cancelar">Cancelar</button>
+      <button type="button" class="dlg-btn dlg-guardar" id="dlg-guardar">Guardar</button>
+    </div>
+  </div>
+</div>
 </body>
 </html>
