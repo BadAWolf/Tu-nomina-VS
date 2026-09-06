@@ -1018,24 +1018,24 @@ function construirPDF(tipo){
 
   /* ── Piezas reutilizables ── */
   function cabecera(subtitulo){
-    var hb = conCuadrante?19:24;
+    var hb = conCuadrante?21:24;
     doc.setFillColor(C.ORO2[0],C.ORO2[1],C.ORO2[2]);
     doc.rect(0,0,W,hb,"F");
     doc.setTextColor(255,255,255);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?13:16);
-    doc.text("NOMINA VIGILANTE",M,conCuadrante?9.5:12.5);
-    doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7:8);
-    doc.text("calculadoravigilante.com",M,conCuadrante?15:18.5);
-    doc.text("Emitido el "+hoyLargo(),W-M,conCuadrante?15:18.5,{align:"right"});
-    var ht = conCuadrante?9:12;
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?15:16);
+    doc.text("NOMINA VIGILANTE",M,conCuadrante?11:12.5);
+    doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7.5:8);
+    doc.text("calculadoravigilante.com",M,conCuadrante?16.5:18.5);
+    doc.text("Emitido el "+hoyLargo(),W-M,conCuadrante?16.5:18.5,{align:"right"});
+    var ht = conCuadrante?10:12;
     doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
     doc.rect(0,hb,W,ht,"F");
     doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
     doc.line(0,hb+ht,W,hb+ht);
     doc.setTextColor(C.TXT[0],C.TXT[1],C.TXT[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?9:11);
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?10:11);
     doc.text(subtitulo,M,hb+ht-2.6);
-    return hb+ht+(conCuadrante?5:7);
+    return hb+ht+(conCuadrante?6:7);
   }
 
   function bloqueDatos(x,y,an){
@@ -1044,14 +1044,14 @@ function construirPDF(tipo){
     doc.text("DATOS DEL CALCULO",x,y);
     y+=2.5;
     var claves=Object.keys(datos);
-    var paso = conCuadrante?4.6:5.2;
+    var paso = conCuadrante?5.1:5.2;
     var alto=claves.length*paso+4.5;
     doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
     doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
     doc.roundedRect(x,y,an,alto,2,2,"FD");
     y+=6;
     claves.forEach(function(k){
-      doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?6.6:7.6);
+      doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7.4:7.6);
       doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
       var kk=doc.splitTextToSize(k, an*0.5);
       doc.text(kk[0],x+3,y);
@@ -1082,13 +1082,13 @@ function construirPDF(tipo){
           y+=1;
           doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
           doc.line(x,y-3.5,x+an,y-3.5);
-          doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?8.4:10);
+          doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?9.4:10);
           doc.setTextColor(C.TXT[0],C.TXT[1],C.TXT[2]);
           doc.text(f.c,x,y);
           doc.text(f.v,x+an,y,{align:"right"});
-          y+=conCuadrante?5.6:6.5;
+          y+=conCuadrante?6.3:6.5;
         } else {
-          doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?6.8:8);
+          doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7.6:8);
           doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
           var concepto=doc.splitTextToSize(f.c, an-(conCuadrante?24:32));
           doc.text(concepto[0],x,y);
@@ -1096,7 +1096,7 @@ function construirPDF(tipo){
           doc.setTextColor(col[0],col[1],col[2]);
           doc.setFont("helvetica","bold");
           doc.text(f.v,x+an,y,{align:"right"});
-          y+=conCuadrante?4.7:5.4;
+          y+=conCuadrante?5.2:5.4;
         }
       });
       y+=3;
@@ -1105,24 +1105,24 @@ function construirPDF(tipo){
   }
 
   function bloqueNeto(x,y,an){
-    var hn = conCuadrante?17:20;
+    var hn = conCuadrante?23:20;
     doc.setFillColor(C.ORObg[0],C.ORObg[1],C.ORObg[2]);
     doc.setDrawColor(C.OROline[0],C.OROline[1],C.OROline[2]); doc.setLineWidth(0.6);
     doc.roundedRect(x,y,an,hn,2.5,2.5,"FD");
     doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?10:11);
-    doc.text(cfg.netoLbl,x+6,y+(conCuadrante?7.6:9));
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?10.5:11);
+    doc.text(cfg.netoLbl,x+5.5,y+(conCuadrante?8:9));
     doc.setFont("helvetica","normal"); doc.setFontSize(7);
     doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
-    doc.text("Lo que entra en tu cuenta",x+6,y+(conCuadrante?12.4:14.5));
+    doc.text("Lo que entra en tu cuenta",x+5.5,y+(conCuadrante?12.8:14.5));
     doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?17:20);
-    doc.text(document.getElementById(cfg.netoId).textContent,x+an-6,y+(conCuadrante?11.2:13),{align:"right"});
+    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?19:20);
+    doc.text(document.getElementById(cfg.netoId).textContent,x+an-5.5,y+(conCuadrante?20:13),{align:"right"});
     return y+hn+7;
   }
 
   function pie(){
-    var yp=conCuadrante?H-18:H-24;
+    var yp=conCuadrante?H-20:H-24;
     doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
     doc.line(M,yp,W-M,yp);
     doc.setFont("helvetica","normal"); doc.setFontSize(6.8);
@@ -1144,16 +1144,14 @@ function construirPDF(tipo){
     /* Arriba: el cuadrante del mes */
     y=dibujarCuadrantePDF(doc, y, M, ancho, W, ctxPDF.cuadrante.anio, ctxPDF.cuadrante.mes, C);
 
-    /* Abajo: dos columnas */
-    var colAn=(ancho-10)/2;
-    var xIzq=M, xDer=M+colAn+10;
+    /* Abajo: dos columnas.
+       Izquierda: datos del cálculo + caja del neto.
+       Derecha: devengos y deducciones (es la más larga). */
+    var colAn=(ancho-9)/2;
+    var xIzq=M, xDer=M+colAn+9;
     var yIzq=bloqueDatos(xIzq, y, colAn);
-    var yDer=bloqueDesglose(xDer, y, colAn);
-
-    /* Y al pie, el neto a todo lo ancho */
-    var yN=Math.max(yIzq,yDer)+2;
-    if(yN>H-52) yN=H-52;
-    bloqueNeto(M, yN, ancho);
+    bloqueNeto(xIzq, yIzq+2, colAn);
+    bloqueDesglose(xDer, y, colAn);
     pie();
   } else {
     /* ─── HOJA ÚNICA VERTICAL (modo manual, finiquito y baja) ─── */
@@ -1178,13 +1176,13 @@ function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
   var offset=(primeroTmp.getDay()+6)%7;
   var ultimo=new Date(anio,mes+1,0).getDate();
   var filasMes=Math.ceil((offset+ultimo)/7);
-  var ch=(filasMes>=6)?11.4:13.2;
+  var ch=(filasMes>=6)?14.4:17.2;
 
   /* Título del mes */
   doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-  doc.setFont("helvetica","bold"); doc.setFontSize(8.5);
+  doc.setFont("helvetica","bold"); doc.setFontSize(10);
   doc.text(MESES_ES[mes].toUpperCase()+" "+anio, W/2, y, {align:"center"});
-  y+=3.5;
+  y+=4.5;
 
   /* Cabecera de días */
   var DOW=["LUNES","MARTES","MIERCOLES","JUEVES","VIERNES","SABADO","DOMINGO"];
@@ -1192,12 +1190,12 @@ function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
     var esFS=(i>=5);
     doc.setFillColor(esFS?253:245, esFS?242:243, esFS?224:240);
     doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.25);
-    doc.rect(MG+cw*i, y, cw, 5, "FD");
-    doc.setFont("helvetica","bold"); doc.setFontSize(5.4);
+    doc.rect(MG+cw*i, y, cw, 6, "FD");
+    doc.setFont("helvetica","bold"); doc.setFontSize(6.2);
     doc.setTextColor(esFS?C.ORO[0]:C.MUT[0], esFS?C.ORO[1]:C.MUT[1], esFS?C.ORO[2]:C.MUT[2]);
-    doc.text(DOW[i], MG+cw*i+cw/2, y+3.4, {align:"center"});
+    doc.text(DOW[i], MG+cw*i+cw/2, y+4, {align:"center"});
   }
-  y+=5;
+  y+=6;
 
   var col=offset, fila=0;
   for(var v=0; v<offset; v++){
@@ -1219,22 +1217,26 @@ function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
     doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.25);
     doc.rect(x, yy, cw, ch, "FD");
 
-    doc.setFont("helvetica","bold"); doc.setFontSize(6.2);
+    doc.setFont("helvetica","bold"); doc.setFontSize(7.6);
     doc.setTextColor(plus?C.ORO[0]:C.MUT[0], plus?C.ORO[1]:C.MUT[1], plus?C.ORO[2]:C.MUT[2]);
-    doc.text(String(d), x+1.8, yy+3.6);
+    doc.text(String(d), x+2, yy+4.6);
 
     if(r&&r.tipo==="trab"){
-      doc.setFont("helvetica","normal"); doc.setFontSize(5.2);
+      doc.setFont("helvetica","normal"); doc.setFontSize(6.4);
       doc.setTextColor(C.VER[0],C.VER[1],C.VER[2]);
-      var txt = (r.lineas.length===2) ? r.lineas[0]+"-"+r.lineas[1] : r.lineas[0];
-      doc.text(txt, x+cw/2, yy+7.4, {align:"center"});
-      doc.setFont("helvetica","bold"); doc.setFontSize(5.6);
-      doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
-      doc.text(String(r.horas).replace(".",",")+" h", x+cw/2, yy+ch-1.8, {align:"center"});
-    } else if(r&&r.tipo==="vac"){
+      if(r.lineas.length===2){
+        doc.text(r.lineas[0], x+cw/2, yy+8.6, {align:"center"});
+        doc.text(r.lineas[1], x+cw/2, yy+12.4, {align:"center"});
+      } else {
+        doc.text(r.lineas[0], x+cw/2, yy+10.4, {align:"center"});
+      }
       doc.setFont("helvetica","bold"); doc.setFontSize(6.4);
+      doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
+      doc.text(String(r.horas).replace(".",",")+" h", x+cw-2, yy+4.6, {align:"right"});
+    } else if(r&&r.tipo==="vac"){
+      doc.setFont("helvetica","bold"); doc.setFontSize(7.4);
       doc.setTextColor(C.AZU[0],C.AZU[1],C.AZU[2]);
-      doc.text("VACAC.", x+cw/2, yy+ch/2+1.6, {align:"center"});
+      doc.text("VACAC.", x+cw/2, yy+ch/2+2.4, {align:"center"});
     }
 
     col++;
@@ -1248,13 +1250,13 @@ function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
     }
     fila++;
   }
-  y += ch*fila + 3.5;
+  y += ch*fila + 4.5;
 
   /* Franja resumen del mes */
   var hh=function(n){ return String(Math.round(n*100)/100).replace(".",",")+" h"; };
   doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
   doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.35);
-  doc.roundedRect(MG,y,ancho,15,2,2,"FD");
+  doc.roundedRect(MG,y,ancho,19,2.5,2.5,"FD");
   var items=[
     ["Trabajados", String(t.diasTrab)+" dias", false],
     ["Libres", String(t.diasLibres)+" dias", false],
@@ -1267,16 +1269,16 @@ function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
   items.forEach(function(it,i){
     if(i>0){
       doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.2);
-      doc.line(MG+celda*i, y+2.5, MG+celda*i, y+12.5);
+      doc.line(MG+celda*i, y+3, MG+celda*i, y+16);
     }
-    doc.setFont("helvetica","normal"); doc.setFontSize(5.4);
+    doc.setFont("helvetica","normal"); doc.setFontSize(6.4);
     doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
-    doc.text(it[0], MG+celda*i+celda/2, y+5.2, {align:"center"});
-    doc.setFont("helvetica","bold"); doc.setFontSize(it[2]?9:7.6);
+    doc.text(it[0], MG+celda*i+celda/2, y+6.4, {align:"center"});
+    doc.setFont("helvetica","bold"); doc.setFontSize(it[2]?11.5:9);
     doc.setTextColor(it[2]?C.ORO[0]:C.TXT[0], it[2]?C.ORO[1]:C.TXT[1], it[2]?C.ORO[2]:C.TXT[2]);
-    doc.text(it[1], MG+celda*i+celda/2, y+11, {align:"center"});
+    doc.text(it[1], MG+celda*i+celda/2, y+14.2, {align:"center"});
   });
-  return y+15+6;
+  return y+19+7;
 }
 
 /* Comparte el PDF por el panel nativo del móvil (WhatsApp, Mail, Guardar...)
