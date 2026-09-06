@@ -450,10 +450,22 @@ input:checked + .slider:before{transform:translateX(20px);}
 <input type="number" id="hNoc" placeholder="0" min="0" inputmode="decimal">
 <div class="field-hint">Entre las 22:00 y las 06:00 — pueden coincidir con festivas</div>
 </div>
-<div class="field" style="margin-bottom:0">
+<div class="field">
 <div class="field-label">De esas, horas de fin de semana o festivo<span class="field-badge">+1,02 €/h</span></div>
 <input type="number" id="hFest" placeholder="0" min="0" inputmode="decimal">
 <div class="field-hint">Cuenta TODAS las horas trabajadas en sábado (desde las 00:00) y domingo (hasta las 24:00), más los festivos oficiales. Si además son nocturnas, se cobran los dos pluses</div>
+</div>
+<div class="switch-row" style="padding-top:0.85rem;border-top:1px solid var(--border)">
+<div>
+<div class="switch-text">He tenido vacaciones este mes</div>
+<div class="switch-sub">Cada día computa 5,226 h de jornada</div>
+</div>
+<label class="switch"><input type="checkbox" id="switchVac"><span class="slider"></span></label>
+</div>
+<div id="vac-field" class="field" style="display:none;margin-top:0.8rem;margin-bottom:0">
+<div class="field-label">Días de vacaciones disfrutados</div>
+<input type="number" id="diasVac" placeholder="0" min="0" max="31" inputmode="decimal">
+<div class="field-hint" id="hint-vac">El convenio da 31 días naturales al año (162 h ÷ 31 días = 5,226 h por día)</div>
 </div>
 </div>
 
@@ -495,6 +507,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-section-label green">DEVENGOS</div>
 <div class="res-row"><span class="res-concept" id="lbl-base">Salario base</span><span class="res-val up" id="r-base">—</span></div>
 <div class="res-row"><span class="res-concept" id="lbl-pelig">Plus peligrosidad</span><span class="res-val up" id="r-pelig">—</span></div>
+<div class="res-row" id="row-vacinfo" style="display:none"><span class="res-concept" id="lbl-vacinfo">—</span><span class="res-val exento" id="r-vacinfo">—</span></div>
 <div class="res-row" id="row-act" style="display:none"><span class="res-concept" id="lbl-act">Plus de actividad</span><span class="res-val up" id="r-act">—</span></div>
 <div class="res-row"><span class="res-concept">Plus transporte</span><span class="res-val up" id="r-trans">—</span></div>
 <div class="res-row"><span class="res-concept">Plus vestuario</span><span class="res-val up" id="r-vest">—</span></div>
@@ -1704,6 +1717,18 @@ document.getElementById("aniosAntiguedad").addEventListener("input",function(){
 document.getElementById("switchPlus").addEventListener("change",function(){
   document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
 });
+document.getElementById("switchVac").addEventListener("change",function(){
+  document.getElementById("vac-field").style.display=this.checked?"block":"none";
+  if(!this.checked) document.getElementById("diasVac").value="";
+  actualizarHintVac();
+});
+function actualizarHintVac(){
+  var d=parseFloat(document.getElementById("diasVac").value)||0;
+  document.getElementById("hint-vac").textContent = d>0
+    ? d+" día"+(d!==1?"s":"")+" × 5,226 h = "+fmt(r2(d*H_VACACION)).replace(" €"," h")+" que se suman a tu jornada del mes"
+    : "El convenio da 31 días naturales al año (162 h ÷ 31 días = 5,226 h por día)";
+}
+document.getElementById("diasVac").addEventListener("input",actualizarHintVac);
 ["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
   document.getElementById("btn-"+c).addEventListener("click",function(){
     document.querySelectorAll("#view-nomina .cat-btn").forEach(function(b){b.classList.remove("active");});
@@ -1746,24 +1771,30 @@ function calcNomina(){
   var an=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
   var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
   var esJefe=document.getElementById("switchJefe").checked;
+  var dVac=(MODO_HORAS==="manual"&&document.getElementById("switchVac").checked)
+             ? (parseFloat(document.getElementById("diasVac").value)||0) : 0;
+  var hVac=r2(dVac*H_VACACION);
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
   var err=document.getElementById("errorBox");
-  if(hT<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
+  if(hT<=0&&hVac<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   if(hF>hT){err.textContent="Las horas de fin de semana/festivo no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
   err.style.display="none";
 
+  /* Las vacaciones computan como jornada, aunque no se hayan trabajado */
+  var hTrab=hT;                 // horas realmente trabajadas
+  var hJor=r2(hT+hVac);         // jornada computable del mes
   var ratioFijo=hp/JORNADA;
   var factorH=1;
   var labelSufix="";
-  if(jornActual==="completa"&&hT<JORNADA){
-    factorH=hT/JORNADA;
-    labelSufix=" (Proporcional "+hT+"h/"+JORNADA+"h)";
-  } else if(jornActual==="parcial"&&hT<hp){
-    factorH=hT/hp;
-    labelSufix=" (Proporcional "+hT+"h/"+hp+"h)";
+  if(jornActual==="completa"&&hJor<JORNADA){
+    factorH=hJor/JORNADA;
+    labelSufix=" (Proporcional "+hJor+"h/"+JORNADA+"h)";
+  } else if(jornActual==="parcial"&&hJor<hp){
+    factorH=hJor/hp;
+    labelSufix=" (Proporcional "+hJor+"h/"+hp+"h)";
   }
 
   var sb=r2(cat.salBase*ratioFijo*factorH);
@@ -1777,7 +1808,7 @@ function calcNomina(){
   var q=Math.floor(an/5);
   var sbHE=esJefe?r2(cat.salBase*1.10):cat.salBase;
   var hev=calcHoraExtra(sbHE,cat.pelig,cat.act||0,ant);
-  var hEx=Math.max(0,hT-hp);
+  var hEx=Math.max(0,r2(hJor-hp));
   var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=r2(hF*PLUS_FEST);
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
   var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo);
@@ -1793,6 +1824,11 @@ function calcNomina(){
   document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+suf;
   document.getElementById("r-base").textContent="+"+fmt(sb);
   document.getElementById("r-pelig").textContent="+"+fmt(pe);
+  if(hVac>0){
+    document.getElementById("row-vacinfo").style.display="flex";
+    document.getElementById("lbl-vacinfo").textContent="Vacaciones — "+dVac+" día"+(dVac!==1?"s":"")+" × 5,226 h";
+    document.getElementById("r-vacinfo").textContent=String(hVac).replace(".",",")+" h de jornada";
+  } else { document.getElementById("row-vacinfo").style.display="none"; }
   showR("row-act","lbl-act","r-act","Plus de actividad"+suf,ac,"up");
   document.getElementById("r-trans").textContent="+"+fmt(tr);
   document.getElementById("r-vest").textContent="+"+fmt(ve);
@@ -1816,10 +1852,12 @@ function calcNomina(){
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
     "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)"),
-    "Horas trabajadas":hT+" h"+(hEx>0?"  (de las cuales "+hEx+" h extraordinarias)":""),
+    "Horas trabajadas":hTrab+" h"+(hEx>0?"  (de las cuales "+hEx+" h extraordinarias)":""),
     "Horas nocturnas":(hN>0?hN+" h  ×  "+cat.nocH.toFixed(2).replace(".",",")+" €":"Ninguna"),
     "Horas fin de semana / festivo":(hF>0?hF+" h  ×  1,02 €":"Ninguna"),
     "Antigüedad":(an>0?an+" años  ("+q+" quinquenio"+(q!==1?"s":"")+")":"Sin antigüedad"),
+    "Vacaciones disfrutadas":(dVac>0?dVac+" día"+(dVac!==1?"s":"")+" = "+String(hVac).replace(".",",")+" h de jornada":"Ninguna"),
+    "Jornada computable del mes":String(hJor).replace(".",",")+" h",
     "Jefe de Equipo":(esJefe?"Sí (10% del salario base)":"No"),
     "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
