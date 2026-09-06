@@ -428,7 +428,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="neto-label">NETO A COBRAR<span>Lo que entra en tu cuenta</span></div>
 <div class="neto-val" id="r-neto">—</div>
 </div>
-<button type="button" class="btn-pdf" id="btnPdfNomina" onclick="exportarPDF('nomina',this)">📄 Descargar en PDF</button>
+<button type="button" class="btn-pdf" id="btnPdfNomina" onclick="exportarPDF('nomina',this)">📤 Compartir / Descargar PDF</button>
 </div>
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
@@ -560,7 +560,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="neto-label">TOTAL NETO<span>Lo que entra en tu cuenta</span></div>
 <div class="neto-val" id="fr-total-neto">—</div>
 </div>
-<button type="button" class="btn-pdf" id="btnPdfFiniquito" onclick="exportarPDF('finiquito',this)">📄 Descargar en PDF</button>
+<button type="button" class="btn-pdf" id="btnPdfFiniquito" onclick="exportarPDF('finiquito',this)">📤 Compartir / Descargar PDF</button>
 </div>
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
@@ -674,7 +674,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="info-box" style="margin-top:0">
 <strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días.<br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
 </div>
-<button type="button" class="btn-pdf" id="btnPdfBaja" onclick="exportarPDF('baja',this)">📄 Descargar en PDF</button>
+<button type="button" class="btn-pdf" id="btnPdfBaja" onclick="exportarPDF('baja',this)">📤 Compartir / Descargar PDF</button>
 </div>
 <div class="donate-box">
 <div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
@@ -882,7 +882,6 @@ function exportarPDF(tipo, btn){
   cargarJsPDF(function(){
     try{
       construirPDF(tipo);
-      if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo});}
     }
     catch(e){ alert("Ha ocurrido un error al generar el PDF."); }
     btn.disabled=false; btn.textContent=txt;
@@ -1027,7 +1026,39 @@ function construirPDF(tipo){
   var yy=pie+5;
   legal.forEach(function(l){ doc.text(l,W/2,yy,{align:"center"}); yy+=3.6; });
 
-  doc.save("calculo-"+cfg.archivo+"-"+sufijoArchivo()+".pdf");
+  var archivo="calculo-"+cfg.archivo+"-"+sufijoArchivo()+".pdf";
+  guardarOCompartir(doc, archivo, tipo);
+}
+
+/* Comparte el PDF por el panel nativo del móvil (WhatsApp, Mail, Guardar...)
+   si el navegador lo permite; si no, lo descarga directamente. */
+function guardarOCompartir(doc, filename, tipo){
+  var blob;
+  try{ blob=doc.output("blob"); }
+  catch(e){ doc.save(filename); return; }
+
+  var file=null;
+  try{ file=new File([blob],filename,{type:"application/pdf"}); }catch(e){ file=null; }
+
+  if(file && navigator.canShare && navigator.canShare({files:[file]})){
+    navigator.share({files:[file], title:filename}).then(function(){
+      if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo,metodo:"compartir"});}
+    }).catch(function(err){
+      if(err && err.name==="AbortError") return; // el usuario ha cancelado, no hacemos nada más
+      descargarBlobDirecto(blob,filename,tipo);
+    });
+  } else {
+    descargarBlobDirecto(blob,filename,tipo);
+  }
+}
+
+function descargarBlobDirecto(blob, filename, tipo){
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement("a");
+  a.href=url; a.download=filename;
+  document.body.appendChild(a); a.click();
+  setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },150);
+  if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo,metodo:"descarga"});}
 }
 
 var CATS = {
@@ -1192,6 +1223,7 @@ function calcNomina(){
   else{document.getElementById("row-irpf").style.display="none";document.getElementById("row-irpf0").style.display="flex";}
   document.getElementById("r-neto").textContent=fmt(neto);
   document.getElementById("resultado").style.display="block";
+  cargarJsPDF(function(){});
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
     "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)"),
@@ -1343,6 +1375,7 @@ function calcFiniquito(){
   else{document.getElementById("frow-indem-label").style.display="none";document.getElementById("frow-indem").style.display="none";document.getElementById("f-exento-info").style.display="none";}
   document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
   document.getElementById("resultado-finiquito").style.display="block";
+  cargarJsPDF(function(){});
   ctxPDF.finiquito={
     "Categoría":nombreCat(fcatActual,document.getElementById("switchCondF").checked),
     "Tipo de jornada":(fjornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+fhp+" h/mes pactadas)"),
@@ -1451,6 +1484,7 @@ function calcBaja(){
   else{document.getElementById("brow-irpf").style.display="none";document.getElementById("brow-irpf0").style.display="flex";}
   document.getElementById("br-neto").textContent=fmt(neto);
   document.getElementById("resultado-baja").style.display="block";
+  cargarJsPDF(function(){});
   ctxPDF.baja={
     "Categoría":nombreCat(bcatActual,document.getElementById("switchCondB").checked),
     "Tipo de baja":(tipo==="comun"?"Enfermedad común o accidente no laboral":(tipo==="laboral"?"Accidente laboral o enfermedad profesional":"Hospitalización")),
