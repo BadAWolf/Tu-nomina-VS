@@ -230,20 +230,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .privacy-text{font-size:0.7rem;font-weight:500;color:var(--muted);line-height:1.6;padding:0 0.5rem;}
 .ads-placeholder{width:100%;margin:1rem 0;text-align:center;display:block;}
 
-.donate-box{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);border-radius:12px;padding:1.3rem 1.2rem;text-align:center;margin-top:0.9rem;box-shadow:0 2px 10px rgba(180,120,10,0.12);}
-.donate-title{font-family:'Bebas Neue',sans-serif;font-size:1.15rem;letter-spacing:0.07em;color:var(--gold);margin-bottom:0.35rem;}
-.donate-text{font-size:0.73rem;color:var(--text2);line-height:1.55;margin-bottom:0.9rem;font-weight:500;}
-.donate-btn{display:inline-flex;align-items:center;gap:0.5rem;background:var(--gold2);color:#fff;text-decoration:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.7rem 1.5rem;box-shadow:0 2px 8px rgba(180,120,10,0.3);transition:background 0.15s;}
-.donate-btn:hover{background:var(--gold);}
-.donate-note{font-size:0.6rem;color:var(--muted);margin-top:0.6rem;font-weight:500;}
 
-.donate-btns{display:flex;gap:0.6rem;justify-content:center;flex-wrap:wrap;}
-.donate-btn{border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
-.donate-btn.donate-bizum{background:#1f9ea8;}
-.donate-btn.donate-bizum:hover{background:#177d85;}
-.bizum-info{margin-top:0.85rem;font-size:0.85rem;color:var(--text);background:var(--card);border:1.5px dashed var(--goldline);border-radius:8px;padding:0.75rem;}
-.bizum-info strong{font-family:'DM Mono',monospace;font-size:1.1rem;color:var(--gold);letter-spacing:0.05em;}
-.bizum-info span{display:block;font-size:0.63rem;color:var(--muted);margin-top:0.35rem;font-weight:500;}
 
 .guide-card.guide-destacada{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);box-shadow:0 2px 10px rgba(180,120,10,0.13);padding:1.1rem 1.15rem;}
 .guide-card.guide-destacada:hover{box-shadow:0 3px 14px rgba(180,120,10,0.2);}
@@ -556,16 +543,6 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <button type="button" class="btn-pdf" id="btnPdfNomina" onclick="exportarPDF('nomina',this)">📤 Compartir / Descargar PDF</button>
 </div>
-<div class="donate-box">
-<div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
-<p class="donate-text">Esta calculadora es y será siempre <strong>gratuita</strong>. Si te ha ayudado a entender tu nómina o a reclamar lo tuyo, puedes invitarme a un café: ayuda a mantenerla y a tenerla al día con cada subida de las tablas del convenio.</p>
-<div class="donate-btns">
-<button type="button" class="donate-btn donate-bizum" onclick="mostrarBizum(this)">💸 Enviar Bizum</button>
-<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ PayPal</a>
-</div>
-<div class="bizum-info" style="display:none;">Bizum al <strong>651 813 672</strong><span>Número copiado ✓ — abre la app de tu banco, entra en Bizum y pégalo</span></div>
-<div class="donate-note">Tú eliges la cantidad — cualquier café suma</div>
-</div>
 </div>
 
 <div id="view-finiquito">
@@ -688,16 +665,6 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <button type="button" class="btn-pdf" id="btnPdfFiniquito" onclick="exportarPDF('finiquito',this)">📤 Compartir / Descargar PDF</button>
 </div>
-<div class="donate-box">
-<div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
-<p class="donate-text">Esta calculadora es y será siempre <strong>gratuita</strong>. Si te ha ayudado a entender tu nómina o a reclamar lo tuyo, puedes invitarme a un café: ayuda a mantenerla y a tenerla al día con cada subida de las tablas del convenio.</p>
-<div class="donate-btns">
-<button type="button" class="donate-btn donate-bizum" onclick="mostrarBizum(this)">💸 Enviar Bizum</button>
-<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ PayPal</a>
-</div>
-<div class="bizum-info" style="display:none;">Bizum al <strong>651 813 672</strong><span>Número copiado ✓ — abre la app de tu banco, entra en Bizum y pégalo</span></div>
-<div class="donate-note">Tú eliges la cantidad — cualquier café suma</div>
-</div>
 </div>
 
 <div id="view-baja">
@@ -801,16 +768,6 @@ input:checked + .slider:before{transform:translateX(20px);}
 <strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días.<br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
 </div>
 <button type="button" class="btn-pdf" id="btnPdfBaja" onclick="exportarPDF('baja',this)">📤 Compartir / Descargar PDF</button>
-</div>
-<div class="donate-box">
-<div class="donate-title">☕ ¿TE HA SIDO ÚTIL?</div>
-<p class="donate-text">Esta calculadora es y será siempre <strong>gratuita</strong>. Si te ha ayudado a entender tu nómina o a reclamar lo tuyo, puedes invitarme a un café: ayuda a mantenerla y a tenerla al día con cada subida de las tablas del convenio.</p>
-<div class="donate-btns">
-<button type="button" class="donate-btn donate-bizum" onclick="mostrarBizum(this)">💸 Enviar Bizum</button>
-<a href="https://paypal.me/CAdan98" target="_blank" rel="noopener" class="donate-btn">☕ PayPal</a>
-</div>
-<div class="bizum-info" style="display:none;">Bizum al <strong>651 813 672</strong><span>Número copiado ✓ — abre la app de tu banco, entra en Bizum y pégalo</span></div>
-<div class="donate-note">Tú eliges la cantidad — cualquier café suma</div>
 </div>
 </div>
 
@@ -924,14 +881,6 @@ Herramienta orientativa — compara siempre con tu nómina real
 </div>
 
 <script>
-function mostrarBizum(btn){
-  var box=btn.closest(".donate-box");
-  var info=box.querySelector(".bizum-info");
-  info.style.display="block";
-  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText("651813672").catch(function(){});}
-  btn.textContent="✓ Número copiado";
-  setTimeout(function(){btn.textContent="💸 Enviar Bizum";},2500);
-}
 
 
 /* ══════════════════════════════════════════════════════════
@@ -1410,11 +1359,23 @@ function mostrarAvisoInstalacion(){
   } else if(esIOS()){
     /* iPhone y iPad: Apple no permite instalar solo, se explican los pasos */
     document.getElementById("inst-sub").textContent="Tenla como una app más, sin buscar el enlace cada vez.";
-    cont.innerHTML=
-      '<div class="inst-pasos">'+
-        '<div class="inst-paso"><span class="inst-num">1</span><span>Pulsa <span class="inst-ios-ico">&#8593;</span> Compartir, abajo en la barra de Safari</span></div>'+
-        '<div class="inst-paso"><span class="inst-num">2</span><span>Baja y elige <strong>Añadir a pantalla de inicio</strong></span></div>'+
-      '</div>'+
+    var enSafari = /Safari/.test(navigator.userAgent) &&
+                   !/CriOS|FxiOS|EdgiOS|OPiOS|GSA/.test(navigator.userAgent);
+    var pasos = "";
+    if(!enSafari){
+      /* Ha entrado desde WhatsApp, Instagram, Chrome... y ahí iOS no deja añadir nada */
+      pasos =
+        '<div class="inst-paso"><span class="inst-num">1</span><span>Pulsa <span class="inst-ios-ico">&#8593;</span> <strong>Compartir</strong> y elige <strong>Abrir en Safari</strong></span></div>'+
+        '<div class="inst-paso"><span class="inst-num">2</span><span>Ya en Safari, vuelve a pulsar <span class="inst-ios-ico">&#8593;</span> <strong>Compartir</strong> (abajo en el centro)</span></div>'+
+        '<div class="inst-paso"><span class="inst-num">3</span><span>Baja por la lista y pulsa <strong>Añadir a pantalla de inicio</strong></span></div>'+
+        '<div class="inst-paso"><span class="inst-num">4</span><span>Arriba a la derecha, pulsa <strong>Añadir</strong></span></div>';
+    } else {
+      pasos =
+        '<div class="inst-paso"><span class="inst-num">1</span><span>Pulsa <span class="inst-ios-ico">&#8593;</span> <strong>Compartir</strong>, abajo en el centro de la pantalla</span></div>'+
+        '<div class="inst-paso"><span class="inst-num">2</span><span>Baja por la lista y pulsa <strong>Añadir a pantalla de inicio</strong></span></div>'+
+        '<div class="inst-paso"><span class="inst-num">3</span><span>Arriba a la derecha, pulsa <strong>Añadir</strong></span></div>';
+    }
+    cont.innerHTML='<div class="inst-pasos">'+pasos+'</div>'+
       '<button type="button" class="inst-btn" id="inst-ok">Entendido</button>';
     document.getElementById("inst-ok").addEventListener("click",cerrarAvisoInst);
   } else {
