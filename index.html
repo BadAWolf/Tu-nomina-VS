@@ -10,6 +10,12 @@
 <meta property="og:url" content="https://calculadoravigilante.com/">
 <meta property="og:type" content="website">
 <title>Calculadora Nómina Vigilante de Seguridad 2026 | Gratis</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#d4860f">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nómina VS">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
 
 <style>
@@ -321,6 +327,25 @@ input:checked + .slider:before{transform:translateX(20px);}
   .cal-num{font-size:0.58rem;}
   .cal-tag{font-size:0.46rem;}
 }
+
+/* ═══ AVISO DE INSTALACIÓN ═══ */
+#inst-banner{position:fixed;left:0;right:0;bottom:0;z-index:9998;background:var(--card);border-top:1.5px solid var(--goldline);box-shadow:0 -4px 18px rgba(44,36,22,0.14);padding:0.95rem 1rem 1.1rem;display:none;animation:instSube 0.3s ease-out;}
+#inst-banner.visible{display:block;}
+@keyframes instSube{from{transform:translateY(100%);}to{transform:translateY(0);}}
+.inst-wrap{max-width:420px;margin:0 auto;position:relative;}
+.inst-x{position:absolute;top:-0.35rem;right:-0.2rem;background:transparent;border:none;color:var(--subtle);font-size:1.3rem;line-height:1;cursor:pointer;padding:0.2rem 0.4rem;font-family:'DM Sans',sans-serif;}
+.inst-x:hover{color:var(--muted);}
+.inst-top{display:flex;align-items:center;gap:0.7rem;padding-right:1.6rem;}
+.inst-icono{width:2.6rem;height:2.6rem;border-radius:11px;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0;box-shadow:0 2px 7px rgba(180,120,10,0.3);}
+.inst-tit{font-size:0.85rem;font-weight:700;color:var(--text);line-height:1.25;}
+.inst-sub{font-size:0.7rem;color:var(--muted);font-weight:500;margin-top:0.12rem;line-height:1.4;}
+.inst-pasos{margin-top:0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.8rem;}
+.inst-paso{display:flex;align-items:center;gap:0.5rem;font-size:0.73rem;color:var(--text2);line-height:1.4;}
+.inst-paso + .inst-paso{margin-top:0.45rem;}
+.inst-num{background:var(--gold2);color:#fff;width:1.15rem;height:1.15rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;flex-shrink:0;}
+.inst-ios-ico{display:inline-block;border:1.5px solid var(--gold2);color:var(--gold2);border-radius:4px;padding:0 0.28rem;font-size:0.72rem;font-weight:700;line-height:1.25;}
+.inst-btn{width:100%;margin-top:0.8rem;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.72rem;cursor:pointer;box-shadow:0 2px 8px rgba(180,120,10,0.28);}
+.inst-btn:hover{background:var(--gold);}
 </style>
 <script type="application/ld+json">
 {
@@ -1324,6 +1349,101 @@ function descargarBlobDirecto(blob, filename, tipo){
 }
 
 /* ══════════════════════════════════════════════════════════
+   AVISO PARA AÑADIR A LA PANTALLA DE INICIO
+   Solo en móvil, solo tras el primer cálculo y una única vez.
+   ══════════════════════════════════════════════════════════ */
+var promptInstalacion = null;
+var avisoInstMostrado = false;
+
+window.addEventListener("beforeinstallprompt", function(e){
+  e.preventDefault();
+  promptInstalacion = e;           // lo guardamos para lanzarlo desde nuestro botón
+});
+window.addEventListener("appinstalled", function(){
+  try{ localStorage.setItem("inst_aviso","instalada"); }catch(e){}
+  ocultarAvisoInst();
+  if(typeof gtag!=="undefined"){ gtag("event","app_instalada"); }
+});
+
+function yaEsApp(){
+  try{
+    return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
+           || navigator.standalone === true;
+  }catch(e){ return false; }
+}
+function esMovil(){
+  try{
+    return (navigator.maxTouchPoints||0) > 0 &&
+           window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+  }catch(e){ return false; }
+}
+function esIOS(){
+  var ua = navigator.userAgent || "";
+  return /iPad|iPhone|iPod/.test(ua) ||
+         (/Macintosh/.test(ua) && (navigator.maxTouchPoints||0) > 1);   // iPad moderno
+}
+function ocultarAvisoInst(){
+  var b=document.getElementById("inst-banner");
+  if(b) b.classList.remove("visible");
+}
+
+function mostrarAvisoInstalacion(){
+  if(avisoInstMostrado) return;
+  if(!esMovil()) return;                       // en ordenador no sale nada
+  if(yaEsApp()) return;                        // ya la tiene instalada
+  try{ if(localStorage.getItem("inst_aviso")) return; }catch(e){ return; }
+
+  var cont=document.getElementById("inst-contenido");
+  if(!cont) return;
+
+  if(promptInstalacion){
+    /* Android con instalación nativa: un solo toque */
+    cont.innerHTML='<button type="button" class="inst-btn" id="inst-instalar">Añadir a la pantalla de inicio</button>';
+    document.getElementById("inst-instalar").addEventListener("click",function(){
+      var p=promptInstalacion; promptInstalacion=null;
+      cerrarAvisoInst();
+      p.prompt();
+      p.userChoice.then(function(r){
+        if(typeof gtag!=="undefined"){ gtag("event","instalar_app",{resultado:r.outcome}); }
+      });
+    });
+  } else if(esIOS()){
+    /* iPhone y iPad: Apple no permite instalar solo, se explican los pasos */
+    document.getElementById("inst-sub").textContent="Tenla como una app más, sin buscar el enlace cada vez.";
+    cont.innerHTML=
+      '<div class="inst-pasos">'+
+        '<div class="inst-paso"><span class="inst-num">1</span><span>Pulsa <span class="inst-ios-ico">&#8593;</span> Compartir, abajo en la barra de Safari</span></div>'+
+        '<div class="inst-paso"><span class="inst-num">2</span><span>Baja y elige <strong>Añadir a pantalla de inicio</strong></span></div>'+
+      '</div>'+
+      '<button type="button" class="inst-btn" id="inst-ok">Entendido</button>';
+    document.getElementById("inst-ok").addEventListener("click",cerrarAvisoInst);
+  } else {
+    /* Android sin prompt nativo: se explican los pasos del menú */
+    cont.innerHTML=
+      '<div class="inst-pasos">'+
+        '<div class="inst-paso"><span class="inst-num">1</span><span>Abre el menú <strong>⋮</strong> del navegador, arriba a la derecha</span></div>'+
+        '<div class="inst-paso"><span class="inst-num">2</span><span>Elige <strong>Añadir a pantalla de inicio</strong></span></div>'+
+      '</div>'+
+      '<button type="button" class="inst-btn" id="inst-ok">Entendido</button>';
+    document.getElementById("inst-ok").addEventListener("click",cerrarAvisoInst);
+  }
+
+  avisoInstMostrado=true;
+  document.getElementById("inst-banner").classList.add("visible");
+  if(typeof gtag!=="undefined"){ gtag("event","aviso_instalacion_visto"); }
+}
+
+function cerrarAvisoInst(){
+  try{ localStorage.setItem("inst_aviso","visto"); }catch(e){}
+  ocultarAvisoInst();
+}
+
+window.addEventListener("DOMContentLoaded",function(){
+  var x=document.getElementById("inst-cerrar");
+  if(x) x.addEventListener("click",cerrarAvisoInst);
+});
+
+/* ══════════════════════════════════════════════════════════
    CUADRANTE MENSUAL
    Calcula totales y los vuelca a los campos de horas.
    No toca el motor de nómina: solo lo alimenta.
@@ -1848,6 +1968,7 @@ function calcNomina(){
   document.getElementById("r-neto").textContent=fmt(neto);
   document.getElementById("resultado").style.display="block";
   cargarJsPDF(function(){});
+  setTimeout(mostrarAvisoInstalacion, 1200);
   ctxPDF.cuadrante = (MODO_HORAS==="cuadrante") ? {anio:calAnio, mes:calMes} : null;
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
@@ -2003,6 +2124,7 @@ function calcFiniquito(){
   document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
   document.getElementById("resultado-finiquito").style.display="block";
   cargarJsPDF(function(){});
+  setTimeout(mostrarAvisoInstalacion, 1200);
   ctxPDF.finiquito={
     "Categoría":nombreCat(fcatActual,document.getElementById("switchCondF").checked),
     "Tipo de jornada":(fjornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+fhp+" h/mes pactadas)"),
@@ -2112,6 +2234,7 @@ function calcBaja(){
   document.getElementById("br-neto").textContent=fmt(neto);
   document.getElementById("resultado-baja").style.display="block";
   cargarJsPDF(function(){});
+  setTimeout(mostrarAvisoInstalacion, 1200);
   ctxPDF.baja={
     "Categoría":nombreCat(bcatActual,document.getElementById("switchCondB").checked),
     "Tipo de baja":(tipo==="comun"?"Enfermedad común o accidente no laboral":(tipo==="laboral"?"Accidente laboral o enfermedad profesional":"Hospitalización")),
@@ -2160,6 +2283,19 @@ function calcBaja(){
       <button type="button" class="dlg-btn dlg-cancelar" id="dlg-cancelar">Cancelar</button>
       <button type="button" class="dlg-btn dlg-guardar" id="dlg-guardar">Guardar</button>
     </div>
+  </div>
+</div>
+<div id="inst-banner">
+  <div class="inst-wrap">
+    <button type="button" class="inst-x" id="inst-cerrar" aria-label="Cerrar">×</button>
+    <div class="inst-top">
+      <div class="inst-icono">🛡️</div>
+      <div>
+        <div class="inst-tit">Tenla siempre a mano</div>
+        <div class="inst-sub" id="inst-sub">Añádela a tu pantalla de inicio y ábrela de un toque, sin buscar el enlace.</div>
+      </div>
+    </div>
+    <div id="inst-contenido"></div>
   </div>
 </div>
 </body>
