@@ -115,7 +115,7 @@
 --blue:#2a5ea8;--bluebg:#eef4fc;
 }
 html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100%;}
-body{display:flex;flex-direction:column;align-items:center;padding:1.5rem 1rem 4rem;}
+body{display:flex;flex-direction:column;align-items:center;padding:0 1rem 4rem;}
 .wrap{width:100%;max-width:420px;}
 header{text-align:center;padding:1.1rem 0 1.1rem;}
 .header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.4rem;font-weight:600;}
@@ -215,19 +215,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 .guide-arrow{font-size:1.4rem;color:var(--gold2);font-weight:300;flex-shrink:0;}
 
 /* NUEVOS ESTILOS PARA LA SECCIÓN DE PREGUNTAS FRECUENTES */
-.faq-section {margin-top: 2.5rem; width: 100%;}
-.faq-card {background: var(--card); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.2rem; margin-bottom: 0.65rem; box-shadow: 0 1px 4px rgba(44,36,22,0.07);}
-.faq-question {font-size: 0.82rem; font-weight: 700; color: var(--text); margin-bottom: 0.45rem; line-height: 1.35; display: flex; align-items: flex-start; gap: 0.4rem;}
-.faq-answer {font-size: 0.72rem; color: var(--text2); line-height: 1.55; font-weight: 500;}
-.faq-answer strong {color: var(--gold); font-weight: 700;}
-.faq-answer ul {margin-top: 0.4rem; margin-left: 1.1rem; padding-left: 0;}
-.faq-answer li {margin-bottom: 0.3rem;}
 
 .disclaimer{font-size:0.62rem;font-weight:500;color:var(--subtle);text-align:center;margin-top:1.75rem;line-height:1.7;}
-.privacy-footer{margin-top:1.5rem;padding-top:1.2rem;border-top:1px dashed var(--border2);text-align:center;}
-.privacy-footer:first-of-type{margin-top:2.5rem;}
-.privacy-title{font-family:'DM Mono',monospace;font-size:0.68rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.5rem;font-weight:600;}
-.privacy-text{font-size:0.7rem;font-weight:500;color:var(--muted);line-height:1.6;padding:0 0.5rem;}
 .ads-placeholder{width:100%;margin:1rem 0;text-align:center;display:block;}
 
 
@@ -323,7 +312,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .inst-x{position:absolute;top:-0.35rem;right:-0.2rem;background:transparent;border:none;color:var(--subtle);font-size:1.3rem;line-height:1;cursor:pointer;padding:0.2rem 0.4rem;font-family:'DM Sans',sans-serif;}
 .inst-x:hover{color:var(--muted);}
 .inst-top{display:flex;align-items:center;gap:0.7rem;padding-right:1.6rem;}
-.inst-icono{width:2.6rem;height:2.6rem;border-radius:11px;background:linear-gradient(135deg,var(--gold2),var(--gold));display:flex;align-items:center;justify-content:center;font-size:1.35rem;flex-shrink:0;box-shadow:0 2px 7px rgba(180,120,10,0.3);}
+.inst-icono{width:2.6rem;height:2.6rem;border-radius:11px;flex-shrink:0;overflow:hidden;box-shadow:0 2px 7px rgba(180,120,10,0.3);}
 .inst-tit{font-size:0.85rem;font-weight:700;color:var(--text);line-height:1.25;}
 .inst-sub{font-size:0.7rem;color:var(--muted);font-weight:500;margin-top:0.12rem;line-height:1.4;}
 .inst-pasos{margin-top:0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.8rem;}
@@ -333,6 +322,34 @@ input:checked + .slider:before{transform:translateX(20px);}
 .inst-ios-ico{display:inline-block;border:1.5px solid var(--gold2);color:var(--gold2);border-radius:4px;padding:0 0.28rem;font-size:0.72rem;font-weight:700;line-height:1.25;}
 .inst-btn{width:100%;margin-top:0.8rem;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.72rem;cursor:pointer;box-shadow:0 2px 8px rgba(180,120,10,0.28);}
 .inst-btn:hover{background:var(--gold);}
+
+.topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);margin-bottom:0.4rem;}
+.topbar-inner{max-width:420px;margin:0 auto;display:flex;align-items:center;gap:0.5rem;padding:0.55rem 1rem;}
+.brand{display:flex;align-items:center;gap:0.4rem;text-decoration:none;}
+.brand-icon{width:1.4rem;height:1.4rem;border-radius:4px;display:block;flex-shrink:0;}
+.brand-name{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
+.brand-name em{color:var(--gold2);font-style:normal;}
+
+/* ═══ MENÚ LATERAL ═══ */
+.menu-btn{background:transparent;border:none;cursor:pointer;padding:0.35rem 0.5rem 0.35rem 0;display:flex;flex-direction:column;justify-content:center;gap:4px;width:2rem;flex-shrink:0;}
+.menu-btn span{display:block;height:2px;width:19px;background:var(--gold2);border-radius:2px;}
+.menu-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.45);z-index:10500;opacity:0;visibility:hidden;transition:opacity 0.22s;backdrop-filter:blur(2px);}
+.menu-overlay.abierto{opacity:1;visibility:visible;}
+.menu-panel{position:fixed;top:0;left:0;bottom:0;width:82%;max-width:300px;background:var(--card);z-index:10600;transform:translateX(-100%);transition:transform 0.26s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:4px 0 22px rgba(44,36,22,0.2);}
+.menu-panel.abierto{transform:translateX(0);}
+.menu-cab{background:linear-gradient(135deg,var(--gold2),var(--gold));padding:1.1rem 1.1rem 1rem;display:flex;align-items:center;justify-content:space-between;}
+.menu-marca{display:flex;align-items:center;gap:0.5rem;}
+.menu-marca-ico{width:2.1rem;height:2.1rem;border-radius:8px;display:block;flex-shrink:0;box-shadow:0 1px 5px rgba(44,36,22,0.22);}
+.menu-marca-txt{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.07em;color:#fff;line-height:1.1;}
+.menu-marca-sub{font-size:0.58rem;color:rgba(255,255,255,0.85);font-weight:500;margin-top:0.1rem;}
+.menu-x{background:transparent;border:none;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 0.2rem;font-family:'DM Sans',sans-serif;}
+.menu-lista{flex:1;overflow-y:auto;padding:0.6rem 0 1.2rem;}
+.menu-grupo{font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);font-weight:600;padding:0.9rem 1.1rem 0.4rem;}
+.menu-link{display:flex;align-items:center;gap:0.7rem;padding:0.72rem 1.1rem;text-decoration:none;color:var(--text2);font-size:0.82rem;font-weight:600;border-left:3px solid transparent;transition:background 0.15s;}
+.menu-link:hover{background:var(--surface);}
+.menu-link.activo{background:var(--goldbg);border-left-color:var(--gold2);color:var(--gold);}
+.menu-ico{font-size:1rem;width:1.3rem;text-align:center;flex-shrink:0;}
+.menu-pie{border-top:1px solid var(--border);padding:0.8rem 1.1rem;font-size:0.6rem;color:var(--subtle);line-height:1.5;}
 </style>
 <script type="application/ld+json">
 {
@@ -361,6 +378,37 @@ input:checked + .slider:before{transform:translateX(20px);}
 </script>
 </head>
 <body>
+<div class="menu-overlay" id="menu-overlay"></div>
+<nav class="menu-panel" id="menu-panel" aria-label="Menú principal">
+<div class="menu-cab">
+<div class="menu-marca"><img src="icon-192.png" alt="Nómina Vigilante" class="menu-marca-ico"><div>
+<div class="menu-marca-txt">NÓMINA VIGILANTE</div>
+<div class="menu-marca-sub">Convenio 2026–2030</div>
+</div></div>
+<button type="button" class="menu-x" id="menu-cerrar" aria-label="Cerrar menú">&times;</button>
+</div>
+<div class="menu-lista">
+<div class="menu-grupo">Calculadora</div>
+<a href="index.html" class="menu-link activo"><span class="menu-ico">🧮</span>Calcular mi nómina</a>
+<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico">🎓</span>Sindicatos y formación</a>
+<div class="menu-grupo">Guías del sector</div>
+<a href="convenio-2026.html" class="menu-link"><span class="menu-ico">📋</span>Convenio 2026–2030</a>
+<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico">⚖️</span>Mis derechos</a>
+<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico">🧾</span>Cómo leer tu nómina</a>
+<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico">❓</span>Preguntas frecuentes</a>
+<div class="menu-grupo">La web</div>
+<a href="contacto.html" class="menu-link"><span class="menu-ico">✉️</span>Contacto y quiénes somos</a>
+<a href="privacidad.html" class="menu-link"><span class="menu-ico">🔒</span>Política de privacidad</a>
+</div>
+<div class="menu-pie">Herramienta gratuita e independiente<br>calculadoravigilante.com</div>
+</nav>
+<div class="topbar">
+<div class="topbar-inner">
+<button type="button" class="menu-btn" id="menu-btn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+<a href="index.html" class="brand"><img src="icon-192.png" alt="" class="brand-icon"><span class="brand-name">NÓMINA <em>VIGILANTE</em></span></a>
+</div>
+</div>
+
 
 <div id="cookie-banner">
   <p>Esta calculadora orientativa utiliza cookies de terceros (Google Analytics y AdSense) para analizar el tráfico y mostrar publicidad. Ningún dato personal o salario se guarda en nuestros servidores (todo se calcula en tu dispositivo). ¿Aceptas el uso de estas cookies?</p>
@@ -783,99 +831,10 @@ input:checked + .slider:before{transform:translateX(20px);}
   </a>
 </section>
 
-<section class="seo-section" style="margin-top:1.6rem;">
-  <div class="seo-header">
-    <h2>Guías del Sector</h2>
-    <p>Documentación completa sobre el Convenio y tus derechos</p>
-  </div>
-  <a href="convenio-2026.html" class="guide-card">
-    <div class="guide-icon">📋</div>
-    <div class="guide-body">
-      <div class="guide-title">Convenio Colectivo 2026–2030</div>
-      <div class="guide-desc">Tablas salariales completas, jornada, pagas extras, vacaciones y todos los artículos clave del BOE 18/04/2026</div>
-    </div>
-    <div class="guide-arrow">›</div>
-  </a>
-  <a href="derechos-vigilante.html" class="guide-card">
-    <div class="guide-icon">⚖️</div>
-    <div class="guide-body">
-      <div class="guide-title">Derechos del Vigilante de Seguridad</div>
-      <div class="guide-desc">Horas extra, descansos, uniforme, arma, categorías profesionales y cómo reclamar si tu empresa incumple</div>
-    </div>
-    <div class="guide-arrow">›</div>
-  </a>
-  <a href="guia-nomina-vigilante.html" class="guide-card">
-    <div class="guide-icon">🧾</div>
-    <div class="guide-body">
-      <div class="guide-title">Cómo leer tu nómina paso a paso</div>
-      <div class="guide-desc">Qué conceptos deben aparecer, cómo detectar errores y qué hacer si te están pagando de menos</div>
-    </div>
-    <div class="guide-arrow">›</div>
-  </a>
-</section>
-
-<section class="faq-section">
-  <div class="seo-header">
-    <h2>Preguntas Frecuentes</h2>
-    <p>Resolvemos las dudas más comunes sobre el sueldo de seguridad privada</p>
-  </div>
-
-  <div class="faq-card">
-    <div class="faq-question">💶 ¿Cuánto cobra un vigilante de seguridad en 2026?</div>
-    <div class="faq-answer">
-      El salario base fijado por convenio para un Vigilante de Seguridad en 2026 es de <strong>1.161,28 € brutos al mes</strong> (en 15 pagas). Al sumarle los complementos salariales mínimos establecidos en convenio (Plus de Transporte: 137,81 €, Plus de Vestuario: 112,28 € y Plus de Peligrosidad para Vigilante sin arma: 24,08 €), el salario bruto mensual de referencia asciende aproximadamente a <strong>1.435,45 €</strong>. La cantidad final que percibe cada trabajador puede variar en función de la antigüedad, las horas extraordinarias, la nocturnidad, los festivos trabajados, los pluses de servicio y del sistema de cobro de las pagas extraordinarias (prorrateadas o no).
-    </div>
-  </div>
-
-  <div class="faq-card">
-    <div class="faq-question">⏰ ¿A cuánto se paga la hora extra, nocturna y festiva? ¿Se suman si coinciden?</div>
-    <div class="faq-answer">
-      Para un vigilante base (sin arma ni antigüedad) en 2026, los valores mínimos por hora son:
-      <ul>
-        <li><strong>Hora extraordinaria estándar:</strong> 9,98 € brutos.</li>
-        <li><strong>Plus de Nocturnidad (22h a 06h):</strong> +1,26 € brutos/hora.</li>
-        <li><strong>Plus de Fin de Semana y Festivos:</strong> +1,02 € brutos/hora (art. 43.h del convenio). Se abona por <strong>todas</strong> las horas trabajadas entre las 00:00 del sábado y las 24:00 del domingo, además de los días festivos oficiales (nacionales, autonómicos o locales). No hace falta que sea festivo: trabajar un sábado o domingo corriente ya genera este plus.</li>
-      </ul>
-      <strong>Sí, son totalmente acumulables.</strong> Si realizas una hora extraordinaria que coincide dentro del horario nocturno y además cae en día festivo, los tres conceptos se suman obligatoriamente para esa hora específica: 9,98 € + 1,26 € + 1,02 € = <strong>12,26 € brutos por esa hora</strong> trabajada.
-    </div>
-  </div>
-
-  <div class="faq-card">
-    <div class="faq-question">📃 ¿Cómo puedo saber si mi nómina está mal calculada?</div>
-    <div class="faq-answer">
-      Para reclamar errores de la empresa en tu nómina, primero debes comprobar estos cuatro puntos:
-      <ul>
-        <li><strong>El cómputo de jornada:</strong> la jornada del convenio es de 1.782 horas anuales, con un promedio de 162 horas al mes. Ojo: en cuadrante anual cada mes puede oscilar entre 144 y 176 horas sin que varíe tu salario, así que un mes de 170 horas no significa automáticamente que tengas horas extra. Lo que hay que vigilar es el cómputo anual: lleva tu propio registro mensual y comprueba al cierre del año que no has superado las 1.782 horas.</li>
-        <li><strong>Los pluses variables:</strong> cuenta las noches y los festivos reales de tu cuadrante mensual y revisa que la nómina abone exactamente esa cantidad de horas.</li>
-        <li><strong>La antigüedad:</strong> comprueba que tengan actualizado tu contador de quinquenios. Cada quinquenio suma 45,86 € al mes (50,23 € en las categorías de transporte de fondos y explosivos), y muchas empresas no lo actualizan solas al cumplirse los 5, 10 o 15 años.</li>
-        <li><strong>Las retenciones:</strong> revisa que el porcentaje de IRPF se corresponde con tu situación personal y familiar, comunicada a la empresa mediante el modelo 145.</li>
-      </ul>
-      Si tienes dudas, introduce los datos de tu cuadrante real en la <strong>calculadora de nómina mensual</strong> de arriba para validar lo que te corresponde cobrar.
-    </div>
-  </div>
-</section>
-
 <div class="disclaimer">
 Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026)<br>
 Art. 51 IT · Art. 45 Pagas extras · Art. 57 Vacaciones · Art. 42 Antigüedad<br>
 Herramienta orientativa — compara siempre con tu nómina real
-</div>
-
-<div class="privacy-footer">
-  <div class="privacy-title">Política de Privacidad y Confidencialidad</div>
-  <p class="privacy-text">Esta calculadora es una herramienta 100% privada. Los cálculos se realizan de forma local e interna dentro de tu propio navegador móvil o dispositivo. Ningún dato personal, salario, fecha o porcentaje introducido es almacenado, guardado ni enviado a ningún servidor externo. Cumplimos estrictamente con las normativas europeas de protección de datos (RGPD) garantizando el anonimato absoluto de todos los vigilantes. Puedes consultar el documento extendido de nuestra <a href="privacidad.html" style="color:var(--gold2);font-weight:600;text-decoration:underline;">Política de Privacidad y Cookies</a>.</p>
-</div>
-
-<div class="privacy-footer">
-  <div class="privacy-title">Quiénes somos</div>
-  <p class="privacy-text">Soy un vigilante de seguridad privada que, cansado de la falta de transparencia, decidí crear esta herramienta de forma completamente gratuita para ayudar al colectivo. Nómina Vigilante nació para revisar las nóminas mensuales, pero ha crecido con un único objetivo: acompañar al vigilante en toda su vida laboral para saber con claridad y precisión lo que te corresponde ganar. Aplico el Convenio Colectivo Estatal de forma rigurosa para que cualquier compañero pueda calcular en segundos una estimación muy aproximada de su salario mensual, su liquidación y finiquito en caso de despido, o la prestación que le corresponde estando de baja por incapacidad (IT). La web se financia exclusivamente mediante anuncios para poder cubrir los costes de mantenimiento y seguir ofreciendo el servicio gratis a todos. Esta calculadora es una guía de orientación que no sustituye el asesoramiento laboral profesional, pero sí te da el conocimiento para defender tus derechos.</p>
-</div>
-
-<div class="privacy-footer">
-  <div class="privacy-title">Contacto</div>
-  <p class="privacy-text">¿Tienes alguna duda, has detectado un error o quieres sugerirnos una mejora? Escríbenos, leemos todos los mensajes.<br><br>
-  <strong>Correo electrónico:</strong><br>
-  <a href="mailto:BadAWolfprivado@gmail.com" style="color:var(--gold2);font-weight:600;">BadAWolfprivado@gmail.com</a></p>
 </div>
 
 </div>
@@ -2250,7 +2209,7 @@ function calcBaja(){
   <div class="inst-wrap">
     <button type="button" class="inst-x" id="inst-cerrar" aria-label="Cerrar">×</button>
     <div class="inst-top">
-      <div class="inst-icono">🛡️</div>
+      <div class="inst-icono"><img src="icon-192.png" alt="" style="width:100%;height:100%;border-radius:11px;display:block;"></div>
       <div>
         <div class="inst-tit">Tenla siempre a mano</div>
         <div class="inst-sub" id="inst-sub">Añádela a tu pantalla de inicio y ábrela de un toque, sin buscar el enlace.</div>
@@ -2259,5 +2218,21 @@ function calcBaja(){
     <div id="inst-contenido"></div>
   </div>
 </div>
+<script>
+(function(){
+  function listo(){
+    var b=document.getElementById("menu-btn"), p=document.getElementById("menu-panel"),
+        o=document.getElementById("menu-overlay"), x=document.getElementById("menu-cerrar");
+    if(!b||!p||!o) return;
+    function abrir(){ p.classList.add("abierto"); o.classList.add("abierto"); document.body.style.overflow="hidden"; }
+    function cerrar(){ p.classList.remove("abierto"); o.classList.remove("abierto"); document.body.style.overflow=""; }
+    b.addEventListener("click",abrir);
+    o.addEventListener("click",cerrar);
+    if(x) x.addEventListener("click",cerrar);
+    document.addEventListener("keydown",function(e){ if(e.key==="Escape") cerrar(); });
+  }
+  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",listo); else listo();
+})();
+</script>
 </body>
 </html>
