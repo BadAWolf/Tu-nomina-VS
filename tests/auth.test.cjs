@@ -7,7 +7,7 @@ async function setup(state={}){
   const dom=new JSDOM(read('index.html'),{url:state.url||'http://localhost:4173/',runScripts:'outside-only'});
   const w=dom.window,d=w.document;w.alert=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.matchMedia=()=>({matches:false,addListener(){},addEventListener(){}});
-  const dialog=d.getElementById('auth-dialog');dialog.showModal=function(){this.open=true;};dialog.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};
+  for (const dialog of d.querySelectorAll('dialog')) {dialog.showModal=function(){this.open=true;};dialog.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};}
   const calls=[];let callback;
   const auth={
     getUser:async()=>{state.verifications=(state.verifications||0)+1;return state.networkError?Promise.reject(new Error('offline')):{data:{user:state.user||null},error:null};},
@@ -21,8 +21,13 @@ async function setup(state={}){
     signOut:async()=>{state.user=null;callback('SIGNED_OUT',null);return {error:null};}
   };
   w.__sdk={createClient:(_url,_key,options)=>{state.clientOptions=options;return {auth,from:table=>{
-    const query={select:()=>query,eq:()=>query,limit:async()=>({data:(state.accepted||state.historicalAcceptance)?[{version:'previous'}]:[],error:null}),maybeSingle:async()=>({data:table==='marketing_preferences'?(state.preferences||null):state.accepted?{version:'2026-09-15'}:null,error:null}),insert:async data=>{
-      if(table==='marketing_consent_events') {calls.push(['marketing',data]);if(state.marketingError)return {error:{code:'offline'}};state.preferences={...data,email_at_consent:member.email};return {error:null};}
+    const query={select:()=>query,eq:()=>query,limit:async()=>({data:(state.accepted||state.historicalAcceptance)?[{version:'previous'}]:[],error:null}),maybeSingle:async()=>{
+      if(table==='marketing_preferences' && state.preferencesReadGate)await state.preferencesReadGate;
+      return {data:table==='marketing_preferences'?(state.preferences||null):state.accepted?{version:'2026-09-15'}:null,error:table==='marketing_preferences'&&state.marketingReadError?{code:'offline'}:null};
+    },insert:data=>{
+      if(table==='marketing_consent_events') return {select:async()=>{calls.push(['marketing',data]);if(state.marketingError)return {error:{code:'offline'}};
+        const same=state.preferences?.email_at_consent===state.user.email && state.preferences?.own_news===data.own_news && state.preferences?.partner_offers===data.partner_offers;
+        state.preferences={...data,email_at_consent:state.user.email};return {error:null,data:same?[]:[data]};}};
       calls.push(['accept',data]);if(state.accepted)return {error:{code:'23505'}};state.accepted=true;return {error:null};}};return query;
   }};}};
   require('./load-calculator.cjs')(w);
@@ -227,16 +232,21 @@ test('Marketing permissions start empty, are independent and never gate account 
  for(const [own,partners] of [[false,false],[true,false],[false,true],[true,true]]){
   const x=await setup({user:member});try{
    x.click('tab-baja');await tick();
-   assert.equal(x.d.getElementById('auth-marketing-fields').hidden,false);
+   assert.equal(x.d.getElementById('marketing-dialog').open,false);
+   x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();
+   assert.equal(x.d.getElementById('marketing-dialog').open,true);
+   assert.equal(x.d.getElementById('view-baja').style.display,'block');
    for(const id of ['auth-marketing-own','auth-marketing-partners']){
     assert.equal(x.d.getElementById(id).checked,false);assert.equal(x.d.getElementById(id).required,false);
    }
-   x.d.getElementById('auth-terms').checked=true;
    x.d.getElementById('auth-marketing-own').checked=own;x.d.getElementById('auth-marketing-partners').checked=partners;
-   x.submit();await tick();await tick();
+   x.click('marketing-welcome-save');await tick();await tick();
    const saved=x.calls.find(c=>c[0]==='marketing')[1];
    assert.equal(saved.own_news,own);assert.equal(saved.partner_offers,partners);
    assert.equal(saved.email_at_consent,undefined);assert.equal(saved.recorded_at,undefined);
+   assert.equal(x.d.getElementById('marketing-dialog').open,false);
+   assert.equal(x.state.analytics.filter(c=>c[0]==='marketing_own_opt_in').length,Number(own));
+   assert.equal(x.state.analytics.filter(c=>c[0]==='marketing_partner_opt_in').length,Number(partners));
    assert.equal(x.d.getElementById('view-baja').style.display,'block');
    assert.equal(x.state.analytics.filter(c=>c[0]==='sign_up').length,1);
    await x.w.VigilanteAuth.require(()=>{});assert.equal(x.state.analytics.filter(c=>c[0]==='sign_up').length,1);
@@ -245,10 +255,14 @@ test('Marketing permissions start empty, are independent and never gate account 
 });
 test('Marketing outage does not take away an activated account or report a successful subscription',async()=>{
  const x=await setup({user:member,marketingError:true});try{
-  x.click('tab-baja');await tick();x.d.getElementById('auth-terms').checked=true;x.d.getElementById('auth-marketing-own').checked=true;
+  x.click('tab-baja');await tick();x.d.getElementById('auth-terms').checked=true;
   x.submit();await tick();await tick();
+  x.d.getElementById('auth-marketing-own').checked=true;x.click('marketing-welcome-save');await tick();await tick();
   assert.equal(x.d.getElementById('account-title').textContent,'Tu cuenta está activa');
-  assert.match(x.d.getElementById('account-notice').textContent,/No pudimos guardar/);
+  assert.match(x.d.getElementById('marketing-welcome-status').textContent,/No se pudo guardar/);
+  assert.equal(x.d.getElementById('marketing-dialog').open,true);
+  assert.equal(x.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
+  x.click('marketing-close');let used=false;await x.w.VigilanteAuth.require(()=>used=true);assert.equal(used,true);
  }finally{x.close();}
 });
 test('Existing members are not subscribed retroactively and can withdraw both categories without losing tools',async()=>{
@@ -258,7 +272,9 @@ test('Existing members are not subscribed retroactively and can withdraw both ca
   assert.equal(x.d.getElementById('marketing-own').checked,true);assert.equal(x.d.getElementById('marketing-partners').checked,true);
   x.click('marketing-withdraw');await tick();await tick();
   const saved=x.calls.find(c=>c[0]==='marketing')[1];assert.equal(saved.own_news,false);assert.equal(saved.partner_offers,false);
-  assert.match(x.d.getElementById('marketing-status').textContent,/Baja guardada/);
+  assert.match(x.d.getElementById('marketing-status').textContent,/sin publicidad/);
+  assert.equal(x.state.analytics.filter(c=>c[0]==='marketing_own_opt_out').length,1);
+  assert.equal(x.state.analytics.filter(c=>c[0]==='marketing_partner_opt_out').length,1);
   let allowed=false;await x.w.VigilanteAuth.require(()=>{allowed=true;});assert.equal(allowed,true);
  }finally{x.close();}
 });
@@ -276,4 +292,74 @@ test('Accepting updated terms does not count an existing account as a new regist
   assert.equal(x.state.analytics.filter(c=>c[0]==='sign_up').length,0);
   assert.equal(x.state.clientOptions.auth.persistSession,true);assert.equal(x.state.clientOptions.auth.autoRefreshToken,true);
  }finally{x.close();}
+});
+
+test('First entry asks verified members with no choice, including Google; guests and unverified users are never asked',async()=>{
+ for(const user of [null,{...member,email_confirmed_at:null},{...member,is_anonymous:true},member,{...member,app_metadata:{provider:'google'}}]){
+  const x=await setup({user,accepted:true});try{
+   assert.equal(x.d.getElementById('marketing-dialog').open,Boolean(user?.email_confirmed_at&&!user.is_anonymous));
+   assert.equal(x.calls.filter(c=>c[0]==='marketing').length,0);
+  }finally{x.close();}
+ }
+});
+
+test('Continue without advertising clears either selection and the stored refusal survives a fresh visit',async()=>{
+ const x=await setup({user:member,accepted:true});let preferences;try{
+  x.d.getElementById('auth-marketing-own').checked=true;x.d.getElementById('auth-marketing-partners').checked=true;
+  x.click('marketing-skip');await tick();await tick();
+  preferences=x.state.preferences;
+  assert.equal(preferences.own_news,false);assert.equal(preferences.partner_offers,false);
+  assert.equal(x.d.getElementById('marketing-dialog').open,false);
+  assert.equal(x.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
+ }finally{x.close();}
+ const fresh=await setup({user:member,accepted:true,preferences});try{
+  assert.equal(fresh.d.getElementById('marketing-dialog').open,false);
+  await fresh.w.VigilanteAuth.require(()=>{});assert.equal(fresh.calls.length,0);
+ }finally{fresh.close();}
+});
+
+test('Dismissing the offer records no choice and does not reopen it during the visit',async()=>{
+ const x=await setup({user:member,accepted:true});try{
+  x.click('marketing-close');await tick();await x.w.VigilanteAuth.require(()=>{});
+  assert.equal(x.d.getElementById('marketing-dialog').open,false);
+  assert.equal(x.calls.filter(c=>c[0]==='marketing').length,0);
+  assert.equal(x.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
+ }finally{x.close();}
+});
+
+test('Stored consent is not reset on new legal acceptance, nor counted again on reading or saving the same preferences',async()=>{
+ const x=await setup({user:member,historicalAcceptance:true,preferences:{email_at_consent:member.email,own_news:true,partner_offers:false}});try{
+  x.click('tab-baja');await tick();x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();
+  assert.equal(x.d.getElementById('marketing-dialog').open,false);
+  assert.equal(x.calls.filter(c=>c[0]==='marketing').length,0);
+  x.d.getElementById('marketing-preferences').open=true;await tick();await tick();
+  x.click('marketing-save');await tick();await tick();
+  assert.equal(x.state.preferences.own_news,true);
+  assert.equal(x.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
+ }finally{x.close();}
+});
+
+test('Unreadable preferences are not treated as a new account or written automatically',async()=>{
+ const x=await setup({user:member,accepted:true,marketingReadError:true});try{
+  assert.equal(x.d.getElementById('marketing-dialog').open,false);
+  assert.equal(x.calls.length,0);
+  x.d.getElementById('marketing-preferences').open=true;await tick();await tick();
+  assert.equal(x.d.getElementById('marketing-save').disabled,true);
+  assert.match(x.d.getElementById('marketing-status').textContent,/No se pudieron cargar/);
+ }finally{x.close();}
+});
+
+test('Logout during a pending preference read prevents both the offer and a stale write',async()=>{
+ let resolve;const gate=new Promise(done=>resolve=done);
+ const x=await setup({user:member,accepted:true,preferencesReadGate:gate});try{
+  x.click('account-signout');await tick();resolve();await tick();
+  assert.equal(x.d.getElementById('marketing-dialog').open,false);assert.equal(x.calls.length,0);
+ }finally{x.close();}
+ const y=await setup({user:member,accepted:true});try{
+  y.state.preferencesReadGate=new Promise(done=>resolve=done);
+  y.d.getElementById('auth-marketing-own').checked=true;y.click('marketing-welcome-save');await tick();
+  y.click('account-signout');await tick();resolve();await tick();await tick();
+  assert.equal(y.calls.filter(c=>c[0]==='marketing').length,0);
+  assert.equal(y.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
+ }finally{y.close();}
 });

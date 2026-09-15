@@ -37,7 +37,7 @@
     $('account-benefits').textContent = member ? 'Ya puedes añadir vacaciones, descargar tus PDF y calcular la baja y el finiquito.'
       : recovery ? 'Completa el cambio de contraseña para continuar.' : 'Revisa y acepta las condiciones para activar las herramientas. También puedes cerrar la sesión.';
     $('account-email').textContent = user ? user.email : '';
-    window.VigilanteMarketing?.setUser(recovery ? null : user);
+    window.VigilanteMarketing?.setUser(recovery ? null : user, member);
     window.actualizarAccesoVacaciones?.(member);
     ['Nomina','Finiquito','Baja'].forEach(kind => {
       $('btnPdf'+kind).textContent = member ? 'Compartir / Descargar PDF' : 'Regístrate para descargar el PDF';
@@ -63,10 +63,6 @@
     $('auth-confirm-field').hidden = !showConfirm; confirm.disabled = !showConfirm;
     $('auth-terms-field').hidden = !['signup','consent'].includes(mode);
     terms.disabled = !['signup','consent'].includes(mode); terms.checked = false;
-    // The optional choice is made after email verification, for Google and email alike.
-    $('auth-marketing-fields').hidden = mode !== 'consent';
-    $('auth-marketing-fields').disabled = mode !== 'consent';
-    window.VigilanteMarketing?.resetActivation();
     if(mode === 'signup') window.VigilanteAnalytics?.track('sign_up_start');
     $('auth-provider-options').hidden = !['signup','signin'].includes(mode);
     $('auth-switches').hidden = !['signup','signin','reset'].includes(mode);
@@ -143,10 +139,7 @@
       const verification=['signup','signin','reset'].includes(currentMode)?captchaToken():undefined;
       if(currentMode==='consent'){
         await recordAcceptance();
-        let preferenceError = false;
-        try { await window.VigilanteMarketing?.activate(); } catch (_) { preferenceError = true; }
         finish();
-        if(preferenceError) accountNotice('Tu cuenta está activa. No pudimos guardar las preferencias de correo; puedes revisarlas en «Mis preferencias de correo».');
         return;
       }
       if(currentMode==='reset'){

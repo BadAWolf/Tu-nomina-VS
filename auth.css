@@ -33,4 +33,10 @@
 .marketing-preferences .auth-check{display:flex;align-items:flex-start;gap:.7rem;font-size:.85rem;line-height:1.6;margin:.8rem 0;}
 .marketing-preferences input[type=checkbox]{width:18px;height:18px;flex-shrink:0;margin-top:.25rem;accent-color:var(--gold);}
 .marketing-preferences a{color:var(--gold);}
+.marketing-welcome{width:min(520px,calc(100% - 2rem));}
+.marketing-welcome .marketing-kicker{margin-top:.8rem;color:var(--gold);font-weight:700;font-size:.8rem;}
+.marketing-welcome .auth-check strong{display:block;margin-bottom:.2rem;font-size:.95rem;}
+.marketing-welcome-actions{display:flex;flex-wrap:wrap;gap:.65rem;}
+.marketing-welcome-actions button{flex:1 1 200px;}
+.marketing-welcome .marketing-options{padding:.7rem 1rem;}
 .account-primary:focus-visible,.account-secondary:focus-visible,.auth-close:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}

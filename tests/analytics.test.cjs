@@ -96,3 +96,21 @@ test('Preview and auth callback pages never send analytics; cleaned callback can
     assert.equal(JSON.stringify(w.dataLayer).includes('secret'),false);
   }finally{w.close();}
 });
+
+test('Marketing events need independent analytics consent and contain no contact data or account state',()=>{
+ const events=['marketing_own_opt_in','marketing_partner_opt_in','marketing_own_opt_out','marketing_partner_opt_out'];
+ for(const consent of [undefined,false,true]){
+  const w=setup(undefined,consent);try{
+   for(const name of events)assert.equal(w.VigilanteAnalytics.track(name,{email:'secret@example.test',user_id:'private-id',own_news:true}),consent===true);
+   if(consent!==true){w.acceptCookies();assert.equal(w.dataLayer.filter(e=>events.includes(e[1])).length,0);}
+   else {
+    assert.equal(w.dataLayer.filter(e=>events.includes(e[1])).length,4);
+    for(const e of w.dataLayer.filter(e=>events.includes(e[1])))assert.deepEqual(Object.keys(e[2]).sort(),['page_location','page_referrer','page_title']);
+    w.rejectCookies();for(const name of events)assert.equal(w.VigilanteAnalytics.track(name),false);
+   }
+  }finally{w.close();}
+ }
+ for(const url of ['http://localhost:4173/','https://calculadoravigilante.com/?code=private']){
+  const w=setup(url,true);try{for(const name of events)assert.equal(w.VigilanteAnalytics.track(name),false);}finally{w.close();}
+ }
+});
