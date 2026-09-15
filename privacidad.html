@@ -1,94 +1,10 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Política de privacidad y cookies de Nómina Vigilante. Los cálculos se realizan en tu propio dispositivo: no almacenamos ningún dato personal.">
-<meta name="robots" content="noindex, follow">
-<title>Política de Privacidad y Cookies | Nómina Vigilante</title>
-<link rel="canonical" href="https://calculadoravigilante.com/privacidad.html">
-<link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#d4860f">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="apple-mobile-web-app-title" content="Nómina VS">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-:root{
---bg:#f5f3ef;--surface:#faf8f5;--card:#ffffff;
---border:#e8e3da;--border2:#d6cfc4;
---gold:#b8720a;--gold2:#d4860f;--goldbg:#fdf2e0;--goldline:#e8c87a;
---text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;--subtle:#b5a898;
---green:#2d7a3a;--greenbg:#edf7ef;
-}
-html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
-body{display:flex;flex-direction:column;align-items:center;padding:0 0 4rem;}
-.topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
-.topbar-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;}
-.brand{display:flex;align-items:center;gap:0.4rem;text-decoration:none;}
-.brand-icon{width:1.4rem;height:1.4rem;border-radius:4px;display:block;flex-shrink:0;}
-.brand-name{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
-.brand-name em{color:var(--gold2);font-style:normal;}
-.topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(180,120,10,0.25);}
-.topbar-cta:hover{background:var(--gold);}
-.wrap{width:100%;max-width:680px;padding:1.5rem 1rem 0;}
-.crumbs{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;color:var(--subtle);margin-bottom:1.2rem;}
-.crumbs a{color:var(--gold2);text-decoration:none;}
-.crumbs a:hover{text-decoration:underline;}
-header.page{text-align:center;padding:0.5rem 0 1.5rem;}
-.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.45rem;font-weight:600;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:2rem;letter-spacing:0.04em;line-height:1.1;color:var(--text);margin-bottom:0.5rem;}
-h1 em{color:var(--gold2);font-style:normal;}
-.header-sub{font-size:0.75rem;color:var(--muted);font-weight:500;}
-h2{font-family:'Bebas Neue',sans-serif;font-size:1.25rem;letter-spacing:0.04em;color:var(--text);margin:1.8rem 0 0.7rem;display:flex;align-items:center;gap:0.5rem;}
-h2 span{font-size:1rem;}
-p{font-size:0.79rem;color:var(--text2);line-height:1.7;margin-bottom:0.8rem;}
-p:last-child{margin-bottom:0;}
-ul{margin-left:1.2rem;margin-bottom:0.8rem;}
-ul li{font-size:0.79rem;color:var(--text2);line-height:1.65;margin-bottom:0.5rem;}
-ul li strong{color:var(--text);font-weight:700;}
-ul li::marker{color:var(--gold2);}
-a{color:var(--gold2);font-weight:600;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.25rem;margin-bottom:0.9rem;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
-.highlight{background:var(--greenbg);border-left:3px solid var(--green);padding:0.75rem 0.95rem;border-radius:0 8px 8px 0;margin-bottom:0.9rem;font-size:0.77rem;color:#2d5a35;line-height:1.6;}
-.highlight strong{color:#2d7a3a;font-weight:700;}
-.disclaimer{font-size:0.62rem;color:var(--subtle);text-align:center;margin-top:2.2rem;line-height:1.7;}
-
-#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:1rem;text-align:center;border-top:1px solid var(--border);box-shadow:0 -2px 10px rgba(0,0,0,0.05);z-index:9999;font-size:0.75rem;color:var(--text2);display:none;}
-#cookie-banner p{font-size:0.75rem;margin:0;line-height:1.55;}
-.cookie-buttons{margin-top:0.8rem;display:flex;justify-content:center;gap:10px;}
-.btn-cookie{border:none;border-radius:5px;padding:0.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;}
-.btn-accept{background:var(--gold2);color:#fff;}
-.btn-reject{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
-
-/* ═══ MENÚ LATERAL ═══ */
-.menu-btn{background:transparent;border:none;cursor:pointer;padding:0.35rem 0.5rem 0.35rem 0;display:flex;flex-direction:column;justify-content:center;gap:4px;width:2rem;flex-shrink:0;}
-.menu-btn span{display:block;height:2px;width:19px;background:var(--gold2);border-radius:2px;}
-.menu-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.45);z-index:10500;opacity:0;visibility:hidden;transition:opacity 0.22s;backdrop-filter:blur(2px);}
-.menu-overlay.abierto{opacity:1;visibility:visible;}
-.menu-panel{position:fixed;top:0;left:0;bottom:0;width:82%;max-width:300px;background:var(--card);z-index:10600;transform:translateX(-100%);transition:transform 0.26s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:4px 0 22px rgba(44,36,22,0.2);}
-.menu-panel.abierto{transform:translateX(0);}
-.menu-cab{background:linear-gradient(135deg,var(--gold2),var(--gold));padding:1.1rem 1.1rem 1rem;display:flex;align-items:center;justify-content:space-between;}
-.menu-marca{display:flex;align-items:center;gap:0.5rem;}
-.menu-marca-ico{width:2.1rem;height:2.1rem;border-radius:8px;display:block;flex-shrink:0;box-shadow:0 1px 5px rgba(44,36,22,0.22);}
-.menu-marca-txt{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.07em;color:#fff;line-height:1.1;}
-.menu-marca-sub{font-size:0.58rem;color:rgba(255,255,255,0.85);font-weight:500;margin-top:0.1rem;}
-.menu-x{background:transparent;border:none;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 0.2rem;font-family:'DM Sans',sans-serif;}
-.menu-lista{flex:1;overflow-y:auto;padding:0.6rem 0 1.2rem;}
-.menu-grupo{font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);font-weight:600;padding:0.9rem 1.1rem 0.4rem;}
-.menu-link{display:flex;align-items:center;gap:0.7rem;padding:0.72rem 1.1rem;text-decoration:none;color:var(--text2);font-size:0.82rem;font-weight:600;border-left:3px solid transparent;transition:background 0.15s;}
-.menu-link:hover{background:var(--surface);}
-.menu-link.activo{background:var(--goldbg);border-left-color:var(--gold2);color:var(--gold);}
-.menu-ico{font-size:1rem;width:1.3rem;text-align:center;flex-shrink:0;}
-.menu-pie{border-top:1px solid var(--border);padding:0.8rem 1.1rem;font-size:0.6rem;color:var(--subtle);line-height:1.5;}
-</style>
-</head>
-<body>
-<div class="menu-overlay" id="menu-overlay"></div>
-<nav class="menu-panel" id="menu-panel" aria-label="Menú principal">
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://qhqbrtxzbfokqdlhstuo.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-src https://challenges.cloudflare.com">
+<meta name="referrer" content="no-referrer"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex"><title>Privacidad y cookies · Nómina Vigilante</title><link rel="stylesheet" href="legal.css?v=20260915"><link rel="manifest" href="manifest.json"><meta name="theme-color" content="#21634f"><link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20260914"><meta name="apple-mobile-web-app-title" content="Nómina VS"><link rel="icon" type="image/svg+xml" href="brand.svg"><link rel="stylesheet" href="legal-navigation.css?v=20260915"><link rel="stylesheet" href="brand.css?v=20260915"><script src="frame-protection.js?v=20260915"></script>
+<meta name="application-version" content="2026-09-15">
+</head><body class="legal-page">
+<div class="menu-overlay" id="menu-overlay" aria-hidden="true"></div>
+<nav class="menu-panel" id="menu-panel" aria-label="Menú principal" aria-hidden="true" inert>
 <div class="menu-cab">
 <div class="menu-marca"><img src="icon-192.png" alt="Nómina Vigilante" class="menu-marca-ico"><div>
 <div class="menu-marca-txt">NÓMINA VIGILANTE</div>
@@ -98,149 +14,72 @@ a{color:var(--gold2);font-weight:600;}
 </div>
 <div class="menu-lista">
 <div class="menu-grupo">Calculadora</div>
-<a href="index.html" class="menu-link"><span class="menu-ico">🧮</span>Calcular mi nómina</a>
-<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico">🎓</span>Sindicatos y formación</a>
+<a href="index.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 7h8M8 11h1m6 0h1M8 15h1m6 0h1M8 18h1m6 0h1"/></svg></span>Calcular mi nómina</a>
+<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg></span>Sindicatos y formación</a>
 <div class="menu-grupo">Guías del sector</div>
-<a href="convenio-2026.html" class="menu-link"><span class="menu-ico">📋</span>Convenio 2026–2030</a>
-<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico">⚖️</span>Mis derechos</a>
-<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico">🧾</span>Cómo leer tu nómina</a>
-<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico">❓</span>Preguntas frecuentes</a>
+<a href="convenio-2026.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="5" width="14" height="16" rx="3"/><rect x="9" y="3" width="6" height="4" rx="1.5"/><path d="M9 12h6m-6 4h6"/></svg></span>Convenio 2026–2030</a>
+<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg></span>Mis derechos</a>
+<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6m-6 4h3"/></svg></span>Cómo leer tu nómina</a>
+<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20 11a8 8 0 0 1-8 8H8l-5 2 1.5-5A8 8 0 1 1 20 11Z"/><path d="M10 8a2 2 0 1 1 3 1.7c-1 .6-1 1.1-1 2.3m0 3h.01"/></svg></span>Preguntas frecuentes</a>
 <div class="menu-grupo">La web</div>
-<a href="contacto.html" class="menu-link"><span class="menu-ico">✉️</span>Contacto y quiénes somos</a>
-<a href="privacidad.html" class="menu-link activo"><span class="menu-ico">🔒</span>Política de privacidad</a>
+<a href="contacto.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span>Contacto y quiénes somos</a>
+<a href="privacidad.html" class="menu-link activo" aria-current="page"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg></span>Política de privacidad</a>
+<a href="condiciones.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9l-6-6Zm0 0v6h6M8 13h8m-8 4h6"/></svg></span>Condiciones y aviso legal</a>
 </div>
 <div class="menu-pie">Herramienta gratuita e independiente<br>calculadoravigilante.com</div>
 </nav>
-<div id="cookie-banner">
-  <p>Esta web utiliza cookies de terceros (Google Analytics y AdSense) para analizar el tráfico y mostrar publicidad. Ningún dato personal se guarda en nuestros servidores. <a href="privacidad.html" style="color:var(--gold2);font-weight:600;">Más información</a></p>
-  <div class="cookie-buttons">
-    <button class="btn-cookie btn-reject" onclick="rejectCookies()">Rechazar</button>
-    <button class="btn-cookie btn-accept" onclick="acceptCookies()">Aceptar</button>
-  </div>
-</div>
-
 <div class="topbar">
 <div class="topbar-inner">
-<div style="display:flex;align-items:center;gap:0.5rem;">
-<button type="button" class="menu-btn" id="menu-btn" aria-label="Abrir menú"><span></span><span></span><span></span></button>
+<div class="topbar-brand">
+<button type="button" class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-controls="menu-panel" aria-expanded="false"><span></span><span></span><span></span></button>
 <a href="index.html" class="brand"><img src="icon-192.png" alt="" class="brand-icon"><span class="brand-name">NÓMINA <em>VIGILANTE</em></span></a>
 </div>
-<a href="index.html" class="topbar-cta">IR A LA CALCULADORA</a>
+<a href="index.html" class="topbar-cta" aria-label="Volver a la calculadora">Calculadora</a>
 </div>
 </div>
+<main class="legal-content"><h1>Privacidad y cookies</h1><p>Versión vigente: 15 de septiembre de 2026.</p>
 
-<div class="wrap">
-<div class="crumbs"><a href="index.html">Inicio</a> › Política de Privacidad</div>
-
-<header class="page">
-<div class="header-label">Última actualización: septiembre de 2026</div>
-<h1>POLÍTICA DE<br><em>PRIVACIDAD Y COOKIES</em></h1>
-<p class="header-sub">Información sobre el tratamiento de datos conforme al Reglamento (UE) 2016/679 (RGPD) y a la LOPDGDD</p>
-</header>
-
-<div class="highlight">
-<strong>En una línea:</strong> los cálculos se hacen dentro de tu propio dispositivo. Ni tu salario, ni tus horas, ni tu IRPF salen de tu móvil ni llegan a ningún servidor.
-</div>
-
-<h2><span>👤</span>1. Quién es el responsable</h2>
-<p>Esta web es un proyecto <strong>personal e independiente</strong>, sin ánimo de lucro y sin vinculación con ninguna empresa de seguridad, sindicato ni organismo público. No presta servicios de asesoría laboral.</p>
-<p>Para cualquier cuestión relacionada con esta política o con tus datos, puedes escribir a <a href="mailto:BadAWolfprivado@gmail.com">BadAWolfprivado@gmail.com</a>.</p>
-
-<h2><span>🔒</span>2. Qué datos se tratan</h2>
-<p>La calculadora funciona <strong>íntegramente en tu navegador</strong>. Los salarios, horas, fechas, antigüedad y porcentajes de IRPF que introduces se procesan en tu propio dispositivo y <strong>no se transmiten ni se almacenan en ningún servidor</strong>.</p>
-<p>No existe registro de usuarios: no se pide nombre, correo electrónico, DNI ni ningún otro dato identificativo para utilizar la herramienta.</p>
-
-<h2><span>💾</span>3. Datos guardados en tu dispositivo</h2>
-<p>Para que la herramienta funcione, se guardan algunos datos en el <strong>almacenamiento local de tu navegador</strong>. Esta información <strong>nunca sale de tu dispositivo</strong>, no viaja por internet y no es accesible para nadie más:</p>
-<div class="card">
-<ul style="margin-bottom:0;">
-<li><strong>Cuadrante de turnos:</strong> si usas el modo calendario, los horarios que introduzcas se guardan para que no los pierdas al cerrar la página.</li>
-<li><strong>Preferencia de cookies:</strong> si has aceptado o rechazado las cookies publicitarias.</li>
-<li><strong>Aviso de instalación:</strong> si ya se te ha mostrado el aviso para añadir la web a la pantalla de inicio.</li>
-</ul>
-</div>
-<p>Puedes borrar todo esto en cualquier momento eliminando los datos de navegación de este sitio desde los ajustes de tu navegador. Al hacerlo perderás el cuadrante guardado.</p>
-
-<h2><span>🍪</span>4. Cookies y servicios de terceros</h2>
-<p>Para cubrir los costes de mantenimiento, esta web utiliza dos servicios de Google que <strong>solo se activan si prestas tu consentimiento</strong>:</p>
-<div class="card">
-<ul style="margin-bottom:0;">
-<li><strong>Google Analytics:</strong> recoge información estadística agregada sobre visitas y páginas más utilizadas, con la única finalidad de mejorar la herramienta.</li>
-<li><strong>Google AdSense:</strong> puede utilizar cookies para mostrar anuncios en función de tus visitas anteriores a este u otros sitios web. Puedes desactivar la publicidad personalizada desde la <a href="https://adssettings.google.com" target="_blank" rel="noopener">configuración de anuncios de Google</a>.</li>
-</ul>
-</div>
-<div class="highlight">
-<strong>Importante:</strong> si rechazas las cookies, <strong>ninguno de los dos servicios se carga</strong> y puedes seguir usando la calculadora con total normalidad. Rechazarlas no limita ninguna función.
-</div>
-<p>Estos servicios son prestados por Google Ireland Limited, que actúa como tratamiento independiente y puede realizar transferencias internacionales de datos amparadas en las cláusulas contractuales tipo aprobadas por la Comisión Europea. Puedes consultar su <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">política de privacidad</a>.</p>
-
-<h2><span>✅</span>5. Base legal y consentimiento</h2>
-<p>La base legal para el uso de cookies analíticas y publicitarias es tu <strong>consentimiento expreso</strong>, que se solicita mediante el banner que aparece al entrar por primera vez.</p>
-<p>Puedes retirarlo en cualquier momento borrando los datos de navegación de este sitio. Al volver a entrar, el banner te preguntará de nuevo.</p>
-
-<h2><span>🖥️</span>6. Alojamiento</h2>
-<p>La web está alojada en <strong>GitHub Pages</strong> (GitHub, Inc.). Como ocurre con cualquier servidor web, el proveedor puede registrar de forma automática datos técnicos de conexión, como la dirección IP, con fines de seguridad y funcionamiento del servicio. Este tratamiento es ajeno a esta web y se rige por la <a href="https://docs.github.com/es/site-policy/privacy-policies/github-privacy-statement" target="_blank" rel="noopener">política de privacidad de GitHub</a>.</p>
-
-<h2><span>📧</span>7. Si nos escribes</h2>
-<p>Si contactas por correo electrónico, se tratará únicamente tu dirección y el contenido del mensaje, con la finalidad de responderte. La base legal es tu propio consentimiento al escribir. Los mensajes se conservan mientras sea necesario para atender la consulta y se eliminan cuando dejan de serlo.</p>
-
-<h2><span>⚖️</span>8. Tus derechos</h2>
-<p>Puedes ejercer los derechos de <strong>acceso, rectificación, supresión, oposición, limitación y portabilidad</strong> escribiendo a <a href="mailto:BadAWolfprivado@gmail.com">BadAWolfprivado@gmail.com</a>.</p>
-<p>Ten en cuenta que, al no existir registro de usuarios ni datos almacenados en servidores, en la práctica no hay información personal tuya que podamos consultar, modificar o eliminar: los datos de los cálculos y del cuadrante están únicamente en tu dispositivo y solo tú tienes acceso a ellos.</p>
-<p>Si consideras que tus derechos no han sido atendidos, puedes presentar una reclamación ante la <a href="https://www.aepd.es" target="_blank" rel="noopener">Agencia Española de Protección de Datos</a>.</p>
-
-<h2><span>🔄</span>9. Cambios en esta política</h2>
-<p>Esta política puede actualizarse si cambian las funciones de la web o la normativa aplicable. La fecha de la última revisión aparece al principio de esta página.</p>
-
-<div class="disclaimer">
-Nómina Vigilante · calculadoravigilante.com<br>
-Herramienta gratuita e independiente para vigilantes de seguridad privada
-</div>
-</div>
-<script>
-function loadGoogleScripts(){
-  var s1=document.createElement('script');
-  s1.src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B";
-  s1.async=true; document.head.appendChild(s1);
-  window.dataLayer=window.dataLayer||[];
-  window.gtag=function(){dataLayer.push(arguments);};
-  gtag('js',new Date());
-  gtag('config','G-NMM3MRRZ6B');
-  var s2=document.createElement('script');
-  s2.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445";
-  s2.async=true; s2.setAttribute('crossorigin','anonymous');
-  document.head.appendChild(s2);
-}
-function acceptCookies(){
-  localStorage.setItem('cookies_status','accepted');
-  document.getElementById('cookie-banner').style.display='none';
-  loadGoogleScripts();
-}
-function rejectCookies(){
-  localStorage.setItem('cookies_status','rejected');
-  document.getElementById('cookie-banner').style.display='none';
-}
-window.addEventListener('DOMContentLoaded',function(){
-  var st=localStorage.getItem('cookies_status');
-  if(st==='accepted'){loadGoogleScripts();}
-  else if(st!=='rejected'){document.getElementById('cookie-banner').style.display='block';}
-});
-</script>
-<script>
-(function(){
-  function listo(){
-    var b=document.getElementById("menu-btn"), p=document.getElementById("menu-panel"),
-        o=document.getElementById("menu-overlay"), x=document.getElementById("menu-cerrar");
-    if(!b||!p||!o) return;
-    function abrir(){ p.classList.add("abierto"); o.classList.add("abierto"); document.body.style.overflow="hidden"; }
-    function cerrar(){ p.classList.remove("abierto"); o.classList.remove("abierto"); document.body.style.overflow=""; }
-    b.addEventListener("click",abrir);
-    o.addEventListener("click",cerrar);
-    if(x) x.addEventListener("click",cerrar);
-    document.addEventListener("keydown",function(e){ if(e.key==="Escape") cerrar(); });
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",listo); else listo();
-})();
-</script>
-</body>
-</html>
+<h2>1. Responsable del tratamiento</h2><p><strong>Carlos Adán Miro</strong>, trabajador autónomo, NIF <strong>53785493Q</strong>, domicilio profesional <strong>Calle San Agustín, 4, Burriana</strong>, responsable de calculadoravigilante.com. Correo de contacto: <a href="mailto:badawolfprivado@gmail.com">badawolfprivado@gmail.com</a>. Ver también el <a href="condiciones.html">aviso legal</a>.</p>
+<h2>2. Información esencial sobre tus datos</h2>
+<table><thead><tr><th>Tratamiento</th><th>Datos y finalidad</th><th>Base jurídica</th></tr></thead><tbody>
+<tr><td>Cuenta y autenticación</td><td>Correo, identificador de usuario, verificación, sesiones y datos técnicos necesarios para crear la cuenta, iniciar sesión y recuperar el acceso. La contraseña se gestiona mediante un hash de autenticación, no como texto legible.</td><td>Ejecución del servicio solicitado, art. 6.1.b RGPD.</td></tr>
+<tr><td>Acceso con Google</td><td>Identificador del proveedor, correo y perfil básico que Google comparta al autorizar el acceso. No se solicita acceso al correo de Gmail, contactos o documentos.</td><td>Ejecución del acceso que solicitas. Google informa de su propio tratamiento.</td></tr>
+<tr><td>Condiciones</td><td>Identificador de usuario, versión y fecha de aceptación para documentar las condiciones de la cuenta.</td><td>Ejecución del servicio y acreditación de la relación.</td></tr>
+<tr><td>Publicidad opcional por correo</td><td>Correo verificado, preferencias independientes para comunicaciones propias y promociones de colaboradores, texto y versión informados, fecha del servidor y origen de cada elección o retirada. Se usan para enviar únicamente las categorías elegidas y acreditar el permiso.</td><td>Consentimiento, art. 6.1.a RGPD y art. 21 LSSI. Retirable en cualquier momento sin perder la cuenta.</td></tr>
+<tr><td>Seguridad</td><td>Registros técnicos de autenticación y conexión, como dirección IP, errores e intentos de acceso, para proteger el servicio y detectar abusos.</td><td>Interés legítimo en la seguridad, art. 6.1.f RGPD, sujeto a la ponderación documentada por el responsable.</td></tr>
+<tr><td>Consultas y derechos</td><td>Correo y contenido de la solicitud para responder a tus consultas y atender tus derechos.</td><td>Solicitud de servicio o interés legítimo para consultas; obligación legal para derechos, art. 6.1.c RGPD.</td></tr>
+<tr><td>Analítica opcional</td><td>Información de navegación mediante Google Analytics, únicamente si la aceptas.</td><td>Consentimiento, art. 6.1.a RGPD y art. 22.2 LSSI.</td></tr>
+</tbody></table>
+<p>La aceptación de las condiciones no implica consentimiento para publicidad ni para analítica. Cada finalidad se elige por separado. Registrarte, verificar el correo o usar Google no te suscribe automáticamente a comunicaciones comerciales.</p>
+<h2 id="publicidad">Publicidad por correo: tú eliges</h2>
+<p>El responsable del envío es Carlos Adán Miro, bajo el nombre Nómina Vigilante. Al activar tu cuenta, o después en «Mis preferencias de correo», puedes elegir separadamente:</p>
+<ul><li><strong>Comunicaciones propias:</strong> novedades de la calculadora, consejos y ofertas propias relacionadas con la seguridad privada.</li><li><strong>Promociones de colaboradores:</strong> formación, productos y servicios del sector de la seguridad privada, enviados por Nómina Vigilante. No entregamos tu correo a los colaboradores para que te escriban por su cuenta. Los mensajes identificarán su carácter comercial y al colaborador correspondiente.</li></ul>
+<p>Ambas casillas son opcionales y aparecen sin marcar. Puedes usar la cuenta, los PDF y el resto de herramientas aunque rechaces las dos. No utilizamos importes de nómina, datos de baja ni cuadrantes para segmentar publicidad. No vendemos ni cedemos la lista de correos a otras empresas para su propia publicidad.</p>
+<p>Puedes retirar cada permiso o dar de baja toda la publicidad desde «Mis preferencias de correo». También puedes escribir a <a href="mailto:badawolfprivado@gmail.com?subject=Baja%20de%20publicidad">badawolfprivado@gmail.com</a> con el asunto «Baja de publicidad», sin necesidad de iniciar sesión. Cada comunicación comercial incluirá una dirección o enlace válido para solicitar la baja de forma sencilla y gratuita. No afecta a los mensajes necesarios de verificación, seguridad y recuperación de tu cuenta.</p>
+<p>Las altas y bajas se guardan en Supabase con fecha del servidor y el texto informado. La lista de destinatarios utiliza la última preferencia y excluye correos no verificados, direcciones cambiadas sin renovar el permiso y cuentas eliminadas. La baja desde la cuenta excluye inmediatamente tu dirección de futuras selecciones; las solicitudes recibidas por correo se atenderán antes de cualquier nuevo envío. La evidencia se conserva mientras la cuenta esté activa para gestionar y acreditar tus preferencias y se elimina con la cuenta de la base operativa, sin perjuicio del bloqueo legal que proceda según el apartado 5.</p>
+<p>Antes de cada campaña se comprueban los permisos vigentes y las bajas. Los correos de verificación y recuperación no incluyen publicidad.</p>
+<h2>Cómo medimos los registros</h2>
+<p>Solo si aceptas la analítica enviamos a Google Analytics eventos de apertura del registro, primera activación de la cuenta, acceso por correo, cálculos terminados y exportaciones de PDF. Los eventos de cálculo y PDF no indican importes ni el tipo de cálculo. La activación se registra al aceptar por primera vez las condiciones de una cuenta; volver a aceptar una versión nueva no cuenta como un registro nuevo. Ese primer evento puede distinguir el método Google o correo. No enviamos tu dirección de correo, identificador de cuenta, contraseña, importes, turnos ni datos de baja como parámetros de eventos. Las URL de medición se limpian de parámetros y fragmentos. Google puede tratar identificadores técnicos de navegación para elaborar sus estadísticas; estas no equivalen a una lista de personas identificadas ni al total exacto de cuentas.</p>
+<h2>3. Los cálculos permanecen en tu dispositivo</h2><p>Los salarios, horas, fechas, antigüedad, IRPF y datos de baja que introduces se calculan en tu navegador. Esta integración no los sube a Supabase ni crea un historial de nóminas en el servidor. El cuadrante se guarda localmente en el dispositivo. El PDF se genera en el navegador y, si decides compartirlo, se entrega a la aplicación o destinatario que elijas.</p><p>No introduzcas diagnósticos, informes médicos, DNI ni otros datos que la calculadora no necesite. El registro de usuarios sí implica almacenamiento de datos de cuenta en servidores; es un tratamiento distinto del cálculo local.</p>
+<h2>4. Proveedores y destinatarios</h2><ul>
+<li><strong>Supabase:</strong> autenticación y base de datos. El proyecto está creado en la región de Irlanda. Los datos de cuenta y aceptación se gestionan allí; esta elección no garantiza por sí sola que todos los servicios auxiliares y subencargados operen exclusivamente en la UE. <a href="https://supabase.com/privacy">Privacidad de Supabase</a>.</li>
+<li><strong>GitHub Pages:</strong> alojamiento de la web pública y registros técnicos de conexión conforme a sus condiciones. <a href="https://docs.github.com/es/site-policy/privacy-policies/github-privacy-statement">Privacidad de GitHub</a>.</li>
+<li><strong>Resend (Plus Five Five, Inc.):</strong> envío de verificaciones y recuperaciones de contraseña desde cuentas@calculadoravigilante.com. Recibe el destinatario, contenido y datos de entrega del mensaje. El dominio de envío está configurado en Irlanda y exige transporte TLS; esto no significa que todo el tratamiento del proveedor se limite a la UE. No hemos configurado seguimiento de aperturas o clics. <a href="https://resend.com/legal/privacy-policy">Privacidad de Resend</a>.</li>
+<li><strong>Cloudflare Turnstile:</strong> comprobación de seguridad en los formularios de acceso, registro y recuperación. Trata datos técnicos de conexión y del navegador para detectar automatizaciones abusivas. Se carga al abrir esos formularios, no al realizar cálculos sin cuenta. <a href="https://www.cloudflare.com/privacypolicy/">Privacidad de Cloudflare</a>. Cloudflare actúa como encargado para proteger la web y como responsable independiente para mejorar la detección de bots, conforme a su <a href="https://www.cloudflare.com/turnstile-privacy-policy/">anexo de privacidad de Turnstile</a>.</li>
+<li><strong>Google:</strong> inicio de sesión si eliges ese método y Analytics si prestas consentimiento. La web utiliza las fuentes del dispositivo y sirve el generador de PDF desde su propio dominio, sin conexión a proveedores de tipografías o de PDF. <a href="https://policies.google.com/privacy">Privacidad de Google</a>.</li>
+</ul><p>Los proveedores pueden tratar datos fuera del Espacio Económico Europeo. Los servicios se rigen por sus condiciones y acuerdos de tratamiento: <a href="https://supabase.com/legal/customer-resources/data-processing-addendum">Supabase</a>, <a href="https://resend.com/legal/dpa">Resend</a>, <a href="https://www.cloudflare.com/cloudflare-customer-dpa/">Cloudflare</a> y <a href="https://business.safety.google/adsprocessorterms/">Google Analytics</a>. Estos acuerdos prevén cláusulas contractuales tipo para las transferencias que las requieran, además de las decisiones de adecuación aplicables. Puedes solicitar información sobre las garantías al correo del responsable.</p>
+<h2>5. Conservación</h2><p>Los datos de cuenta se mantienen mientras la cuenta esté activa. Al atender una solicitud de supresión, se elimina la cuenta y las aceptaciones vinculadas de la base operativa, salvo los datos que deban conservarse o bloquearse por una obligación legal o para atender responsabilidades durante los plazos aplicables. Las solicitudes se verifican de forma proporcionada; después se revocan las sesiones y se eliminan los datos de la cuenta de la base operativa. Si es necesario conservar evidencia para una responsabilidad concreta, se restringe su acceso y uso a esa finalidad durante el plazo de prescripción aplicable, sin utilizarla para publicidad.</p><p>Resend conserva durante 30 días el contenido y metadatos de correo, eventos y registros de entrega, según su <a href="https://resend.com/docs/knowledge-base/account-quotas-and-limits">documentación de conservación</a>. La consulta de registros de API y base de datos en el plan gratuito de Supabase abarca un día; esto no equivale al borrado de los datos de cuenta ni de todos los registros del proveedor. Los registros de autenticación almacenados en la base se revisan para conservar solo los necesarios para gestionar incidentes. Cloudflare no publica un plazo único de Turnstile: aplica criterios de necesidad para detectar abusos y cumplir obligaciones legales, según su política de conservación. No exportamos ni conservamos por nuestra cuenta los datos individuales de los desafíos. Las copias de seguridad no se usan para publicidad ni para reactivar cuentas suprimidas; una restauración debe volver a aplicar las solicitudes de supresión.</p><p>La propiedad de Google Analytics tiene configurada una conservación de datos de eventos de 2 meses y de datos de usuario de 14 meses, con renovación del plazo por nueva actividad. Estos plazos son distintos de la duración de las cookies y no afectan a la mayoría de los informes agregados.</p>
+<h2 id="cookies">6. Cookies y almacenamiento del navegador</h2><table><thead><tr><th>Elemento</th><th>Finalidad</th><th>Duración o criterio</th></tr></thead><tbody>
+<tr><td>Sesión de Supabase (sb-…-auth-token)</td><td>Mantener y renovar tu sesión. Necesario para las funciones de la cuenta.</td><td>Se conserva entre visitas hasta cerrar sesión, borrar los datos del sitio o revocarse por seguridad. Los tokens de acceso breves se renuevan automáticamente; no se impone un cierre periódico por inactividad.</td></tr>
+<tr><td>Cuadrante</td><td>Conservar tus turnos en este dispositivo.</td><td>Hasta que los elimines desde la herramienta o el navegador.</td></tr><tr><td>vigilante_install_v1 y preferencia anterior inst_aviso</td><td>Recordar si has cerrado el aviso o indicado que la app está instalada y espaciar el recordatorio cada diez cálculos. El contador se guarda solo en este navegador, sin datos de nómina ni de cuenta y sin enviarlo al servidor.</td><td>Hasta eliminar los datos del sitio en el navegador. Si no hay almacenamiento disponible, solo durante la página actual.</td></tr>
+<tr><td>vigilante_cookie_preferences_v1</td><td>Recordar tu decisión sobre la analítica.</td><td>La elección se solicita de nuevo tras 180 días.</td></tr>
+<tr><td>Google Analytics (_ga y _ga_…)</td><td>Analítica opcional de navegación, solo con tu consentimiento.</td><td>El código configura las cookies durante un máximo de 180 días, sin renovar ese plazo automáticamente. Puedes retirarlas antes.</td></tr>
+</tbody></table><p>El panel ofrece aceptar o rechazar la analítica con la misma visibilidad. Puedes cambiar tu decisión en <button type="button" data-cookie-settings>Configurar cookies</button>, disponible también al pie de las páginas. Rechazarla no impide calcular ni usar tu cuenta. Al retirar el consentimiento se detiene la carga de analítica, se eliminan las cookies de Analytics accesibles desde este dominio y se recarga la página.</p><p>No se cargan anuncios de AdSense en esta versión. Su reactivación requiere completar la configuración de consentimiento publicitario y actualizar esta información con sus finalidades, proveedores y plazos.</p>
+<h2>7. Tus derechos y eliminación de cuenta</h2><p>Puedes solicitar acceso, rectificación, supresión, oposición, limitación y portabilidad, cuando correspondan, escribiendo al contacto del apartado 1. Indica el correo de tu cuenta y el derecho que quieres ejercer. No envíes una copia de tu DNI de forma preventiva; solo se solicitará información adicional proporcionada si existen dudas razonables sobre tu identidad.</p><p>Para eliminar la cuenta, puedes usar el asunto «Eliminar mi cuenta». Cerrar sesión no elimina los datos del servidor. Se responderá, con carácter general, en un mes; si procede una ampliación legal, se explicará dentro de ese plazo. Puedes retirar el consentimiento para analítica en cualquier momento, sin afectar a la licitud del tratamiento previo.</p><p>Puedes reclamar ante la <a href="https://www.aepd.es">Agencia Española de Protección de Datos</a>. El registro no se utiliza para decisiones automatizadas con efectos jurídicos ni para elaborar perfiles de solvencia, empleo o salud.</p>
+<h2>8. Actualizaciones</h2><p>Las modificaciones relevantes se comunicarán antes de aplicarse cuando corresponda. La versión vigente y su fecha estarán disponibles en esta página.</p>
+</main>
+<div id="cookie-banner" hidden role="region" aria-label="Preferencias de cookies"><p>Usamos almacenamiento necesario para tu sesión y tus preferencias. Solo con tu permiso activamos Google Analytics para medir el uso de la web. Puedes cambiar tu elección cuando quieras. <a href="privacidad.html#cookies">Más información</a>.</p><div class="cookie-buttons"><button type="button" id="cookie-reject" class="btn-cookie" data-cookie-choice="reject">Rechazar analítica</button><button type="button" class="btn-cookie" data-cookie-choice="accept">Aceptar analítica</button></div></div>
+<script src="cookies.js?v=20260915"></script>
+<script src="legal-navigation.js?v=20260915"></script>
+<footer class="legal-footer"><a href="index.html">Calculadora</a><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings>Configurar cookies</button></footer>
+</body></html>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">Nómina Vigilante</title>
+  <rect width="64" height="64" rx="14" fill="#21634f"/>
+  <path d="M32 10 51 17 49 36 42 47 32 54 22 47 15 36 13 17Z" fill="none" stroke="#f7f6f2" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M25 23H39M25 29H33" fill="none" stroke="#f7f6f2" stroke-width="3" stroke-linecap="round"/>
+  <path d="m24 37 6 6 11-11" fill="none" stroke="#c5dfb9" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

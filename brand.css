@@ -1,0 +1,36 @@
+/* Identity shared by the calculator, guides, account, legal pages and app. */
+:root{--bg:#f7f6f2;--surface:#f7f8f5;--card:#fff;--border:#dfe5dd;--border2:#bfcabd;--gold:#21634f;--gold2:#28765c;--goldbg:#eef6ed;--goldline:#b9d4b4;--text:#213e33;--text2:#3d554a;--muted:#607367;--subtle:#667b6b;--green:#21634f;--greenbg:#eef6ed;--red:#a53838;--blue:#326286;}
+body,body.legal-page,h1,h2,h3,button,input,select,.brand-name,.menu-marca-nombre,.header-label,.card-label,.btn-calc,.inst-tit,.inst-btn,.neto-val,.bruto-val,.page-title,.dlg-title{font-family:Arial,Helvetica,sans-serif;}
+body{background:var(--bg);color:var(--text);}
+.topbar{background:#fffffff5;border-bottom:1px solid var(--border);}
+.brand{gap:.6rem;}.brand-icon{width:32px;height:32px;border-radius:8px;}
+.brand-name{font-size:.87rem;letter-spacing:-.02em;font-weight:700;}.brand-name em{color:var(--gold);}
+.topbar-cta,.inst-btn{background:var(--gold);box-shadow:none;}
+.menu-marca-ico{border-radius:12px;}.menu-panel{background:var(--surface);}
+.menu-marca-nombre{font-weight:700;font-size:1.1rem;letter-spacing:0;}
+.menu-link{gap:.75rem;min-height:46px;}
+.menu-ico{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;flex:0 0 34px;border-radius:10px;background:#eaf0e8;color:var(--gold);}
+.menu-ico svg{display:block;width:22px;height:22px;}
+.menu-link.activo .menu-ico{background:var(--gold);color:#fff;}
+.menu-link:hover .menu-ico{box-shadow:inset 0 0 0 1px var(--goldline);}
+.content-icon{display:inline-block;vertical-align:middle;width:22px;height:22px;flex-shrink:0;color:var(--gold);}
+.rel-title,.faq-question{display:flex;align-items:flex-start;gap:.65rem;}
+.rel-title .content-icon,.faq-question .content-icon{margin-top:.1rem;}
+.h2-icon{display:inline-flex;align-items:center;justify-content:center;}
+.preparando-icon,.guide-icon{display:flex;align-items:center;justify-content:center;color:var(--gold);}
+.preparando-icon{width:64px;height:64px;margin:0 auto 1.25rem;background:var(--goldbg);border:1px solid var(--goldline);border-radius:18px;}
+.preparando-icon .content-icon{width:34px;height:34px;}
+.guide-icon .content-icon{width:28px;height:28px;}
+.wrap{max-width:792px;}.topbar-inner{max-width:824px;}
+header.page{text-align:left;}header.page h1{font-size:clamp(1.9rem,5vw,2.65rem);letter-spacing:-.04em;line-height:1.15;font-weight:700;}
+.card,.info-card,.guide-card{border-color:var(--border);border-radius:14px;}
+.neto-box{background:var(--goldbg);border-color:var(--goldline);}.neto-val,.neto-label{color:var(--gold);}
+.guide-card.guide-destacada{background:var(--goldbg);border-color:var(--goldline);}
+.inst-wrap{border-color:var(--goldline);border-radius:18px;background:var(--surface);box-shadow:0 8px 40px #213e3326;}
+.inst-icono{box-shadow:none;}.inst-num{background:var(--goldbg);color:var(--gold);}.inst-tit{font-size:1.1rem;letter-spacing:-.02em;font-weight:700;}
+.legal-brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-size:1rem;font-weight:700;}.legal-brand small{display:block;font-size:.75rem;color:var(--muted);font-weight:400;}
+.legal-page h1{font-family:Arial,Helvetica,sans-serif;}.legal-page table{background:#fff;}
+.auth-dialog{border-radius:18px;}.auth-dialog input{font-size:1rem;}.auth-dialog form button[type=submit]{width:100%;}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #326286;outline-offset:3px;}
+@media(max-width:540px){.brand-name{font-size:.75rem;}.topbar-inner{gap:.5rem;}.topbar-cta{font-size:.65rem;}input,select{font-size:1rem!important;}.legal-page{overflow-wrap:anywhere;}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}

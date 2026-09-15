@@ -1,0 +1,17 @@
+{
+  "name": "calculadora-vigilante",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.cjs",
+    "build:auth": "esbuild node_modules/@supabase/supabase-js/dist/index.mjs --bundle --minify --format=esm --platform=browser --outfile=vendor/supabase.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "2.116.0",
+    "jspdf": "4.2.1"
+  },
+  "devDependencies": {
+    "esbuild": "0.25.9",
+    "jsdom": "26.1.0"
+  }
+}

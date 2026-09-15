@@ -1,0 +1,86 @@
+[
+  {
+    "name": "nomina completa",
+    "fn": "calcNomina",
+    "fields": {
+      "hTTotal": "162",
+      "irpf": "10"
+    },
+    "outputs": [
+      "r-bruto",
+      "r-neto"
+    ],
+    "expected": {
+      "r-bruto": "1435,45 €",
+      "r-neto": "1179,34 €"
+    }
+  },
+  {
+    "name": "extras nocturnas festivas y antiguedad",
+    "fn": "calcNomina",
+    "fields": {
+      "hTTotal": "200",
+      "hNoc": "60",
+      "hFest": "32",
+      "aniosAntiguedad": "12",
+      "irpf": "15"
+    },
+    "outputs": [
+      "r-bruto",
+      "r-neto"
+    ],
+    "expected": {
+      "r-bruto": "2043,91 €",
+      "r-neto": "1584,33 €"
+    }
+  },
+  {
+    "name": "jornada parcial",
+    "fn": "calcNomina",
+    "click": "jorn-parcial",
+    "fields": {
+      "hPactadas": "80",
+      "hTTotal": "80",
+      "irpf": "2"
+    },
+    "outputs": [
+      "r-bruto",
+      "r-neto"
+    ],
+    "expected": {
+      "r-bruto": "708,86 €",
+      "r-neto": "639,09 €"
+    }
+  },
+  {
+    "name": "baja comun 30 dias",
+    "fn": "calcBaja",
+    "fields": {
+      "b-dias": "30",
+      "b-baseManual": "1800",
+      "b-irpf": "10"
+    },
+    "outputs": [
+      "br-neto"
+    ],
+    "expected": {
+      "br-neto": "1238,40 €"
+    }
+  },
+  {
+    "name": "finiquito un año",
+    "fn": "calcFiniquito",
+    "fields": {
+      "f-inicio": "2025-01-01",
+      "f-fin": "2026-01-01",
+      "f-vacas": "10",
+      "f-irpf": "10"
+    },
+    "outputs": [
+      "fr-total-neto"
+    ],
+    "expected": {
+      "fr-total-neto": "2012,94 €"
+    }
+  }
+]

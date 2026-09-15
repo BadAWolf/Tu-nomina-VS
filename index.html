@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://qhqbrtxzbfokqdlhstuo.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-src https://challenges.cloudflare.com">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Calculadora gratis de nómina para vigilantes de seguridad. Convenio 2026 actualizado: salario neto, horas extras, nocturnidad, festivos, finiquito y baja IT.">
 <link rel="canonical" href="https://calculadoravigilante.com/">
@@ -11,12 +13,13 @@
 <meta property="og:type" content="website">
 <title>Calculadora Nómina Vigilante de Seguridad 2026 | Gratis</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#d4860f">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#21634f">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260914">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Nómina VS">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+<link rel="icon" type="image/svg+xml" href="brand.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
 
 <style>
 #cookie-banner {
@@ -63,52 +66,15 @@
 .btn-reject:hover { background: var(--border); }
 </style>
 
-<script>
-  function loadGoogleScripts() {
-    var s1 = document.createElement('script');
-    s1.src = "https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B";
-    s1.async = true;
-    document.head.appendChild(s1);
-    window.dataLayer = window.dataLayer || [];
-    window.gtag = function(){dataLayer.push(arguments);};
-    gtag('js', new Date());
-    gtag('config', 'G-NMM3MRRZ6B');
 
-    var s2 = document.createElement('script');
-    s2.src = "https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445";
-    s2.async = true;
-    s2.setAttribute('crossorigin', 'anonymous');
-    document.head.appendChild(s2);
-  }
 
-  function acceptCookies() {
-    localStorage.setItem('cookies_status', 'accepted');
-    document.getElementById('cookie-banner').style.display = 'none';
-    loadGoogleScripts();
-  }
 
-  function rejectCookies() {
-    localStorage.setItem('cookies_status', 'rejected');
-    document.getElementById('cookie-banner').style.display = 'none';
-  }
-
-  window.addEventListener('DOMContentLoaded', (event) => {
-    var status = localStorage.getItem('cookies_status');
-    if (status === 'accepted') {
-      loadGoogleScripts();
-    } else if (status !== 'rejected') {
-      document.getElementById('cookie-banner').style.display = 'block';
-    }
-  });
-</script>
-
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
 --bg:#f5f3ef;--surface:#faf8f5;--card:#ffffff;
 --border:#e8e3da;--border2:#d6cfc4;
---gold:#b8720a;--gold2:#d4860f;--goldbg:#fdf2e0;--goldline:#e8c87a;
+--gold:#21634f;--gold2:#28765c;--goldbg:#eef6ed;--goldline:#b9d4b4;
 --text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;--subtle:#b5a898;
 --green:#2d7a3a;--greenbg:#edf7ef;
 --red:#b83232;--redbg:#fdf0f0;
@@ -124,7 +90,7 @@ h1 em{color:var(--gold2);font-style:normal;}
 .header-sub{font-size:0.75rem;color:var(--muted);margin-top:0.35rem;font-weight:500;}
 .tab-selector{display:grid;grid-template-columns:1fr 1fr 1fr;background:var(--card);border:1.5px solid var(--border);border-radius:10px;padding:4px;margin-bottom:1rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
 .tab-btn{background:transparent;border:none;border-radius:7px;font-family:'DM Sans',sans-serif;font-size:0.72rem;font-weight:600;padding:0.6rem 0.3rem;cursor:pointer;color:var(--muted);transition:all 0.2s;text-align:center;line-height:1.25;}
-.tab-btn.active{background:var(--goldbg);color:var(--gold);box-shadow:0 1px 3px rgba(180,120,10,0.15);}
+.tab-btn.active{background:var(--goldbg);color:var(--gold);box-shadow:0 1px 3px rgba(33,99,79,0.15);}
 .tab-btn-sub{display:block;font-size:0.57rem;font-weight:500;margin-top:0.08rem;opacity:0.8;}
 #view-nomina{display:block;}#view-finiquito{display:none;}#view-baja{display:none;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1.2rem;margin-bottom:0.65rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);}
@@ -169,7 +135,7 @@ select option{background:var(--card);}
 input:checked + .slider{background:var(--gold2);}
 input:checked + .slider:before{transform:translateX(20px);}
 #plus-servicio-field{display:none;margin-top:0.8rem;}
-.btn-calc{width:100%;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.12em;padding:0.88rem;cursor:pointer;transition:background 0.15s;margin-top:0.65rem;box-shadow:0 2px 8px rgba(180,120,10,0.25);display:block;}
+.btn-calc{width:100%;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.35rem;letter-spacing:0.12em;padding:0.88rem;cursor:pointer;transition:background 0.15s;margin-top:0.65rem;box-shadow:0 2px 8px rgba(33,99,79,0.25);display:block;}
 .btn-calc:hover{background:var(--gold);}
 .btn-calc:active{opacity:0.92;}
 .error-box{background:var(--redbg);border:1px solid #e8b4b4;border-radius:7px;padding:0.62rem 0.85rem;font-size:0.73rem;font-weight:600;color:var(--red);display:none;margin-top:0.5rem;}
@@ -192,7 +158,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .bruto-row{display:flex;justify-content:space-between;align-items:center;padding:0.5rem 0 0.2rem;}
 .bruto-label{font-size:0.85rem;font-weight:700;color:var(--text);}
 .bruto-val{font-family:'DM Mono',monospace;font-size:1.1rem;font-weight:700;color:var(--text);}
-.neto-box{background:var(--goldbg);border:1.5px solid var(--goldline);border-radius:10px;padding:1.15rem 1.2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(180,120,10,0.1);margin-bottom:0.55rem;}
+.neto-box{background:var(--goldbg);border:1.5px solid var(--goldline);border-radius:10px;padding:1.15rem 1.2rem;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 8px rgba(33,99,79,0.1);margin-bottom:0.55rem;}
 .neto-label{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.08em;color:var(--gold);}
 .neto-label span{display:block;font-family:'DM Sans',sans-serif;font-size:0.65rem;font-weight:500;letter-spacing:0;color:var(--muted);margin-top:0.15rem;}
 .neto-val{font-family:'DM Mono',monospace;font-size:1.9rem;font-weight:700;color:var(--gold);}
@@ -205,9 +171,9 @@ input:checked + .slider:before{transform:translateX(20px);}
 .seo-section{margin-top:2.5rem;width:100%;}
 .seo-header{text-align:center;margin-bottom:1rem;}
 .seo-header h2{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:0.05em;color:var(--text);line-height:1.1;}
-.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3--rem;}
+.seo-header p{font-size:0.75rem;color:var(--muted);font-weight:500;margin-top:0.3rem;}
 .guide-card{display:flex;align-items:center;gap:0.9rem;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:1rem 1.1rem;margin-bottom:0.65rem;box-shadow:0 1px 4px rgba(44,36,22,0.07);text-decoration:none;transition:border-color 0.15s,box-shadow 0.15s;}
-.guide-card:hover{border-color:var(--gold2);box-shadow:0 2px 8px rgba(180,120,10,0.12);}
+.guide-card:hover{border-color:var(--gold2);box-shadow:0 2px 8px rgba(33,99,79,0.12);}
 .guide-icon{font-size:1.5rem;flex-shrink:0;}
 .guide-body{flex:1;}
 .guide-title{font-size:0.82rem;font-weight:700;color:var(--text);margin-bottom:0.2rem;}
@@ -221,8 +187,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 
 
 
-.guide-card.guide-destacada{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);box-shadow:0 2px 10px rgba(180,120,10,0.13);padding:1.1rem 1.15rem;}
-.guide-card.guide-destacada:hover{box-shadow:0 3px 14px rgba(180,120,10,0.2);}
+.guide-card.guide-destacada{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);box-shadow:0 2px 10px rgba(33,99,79,0.13);padding:1.1rem 1.15rem;}
+.guide-card.guide-destacada:hover{box-shadow:0 3px 14px rgba(33,99,79,0.2);}
 .guide-kicker{font-family:'DM Mono',monospace;font-size:0.53rem;letter-spacing:0.13em;text-transform:uppercase;color:var(--gold2);font-weight:600;margin-bottom:0.15rem;}
 .guide-card.guide-destacada .guide-title{color:var(--gold);font-size:0.88rem;}
 .guide-card.guide-destacada .guide-icon{font-size:1.7rem;}
@@ -296,7 +262,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .dlg-borrar:hover{background:var(--redbg);}
 .dlg-cancelar{background:transparent;color:var(--muted);border-color:var(--border2);}
 .dlg-cancelar:hover{background:var(--border);}
-.dlg-guardar{background:var(--gold2);color:#fff;box-shadow:0 2px 6px rgba(180,120,10,0.25);}
+.dlg-guardar{background:var(--gold2);color:#fff;box-shadow:0 2px 6px rgba(33,99,79,0.25);}
 .dlg-guardar:hover{background:var(--gold);}
 @media(max-width:360px){
   .cal-cell{min-height:40px;}
@@ -312,7 +278,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .inst-x{position:absolute;top:-0.35rem;right:-0.2rem;background:transparent;border:none;color:var(--subtle);font-size:1.3rem;line-height:1;cursor:pointer;padding:0.2rem 0.4rem;font-family:'DM Sans',sans-serif;}
 .inst-x:hover{color:var(--muted);}
 .inst-top{display:flex;align-items:center;gap:0.7rem;padding-right:1.6rem;}
-.inst-icono{width:2.6rem;height:2.6rem;border-radius:11px;flex-shrink:0;overflow:hidden;box-shadow:0 2px 7px rgba(180,120,10,0.3);}
+.inst-icono{width:2.6rem;height:2.6rem;border-radius:11px;flex-shrink:0;overflow:hidden;box-shadow:0 2px 7px rgba(33,99,79,0.3);}
 .inst-tit{font-size:0.85rem;font-weight:700;color:var(--text);line-height:1.25;}
 .inst-sub{font-size:0.7rem;color:var(--muted);font-weight:500;margin-top:0.12rem;line-height:1.4;}
 .inst-pasos{margin-top:0.8rem;background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:0.7rem 0.8rem;}
@@ -320,7 +286,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 .inst-paso + .inst-paso{margin-top:0.45rem;}
 .inst-num{background:var(--gold2);color:#fff;width:1.15rem;height:1.15rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.62rem;font-weight:700;flex-shrink:0;}
 .inst-ios-ico{display:inline-block;border:1.5px solid var(--gold2);color:var(--gold2);border-radius:4px;padding:0 0.28rem;font-size:0.72rem;font-weight:700;line-height:1.25;}
-.inst-btn{width:100%;margin-top:0.8rem;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.72rem;cursor:pointer;box-shadow:0 2px 8px rgba(180,120,10,0.28);}
+.inst-btn{width:100%;margin-top:0.8rem;background:var(--gold2);color:#fff;border:none;border-radius:8px;font-family:'DM Sans',sans-serif;font-size:0.85rem;font-weight:700;padding:0.72rem;cursor:pointer;box-shadow:0 2px 8px rgba(33,99,79,0.28);}
 .inst-btn:hover{background:var(--gold);}
 
 .topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.93);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);margin-bottom:0.4rem;}
@@ -376,6 +342,13 @@ input:checked + .slider:before{transform:translateX(20px);}
   "isAccessibleForFree": true
 }
 </script>
+<link rel="stylesheet" href="legal.css?v=20260915">
+
+
+<link rel="stylesheet" href="auth.css?v=20260915">
+<link rel="stylesheet" href="design.css?v=20260915">
+<link rel="stylesheet" href="brand.css?v=20260915"><link rel="stylesheet" href="install.css?v=20260915"><script src="pdf-layout.js?v=20260915" defer></script><script src="frame-protection.js?v=20260915"></script>
+<meta name="application-version" content="2026-09-15">
 </head>
 <body>
 <div class="menu-overlay" id="menu-overlay"></div>
@@ -389,16 +362,16 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <div class="menu-lista">
 <div class="menu-grupo">Calculadora</div>
-<a href="index.html" class="menu-link activo"><span class="menu-ico">🧮</span>Calcular mi nómina</a>
-<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico">🎓</span>Sindicatos y formación</a>
+<a href="index.html" class="menu-link activo"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 7h8M8 11h1m6 0h1M8 15h1m6 0h1M8 18h1m6 0h1"/></svg></span>Calcular mi nómina</a>
+<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg></span>Sindicatos y formación</a>
 <div class="menu-grupo">Guías del sector</div>
-<a href="convenio-2026.html" class="menu-link"><span class="menu-ico">📋</span>Convenio 2026–2030</a>
-<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico">⚖️</span>Mis derechos</a>
-<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico">🧾</span>Cómo leer tu nómina</a>
-<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico">❓</span>Preguntas frecuentes</a>
+<a href="convenio-2026.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="5" width="14" height="16" rx="3"/><rect x="9" y="3" width="6" height="4" rx="1.5"/><path d="M9 12h6m-6 4h6"/></svg></span>Convenio 2026–2030</a>
+<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg></span>Mis derechos</a>
+<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6m-6 4h3"/></svg></span>Cómo leer tu nómina</a>
+<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20 11a8 8 0 0 1-8 8H8l-5 2 1.5-5A8 8 0 1 1 20 11Z"/><path d="M10 8a2 2 0 1 1 3 1.7c-1 .6-1 1.1-1 2.3m0 3h.01"/></svg></span>Preguntas frecuentes</a>
 <div class="menu-grupo">La web</div>
-<a href="contacto.html" class="menu-link"><span class="menu-ico">✉️</span>Contacto y quiénes somos</a>
-<a href="privacidad.html" class="menu-link"><span class="menu-ico">🔒</span>Política de privacidad</a>
+<a href="contacto.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span>Contacto y quiénes somos</a>
+<a href="privacidad.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg></span>Política de privacidad</a>
 </div>
 <div class="menu-pie">Herramienta gratuita e independiente<br>calculadoravigilante.com</div>
 </nav>
@@ -410,20 +383,15 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 
 
-<div id="cookie-banner">
-  <p>Esta calculadora orientativa utiliza cookies de terceros (Google Analytics y AdSense) para analizar el tráfico y mostrar publicidad. Ningún dato personal o salario se guarda en nuestros servidores (todo se calcula en tu dispositivo). ¿Aceptas el uso de estas cookies?</p>
-  <div class="cookie-buttons">
-    <button class="btn-cookie btn-reject" onclick="rejectCookies()">Rechazar</button>
-    <button class="btn-cookie btn-accept" onclick="acceptCookies()">Aceptar</button>
-  </div>
-</div>
+<div id="cookie-banner" hidden role="region" aria-label="Preferencias de cookies"><p>Usamos almacenamiento necesario para tu sesión y tus preferencias. Solo con tu permiso activamos Google Analytics para medir el uso de la web. Puedes cambiar tu elección cuando quieras. <a href="privacidad.html#cookies">Más información</a>.</p><div class="cookie-buttons"><button type="button" id="cookie-reject" class="btn-cookie" data-cookie-choice="reject">Rechazar analítica</button><button type="button" class="btn-cookie" data-cookie-choice="accept">Aceptar analítica</button></div></div>
 
 <div class="wrap">
 
 <header>
 <div class="header-label">Convenio Colectivo · Seguridad Privada 2026</div>
-<h1>NÓMINA<br><em>VIGILANTE</em></h1>
-<p class="header-sub">Herramienta para vigilantes de seguridad</p>
+<h1>Tu trabajo cuenta.<br><em>Tu nómina, clara.</em></h1>
+<p class="header-sub">Horas, noches y festivos. Calcula lo que te corresponde, paso a paso.</p>
+<div class="hero-notes"><span>Gratis y sin límites</span><span>Sin registro para calcular</span></div>
 </header>
 
 <div class="tab-selector">
@@ -432,7 +400,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <button class="tab-btn" id="tab-baja">Baja IT<span class="tab-btn-sub">Incapacidad</span></button>
 </div>
 
-<div id="view-nomina">
+<div id="view-nomina"><div class="card"><label class="field-label" for="n-contrato">Contrato para la cotización</label><select id="n-contrato"><option value="indefinido">Indefinido (incluido fijo discontinuo)</option><option value="temporal">Temporal general</option></select><div class="field-hint">Estimación de tipos de 2026. Algunas modalidades tienen reglas especiales.</div></div>
 <div class="card">
 <div class="card-label">Categoría profesional</div>
 <div class="cat-grid">
@@ -461,7 +429,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div id="parcial-field" class="field" style="margin-bottom:0">
 <div class="field-label">Horas pactadas en tu contrato</div>
 <input type="number" id="hPactadas" placeholder="ej. 80" min="1" max="161" inputmode="decimal">
-<div class="field-hint">Las extras empiezan a partir de tus horas pactadas</div>
+<div class="field-hint">Las horas adicionales a tiempo parcial se estiman como complementarias; deben cumplir los límites y pactos aplicables.</div>
 </div>
 </div><div class="card">
 <div class="card-label">Jefe de Equipo</div>
@@ -471,7 +439,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="switch-sub">Plus del 10% del salario base según convenio</div>
 </div>
 <label class="switch"><input type="checkbox" id="switchJefe"><span class="slider"></span></label>
-</div>
+</div><div class="field" id="jefe-field" hidden><label class="field-label" for="n-horasJefe">Horas como responsable de equipo</label><input type="number" id="n-horasJefe" min="0" max="300" step="0.01" placeholder="Todas las horas trabajadas"><div class="field-hint">10% del salario base por hora de función, también en las horas extra. Para vacaciones, introduce abajo el promedio de pluses.</div></div>
 </div><div class="card">
 <div class="card-label">Plus de servicio</div>
 <div class="switch-row">
@@ -494,6 +462,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 </div><div class="card">
 <div class="card-label">Horas trabajadas este mes</div>
+<div class="field"><label class="field-label" for="n-diasAlta">Días remunerados del mes</label><input type="number" id="n-diasAlta" value="30" min="1" max="30" step="1"><div class="field-hint">Mes completo: 30, incluso en febrero o meses de 31 días. No se reduce el sueldo solo por tener menos horas asignadas.</div></div>
+<div class="field"><label class="field-label" for="n-objetivoHoras">Jornada de referencia de este mes (opcional)</label><input type="number" id="n-objetivoHoras" min="1" max="300" step="0.01" placeholder="Por defecto, la jornada contratada"><div class="field-hint">Si tienes distribución anual, introduce las horas ordinarias asignadas al mes. El exceso se estima como abonado, no compensado con descanso.</div></div>
 <div class="jornada-toggle" style="margin-bottom:0.85rem">
 <div class="jorn-btn active" id="modo-manual">Escribir horas<span class="jorn-sub">Introducir totales</span></div>
 <div class="jorn-btn" id="modo-cuadrante">Usar cuadrante<span class="jorn-sub">Calendario del mes</span></div>
@@ -517,10 +487,10 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <div class="switch-row" style="padding-top:0.85rem;border-top:1px solid var(--border)">
 <div>
-<div class="switch-text">He tenido vacaciones este mes</div>
-<div class="switch-sub">Cada día computa 5,226 h de jornada</div>
+<div class="switch-text" id="vac-label">He tenido vacaciones este mes</div><div class="switch-sub vacation-account-note" id="vac-access-note">Disponible con cuenta gratuita</div>
+<div class="switch-sub">Cada día computa la jornada contratada dividida entre 31</div>
 </div>
-<label class="switch"><input type="checkbox" id="switchVac"><span class="slider"></span></label>
+<label class="switch"><input type="checkbox" id="switchVac" aria-labelledby="vac-label" aria-describedby="vac-access-note"><span class="slider"></span></label>
 </div>
 <div id="vac-field" class="field" style="display:none;margin-top:0.8rem;margin-bottom:0">
 <div class="field-label">Días de vacaciones disfrutados</div>
@@ -536,6 +506,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <button type="button" class="cal-arrow" id="cal-next" aria-label="Mes siguiente">›</button>
 </div>
 <div class="cal-dow"><span>L</span><span>M</span><span>X</span><span>J</span><span>V</span><span class="fs">S</span><span class="fs">D</span></div>
+<p id="calendar-warning" role="status" hidden></p>
 <div class="cal-grid" id="cal-grid"></div>
 <div class="cal-leyenda">
 <span><i class="lg lg-trab"></i>Trabajado</span>
@@ -545,7 +516,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="cal-resumen" id="cal-resumen"></div>
 <div class="field-hint" style="margin-top:0.55rem">Pulsa un día para introducir tus turnos. Los turnos que cruzan medianoche reparten las horas al día real que corresponde.</div>
 </div>
-</div><div class="card">
+</div><div class="card"><div class="card-label">Si disfrutas vacaciones</div><div class="field"><label class="field-label" for="n-promedioVac">Promedio mensual de pluses variables (€)</label><input type="number" id="n-promedioVac" min="0" max="10000" step="0.01" placeholder="0"><div class="field-hint">Promedio de nocturnidad, festivos, responsable de equipo y demás pluses computables de los 12 meses anteriores (o del tiempo en alta si es menor). Se añade la parte de los días de vacaciones: promedio ÷ 31 × días. No incluyas aquí los conceptos fijos de la tabla.</div></div></div><div class="card">
 <div class="card-label">Pagas extra prorrateadas — activa las que tengas</div>
 <div class="paga-row">
 <div class="paga-btn" id="paga-julio">Paga Julio<span class="paga-sub">inactiva</span></div>
@@ -573,6 +544,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row"><span class="res-concept">Plus vestuario</span><span class="res-val up" id="r-vest">—</span></div>
 <div class="res-row" id="row-antig" style="display:none"><span class="res-concept" id="lbl-antig">Antigüedad</span><span class="res-val up" id="r-antig">—</span></div>
 <div class="res-row" id="row-jefe" style="display:none"><span class="res-concept" id="lbl-jefe">Plus Jefe de Equipo</span><span class="res-val up" id="r-jefe">—</span></div>
+<div class="res-row" id="row-vacplus" style="display:none"><span class="res-concept" id="lbl-vacplus">Promedio de pluses en vacaciones</span><span class="res-val up" id="r-vacplus">—</span></div>
+<div class="res-row" id="row-escolta" style="display:none"><span class="res-concept" id="lbl-escolta">Plus escolta</span><span class="res-val up" id="r-escolta">—</span></div>
 <div class="res-row" id="row-plusserv" style="display:none"><span class="res-concept">Plus de servicio</span><span class="res-val up" id="r-plusserv">—</span></div>
 <div class="res-row" id="row-extra" style="display:none"><span class="res-concept" id="lbl-extra">—</span><span class="res-val up" id="r-extra">—</span></div>
 <div class="res-row" id="row-noc" style="display:none"><span class="res-concept" id="lbl-noc">—</span><span class="res-val up" id="r-noc">—</span></div>
@@ -581,19 +554,20 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-divider"></div>
 <div class="bruto-row"><span class="bruto-label">Salario bruto</span><span class="bruto-val" id="r-bruto">—</span></div>
 <div class="res-section-label red">DEDUCCIONES</div>
-<div class="res-row"><span class="res-concept">Seguridad Social (6,50%) — fija por ley</span><span class="res-val down" id="r-ss">—</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social estimada según contrato y bases</span><span class="res-val down" id="r-ss">—</span></div>
 <div class="res-row" id="row-irpf" style="display:none"><span class="res-concept" id="lbl-irpf">Retención IRPF</span><span class="res-val down" id="r-irpf">—</span></div>
 <div class="res-row" id="row-irpf0" style="display:none"><span class="res-concept">Retención IRPF (0%)</span><span class="res-val down">0,00 €</span></div>
 </div>
 <div class="neto-box">
-<div class="neto-label">NETO A COBRAR<span>Lo que entra en tu cuenta</span></div>
+<div class="neto-label">NETO ESTIMADO<span>Según los datos y la retención indicados</span></div>
 <div class="neto-val" id="r-neto">—</div>
 </div>
-<button type="button" class="btn-pdf" id="btnPdfNomina" onclick="exportarPDF('nomina',this)">📤 Compartir / Descargar PDF</button>
+<button type="button" class="btn-pdf" id="btnPdfNomina" data-pdf="nomina">Compartir / Descargar PDF</button>
 </div>
 </div>
 
-<div id="view-finiquito">
+
+<div id="view-finiquito"><div class="card"><label class="field-label" for="f-contrato">Contrato para la cotización</label><select id="f-contrato"><option value="indefinido">Indefinido (incluido fijo discontinuo)</option><option value="temporal">Temporal general</option></select><div class="field-hint">Estimación de tipos de 2026. Algunas modalidades tienen reglas especiales.</div></div>
 <div class="card">
 <div class="card-label">Categoría profesional</div>
 <div class="cat-grid">
@@ -665,14 +639,19 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="paga-btn" id="fpaga-dic">Paga Diciembre<span class="paga-sub">no prorrateada</span></div>
 <div class="paga-btn" id="fpaga-mar">Paga Marzo<span class="paga-sub">no prorrateada</span></div>
 </div>
-<div class="field-hint" style="margin-top:0.6rem;">Las que NO marques se calcularán como pendientes en el finiquito (con IRPF y SS)</div>
+<div class="field-hint" style="margin-top:0.6rem;">Se calcula el devengo de las no prorrateadas, con IRPF. Las extras ya cotizan mes a mes; no se descuenta Seguridad Social otra vez.</div>
 </div>
 <div class="card">
-<div class="card-label">Tipo de baja o despido</div>
+<div class="card-label">Pagas del periodo que ya has cobrado</div><p class="field-hint">Resta aquí los importes brutos ya abonados de los periodos calculados. En diciembre, incluye la paga de Navidad si ya la has recibido. En la primera quincena de marzo o julio también se incluye el periodo anterior aún no vencido: resta su importe si ya te lo han pagado. No incluyas pagos de otros periodos ni pagas prorrateadas.</p>
+<div class="field"><label class="field-label" for="f-pagado-julio">Julio ya abonado (€)</label><input type="number" id="f-pagado-julio" min="0" max="20000" step="0.01" placeholder="0"></div>
+<div class="field"><label class="field-label" for="f-pagado-dic">Navidad ya abonada (€)</label><input type="number" id="f-pagado-dic" min="0" max="20000" step="0.01" placeholder="0"></div>
+<div class="field"><label class="field-label" for="f-pagado-mar">Marzo ya abonado (€)</label><input type="number" id="f-pagado-mar" min="0" max="20000" step="0.01" placeholder="0"></div>
+</div><div class="card"><div class="card-label">Tipo de baja o despido</div>
 <div class="field" style="margin-bottom:0">
 <select id="f-tipodespido">
 <option value="voluntaria">Baja Voluntaria (sin indemnización)</option>
-<option value="objetivo">Fin de Contrato / Despido Objetivo (20 días/año)</option>
+<option value="temporal">Fin de contrato temporal (12 días/año, salvo sustitución o formación)</option>
+<option value="objetivo">Despido Objetivo (20 días/año)</option>
 <option value="improcedente">Despido Improcedente (33 días/año)</option>
 </select>
 </div>
@@ -697,25 +676,25 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row" id="frow-navidad" style="display:none"><span class="res-concept" id="flbl-navidad">Paga Navidad proporcional</span><span class="res-val up" id="fr-navidad">—</span></div>
 <div class="res-row" id="frow-marzo" style="display:none"><span class="res-concept" id="flbl-marzo">Paga Marzo proporcional</span><span class="res-val up" id="fr-marzo">—</span></div>
 <div class="res-row"><span class="res-concept">Total liquidación bruta</span><span class="res-val neu" id="fr-liq-bruta">—</span></div>
-<div class="res-row"><span class="res-concept">Seguridad Social (6,50%)</span><span class="res-val down" id="fr-ss-liq">—</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social estimada de vacaciones</span><span class="res-val down" id="fr-ss-liq">—</span></div>
 <div class="res-row" id="frow-irpf-liq" style="display:none"><span class="res-concept" id="flbl-irpf-liq">Retención IRPF</span><span class="res-val down" id="fr-irpf-liq">—</span></div>
 <div class="res-divider"></div>
 <div class="bruto-row"><span class="bruto-label">Neto liquidación</span><span class="bruto-val" id="fr-liq-neto">—</span></div>
-<div class="res-section-label blue" id="frow-indem-label" style="display:none">INDEMNIZACIÓN (exenta de IRPF por ley)</div>
+<div class="res-section-label blue" id="frow-indem-label" style="display:none">INDEMNIZACIÓN ESTIMADA</div>
 <div class="res-row" id="frow-indem" style="display:none"><span class="res-concept" id="flbl-indem">Indemnización por despido</span><span class="res-val exento" id="fr-indem">—</span></div>
 </div>
 <div class="exento-box" id="f-exento-info" style="display:none">
-<strong>Indemnización exenta de IRPF:</strong> Va íntegra a tu cuenta bancaria. Exenta hasta el límite legal: 33 días/año, máximo 24 meses para despido improcedente; 20 días/año, máximo 12 meses para despido objetivo.<br><br><strong>Salario regulador aplicado:</strong> <span id="fr-salreg">—</span>/mes. Según la doctrina del Tribunal Supremo, la indemnización se calcula sobre los conceptos salariales más la prorrata de las pagas extras, excluyendo los pluses de transporte y vestuario por su naturaleza extrasalarial.
+<strong>Indemnización estimada:</strong> el despido puede estar exento de IRPF dentro de los límites y requisitos legales; no se garantiza la exención por seleccionar una opción. El fin de contrato temporal lleva la retención indicada. No se incluyen salarios pendientes ni otras deudas de la empresa. Se presumen abonadas las extras de periodos anteriores, excepto la de marzo o julio aún no vencida; comprueba cualquier anticipo o impago.<br><br><strong>Salario regulador aplicado:</strong> <span id="fr-salreg">—</span>/mes. Según la doctrina del Tribunal Supremo, la indemnización se calcula sobre los conceptos salariales más la prorrata de las pagas extras, excluyendo los pluses de transporte y vestuario por su naturaleza extrasalarial.
 </div>
 <div class="neto-box">
 <div class="neto-label">TOTAL NETO<span>Lo que entra en tu cuenta</span></div>
 <div class="neto-val" id="fr-total-neto">—</div>
 </div>
-<button type="button" class="btn-pdf" id="btnPdfFiniquito" onclick="exportarPDF('finiquito',this)">📤 Compartir / Descargar PDF</button>
+<button type="button" class="btn-pdf" id="btnPdfFiniquito" data-pdf="finiquito">Compartir / Descargar PDF</button>
 </div>
 </div>
 
-<div id="view-baja">
+<div id="view-baja"><div class="card"><label class="field-label" for="b-contrato">Contrato para la cotización</label><select id="b-contrato"><option value="indefinido">Indefinido (incluido fijo discontinuo)</option><option value="temporal">Temporal general</option></select><div class="field-hint">Estimación de tipos de 2026. Algunas modalidades tienen reglas especiales.</div></div>
 <div class="card">
 <div class="card-label">Categoría profesional</div>
 <div class="cat-grid">
@@ -742,7 +721,7 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="field" style="margin-bottom:0">
 <div class="field-label">Importe de tu base de cotización (€)</div>
 <input type="number" id="b-baseManual" placeholder="ej. 1450" min="0" step="0.01" inputmode="decimal">
-<div class="field-hint">Introduce la casilla <strong>"Base Contingencias Comunes"</strong> de tu nómina del mes anterior a la baja. Esa base ya incluye por ley todos tus pluses que cotizan (jefe de equipo, plus de servicio...) y la prorrata de las pagas extras — no hace falta añadir nada más. Las horas extras no computan. Si lo dejas en 0, usará el mínimo del convenio prorrateado.</div>
+<div class="field-hint">Para enfermedad común, introduce la casilla <strong>"Base Contingencias Comunes"</strong> de tu nómina del mes anterior a la baja. Esa base ya incluye por ley todos tus pluses que cotizan (jefe de equipo, plus de servicio...) y la prorrata de las pagas extras — no hace falta añadir nada más. Para accidente laboral utiliza la base reguladora mensual equivalente que incluya la media de horas extra que corresponda. Si lo dejas en 0, se usará una estimación de convenio a jornada completa. Para contratos a tiempo parcial o bases variables, introduce la base reguladora real.</div>
 </div>
 </div>
 <div class="card">
@@ -766,14 +745,16 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="field-label">¿Qué número de baja es este año?</div>
 <select id="b-nbaja">
 <option value="1">1.ª baja del año</option>
-<option value="2">2.ª o 3.ª baja del año</option>
-<option value="4">4.ª baja o más del año</option>
+<option value="2">2.ª baja del año</option>
+<option value="3">3.ª baja o más del año</option>
 </select>
 <div class="field-hint" id="b-hint-nbaja">El convenio da un complemento en las 3 primeras bajas del año</div>
 </div>
 </div>
 <div class="card">
 <div class="card-label">Duración de la baja</div>
+<div class="field"><label><input type="checkbox" id="b-sin-procesos"> No he tenido otro proceso de baja en los 12 meses anteriores</label><div class="field-hint">Necesario para el complemento del 80% entre los días 91 y 100.</div></div>
+<div class="field"><label class="field-label" for="b-hospital-dia">Si hay hospitalización, ¿en qué día de la baja empieza?</label><input type="number" id="b-hospital-dia" min="1" max="545" step="1" value="1"><div class="field-hint">Solo se utiliza al elegir hospitalización. El 100% empieza ese día y dura un máximo de 40 días.</div></div>
 <div class="field" style="margin-bottom:0">
 <div class="field-label">Número de días de baja</div>
 <input type="number" id="b-dias" placeholder="0" min="1" max="545" inputmode="decimal">
@@ -801,10 +782,11 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="res-row" id="brow-t4" style="display:none"><span class="res-concept" id="blbl-t4">—</span><span class="res-val up" id="br-t4">—</span></div>
 <div class="res-row" id="brow-t5" style="display:none"><span class="res-concept" id="blbl-t5">—</span><span class="res-val up" id="br-t5">—</span></div>
 <div class="res-row" id="brow-t6" style="display:none"><span class="res-concept" id="blbl-t6">—</span><span class="res-val up" id="br-t6">—</span></div>
+<div class="res-row" id="brow-t7" style="display:none"><span class="res-concept" id="blbl-t7">—</span><span class="res-val up" id="br-t7">—</span></div>
 <div class="res-divider"></div>
 <div class="bruto-row"><span class="bruto-label">Total prestación bruta</span><span class="bruto-val" id="br-total-bruto">—</span></div>
 <div class="res-section-label red">DEDUCCIONES</div>
-<div class="res-row"><span class="res-concept">Seguridad Social (6,50% de la base cotizada)</span><span class="res-val down" id="br-ss">—</span></div>
+<div class="res-row"><span class="res-concept">Seguridad Social estimada sobre la base cotizada</span><span class="res-val down" id="br-ss">—</span></div>
 <div class="res-row" id="brow-irpf" style="display:none"><span class="res-concept" id="blbl-irpf">Retención IRPF</span><span class="res-val down" id="br-irpf">—</span></div>
 <div class="res-row" id="brow-irpf0" style="display:none"><span class="res-concept">Retención IRPF (0%)</span><span class="res-val down">0,00 €</span></div>
 </div>
@@ -815,13 +797,44 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="info-box" style="margin-top:0">
 <strong>Convenio Seguridad Privada — Art. 51:</strong> Días 21-40 al 100%, días 41-60 al 90%, días 61-100 al 80%. Accidente laboral: 100% desde el día siguiente. Hospitalización: 100% hasta 40 días.<br><br><strong>Aviso de Pagas Extras:</strong> Si cobras las pagas extras en verano y Navidad de forma anual, ten en cuenta que la parte proporcional ya va sumada en el importe de la baja diaria, por lo que la empresa restará los días correspondientes de baja de tus pagas cuando llegue su mes de cobro.
 </div>
-<button type="button" class="btn-pdf" id="btnPdfBaja" onclick="exportarPDF('baja',this)">📤 Compartir / Descargar PDF</button>
+<button type="button" class="btn-pdf" id="btnPdfBaja" data-pdf="baja">Compartir / Descargar PDF</button>
 </div>
 </div>
 
+
+<section class="account-card" aria-labelledby="account-heading">
+  <div id="account-guest">
+    <p class="account-kicker">Tu nómina, a tu ritmo</p>
+    <h2 id="account-heading">Calcula sin límites. Regístrate para ir un paso más allá.</h2>
+    <p>Empieza con tu nómina. Crea una cuenta cuando quieras tener todas las herramientas a mano.</p>
+    <div class="account-comparison">
+      <div class="account-plan"><h3>Sin cuenta</h3><p class="plan-price">Gratis, siempre</p><ul><li>Calcular tu nómina sin límites</li><li>Horas extras, noches y festivos</li><li>Cuadrante de turnos en este dispositivo</li></ul><p class="plan-note">Añadir vacaciones, descargar PDF y calcular la baja o el finiquito requiere una cuenta.</p></div>
+      <div class="account-plan account-plan-featured"><span class="plan-badge">Más herramientas · 0 €</span><h3>Con cuenta gratuita</h3><p class="plan-price">Todo lo anterior, y además</p><ul><li>Añadir vacaciones a tu nómina y cuadrante</li><li>Descargar y compartir PDF</li><li>Calcular la baja por incapacidad temporal</li><li>Calcular finiquito e indemnización</li></ul></div>
+    </div>
+    <div class="account-actions"><button type="button" class="account-primary" data-auth-open="signup">Crear cuenta gratis</button><button type="button" class="account-secondary" data-auth-open="signin">Ya tengo cuenta</button></div>
+    <p>Los importes de tus cálculos siguen en tu dispositivo.</p>
+  </div>
+  <div id="account-member" hidden>
+    <h2 id="account-title">Tu cuenta está activa</h2><p class="account-email" id="account-email"></p>
+    <p id="account-benefits">Ya puedes añadir vacaciones, descargar tus PDF y calcular la baja y el finiquito.</p>
+    <button type="button" class="account-secondary" id="account-signout">Cerrar sesión</button>
+    <details id="marketing-preferences" class="marketing-preferences" hidden>
+      <summary>Mis preferencias de correo</summary>
+      <p>Elige qué quieres recibir de Nómina Vigilante (Carlos Adán Miro). Todo es opcional y puedes cambiarlo cuando quieras.</p>
+      <form id="marketing-form">
+        <label class="auth-check"><input type="checkbox" id="marketing-own"><span>Quiero recibir por correo novedades de la calculadora, consejos y ofertas propias de Nómina Vigilante relacionadas con la seguridad privada.</span></label>
+        <label class="auth-check"><input type="checkbox" id="marketing-partners"><span>Quiero recibir por correo promociones de formación, productos y servicios de colaboradores del sector de la seguridad privada, enviadas por Nómina Vigilante, sin ceder mi correo a esos colaboradores.</span></label>
+        <div class="account-actions"><button type="submit" class="account-primary" id="marketing-save" disabled>Guardar preferencias</button><button type="button" class="account-secondary" id="marketing-withdraw">Dar de baja toda la publicidad</button></div>
+      </form>
+      <p id="marketing-status" class="auth-status" role="status" aria-live="polite"></p>
+      <p>La baja no elimina tu cuenta. También puedes <a href="mailto:badawolfprivado@gmail.com?subject=Baja%20de%20publicidad">solicitar la baja por correo</a>. <a href="privacidad.html#publicidad" target="_blank" rel="noopener">Cómo tratamos estos datos</a>.</p>
+    </details>
+  </div>
+  <p id="account-notice" role="status"></p>
+</section>
 <section class="seo-section">
   <a href="sindicatos-formacion.html" class="guide-card guide-destacada">
-    <div class="guide-icon">🎓</div>
+    <div class="guide-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg></div>
     <div class="guide-body">
       <div class="guide-kicker">Recursos en tu provincia</div>
       <div class="guide-title">Sindicatos y Formación</div>
@@ -834,1341 +847,13 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="disclaimer">
 Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026)<br>
 Art. 51 IT · Art. 45 Pagas extras · Art. 57 Vacaciones · Art. 42 Antigüedad<br>
-Herramienta orientativa — compara siempre con tu nómina real
+Estimación con tablas de 2026 — contrasta tu contrato, bases y complementos reales. No incluye todas las situaciones especiales.
 </div>
 
 </div>
 
-<script>
-
-
-/* ══════════════════════════════════════════════════════════
-   EXPORTACIÓN A PDF
-   ══════════════════════════════════════════════════════════ */
-var ctxPDF = {nomina:null, finiquito:null, baja:null, cuadrante:null};
-
-var NOMBRES_CAT = {
-  sin_arma:"Vigilante de Seguridad sin arma",
-  con_arma:"Vigilante de Seguridad con arma",
-  escolta:"Escolta Privado",
-  explosivos:"Vigilante de Explosivos",
-  fondos:"Vigilante de Transporte de Fondos",
-  tr_explo:"Vigilante de Transporte de Explosivos"
-};
-function nombreCat(k,esCond){
-  return NOMBRES_CAT[k] + (esCond&&CATS[k].cBase ? " — Conductor" : "");
-}
-function fechaES(iso){
-  if(!iso) return "—";
-  var p=iso.split("-");
-  return p[2]+"/"+p[1]+"/"+p[0];
-}
-function hoyLargo(){
-  var M=["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
-  var d=new Date();
-  return d.getDate()+" de "+M[d.getMonth()]+" de "+d.getFullYear();
-}
-function sufijoArchivo(){
-  var d=new Date();
-  return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
-}
-
-/* Lee el bloque de resultados tal y como se ve en pantalla */
-function leerResultado(idContenedor){
-  var cont=document.getElementById(idContenedor);
-  var top=cont.querySelector(".res-top");
-  var bloques=[], actual=null;
-  Array.prototype.forEach.call(top.children,function(el){
-    if(el.style.display==="none") return;
-    if(el.classList.contains("res-section-label")){
-      actual={titulo:el.textContent.trim(),
-              color:el.classList.contains("red")?"rojo":(el.classList.contains("blue")?"azul":"verde"),
-              filas:[]};
-      bloques.push(actual);
-    } else if(el.classList.contains("res-row")){
-      var c=el.querySelector(".res-concept"), v=el.querySelector(".res-val");
-      if(!c||!v) return;
-      if(!actual){actual={titulo:"",color:"verde",filas:[]};bloques.push(actual);}
-      actual.filas.push({c:c.textContent.trim(), v:v.textContent.trim(),
-                         neg:v.className.indexOf("down")>=0, exento:v.className.indexOf("exento")>=0});
-    } else if(el.classList.contains("bruto-row")){
-      var lb=el.querySelector(".bruto-label"), vb=el.querySelector(".bruto-val");
-      if(!lb||!vb) return;
-      if(!actual){actual={titulo:"",color:"verde",filas:[]};bloques.push(actual);}
-      actual.filas.push({c:lb.textContent.trim(), v:vb.textContent.trim(), total:true});
-    }
-  });
-  return bloques;
-}
-
-function cargarJsPDF(cb){
-  if(window.jspdf&&window.jspdf.jsPDF){cb();return;}
-  var s=document.createElement("script");
-  s.src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js";
-  s.onload=cb;
-  s.onerror=function(){alert("No se ha podido cargar el generador de PDF. Comprueba tu conexión e inténtalo de nuevo.");};
-  document.head.appendChild(s);
-}
-
-function exportarPDF(tipo, btn){
-  var txt=btn.textContent;
-  btn.disabled=true; btn.textContent="Generando...";
-  cargarJsPDF(function(){
-    try{
-      construirPDF(tipo);
-    }
-    catch(e){ alert("Ha ocurrido un error al generar el PDF."); }
-    btn.disabled=false; btn.textContent=txt;
-  });
-}
-
-function construirPDF(tipo){
-  var cfg={
-    nomina:   {titulo:"CÁLCULO DE NÓMINA MENSUAL", cont:"resultado",
-               netoId:"r-neto", netoLbl:"NETO A COBRAR", archivo:"nomina"},
-    finiquito:{titulo:"CÁLCULO DE FINIQUITO", cont:"resultado-finiquito",
-               netoId:"fr-total-neto", netoLbl:"TOTAL NETO", archivo:"finiquito"},
-    baja:     {titulo:"CÁLCULO DE PRESTACIÓN POR BAJA (IT)", cont:"resultado-baja",
-               netoId:"br-neto", netoLbl:"NETO DE LA BAJA", archivo:"baja-it"}
-  }[tipo];
-
-  var datos=ctxPDF[tipo];
-  if(!datos){alert("Primero pulsa el botón de calcular.");return;}
-
-  var conCuadrante = (tipo==="nomina" && !!ctxPDF.cuadrante);
-
-  var jsPDF=window.jspdf.jsPDF;
-  /* A4 vertical con medidas explícitas en milímetros: 210 x 297 */
-  var A4_ANCHO = 210, A4_ALTO = 297;
-  var doc=new jsPDF({unit:"mm", format:[A4_ANCHO, A4_ALTO], orientation:"portrait", compress:true});
-  try{ doc.setProperties({title:"Calculo de nomina - Nomina Vigilante", creator:"calculadoravigilante.com"}); }catch(e){}
-  var W = A4_ANCHO, H = A4_ALTO;
-  var M = conCuadrante?10:16;
-  var ancho = W-M*2;
-
-  var C={
-    ORO:[184,114,10], ORO2:[212,134,15], ORObg:[253,242,224], OROline:[232,200,122],
-    TXT:[44,36,22], TXT2:[74,63,47], MUT:[138,122,101],
-    VER:[45,122,58], ROJ:[184,50,50], AZU:[42,94,168],
-    LIN:[232,227,218], SURF:[250,248,245]
-  };
-
-  /* ── Piezas reutilizables ── */
-  function cabecera(subtitulo){
-    var hb = conCuadrante?21:24;
-    doc.setFillColor(C.ORO2[0],C.ORO2[1],C.ORO2[2]);
-    doc.rect(0,0,W,hb,"F");
-    doc.setTextColor(255,255,255);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?15:16);
-    doc.text("NOMINA VIGILANTE",M,conCuadrante?11:12.5);
-    doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7.5:8);
-    doc.text("calculadoravigilante.com",M,conCuadrante?16.5:18.5);
-    doc.text("Emitido el "+hoyLargo(),W-M,conCuadrante?16.5:18.5,{align:"right"});
-    var ht = conCuadrante?10:12;
-    doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
-    doc.rect(0,hb,W,ht,"F");
-    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
-    doc.line(0,hb+ht,W,hb+ht);
-    doc.setTextColor(C.TXT[0],C.TXT[1],C.TXT[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?10:11);
-    doc.text(subtitulo,M,hb+ht-2.6);
-    return hb+ht+(conCuadrante?6:7);
-  }
-
-  function bloqueDatos(x,y,an){
-    doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(8);
-    doc.text("DATOS DEL CALCULO",x,y);
-    y+=2.5;
-    var claves=Object.keys(datos);
-    var paso = conCuadrante?5.1:5.2;
-    var alto=claves.length*paso+4.5;
-    doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
-    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
-    doc.roundedRect(x,y,an,alto,2,2,"FD");
-    y+=6;
-    claves.forEach(function(k){
-      doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7.4:7.6);
-      doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
-      var kk=doc.splitTextToSize(k, an*0.5);
-      doc.text(kk[0],x+3,y);
-      doc.setFont("helvetica","bold");
-      doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
-      var val=doc.splitTextToSize(String(datos[k]), an*0.5);
-      doc.text(val[0],x+an-3,y,{align:"right"});
-      y+=paso;
-    });
-    return y+5;
-  }
-
-  function bloqueDesglose(x,y,an){
-    var bloques=leerResultado(cfg.cont);
-    bloques.forEach(function(b){
-      if(b.titulo){
-        var col = b.color==="rojo"?C.ROJ:(b.color==="azul"?C.AZU:C.VER);
-        doc.setTextColor(col[0],col[1],col[2]);
-        doc.setFont("helvetica","bold"); doc.setFontSize(8);
-        doc.text(b.titulo,x,y);
-        y+=1.8;
-        doc.setDrawColor(col[0],col[1],col[2]); doc.setLineWidth(0.5);
-        doc.line(x,y,x+an,y);
-        y+=5;
-      }
-      b.filas.forEach(function(f){
-        if(f.total){
-          y+=1;
-          doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
-          doc.line(x,y-3.5,x+an,y-3.5);
-          doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?9.4:10);
-          doc.setTextColor(C.TXT[0],C.TXT[1],C.TXT[2]);
-          doc.text(f.c,x,y);
-          doc.text(f.v,x+an,y,{align:"right"});
-          y+=conCuadrante?6.3:6.5;
-        } else {
-          doc.setFont("helvetica","normal"); doc.setFontSize(conCuadrante?7.6:8);
-          doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
-          var concepto=doc.splitTextToSize(f.c, an-(conCuadrante?24:32));
-          doc.text(concepto[0],x,y);
-          var col = f.neg?C.ROJ:(f.exento?C.AZU:C.VER);
-          doc.setTextColor(col[0],col[1],col[2]);
-          doc.setFont("helvetica","bold");
-          doc.text(f.v,x+an,y,{align:"right"});
-          y+=conCuadrante?5.2:5.4;
-        }
-      });
-      y+=3;
-    });
-    return y;
-  }
-
-  function bloqueNeto(x,y,an){
-    var hn = conCuadrante?23:20;
-    doc.setFillColor(C.ORObg[0],C.ORObg[1],C.ORObg[2]);
-    doc.setDrawColor(C.OROline[0],C.OROline[1],C.OROline[2]); doc.setLineWidth(0.6);
-    doc.roundedRect(x,y,an,hn,2.5,2.5,"FD");
-    doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?10.5:11);
-    doc.text(cfg.netoLbl,x+5.5,y+(conCuadrante?8:9));
-    doc.setFont("helvetica","normal"); doc.setFontSize(7);
-    doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
-    doc.text("Lo que entra en tu cuenta",x+5.5,y+(conCuadrante?12.8:14.5));
-    doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-    doc.setFont("helvetica","bold"); doc.setFontSize(conCuadrante?19:20);
-    doc.text(document.getElementById(cfg.netoId).textContent,x+an-5.5,y+(conCuadrante?20:13),{align:"right"});
-    return y+hn+7;
-  }
-
-  function pie(){
-    var yp=conCuadrante?H-20:H-24;
-    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.3);
-    doc.line(M,yp,W-M,yp);
-    doc.setFont("helvetica","normal"); doc.setFontSize(6.8);
-    doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
-    var legal=[
-      "Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 (BOE 18/04/2026).",
-      "Documento orientativo generado automaticamente en calculadoravigilante.com. No sustituye a la nomina oficial ni tiene validez contractual.",
-      "Compara siempre con tu recibo de salario y consulta a un asesor laboral o a tu representacion sindical ante cualquier discrepancia."
-    ];
-    var yy=yp+4.5;
-    legal.forEach(function(l){ doc.text(l,W/2,yy,{align:"center"}); yy+=3.6; });
-  }
-
-  /* ══ MAQUETACIÓN ══ */
-  if(conCuadrante){
-    /* ─── UNA SOLA HOJA VERTICAL: cuadrante arriba, desglose abajo ─── */
-    var y=cabecera(cfg.titulo+" — "+MESES_ES[ctxPDF.cuadrante.mes].toUpperCase()+" "+ctxPDF.cuadrante.anio);
-
-    /* Arriba: el cuadrante del mes */
-    y=dibujarCuadrantePDF(doc, y, M, ancho, W, ctxPDF.cuadrante.anio, ctxPDF.cuadrante.mes, C);
-
-    /* Abajo: dos columnas.
-       Izquierda: datos del cálculo + caja del neto.
-       Derecha: devengos y deducciones (es la más larga). */
-    var colAn=(ancho-9)/2;
-    var xIzq=M, xDer=M+colAn+9;
-    var yIzq=bloqueDatos(xIzq, y, colAn);
-    bloqueNeto(xIzq, yIzq+2, colAn);
-    bloqueDesglose(xDer, y, colAn);
-    pie();
-  } else {
-    /* ─── HOJA ÚNICA VERTICAL (modo manual, finiquito y baja) ─── */
-    var yv=cabecera(cfg.titulo);
-    yv=bloqueDatos(M,yv,ancho);
-    yv=bloqueDesglose(M,yv,ancho);
-    if(yv>H-52){ doc.addPage([A4_ANCHO, A4_ALTO],"portrait"); yv=20; }
-    bloqueNeto(M,yv+2,ancho);
-    pie();
-  }
-
-  var archivo="calculo-"+cfg.archivo+"-"+sufijoArchivo()+".pdf";
-  guardarOCompartir(doc, archivo, tipo);
-}
-
-/* Dibuja el cuadrante del mes en la mitad superior de la hoja */
-function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
-  var t=totalesMes(anio,mes);
-  var cw=ancho/7;
-
-  var primeroTmp=new Date(anio,mes,1);
-  var offset=(primeroTmp.getDay()+6)%7;
-  var ultimo=new Date(anio,mes+1,0).getDate();
-  var filasMes=Math.ceil((offset+ultimo)/7);
-  var ch=(filasMes>=6)?14.4:17.2;
-
-  /* Título del mes */
-  doc.setTextColor(C.ORO[0],C.ORO[1],C.ORO[2]);
-  doc.setFont("helvetica","bold"); doc.setFontSize(10);
-  doc.text(MESES_ES[mes].toUpperCase()+" "+anio, W/2, y, {align:"center"});
-  y+=4.5;
-
-  /* Cabecera de días */
-  var DOW=["LUNES","MARTES","MIERCOLES","JUEVES","VIERNES","SABADO","DOMINGO"];
-  for(var i=0;i<7;i++){
-    var esFS=(i>=5);
-    doc.setFillColor(esFS?253:245, esFS?242:243, esFS?224:240);
-    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.25);
-    doc.rect(MG+cw*i, y, cw, 6, "FD");
-    doc.setFont("helvetica","bold"); doc.setFontSize(6.2);
-    doc.setTextColor(esFS?C.ORO[0]:C.MUT[0], esFS?C.ORO[1]:C.MUT[1], esFS?C.ORO[2]:C.MUT[2]);
-    doc.text(DOW[i], MG+cw*i+cw/2, y+4, {align:"center"});
-  }
-  y+=6;
-
-  var col=offset, fila=0;
-  for(var v=0; v<offset; v++){
-    doc.setFillColor(255,255,255);
-    doc.setDrawColor(240,238,234); doc.setLineWidth(0.15);
-    doc.rect(MG+cw*v, y, cw, ch, "FD");
-  }
-
-  for(var d=1; d<=ultimo; d++){
-    var x=MG+cw*col, yy=y+ch*fila;
-    var fecha=new Date(anio,mes,d);
-    var r=resumenDia(anio,mes,d);
-    var plus=diaConPlus(fecha);
-
-    if(r&&r.tipo==="trab"){ doc.setFillColor(237,247,239); }
-    else if(r&&r.tipo==="vac"){ doc.setFillColor(238,244,252); }
-    else if(plus){ doc.setFillColor(253,242,224); }
-    else { doc.setFillColor(250,248,245); }
-    doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.25);
-    doc.rect(x, yy, cw, ch, "FD");
-
-    doc.setFont("helvetica","bold"); doc.setFontSize(7.6);
-    doc.setTextColor(plus?C.ORO[0]:C.MUT[0], plus?C.ORO[1]:C.MUT[1], plus?C.ORO[2]:C.MUT[2]);
-    doc.text(String(d), x+2, yy+4.6);
-
-    if(r&&r.tipo==="trab"){
-      doc.setFont("helvetica","normal"); doc.setFontSize(6.4);
-      doc.setTextColor(C.VER[0],C.VER[1],C.VER[2]);
-      if(r.lineas.length===2){
-        doc.text(r.lineas[0], x+cw/2, yy+8.6, {align:"center"});
-        doc.text(r.lineas[1], x+cw/2, yy+12.4, {align:"center"});
-      } else {
-        doc.text(r.lineas[0], x+cw/2, yy+10.4, {align:"center"});
-      }
-      doc.setFont("helvetica","bold"); doc.setFontSize(6.4);
-      doc.setTextColor(C.TXT2[0],C.TXT2[1],C.TXT2[2]);
-      doc.text(String(r.horas).replace(".",",")+" h", x+cw-2, yy+4.6, {align:"right"});
-    } else if(r&&r.tipo==="vac"){
-      doc.setFont("helvetica","bold"); doc.setFontSize(7.4);
-      doc.setTextColor(C.AZU[0],C.AZU[1],C.AZU[2]);
-      doc.text("VACAC.", x+cw/2, yy+ch/2+2.4, {align:"center"});
-    }
-
-    col++;
-    if(col>6){col=0;fila++;}
-  }
-  if(col>0){
-    for(var w=col; w<7; w++){
-      doc.setFillColor(255,255,255);
-      doc.setDrawColor(240,238,234); doc.setLineWidth(0.15);
-      doc.rect(MG+cw*w, y+ch*fila, cw, ch, "FD");
-    }
-    fila++;
-  }
-  y += ch*fila + 4.5;
-
-  /* Franja resumen del mes */
-  var hh=function(n){ return String(Math.round(n*100)/100).replace(".",",")+" h"; };
-  doc.setFillColor(C.SURF[0],C.SURF[1],C.SURF[2]);
-  doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.35);
-  doc.roundedRect(MG,y,ancho,19,2.5,2.5,"FD");
-  var items=[
-    ["Trabajados", String(t.diasTrab)+" dias", false],
-    ["Libres", String(t.diasLibres)+" dias", false],
-    ["Vacaciones", String(t.diasVac)+" dias", false],
-    ["Nocturnas", hh(t.noct), false],
-    ["Finde / festivo", hh(t.plus), false],
-    ["TOTAL", hh(t.horas), true]
-  ];
-  var celda=ancho/items.length;
-  items.forEach(function(it,i){
-    if(i>0){
-      doc.setDrawColor(C.LIN[0],C.LIN[1],C.LIN[2]); doc.setLineWidth(0.2);
-      doc.line(MG+celda*i, y+3, MG+celda*i, y+16);
-    }
-    doc.setFont("helvetica","normal"); doc.setFontSize(6.4);
-    doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
-    doc.text(it[0], MG+celda*i+celda/2, y+6.4, {align:"center"});
-    doc.setFont("helvetica","bold"); doc.setFontSize(it[2]?11.5:9);
-    doc.setTextColor(it[2]?C.ORO[0]:C.TXT[0], it[2]?C.ORO[1]:C.TXT[1], it[2]?C.ORO[2]:C.TXT[2]);
-    doc.text(it[1], MG+celda*i+celda/2, y+14.2, {align:"center"});
-  });
-  return y+19+7;
-}
-
-/* Comparte el PDF por el panel nativo del móvil (WhatsApp, Mail, Guardar...)
-   si el navegador lo permite; si no, lo descarga directamente. */
-function guardarOCompartir(doc, filename, tipo){
-  var blob;
-  try{ blob=doc.output("blob"); }
-  catch(e){ doc.save(filename); return; }
-
-  var file=null;
-  try{ file=new File([blob],filename,{type:"application/pdf"}); }catch(e){ file=null; }
-
-  /* En móvil/tablet abrimos el panel de compartir; en ordenador descargamos directamente */
-  var esTactil=false;
-  try{
-    esTactil = (navigator.maxTouchPoints||0)>0 &&
-               window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-  }catch(e){ esTactil=false; }
-
-  if(esTactil && file && navigator.canShare && navigator.canShare({files:[file]})){
-    navigator.share({files:[file], title:filename}).then(function(){
-      if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo,metodo:"compartir"});}
-    }).catch(function(err){
-      if(err && err.name==="AbortError") return; // el usuario ha cancelado, no hacemos nada más
-      descargarBlobDirecto(blob,filename,tipo);
-    });
-  } else {
-    descargarBlobDirecto(blob,filename,tipo);
-  }
-}
-
-function descargarBlobDirecto(blob, filename, tipo){
-  var url=URL.createObjectURL(blob);
-  var a=document.createElement("a");
-  a.href=url; a.download=filename;
-  document.body.appendChild(a); a.click();
-  setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },150);
-  if(typeof gtag!=="undefined"){gtag("event","descargar_pdf",{tipo_calculo:tipo,metodo:"descarga"});}
-}
-
-/* ══════════════════════════════════════════════════════════
-   AVISO PARA AÑADIR A LA PANTALLA DE INICIO
-   Solo en móvil, solo tras el primer cálculo y una única vez.
-   ══════════════════════════════════════════════════════════ */
-var promptInstalacion = null;
-var avisoInstMostrado = false;
-
-window.addEventListener("beforeinstallprompt", function(e){
-  e.preventDefault();
-  promptInstalacion = e;           // lo guardamos para lanzarlo desde nuestro botón
-});
-window.addEventListener("appinstalled", function(){
-  try{ localStorage.setItem("inst_aviso","instalada"); }catch(e){}
-  ocultarAvisoInst();
-  if(typeof gtag!=="undefined"){ gtag("event","app_instalada"); }
-});
-
-function yaEsApp(){
-  try{
-    return (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
-           || navigator.standalone === true;
-  }catch(e){ return false; }
-}
-function esMovil(){
-  try{
-    return (navigator.maxTouchPoints||0) > 0 &&
-           window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
-  }catch(e){ return false; }
-}
-function esIOS(){
-  var ua = navigator.userAgent || "";
-  return /iPad|iPhone|iPod/.test(ua) ||
-         (/Macintosh/.test(ua) && (navigator.maxTouchPoints||0) > 1);   // iPad moderno
-}
-function ocultarAvisoInst(){
-  var b=document.getElementById("inst-banner");
-  if(b) b.classList.remove("visible");
-}
-
-function mostrarAvisoInstalacion(){
-  if(avisoInstMostrado) return;
-  if(!esMovil()) return;                       // en ordenador no sale nada
-  if(yaEsApp()) return;                        // ya la tiene instalada
-  try{ if(localStorage.getItem("inst_aviso")) return; }catch(e){ return; }
-
-  var cont=document.getElementById("inst-contenido");
-  if(!cont) return;
-
-  if(promptInstalacion){
-    /* Android con instalación nativa: un solo toque */
-    cont.innerHTML='<button type="button" class="inst-btn" id="inst-instalar">Añadir a la pantalla de inicio</button>';
-    document.getElementById("inst-instalar").addEventListener("click",function(){
-      var p=promptInstalacion; promptInstalacion=null;
-      cerrarAvisoInst();
-      p.prompt();
-      p.userChoice.then(function(r){
-        if(typeof gtag!=="undefined"){ gtag("event","instalar_app",{resultado:r.outcome}); }
-      });
-    });
-  } else if(esIOS()){
-    /* iPhone y iPad: Apple no permite instalar solo, se explican los pasos */
-    document.getElementById("inst-sub").textContent="Tenla como una app más, sin buscar el enlace cada vez.";
-    var enSafari = /Safari/.test(navigator.userAgent) &&
-                   !/CriOS|FxiOS|EdgiOS|OPiOS|GSA/.test(navigator.userAgent);
-    var pasos = "";
-    if(!enSafari){
-      /* Ha entrado desde WhatsApp, Instagram, Chrome... y ahí iOS no deja añadir nada */
-      pasos =
-        '<div class="inst-paso"><span class="inst-num">1</span><span>Pulsa <span class="inst-ios-ico">&#8593;</span> <strong>Compartir</strong> y elige <strong>Abrir en Safari</strong></span></div>'+
-        '<div class="inst-paso"><span class="inst-num">2</span><span>Ya en Safari, vuelve a pulsar <span class="inst-ios-ico">&#8593;</span> <strong>Compartir</strong> (abajo en el centro)</span></div>'+
-        '<div class="inst-paso"><span class="inst-num">3</span><span>Baja por la lista y pulsa <strong>Añadir a pantalla de inicio</strong></span></div>'+
-        '<div class="inst-paso"><span class="inst-num">4</span><span>Arriba a la derecha, pulsa <strong>Añadir</strong></span></div>';
-    } else {
-      pasos =
-        '<div class="inst-paso"><span class="inst-num">1</span><span>Pulsa <span class="inst-ios-ico">&#8593;</span> <strong>Compartir</strong>, abajo en el centro de la pantalla</span></div>'+
-        '<div class="inst-paso"><span class="inst-num">2</span><span>Baja por la lista y pulsa <strong>Añadir a pantalla de inicio</strong></span></div>'+
-        '<div class="inst-paso"><span class="inst-num">3</span><span>Arriba a la derecha, pulsa <strong>Añadir</strong></span></div>';
-    }
-    cont.innerHTML='<div class="inst-pasos">'+pasos+'</div>'+
-      '<button type="button" class="inst-btn" id="inst-ok">Entendido</button>';
-    document.getElementById("inst-ok").addEventListener("click",cerrarAvisoInst);
-  } else {
-    /* Android sin prompt nativo: se explican los pasos del menú */
-    cont.innerHTML=
-      '<div class="inst-pasos">'+
-        '<div class="inst-paso"><span class="inst-num">1</span><span>Abre el menú <strong>⋮</strong> del navegador, arriba a la derecha</span></div>'+
-        '<div class="inst-paso"><span class="inst-num">2</span><span>Elige <strong>Añadir a pantalla de inicio</strong></span></div>'+
-      '</div>'+
-      '<button type="button" class="inst-btn" id="inst-ok">Entendido</button>';
-    document.getElementById("inst-ok").addEventListener("click",cerrarAvisoInst);
-  }
-
-  avisoInstMostrado=true;
-  document.getElementById("inst-banner").classList.add("visible");
-  if(typeof gtag!=="undefined"){ gtag("event","aviso_instalacion_visto"); }
-}
-
-function cerrarAvisoInst(){
-  try{ localStorage.setItem("inst_aviso","visto"); }catch(e){}
-  ocultarAvisoInst();
-}
-
-window.addEventListener("DOMContentLoaded",function(){
-  var x=document.getElementById("inst-cerrar");
-  if(x) x.addEventListener("click",cerrarAvisoInst);
-});
-
-/* ══════════════════════════════════════════════════════════
-   CUADRANTE MENSUAL
-   Calcula totales y los vuelca a los campos de horas.
-   No toca el motor de nómina: solo lo alimenta.
-   ══════════════════════════════════════════════════════════ */
-var CUAD = {};                 // { "2026-09": { "1": {tramos:[...], vac:bool, fest:bool} } }
-var calAnio, calMes;           // mes visible (mes 0-11)
-var dlgClave = null;           // "2026-09|1" del día que se está editando
-var MODO_HORAS = "manual";
-var H_VACACION = 5.226;        // 162 h ÷ 31 días de vacaciones (convenio)
-
-var MESES_ES = ["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"];
-
-/* ── Festivos nacionales (Viernes Santo calculado con el algoritmo de Pascua) ── */
-function domingoPascua(a){
-  var A=a%19, B=Math.floor(a/100), C=a%100, D=Math.floor(B/4), E=B%4;
-  var F=Math.floor((B+8)/25), G=Math.floor((B-F+1)/3), H=(19*A+B-D-G+15)%30;
-  var I=Math.floor(C/4), K=C%4, L=(32+2*E+2*I-H-K)%7;
-  var M=Math.floor((A+11*H+22*L)/451);
-  var mes=Math.floor((H+L-7*M+114)/31), dia=((H+L-7*M+114)%31)+1;
-  return new Date(a,mes-1,dia);
-}
-function festivosNacionales(a){
-  var f={};
-  [[0,1],[0,6],[4,1],[7,15],[9,12],[10,1],[11,6],[11,8],[11,25]].forEach(function(p){
-    f[p[0]+"-"+p[1]]=true;
-  });
-  var vs=new Date(domingoPascua(a).getTime()-2*864e5);   // Viernes Santo
-  f[vs.getMonth()+"-"+vs.getDate()]=true;
-  return f;
-}
-var CACHE_FEST={};
-function esFestivoNacional(d){
-  var a=d.getFullYear();
-  if(!CACHE_FEST[a]) CACHE_FEST[a]=festivosNacionales(a);
-  return !!CACHE_FEST[a][d.getMonth()+"-"+d.getDate()];
-}
-
-/* ── Acceso a datos ── */
-function claveMes(a,m){ return a+"-"+String(m+1).padStart(2,"0"); }
-function datosDia(a,m,d){
-  var mm=CUAD[claveMes(a,m)];
-  return (mm&&mm[d])?mm[d]:null;
-}
-function guardarCuad(){
-  try{ localStorage.setItem("cuadrante_vigilante",JSON.stringify(CUAD)); }catch(e){}
-}
-function cargarCuad(){
-  try{ var s=localStorage.getItem("cuadrante_vigilante"); if(s) CUAD=JSON.parse(s)||{}; }catch(e){ CUAD={}; }
-}
-
-/* ── ¿Este día concreto genera plus de fin de semana / festivo? ── */
-function diaConPlus(fecha){
-  var dow=fecha.getDay();                    // 0 domingo, 6 sábado
-  if(dow===0||dow===6) return true;
-  if(esFestivoNacional(fecha)) return true;
-  var dd=datosDia(fecha.getFullYear(),fecha.getMonth(),fecha.getDate());
-  return !!(dd&&dd.fest);
-}
-
-/* ── Trocea un tramo en minutos y los reparte por día natural y franja ── */
-function trocearTramo(inicio, fin){
-  var res={total:0,noct:0,plus:0};
-  var cur=new Date(inicio.getTime()), FIN=fin.getTime();
-  var guardia=0;
-  while(cur.getTime()<FIN && guardia++<400){
-    var h=cur.getHours();
-    // siguiente frontera relevante: 06:00, 22:00 o medianoche
-    var lim=new Date(cur.getFullYear(),cur.getMonth(),cur.getDate(), h<6?6:(h<22?22:24), 0, 0, 0);
-    var next=Math.min(FIN, lim.getTime());
-    var mins=(next-cur.getTime())/60000;
-    if(mins>0){
-      res.total+=mins;
-      if(h<6||h>=22) res.noct+=mins;
-      if(diaConPlus(cur)) res.plus+=mins;
-    }
-    cur=new Date(next);
-  }
-  return res;
-}
-
-/* ── Convierte {i:"22:00", f:"06:00"} del día d en fechas reales ── */
-function tramoAFechas(a,m,d,t){
-  if(!t||!t.i||!t.f) return null;
-  var pi=t.i.split(":"), pf=t.f.split(":");
-  var ini=new Date(a,m,d,parseInt(pi[0],10),parseInt(pi[1],10),0,0);
-  var fin=new Date(a,m,d,parseInt(pf[0],10),parseInt(pf[1],10),0,0);
-  if(fin.getTime()<=ini.getTime()) fin=new Date(fin.getTime()+864e5);  // cruza medianoche
-  return {ini:ini,fin:fin};
-}
-
-/* ── Totales del mes visible ── */
-function totalesMes(a,m){
-  var t={horas:0,noct:0,plus:0,diasTrab:0,diasVac:0,diasLibres:0};
-  var ultimo=new Date(a,m+1,0).getDate();
-  for(var d=1; d<=ultimo; d++){
-    var dd=datosDia(a,m,d);
-    var trabajado=false;
-    if(dd&&dd.tramos&&dd.tramos.length){
-      dd.tramos.forEach(function(tr){
-        var ff=tramoAFechas(a,m,d,tr);
-        if(!ff) return;
-        var r=trocearTramo(ff.ini,ff.fin);
-        t.horas+=r.total; t.noct+=r.noct; t.plus+=r.plus;
-        trabajado=true;
-      });
-    }
-    if(trabajado){ t.diasTrab++; }
-    else if(dd&&dd.vac){ t.diasVac++; t.horas+=H_VACACION*60; }
-    else { t.diasLibres++; }
-  }
-  t.horas/=60; t.noct/=60; t.plus/=60;
-  t.horas=Math.round(t.horas*100)/100;
-  t.noct=Math.round(t.noct*100)/100;
-  t.plus=Math.round(t.plus*100)/100;
-  return t;
-}
-
-/* ── Resumen compacto de un día para la celda ── */
-function resumenDia(a,m,d){
-  var dd=datosDia(a,m,d);
-  if(!dd) return null;
-  if(dd.tramos&&dd.tramos.length){
-    var mins=0;
-    dd.tramos.forEach(function(tr){
-      var ff=tramoAFechas(a,m,d,tr);
-      if(ff) mins+=trocearTramo(ff.ini,ff.fin).total;
-    });
-    var lineas = dd.tramos.length===1
-      ? [dd.tramos[0].i, dd.tramos[0].f]
-      : [dd.tramos.length+" tramos"];
-    return {tipo:"trab", lineas:lineas, horas:Math.round(mins/60*100)/100, fest:!!dd.fest};
-  }
-  if(dd.vac) return {tipo:"vac", lineas:["V"], horas:H_VACACION, fest:!!dd.fest};
-  if(dd.fest) return {tipo:"libre", lineas:[], horas:0, fest:true};
-  return null;
-}
-
-/* ── Pintado del calendario ── */
-function pintarCalendario(){
-  var grid=document.getElementById("cal-grid");
-  if(!grid) return;
-  document.getElementById("cal-titulo").textContent=MESES_ES[calMes]+" "+calAnio;
-  var primero=new Date(calAnio,calMes,1);
-  var offset=(primero.getDay()+6)%7;              // lunes = 0
-  var ultimo=new Date(calAnio,calMes+1,0).getDate();
-  var hoy=new Date();
-  var h="";
-  for(var i=0;i<offset;i++) h+='<div class="cal-cell vacio"></div>';
-  for(var d=1; d<=ultimo; d++){
-    var fecha=new Date(calAnio,calMes,d);
-    var r=resumenDia(calAnio,calMes,d);
-    var cls="cal-cell";
-    if(diaConPlus(fecha)) cls+=" finde";
-    if(r&&r.tipo==="trab") cls+=" trab";
-    else if(r&&r.tipo==="vac") cls+=" vac";
-    if((r&&r.fest)||esFestivoNacional(fecha)) cls+=" festivo";
-    if(fecha.toDateString()===hoy.toDateString()) cls+=" hoy";
-    h+='<div class="'+cls+'" data-dia="'+d+'">';
-    h+='<span class="cal-num">'+d+'</span>';
-    if(r&&r.lineas&&r.lineas.length){
-      h+='<span class="cal-tag">'+r.lineas.join('<br>')+'</span>';
-    }
-    if(r&&r.horas>0&&r.tipo==="trab") h+='<span class="cal-hrs">'+String(r.horas).replace(".",",")+'h</span>';
-    h+='</div>';
-  }
-  grid.innerHTML=h;
-  Array.prototype.forEach.call(grid.querySelectorAll(".cal-cell[data-dia]"),function(c){
-    c.addEventListener("click",function(){ abrirDialogo(parseInt(c.getAttribute("data-dia"),10)); });
-  });
-  pintarResumen();
-}
-
-function pintarResumen(){
-  var t=totalesMes(calAnio,calMes);
-  var box=document.getElementById("cal-resumen");
-  if(!box) return;
-  if(t.horas===0&&t.diasTrab===0&&t.diasVac===0){
-    box.innerHTML='<div class="cal-vacio-msg">Aún no has introducido ningún turno de este mes.</div>';
-  } else {
-    function fila(l,v,dest){ return '<div class="cal-res-row'+(dest?' destacada':'')+'"><span class="cal-res-lbl">'+l+'</span><span class="cal-res-val">'+v+'</span></div>'; }
-    var hh=function(n){ return String(Math.round(n*100)/100).replace(".",",")+" h"; };
-    box.innerHTML =
-      fila("Días trabajados", t.diasTrab)+
-      fila("Días libres", t.diasLibres)+
-      (t.diasVac>0?fila("Días de vacaciones", t.diasVac):"")+
-      fila("Horas nocturnas", hh(t.noct))+
-      fila("Horas fin de semana / festivo", hh(t.plus))+
-      fila("Horas totales del mes", hh(t.horas), true);
-  }
-  volcarTotales(t);
-}
-
-/* Vuelca los totales a los campos que ya usa el motor de nómina */
-function volcarTotales(t){
-  if(MODO_HORAS!=="cuadrante") return;
-  document.getElementById("hTTotal").value = t.horas>0 ? t.horas : "";
-  document.getElementById("hNoc").value    = t.noct>0  ? t.noct  : "";
-  document.getElementById("hFest").value   = t.plus>0  ? t.plus  : "";
-}
-
-/* ── Diálogo de turnos ── */
-function filaTramo(i,f){
-  return '<div class="tramo">'+
-    '<input type="time" class="t-ini" value="'+(i||"")+'" step="300">'+
-    '<span class="tramo-sep">a</span>'+
-    '<input type="time" class="t-fin" value="'+(f||"")+'" step="300">'+
-    '<button type="button" class="tramo-del" aria-label="Quitar tramo">×</button></div>';
-}
-function engancharBorrarTramo(){
-  var cont=document.getElementById("dlg-tramos");
-  Array.prototype.forEach.call(cont.querySelectorAll(".tramo-del"),function(b){
-    b.onclick=function(){
-      b.parentNode.parentNode.removeChild(b.parentNode);
-      if(!cont.querySelector(".tramo")) cont.innerHTML=filaTramo("","");
-      engancharBorrarTramo(); actualizarNotaDlg();
-    };
-  });
-  Array.prototype.forEach.call(cont.querySelectorAll("input[type=time]"),function(inp){
-    inp.onchange=actualizarNotaDlg;
-  });
-}
-function actualizarNotaDlg(){
-  if(!dlgClave) return;
-  var p=dlgClave.split("|"), pm=p[0].split("-");
-  var a=parseInt(pm[0],10), m=parseInt(pm[1],10)-1, d=parseInt(p[1],10);
-  var tramos=leerTramosDlg();
-  if(!tramos.length){ document.getElementById("dlg-nota").innerHTML=""; return; }
-  var tot=0,noc=0,plus=0;
-  tramos.forEach(function(tr){
-    var ff=tramoAFechas(a,m,d,tr);
-    if(!ff) return;
-    var r=trocearTramo(ff.ini,ff.fin);
-    tot+=r.total; noc+=r.noct; plus+=r.plus;
-  });
-  var hh=function(n){ return String(Math.round(n/60*100)/100).replace(".",","); };
-  var txt="Total del día: <b>"+hh(tot)+" h</b>";
-  if(noc>0)  txt+=" · "+hh(noc)+" h nocturnas";
-  if(plus>0) txt+=" · "+hh(plus)+" h con plus de fin de semana/festivo";
-  document.getElementById("dlg-nota").innerHTML=txt;
-}
-function leerTramosDlg(){
-  var out=[];
-  Array.prototype.forEach.call(document.querySelectorAll("#dlg-tramos .tramo"),function(t){
-    var i=t.querySelector(".t-ini").value, f=t.querySelector(".t-fin").value;
-    if(i&&f) out.push({i:i,f:f});
-  });
-  return out;
-}
-
-function abrirDialogo(d){
-  dlgClave=claveMes(calAnio,calMes)+"|"+d;
-  var fecha=new Date(calAnio,calMes,d);
-  var DOW=["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
-  document.getElementById("dlg-titulo").textContent="Turnos del día "+d;
-  var sub=DOW[fecha.getDay()]+", "+d+" de "+MESES_ES[calMes].toLowerCase()+" de "+calAnio;
-  if(esFestivoNacional(fecha)) sub+="  ·  Festivo nacional";
-  else if(fecha.getDay()===0||fecha.getDay()===6) sub+="  ·  Fin de semana";
-  document.getElementById("dlg-subtitulo").textContent=sub;
-
-  var dd=datosDia(calAnio,calMes,d);
-  var cont=document.getElementById("dlg-tramos");
-  if(dd&&dd.tramos&&dd.tramos.length){
-    cont.innerHTML=dd.tramos.map(function(t){return filaTramo(t.i,t.f);}).join("");
-  } else {
-    cont.innerHTML=filaTramo("","");
-  }
-  document.getElementById("dlg-vac").checked = !!(dd&&dd.vac);
-  document.getElementById("dlg-fest").checked = !!(dd&&dd.fest);
-  engancharBorrarTramo(); actualizarNotaDlg();
-  document.getElementById("dlg-overlay").classList.add("abierto");
-}
-function cerrarDialogo(){
-  document.getElementById("dlg-overlay").classList.remove("abierto");
-  dlgClave=null;
-}
-function guardarDialogo(){
-  if(!dlgClave) return;
-  var p=dlgClave.split("|"), mk=p[0], d=p[1];
-  var tramos=leerTramosDlg();
-  var vac=document.getElementById("dlg-vac").checked;
-  var fest=document.getElementById("dlg-fest").checked;
-  if(!CUAD[mk]) CUAD[mk]={};
-  if(!tramos.length&&!vac&&!fest){ delete CUAD[mk][d]; }
-  else { CUAD[mk][d]={tramos:tramos, vac:vac, fest:fest}; }
-  if(!Object.keys(CUAD[mk]).length) delete CUAD[mk];
-  guardarCuad(); cerrarDialogo(); pintarCalendario();
-}
-function borrarDialogo(){
-  if(!dlgClave) return;
-  var p=dlgClave.split("|"), mk=p[0], d=p[1];
-  if(CUAD[mk]){ delete CUAD[mk][d]; if(!Object.keys(CUAD[mk]).length) delete CUAD[mk]; }
-  guardarCuad(); cerrarDialogo(); pintarCalendario();
-}
-
-/* ── Arranque del cuadrante ── */
-(function initCuadrante(){
-  function listo(){
-    cargarCuad();
-    var hoy=new Date(); calAnio=hoy.getFullYear(); calMes=hoy.getMonth();
-
-    var bm=document.getElementById("modo-manual"), bc=document.getElementById("modo-cuadrante");
-    if(!bm||!bc) return;
-    bm.addEventListener("click",function(){
-      MODO_HORAS="manual";
-      bm.classList.add("active"); bc.classList.remove("active");
-      document.getElementById("campos-manual").style.display="block";
-      document.getElementById("campos-cuadrante").style.display="none";
-    });
-    bc.addEventListener("click",function(){
-      MODO_HORAS="cuadrante";
-      bc.classList.add("active"); bm.classList.remove("active");
-      document.getElementById("campos-manual").style.display="none";
-      document.getElementById("campos-cuadrante").style.display="block";
-      pintarCalendario();
-    });
-    document.getElementById("cal-prev").addEventListener("click",function(){
-      calMes--; if(calMes<0){calMes=11;calAnio--;} pintarCalendario();
-    });
-    document.getElementById("cal-next").addEventListener("click",function(){
-      calMes++; if(calMes>11){calMes=0;calAnio++;} pintarCalendario();
-    });
-    document.getElementById("dlg-add").addEventListener("click",function(){
-      document.getElementById("dlg-tramos").insertAdjacentHTML("beforeend",filaTramo("",""));
-      engancharBorrarTramo();
-    });
-    document.getElementById("dlg-guardar").addEventListener("click",guardarDialogo);
-    document.getElementById("dlg-borrar").addEventListener("click",borrarDialogo);
-    document.getElementById("dlg-cancelar").addEventListener("click",cerrarDialogo);
-    document.getElementById("dlg-overlay").addEventListener("click",function(e){
-      if(e.target===this) cerrarDialogo();
-    });
-    document.getElementById("dlg-vac").addEventListener("change",actualizarNotaDlg);
-    document.getElementById("dlg-fest").addEventListener("change",actualizarNotaDlg);
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",listo);
-  else listo();
-})();
-
-var CATS = {
-  sin_arma:  {salBase:1161.28,pelig:24.08, act:0,     trans:137.81,vest:112.28,nocH:1.26},
-  con_arma:  {salBase:1161.28,pelig:179.90,act:0,     trans:137.81,vest:112.28,nocH:1.26},
-  escolta:   {salBase:1161.28,pelig:177.15,act:0,     trans:137.81,vest:115.67,nocH:1.26},
-  explosivos:{salBase:1161.28,pelig:210.55,act:40.17, trans:137.81,vest:113.27,nocH:1.26},
-  fondos:    {salBase:1227.74,pelig:179.90,act:210.19,trans:137.81,vest:113.27,nocH:1.36,cBase:1285.55,cVest:114.56},
-  tr_explo:  {salBase:1227.74,pelig:191.59,act:152.44,trans:137.81,vest:113.27,nocH:1.36,cBase:1285.55,cVest:114.56}
-};
-var QUINQUENIO = {sin_arma:45.86,con_arma:45.86,escolta:45.86,explosivos:45.86,fondos:50.23,tr_explo:50.23};
-
-// Devuelve la categoría efectiva aplicando la variante conductor si procede
-function catEf(k,esCond){
-  var c=CATS[k];
-  if(esCond&&c.cBase){return {salBase:c.cBase,pelig:c.pelig,act:c.act,trans:c.trans,vest:c.cVest,nocH:c.nocH};}
-  return c;
-}
-var SS_PCT=0.0650, JORNADA=162, HORAS_ANUALES=1782;
-var PLUS_FEST=1.02, DIAS_VACAS=31, H_DIA_VACAS=5.226;
-var catActual="sin_arma", jornActual="completa";
-var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
-
-function r2(n){return Math.round(n*100)/100;}
-function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
-function calcAntig(a,cat){return r2(Math.floor(a/5)*QUINQUENIO[cat]);}
-function calcHoraExtra(sb,p,act,ant){return r2((sb+p+act+ant)*15/HORAS_ANUALES);}
-
-function showR(rid,lid,vid,lbl,val,cls){
-  var row=document.getElementById(rid);
-  cls=cls||"up";
-  if(val>0.005){
-    row.style.display="flex";
-    if(lid)document.getElementById(lid).textContent=lbl;
-    document.getElementById(vid).textContent=(cls==="down"?"-":"+")+fmt(val);
-    document.getElementById(vid).className="res-val "+cls;
-  } else {row.style.display="none";}
-}
-
-["nomina","finiquito","baja"].forEach(function(t){
-  document.getElementById("tab-"+t).addEventListener("click",function(){
-    ["nomina","finiquito","baja"].forEach(function(x){
-      document.getElementById("tab-"+x).classList.toggle("active",x===t);
-      document.getElementById("view-"+x).style.display=x===t?"block":"none";
-    });
-  });
-});
-
-document.getElementById("aniosAntiguedad").addEventListener("input",function(){
-  var a=parseInt(this.value)||0, q=Math.floor(a/5);
-  document.getElementById("hint-antiguedad").textContent=a<5
-    ?"Sin antigüedad — el plus aplica cada 5 años (45,86 €/quinquenio)"
-    :q+" quinquenio"+(q>1?"s":"")+" = +"+fmt(r2(q*QUINQUENIO[catActual]))+"/mes";
-});
-document.getElementById("switchPlus").addEventListener("change",function(){
-  document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
-});
-document.getElementById("switchVac").addEventListener("change",function(){
-  document.getElementById("vac-field").style.display=this.checked?"block":"none";
-  if(!this.checked) document.getElementById("diasVac").value="";
-  actualizarHintVac();
-});
-function actualizarHintVac(){
-  var d=parseFloat(document.getElementById("diasVac").value)||0;
-  document.getElementById("hint-vac").textContent = d>0
-    ? d+" día"+(d!==1?"s":"")+" × 5,226 h = "+fmt(r2(d*H_VACACION)).replace(" €"," h")+" que se suman a tu jornada del mes"
-    : "El convenio da 31 días naturales al año (162 h ÷ 31 días = 5,226 h por día)";
-}
-document.getElementById("diasVac").addEventListener("input",actualizarHintVac);
-["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
-  document.getElementById("btn-"+c).addEventListener("click",function(){
-    document.querySelectorAll("#view-nomina .cat-btn").forEach(function(b){b.classList.remove("active");});
-    document.getElementById("btn-"+c).classList.add("active");
-    catActual=c;
-    document.getElementById("badge-noc").textContent="+"+CATS[c].nocH.toFixed(2).replace(".",",")+" €/h";
-    var esC=!!CATS[c].cBase;
-    document.getElementById("card-cond").style.display=esC?"block":"none";
-    if(!esC)document.getElementById("switchCond").checked=false;
-  });
-});
-document.getElementById("jorn-completa").addEventListener("click",function(){
-  jornActual="completa";
-  document.getElementById("jorn-completa").classList.add("active");
-  document.getElementById("jorn-parcial").classList.remove("active");
-  document.getElementById("parcial-field").style.display="none";
-  document.getElementById("hint-extras").textContent="Si superas 162 h, el exceso se cobra como hora extra";
-});
-document.getElementById("jorn-parcial").addEventListener("click",function(){
-  jornActual="parcial";
-  document.getElementById("jorn-parcial").classList.add("active");
-  document.getElementById("jorn-completa").classList.remove("active");
-  document.getElementById("parcial-field").style.display="block";
-  document.getElementById("hint-extras").textContent="Si superas tus horas pactadas, el exceso se cobra como hora extra";
-});
-["paga-julio","paga-dic","paga-mar"].forEach(function(id){
-  document.getElementById(id).addEventListener("click",function(){
-    this.classList.toggle("active");
-    this.querySelector(".paga-sub").textContent=this.classList.contains("active")?"activa":"inactiva";
-  });
-});
-document.getElementById("btnCalc").addEventListener("click",function(){calcNomina();});
-
-function calcNomina(){
-  var cat=catEf(catActual,document.getElementById("switchCond").checked);
-  var hT=parseFloat(document.getElementById("hTTotal").value)||0;
-  var hN=parseFloat(document.getElementById("hNoc").value)||0;
-  var hF=parseFloat(document.getElementById("hFest").value)||0;
-  var ip=parseFloat(document.getElementById("irpf").value)||0;
-  var an=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
-  var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
-  var esJefe=document.getElementById("switchJefe").checked;
-  var dVac=(MODO_HORAS==="manual"&&document.getElementById("switchVac").checked)
-             ? (parseFloat(document.getElementById("diasVac").value)||0) : 0;
-  var hVac=r2(dVac*H_VACACION);
-  var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
-  var err=document.getElementById("errorBox");
-  if(hT<=0&&hVac<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(hF>hT){err.textContent="Las horas de fin de semana/festivo no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  err.style.display="none";
-
-  /* Las vacaciones computan como jornada, aunque no se hayan trabajado */
-  var hTrab=hT;                 // horas realmente trabajadas
-  var hJor=r2(hT+hVac);         // jornada computable del mes
-  var ratioFijo=hp/JORNADA;
-  var factorH=1;
-  var labelSufix="";
-  if(jornActual==="completa"&&hJor<JORNADA){
-    factorH=hJor/JORNADA;
-    labelSufix=" (Proporcional "+hJor+"h/"+JORNADA+"h)";
-  } else if(jornActual==="parcial"&&hJor<hp){
-    factorH=hJor/hp;
-    labelSufix=" (Proporcional "+hJor+"h/"+hp+"h)";
-  }
-
-  var sb=r2(cat.salBase*ratioFijo*factorH);
-  var pe=r2(cat.pelig*ratioFijo*factorH);
-  var ac=r2((cat.act||0)*ratioFijo*factorH);
-  var tr=r2(cat.trans*ratioFijo*factorH);
-  var ve=r2(cat.vest*ratioFijo*factorH);
-  var ant=calcAntig(an,catActual);
-  var antM=r2(ant*ratioFijo*factorH);
-  var je=esJefe?r2(cat.salBase*0.10*ratioFijo*factorH):0;
-  var q=Math.floor(an/5);
-  var sbHE=esJefe?r2(cat.salBase*1.10):cat.salBase;
-  var hev=calcHoraExtra(sbHE,cat.pelig,cat.act||0,ant);
-  var hEx=Math.max(0,r2(hJor-hp));
-  var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=r2(hF*PLUS_FEST);
-  var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
-  var bP=r2((cat.salBase+cat.pelig+ant)*ratioFijo);
-  var pP=r2((pa*bP*factorH)/12);
-  var bruto=r2(sb+pe+ac+tr+ve+antM+je+ps+pEx+pN+pFe+pP);
-  var pNP=3-pa;
-  var ssB=r2(bruto+r2(pNP*bP*factorH/12));
-  var dSS=r2(ssB*SS_PCT), dIP=r2(bruto*ip/100);
-  var neto=r2(bruto-dSS-dIP);
-
-  var suf=jornActual==="parcial"&&labelSufix===""?" ("+hp+"h/162h)":labelSufix;
-  document.getElementById("lbl-base").textContent="Salario base"+suf;
-  document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+suf;
-  document.getElementById("r-base").textContent="+"+fmt(sb);
-  document.getElementById("r-pelig").textContent="+"+fmt(pe);
-  if(hVac>0){
-    document.getElementById("row-vacinfo").style.display="flex";
-    document.getElementById("lbl-vacinfo").textContent="Vacaciones — "+dVac+" día"+(dVac!==1?"s":"")+" × 5,226 h";
-    document.getElementById("r-vacinfo").textContent=String(hVac).replace(".",",")+" h de jornada";
-  } else { document.getElementById("row-vacinfo").style.display="none"; }
-  showR("row-act","lbl-act","r-act","Plus de actividad"+suf,ac,"up");
-  document.getElementById("r-trans").textContent="+"+fmt(tr);
-  document.getElementById("r-vest").textContent="+"+fmt(ve);
-  if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
-  else{document.getElementById("row-antig").style.display="none";}
-  showR("row-jefe","lbl-jefe","r-jefe","Plus Jefe de Equipo (10% salario base)",je,"up");
-  if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
-  else{document.getElementById("row-plusserv").style.display="none";}
-  showR("row-extra","lbl-extra","r-extra","Horas extra — "+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
-  showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN,"up");
-  showR("row-fest","lbl-fest","r-fest","Plus fin de semana/festivo — "+hF+"h × 1,02 €",pFe,"up");
-  showR("row-prorr","lbl-prorr","r-prorr",pa+" paga"+(pa!==1?"s":"")+" extra prorrateada"+(pa!==1?"s":""),pP,"up");
-  document.getElementById("r-bruto").textContent=fmt(bruto);
-  document.getElementById("r-ss").textContent="-"+fmt(dSS);
-  if(ip>0){document.getElementById("row-irpf").style.display="flex";document.getElementById("row-irpf0").style.display="none";document.getElementById("lbl-irpf").textContent="Retención IRPF ("+ip+"%)";document.getElementById("r-irpf").textContent="-"+fmt(dIP);}
-  else{document.getElementById("row-irpf").style.display="none";document.getElementById("row-irpf0").style.display="flex";}
-  document.getElementById("r-neto").textContent=fmt(neto);
-  document.getElementById("resultado").style.display="block";
-  cargarJsPDF(function(){});
-  setTimeout(mostrarAvisoInstalacion, 1200);
-  ctxPDF.cuadrante = (MODO_HORAS==="cuadrante") ? {anio:calAnio, mes:calMes} : null;
-  ctxPDF.nomina={
-    "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
-    "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)"),
-    "Horas trabajadas":hTrab+" h"+(hEx>0?"  (de las cuales "+hEx+" h extraordinarias)":""),
-    "Horas nocturnas":(hN>0?hN+" h  ×  "+cat.nocH.toFixed(2).replace(".",",")+" €":"Ninguna"),
-    "Horas fin de semana / festivo":(hF>0?hF+" h  ×  1,02 €":"Ninguna"),
-    "Antigüedad":(an>0?an+" años  ("+q+" quinquenio"+(q!==1?"s":"")+")":"Sin antigüedad"),
-    "Vacaciones disfrutadas":(dVac>0?dVac+" día"+(dVac!==1?"s":"")+" = "+String(hVac).replace(".",",")+" h de jornada":"Ninguna"),
-    "Jornada computable del mes":String(hJor).replace(".",",")+" h",
-    "Jefe de Equipo":(esJefe?"Sí (10% del salario base)":"No"),
-    "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
-    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
-  };
-  if(typeof gtag !== 'undefined'){gtag("event","calcular_nomina",{categoria:catActual});}
-  setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
-}
-
-["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
-  document.getElementById("fbtn-"+c).addEventListener("click",function(){
-    document.querySelectorAll("#view-finiquito .cat-btn").forEach(function(b){b.classList.remove("active");});
-    document.getElementById("fbtn-"+c).classList.add("active");
-    fcatActual=c;
-    var esCF=!!CATS[c].cBase;
-    document.getElementById("card-condF").style.display=esCF?"block":"none";
-    if(!esCF)document.getElementById("switchCondF").checked=false;
-  });
-});
-document.getElementById("fjorn-completa").addEventListener("click",function(){
-  fjornActual="completa";
-  document.getElementById("fjorn-completa").classList.add("active");
-  document.getElementById("fjorn-parcial").classList.remove("active");
-  document.getElementById("f-parcial-field").style.display="none";
-});
-document.getElementById("fjorn-parcial").addEventListener("click",function(){
-  fjornActual="parcial";
-  document.getElementById("fjorn-parcial").classList.add("active");
-  document.getElementById("fjorn-completa").classList.remove("active");
-  document.getElementById("f-parcial-field").style.display="block";
-});
-function actuFechas(){
-  var i=document.getElementById("f-inicio").value, f=document.getElementById("f-fin").value;
-  if(!i||!f)return;
-  var d1=new Date(i),d2=new Date(f);
-  if(d2<=d1)return;
-  var dias=Math.round((d2-d1)/(864e5));
-  var anosN=Math.floor(dias/365), mesesN=Math.floor((dias%365)/30), diasN=(dias%365)%30;
-  var q=Math.floor(anosN/5);
-  var txt="";
-  if(anosN>0)txt+=anosN+" año"+(anosN>1?"s":"")+" ";
-  if(mesesN>0)txt+=mesesN+" mes"+(mesesN>1?"es":"")+" ";
-  if(diasN>0)txt+=diasN+" día"+(diasN>1?"s":"");
-  if(q>0)txt+=" | "+q+" quinquenio"+(q>1?"s":"")+" de antigüedad";
-  document.getElementById("f-hint-fechas").textContent=txt.trim()||"Menos de un mes";
-}
-document.getElementById("f-inicio").addEventListener("change",actuFechas);
-document.getElementById("f-fin").addEventListener("change",actuFechas);
-["fpaga-julio","fpaga-dic","fpaga-mar"].forEach(function(id){
-  document.getElementById(id).addEventListener("click",function(){
-    this.classList.toggle("active");
-    this.querySelector(".paga-sub").textContent=this.classList.contains("active")?"prorrateada":"no prorrateada";
-  });
-});
-document.getElementById("btnCalcFiniquito").addEventListener("click",function(){calcFiniquito();});
-
-function solapamiento(a1,a2,b1,b2){
-  var s=new Date(Math.max(a1.getTime(),b1.getTime()));
-  var e=new Date(Math.min(a2.getTime(),b2.getTime()));
-  if(e<s)return 0;
-  return Math.round((e-s)/864e5)+1;
-}
-function propPaga(d1,d2,paga){
-  var y=d2.getFullYear(), m=d2.getMonth(), dia=d2.getDate();
-  var ds,de;
-  if(paga==="julio"){
-    if(m>6||(m===6&&dia>15)){ds=new Date(y,6,1);de=new Date(y+1,5,30);}
-    else{ds=new Date(y-1,6,1);de=new Date(y,5,30);}
-  } else if(paga==="navidad"){
-    if(m===11&&dia>20){ds=new Date(y+1,0,1);de=new Date(y+1,11,31);}
-    else{ds=new Date(y,0,1);de=new Date(y,11,31);}
-  } else {
-    if(m>2||(m===2&&dia>=15)){ds=new Date(y,0,1);de=new Date(y,11,31);}
-    else{ds=new Date(y-1,0,1);de=new Date(y-1,11,31);}
-  }
-  var devDias=Math.round((de-ds)/864e5)+1;
-  var sol=solapamiento(d1,d2,ds,de);
-  return Math.min(1,sol/devDias);
-}
-function calcFiniquito(){
-  var cat=catEf(fcatActual,document.getElementById("switchCondF").checked);
-  var dv=parseFloat(document.getElementById("f-vacas").value)||0;
-  var ip=parseFloat(document.getElementById("f-irpf").value)||0;
-  var tipo=document.getElementById("f-tipodespido").value;
-  var si=document.getElementById("f-inicio").value, sf=document.getElementById("f-fin").value;
-  var err=document.getElementById("f-errorBox");
-  if(!si||!sf){err.textContent="Introduce las fechas de inicio y fin del contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  var d1=new Date(si),d2=new Date(sf);
-  if(d2<=d1){err.textContent="La fecha de fin debe ser posterior a la de inicio.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  var fhp=fjornActual==="completa"?JORNADA:(parseFloat(document.getElementById("fhPactadas").value)||0);
-  if(fjornActual==="parcial"&&fhp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  if(fjornActual==="parcial"&&fhp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  err.style.display="none";
-  var ratio=fhp/JORNADA;
-  var dias=Math.round((d2-d1)/864e5);
-  var anosEx=dias/365, anosC=Math.floor(anosEx), q=Math.floor(anosC/5);
-  var ant=calcAntig(anosC,fcatActual);
-  var esJefeF=document.getElementById("switchJefeF").checked;
-  var sbJE=esJefeF?r2(cat.salBase*1.10):cat.salBase;
-  // Salario mensual completo: se usa para valorar las vacaciones pendientes
-  var sMens=r2((sbJE+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
-  var bPaga=r2((cat.salBase+cat.pelig+ant)*ratio);
-  // Salario regulador de la indemnización (doctrina TS): conceptos salariales
-  // + prorrata de pagas extras, excluyendo transporte y vestuario (extrasalariales)
-  var salReg=r2((sbJE+cat.pelig+(cat.act||0)+ant)*ratio+bPaga*3/12);
-  var vDia=r2(sMens/30);
-  var totVacas=r2(dv*vDia);
-  var pJulio=document.getElementById("fpaga-julio").classList.contains("active");
-  var pDic=document.getElementById("fpaga-dic").classList.contains("active");
-  var pMar=document.getElementById("fpaga-mar").classList.contains("active");
-  var impJulio=0,impNavidad=0,impMarzo=0;
-  var pJulTxt="",pNavTxt="",pMarTxt="";
-  if(!pJulio){var pr=propPaga(d1,d2,"julio");impJulio=r2(bPaga*pr);pJulTxt="Paga Julio proporcional ("+Math.round(pr*100)+"% del periodo)";}
-  if(!pDic){var pr2=propPaga(d1,d2,"navidad");impNavidad=r2(bPaga*pr2);pNavTxt="Paga Navidad proporcional ("+Math.round(pr2*100)+"% del periodo)";}
-  if(!pMar){var pr3=propPaga(d1,d2,"marzo");impMarzo=r2(bPaga*pr3);pMarTxt="Paga Marzo proporcional ("+Math.round(pr3*100)+"% del periodo)";}
-  var liqBruta=r2(totVacas+impJulio+impNavidad+impMarzo);
-  var ssLiq=r2(liqBruta*SS_PCT);
-  var irpfLiq=r2(liqBruta*ip/100);
-  var liqNeto=r2(liqBruta-ssLiq-irpfLiq);
-  var indem=0;
-  if(tipo==="objetivo"||tipo==="improcedente"){
-    var dI=tipo==="objetivo"?20:33, mM=tipo==="objetivo"?12:24;
-    indem=r2(Math.min(r2(dI*(salReg/30)*anosEx),r2(salReg*mM)));
-  }
-  var totalNeto=r2(liqNeto+indem);
-  var anosN=Math.floor(dias/365),mN=Math.floor((dias%365)/30),dN=(dias%365)%30;
-  var dur="";
-  if(anosN>0)dur+=anosN+" año"+(anosN>1?"s":"")+" ";
-  if(mN>0)dur+=mN+" mes"+(mN>1?"es":"")+" ";
-  if(dN>0)dur+=dN+" día"+(dN>1?"s":"");
-  var sufRatio=fjornActual==="parcial"?" (Ajuste parcial: "+fhp+"h)":"";
-  document.getElementById("f-info-duracion").innerHTML="<strong>Duración:</strong> "+dur.trim()+" ("+dias+" días exactos) | <strong>Antigüedad:</strong> "+anosC+" año"+(anosC!==1?"s":"")+(q>0?" | <strong>"+q+" quinquenio"+(q>1?"s":"")+"</strong>":"");
-  showR("frow-vacas","flbl-vacas","fr-vacas","Vacaciones ("+dv+" días × "+fmt(vDia)+")"+sufRatio,totVacas,"up");
-  showR("frow-julio","flbl-julio","fr-julio",pJulTxt,impJulio,"up");
-  showR("frow-navidad","flbl-navidad","fr-navidad",pNavTxt,impNavidad,"up");
-  showR("frow-marzo","flbl-marzo","fr-marzo",pMarTxt,impMarzo,"up");
-  document.getElementById("fr-liq-bruta").textContent=fmt(liqBruta);
-  document.getElementById("fr-ss-liq").textContent="-"+fmt(ssLiq);
-  if(ip>0){document.getElementById("frow-irpf-liq").style.display="flex";document.getElementById("flbl-irpf-liq").textContent="Retención IRPF ("+ip+"%)";document.getElementById("fr-irpf-liq").textContent="-"+fmt(irpfLiq);}
-  else{document.getElementById("frow-irpf-liq").style.display="none";}
-  document.getElementById("fr-liq-neto").textContent=fmt(liqNeto);
-  if(indem>0){document.getElementById("frow-indem-label").style.display="block";document.getElementById("frow-indem").style.display="flex";document.getElementById("flbl-indem").textContent=(tipo==="improcedente"?"Despido improcedente (33 días/año, máx. 24 meses)":"Despido objetivo (20 días/año, máx. 12 meses)")+sufRatio;document.getElementById("fr-indem").textContent="+"+fmt(indem);document.getElementById("fr-salreg").textContent=fmt(salReg);document.getElementById("f-exento-info").style.display="block";}
-  else{document.getElementById("frow-indem-label").style.display="none";document.getElementById("frow-indem").style.display="none";document.getElementById("f-exento-info").style.display="none";}
-  document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
-  document.getElementById("resultado-finiquito").style.display="block";
-  cargarJsPDF(function(){});
-  setTimeout(mostrarAvisoInstalacion, 1200);
-  ctxPDF.finiquito={
-    "Categoría":nombreCat(fcatActual,document.getElementById("switchCondF").checked),
-    "Tipo de jornada":(fjornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+fhp+" h/mes pactadas)"),
-    "Inicio del contrato":fechaES(si),
-    "Fin del contrato":fechaES(sf),
-    "Duración":dur.trim()+"  ("+dias+" días)",
-    "Antigüedad reconocida":anosC+" año"+(anosC!==1?"s":"")+(q>0?"  ("+q+" quinquenio"+(q!==1?"s":"")+")":""),
-    "Jefe de Equipo":(esJefeF?"Sí (10% del salario base)":"No"),
-    "Días de vacaciones pendientes":dv+" días",
-    "Motivo de la extinción":(tipo==="voluntaria"?"Baja voluntaria":(tipo==="objetivo"?"Fin de contrato / despido objetivo (20 días por año)":"Despido improcedente (33 días por año)")),
-    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
-  };
-  if(indem>0){ctxPDF.finiquito["Salario regulador"]=fmt(salReg)+"/mes";}
-  if(typeof gtag !== 'undefined'){gtag("event","calcular_finiquito",{tipo:tipo,categoria:fcatActual});}
-  setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
-}
-
-["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
-  document.getElementById("bbtn-"+c).addEventListener("click",function(){
-    document.querySelectorAll("#view-baja .cat-btn").forEach(function(b){b.classList.remove("active");});
-    document.getElementById("bbtn-"+c).classList.add("active");
-    bcatActual=c;
-    document.getElementById("b-baseManual").value="";
-    var esCB=!!CATS[c].cBase;
-    document.getElementById("card-condB").style.display=esCB?"block":"none";
-    if(!esCB)document.getElementById("switchCondB").checked=false;
-  });
-});
-document.getElementById("b-tipo").addEventListener("change",function(){
-  var es=document.getElementById("b-field-nbaja");
-  if(this.value==="comun"){es.style.display="block";document.getElementById("b-hint-nbaja").textContent="El convenio complementa en las 3 primeras bajas del año";}
-  else{es.style.display="none";}
-});
-document.getElementById("btnCalcBaja").addEventListener("click",function(){calcBaja();});
-
-function tramoRow(rid,lid,vid,d1,d2,pct,base,lbl){
-  if(d1>d2)return 0;
-  var n=d2-d1+1;
-  var imp=r2(n*base*pct);
-  document.getElementById(rid).style.display="flex";
-  document.getElementById(lid).textContent=lbl+" — "+n+" día"+(n>1?"s":"");
-  document.getElementById(vid).textContent="+"+fmt(imp);
-  return imp;
-}
-
-function calcBaja(){
-  var cat=catEf(bcatActual,document.getElementById("switchCondB").checked);
-  var an=parseFloat(document.getElementById("b-anios").value)||0;
-  var dias=parseInt(document.getElementById("b-dias").value)||0;
-  var ip=parseFloat(document.getElementById("b-irpf").value)||0;
-  var tipo=document.getElementById("b-tipo").value;
-  var nbaja=parseInt(document.getElementById("b-nbaja").value)||1;
-  var err=document.getElementById("b-errorBox");
-  if(dias<=0){err.textContent="Introduce el número de días de baja.";err.style.display="block";document.getElementById("resultado-baja").style.display="none";return;}
-  if(dias>545){err.textContent="El máximo legal son 545 días de baja.";err.style.display="block";document.getElementById("resultado-baja").style.display="none";return;}
-  err.style.display="none";
-  var ant=calcAntig(an,bcatActual);
-  var baseManual=parseFloat(document.getElementById("b-baseManual").value)||0;
-  var prorrata=r2((cat.salBase+cat.pelig+ant)*3/12);
-  var baseCotizMens;
-  if(baseManual>0){baseCotizMens=baseManual;}
-  else{baseCotizMens=r2(cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant+prorrata);}
-  var brDiario=r2(baseCotizMens/30);
-  var baseATMens=r2(cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant+prorrata);
-  var brATDiario=r2(baseATMens/30);
-  for(var i=0;i<=6;i++){document.getElementById("brow-t"+i).style.display="none";}
-  var totalBruto=0;
-  if(tipo==="hospitalizacion"){
-    var dH=Math.min(dias,40), dR=Math.max(0,dias-40);
-    if(dH>0)totalBruto+=tramoRow("brow-t0","blbl-t0","br-t0",1,dH,1.0,brDiario,"Días 1-"+dH+" hospitalización (100%)");
-    if(dR>0)totalBruto+=tramoRow("brow-t1","blbl-t1","br-t1",41,dias,0.75,brDiario,"Días 41-"+dias+" (75% SS general)");
-  } else if(tipo==="laboral"){
-    document.getElementById("brow-t0").style.display="flex";
-    document.getElementById("blbl-t0").textContent="Día 1 — empresa paga jornada completa (en nómina)";
-    document.getElementById("br-t0").textContent="incluido en nómina";
-    var dLab=Math.max(0,dias-1);
-    if(dLab>0)totalBruto+=tramoRow("brow-t1","blbl-t1","br-t1",2,dias,1.0,brATDiario,"Días 2-"+dias+" (100% tabla convenio — art. 51)");
-  } else {
-    var pct03,pct420;
-    if(nbaja===1){pct03=0.50;pct420=0.80;}
-    else if(nbaja<=3){pct03=0.00;pct420=0.80;}
-    else{pct03=0.00;pct420=0.60;}
-    var t03=Math.min(3,dias);
-    if(t03>0){
-      if(pct03>0){totalBruto+=tramoRow("brow-t0","blbl-t0","br-t0",1,t03,pct03,brDiario,"Días 1-"+t03+" ("+Math.round(pct03*100)+"% base reguladora)");}
-      else{document.getElementById("brow-t0").style.display="flex";document.getElementById("blbl-t0").textContent="Días 1-"+t03+" (0% — sin prestación"+(nbaja===1?", 2.ª baja en adelante":", 4.ª baja o más")+")";document.getElementById("br-t0").textContent="0,00 €";}
-    }
-    if(dias>3){var d4=Math.min(20,dias);totalBruto+=tramoRow("brow-t1","blbl-t1","br-t1",4,d4,pct420,brDiario,"Días 4-"+d4+" ("+Math.round(pct420*100)+"% base reguladora"+(nbaja>=4?", SS general":", convenio")+")"); }
-    if(nbaja>=4){if(dias>20){totalBruto+=tramoRow("brow-t2","blbl-t2","br-t2",21,dias,0.75,brDiario,"Días 21-"+dias+" (75% SS general)");}}
-    else{
-      if(dias>20){var d20=Math.min(40,dias);totalBruto+=tramoRow("brow-t2","blbl-t2","br-t2",21,d20,1.00,brDiario,"Días 21-"+d20+" (100% — art. 51 convenio)");}
-      if(dias>40){var d40=Math.min(60,dias);totalBruto+=tramoRow("brow-t3","blbl-t3","br-t3",41,d40,0.90,brDiario,"Días 41-"+d40+" (90% — art. 51 convenio)");}
-      if(dias>60){var d60=Math.min(100,dias);totalBruto+=tramoRow("brow-t4","blbl-t4","br-t4",61,d60,0.80,brDiario,"Días 61-"+d60+" (80% — art. 51 convenio/mejora 91-100)");}
-      if(dias>100){totalBruto+=tramoRow("brow-t5","blbl-t5","br-t5",101,dias,0.75,brDiario,"Días 101-"+dias+" (75% SS general)");}
-    }
-  }
-  totalBruto=r2(totalBruto);
-  var baseParaSS=r2((tipo==="laboral"?brATDiario:brDiario)*dias);
-  var dSS=r2(baseParaSS*SS_PCT);
-  var dIP=r2(totalBruto*ip/100);
-  var neto=r2(totalBruto-dSS-dIP);
-  document.getElementById("b-info-base").innerHTML="<strong>Base reguladora diaria:</strong> "+fmt(brDiario)+"/día (cotización "+fmt(baseCotizMens)+" ÷ 30)"+(ant>0&&baseManual===0?" | Antigüedad inc.: "+fmt(ant)+"/m":"");
-  document.getElementById("br-total-bruto").textContent=fmt(totalBruto);
-  document.getElementById("br-ss").textContent="-"+fmt(dSS);
-  if(ip>0){document.getElementById("brow-irpf").style.display="flex";document.getElementById("brow-irpf0").style.display="none";document.getElementById("blbl-irpf").textContent="Retención IRPF ("+ip+"%)";document.getElementById("br-irpf").textContent="-"+fmt(dIP);}
-  else{document.getElementById("brow-irpf").style.display="none";document.getElementById("brow-irpf0").style.display="flex";}
-  document.getElementById("br-neto").textContent=fmt(neto);
-  document.getElementById("resultado-baja").style.display="block";
-  cargarJsPDF(function(){});
-  setTimeout(mostrarAvisoInstalacion, 1200);
-  ctxPDF.baja={
-    "Categoría":nombreCat(bcatActual,document.getElementById("switchCondB").checked),
-    "Tipo de baja":(tipo==="comun"?"Enfermedad común o accidente no laboral":(tipo==="laboral"?"Accidente laboral o enfermedad profesional":"Hospitalización")),
-    "Número de baja en el año":(tipo==="comun"?(nbaja===1?"1.ª del año":(nbaja===2?"2.ª o 3.ª del año":"4.ª o posterior")):"No aplica"),
-    "Duración de la baja":dias+" días",
-    "Antigüedad":(an>0?an+" años":"Sin antigüedad"),
-    "Base de cotización":(baseManual>0?fmt(baseManual)+"/mes  (introducida por el usuario)":fmt(baseCotizMens)+"/mes  (mínimo de convenio)"),
-    "Base reguladora diaria":fmt(brDiario)+"/día",
-    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
-  };
-  if(typeof gtag !== 'undefined'){gtag("event","calcular_baja",{tipo:tipo,dias:dias,categoria:bcatActual});}
-  setTimeout(function(){document.getElementById("resultado-baja").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
-}
-</script>
+<script src="security.js?v=20260915"></script>
+<script src="install.js?v=20260915"></script><script src="calculation-rules.js?v=20260915"></script><script src="calculator.js?v=20260915"></script>
 
 <div id="dlg-overlay" class="dlg-overlay">
   <div class="dlg">
@@ -2184,10 +869,10 @@ function calcBaja(){
       <div class="dlg-switches">
         <div class="switch-row">
           <div>
-            <div class="switch-text">Día de vacaciones</div>
+            <div class="switch-text" id="dlg-vac-label">Día de vacaciones</div><div class="switch-sub vacation-account-note" id="dlg-vac-access-note">Disponible con cuenta gratuita</div>
             <div class="switch-sub">Computa 5,226 h de jornada</div>
           </div>
-          <label class="switch"><input type="checkbox" id="dlg-vac"><span class="slider"></span></label>
+          <label class="switch"><input type="checkbox" id="dlg-vac" aria-labelledby="dlg-vac-label" aria-describedby="dlg-vac-access-note"><span class="slider"></span></label>
         </div>
         <div class="switch-row" style="margin-top:0.7rem">
           <div>
@@ -2205,34 +890,53 @@ function calcBaja(){
     </div>
   </div>
 </div>
-<div id="inst-banner">
+<div id="inst-banner" hidden role="region" aria-labelledby="inst-title">
   <div class="inst-wrap">
-    <button type="button" class="inst-x" id="inst-cerrar" aria-label="Cerrar">×</button>
+    <button type="button" class="inst-x" id="inst-cerrar" aria-label="Cerrar aviso de instalación">×</button>
     <div class="inst-top">
       <div class="inst-icono"><img src="icon-192.png" alt="" style="width:100%;height:100%;border-radius:11px;display:block;"></div>
       <div>
-        <div class="inst-tit">Tenla siempre a mano</div>
+        <div class="inst-tit" id="inst-title">Tenla siempre a mano</div>
         <div class="inst-sub" id="inst-sub">Añádela a tu pantalla de inicio y ábrela de un toque, sin buscar el enlace.</div>
       </div>
     </div>
     <div id="inst-contenido"></div>
   </div>
 </div>
-<script>
-(function(){
-  function listo(){
-    var b=document.getElementById("menu-btn"), p=document.getElementById("menu-panel"),
-        o=document.getElementById("menu-overlay"), x=document.getElementById("menu-cerrar");
-    if(!b||!p||!o) return;
-    function abrir(){ p.classList.add("abierto"); o.classList.add("abierto"); document.body.style.overflow="hidden"; }
-    function cerrar(){ p.classList.remove("abierto"); o.classList.remove("abierto"); document.body.style.overflow=""; }
-    b.addEventListener("click",abrir);
-    o.addEventListener("click",cerrar);
-    if(x) x.addEventListener("click",cerrar);
-    document.addEventListener("keydown",function(e){ if(e.key==="Escape") cerrar(); });
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",listo); else listo();
-})();
-</script>
+<script src="index-script-1.js?v=20260915"></script>
+<dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title" aria-describedby="auth-intro">
+  <button class="auth-close" id="auth-close" type="button" aria-label="Cerrar registro">×</button>
+  <h2 id="auth-title">Crea tu cuenta gratis</h2>
+  <p id="auth-intro">Añade vacaciones y accede a los PDF, la baja y el finiquito.</p>
+  <div id="auth-provider-options"><button type="button" class="account-secondary auth-google" id="auth-google">Continuar con Google</button><p id="auth-google-note">Disponible próximamente. Estamos preparando la conexión con Google.</p><p class="auth-divider">o con tu correo electrónico</p></div>
+  <form id="auth-form">
+    <div id="auth-email-field"><label for="auth-email">Correo electrónico</label>
+    <input type="email" id="auth-email" name="email" required autocomplete="email" maxlength="254" placeholder="tu@correo.com">
+    </div>
+    <div id="auth-password-field"><label for="auth-password">Contraseña</label><input id="auth-password" type="password" name="password" required minlength="12" autocomplete="new-password"><p id="auth-password-hint">Mínimo 12 caracteres.</p></div>
+    <div id="auth-confirm-field"><label for="auth-confirm">Repite la contraseña</label><input id="auth-confirm" type="password" required autocomplete="new-password"></div>
+    <div id="auth-terms-field"><label class="auth-check"><input type="checkbox" id="auth-terms" required><span>He leído y acepto las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de uso</a> y he leído la <a href="privacidad.html" target="_blank" rel="noopener">información sobre privacidad</a>.</span></label></div>
+    <fieldset id="auth-marketing-fields" class="marketing-options" hidden>
+      <legend>Solo si te interesa · Opcional</legend>
+      <label class="auth-check"><input type="checkbox" id="auth-marketing-own"><span>Quiero recibir por correo novedades de la calculadora, consejos y ofertas propias de Nómina Vigilante relacionadas con la seguridad privada.</span></label>
+      <label class="auth-check"><input type="checkbox" id="auth-marketing-partners"><span>Quiero recibir por correo promociones de formación, productos y servicios de colaboradores del sector de la seguridad privada, enviadas por Nómina Vigilante, sin ceder mi correo a esos colaboradores.</span></label>
+      <p>Las envía Carlos Adán Miro, responsable de Nómina Vigilante. Puedes dejar ambas casillas vacías y usar todas las herramientas. Retira el permiso desde tu cuenta o por correo cuando quieras. <a href="privacidad.html#publicidad" target="_blank" rel="noopener">Más información</a>.</p>
+    </fieldset>
+    <p>Gestionamos el correo y la sesión para prestarte el servicio. Puedes ejercer tus derechos y solicitar la eliminación de tu cuenta desde <a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a>. No implica aceptar publicidad.</p>
+    <div id="auth-captcha" hidden><div id="auth-captcha-widget"></div><p id="auth-captcha-status" class="auth-status" role="status" aria-live="polite"></p><button type="button" id="auth-captcha-retry" class="auth-link">Reintentar comprobación</button></div>
+    <button type="submit" class="account-primary" id="auth-submit">Crear cuenta gratis</button>
+    <p id="auth-status" class="auth-status" role="status" aria-live="polite"></p>
+  </form>
+  <div id="auth-switches" class="account-actions"><button type="button" class="auth-link" data-auth-open="signin">Ya tengo cuenta</button><button type="button" class="auth-link" data-auth-open="signup">Crear cuenta</button><button type="button" class="auth-link" data-auth-open="reset">He olvidado mi contraseña</button></div>
+  <button type="button" class="auth-link" id="auth-resend" hidden>Reenviar verificación</button>
+</dialog>
+
+
+<script src="auth-config.js?v=20260915"></script>
+<script src="captcha.js?v=20260915"></script>
+<script src="marketing.js?v=20260915"></script>
+<script src="auth.js?v=20260915"></script>
+<script src="cookies.js?v=20260915"></script>
+<footer class="legal-footer"><a href="index.html">Calculadora</a><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings>Configurar cookies</button></footer>
 </body>
 </html>

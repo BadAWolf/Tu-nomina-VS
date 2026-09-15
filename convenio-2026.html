@@ -2,24 +2,27 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://qhqbrtxzbfokqdlhstuo.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-src https://challenges.cloudflare.com">
+<meta name="referrer" content="no-referrer">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Resumen completo del Convenio Colectivo de Seguridad Privada 2026-2030. Tablas salariales, jornada, pagas extras, vacaciones, IT y antigüedad. BOE 18/04/2026.">
 <title>Convenio Colectivo Seguridad Privada 2026-2030 | Nómina Vigilante</title>
 <link rel="canonical" href="https://calculadoravigilante.com/convenio-2026.html">
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#d4860f">
-<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#21634f">
+<link rel="apple-touch-icon" href="apple-touch-icon.png?v=20260914">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Nómina VS">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" type="image/svg+xml" href="brand.svg">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
 --bg:#f5f3ef;--surface:#faf8f5;--card:#ffffff;
 --border:#e8e3da;--border2:#d6cfc4;
---gold:#b8720a;--gold2:#d4860f;--goldbg:#fdf2e0;--goldline:#e8c87a;
+--gold:#21634f;--gold2:#28765c;--goldbg:#eef6ed;--goldline:#b9d4b4;
 --text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;--subtle:#b5a898;
 --green:#2d7a3a;--greenbg:#edf7ef;
 --red:#b83232;--redbg:#fdf0f0;
@@ -36,7 +39,7 @@ body{display:flex;flex-direction:column;align-items:center;padding:0 0 4rem;}
 .brand-icon{width:1.4rem;height:1.4rem;border-radius:4px;display:block;flex-shrink:0;}
 .brand-name{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
 .brand-name em{color:var(--gold2);font-style:normal;}
-.topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(180,120,10,0.25);}
+.topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(33,99,79,0.25);}
 .topbar-cta:hover{background:var(--gold);}
 
 .wrap{width:100%;max-width:680px;padding:1.5rem 1rem 0;}
@@ -83,7 +86,7 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 .info strong{color:var(--blue);font-weight:700;}
 
 .step{display:flex;gap:0.9rem;margin-bottom:1.05rem;align-items:flex-start;}
-.step-num{background:var(--gold2);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem;box-shadow:0 2px 5px rgba(180,120,10,0.3);}
+.step-num{background:var(--gold2);color:#fff;font-family:'Bebas Neue',sans-serif;font-size:1.05rem;width:2rem;height:2rem;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:0.1rem;box-shadow:0 2px 5px rgba(33,99,79,0.3);}
 .step-body h4{font-size:0.83rem;font-weight:700;color:var(--text);margin-bottom:0.28rem;}
 .step-body p{font-size:0.76rem;margin-bottom:0;}
 
@@ -93,9 +96,9 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 .concept-val{font-family:'DM Mono',monospace;font-size:0.74rem;font-weight:600;color:var(--green);white-space:nowrap;}
 .concept-val.down{color:var(--red);}
 
-.cta-box{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);border-radius:12px;padding:1.4rem 1.2rem;text-align:center;margin-top:1.8rem;box-shadow:0 2px 10px rgba(180,120,10,0.12);}
+.cta-box{background:linear-gradient(135deg,var(--goldbg),#fbe8c8);border:1.5px solid var(--goldline);border-radius:12px;padding:1.4rem 1.2rem;text-align:center;margin-top:1.8rem;box-shadow:0 2px 10px rgba(33,99,79,0.12);}
 .cta-box p{font-size:0.8rem;color:var(--text2);margin-bottom:0.9rem;}
-.cta-btn{display:inline-block;background:var(--gold2);color:#fff;text-decoration:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;padding:0.72rem 1.6rem;box-shadow:0 2px 8px rgba(180,120,10,0.3);transition:background 0.15s;}
+.cta-btn{display:inline-block;background:var(--gold2);color:#fff;text-decoration:none;border-radius:8px;font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:0.1em;padding:0.72rem 1.6rem;box-shadow:0 2px 8px rgba(33,99,79,0.3);transition:background 0.15s;}
 .cta-btn:hover{background:var(--gold);}
 
 .rel-links{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1.6rem;}
@@ -181,6 +184,9 @@ tbody td:first-child{font-weight:700;color:var(--text);}
   ]
 }
 </script>
+<link rel="stylesheet" href="legal.css?v=20260915">
+<link rel="stylesheet" href="brand.css?v=20260915"><script src="frame-protection.js?v=20260915"></script>
+<meta name="application-version" content="2026-09-15">
 </head>
 <body>
 <div class="menu-overlay" id="menu-overlay"></div>
@@ -194,26 +200,20 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 </div>
 <div class="menu-lista">
 <div class="menu-grupo">Calculadora</div>
-<a href="index.html" class="menu-link"><span class="menu-ico">🧮</span>Calcular mi nómina</a>
-<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico">🎓</span>Sindicatos y formación</a>
+<a href="index.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 7h8M8 11h1m6 0h1M8 15h1m6 0h1M8 18h1m6 0h1"/></svg></span>Calcular mi nómina</a>
+<a href="sindicatos-formacion.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg></span>Sindicatos y formación</a>
 <div class="menu-grupo">Guías del sector</div>
-<a href="convenio-2026.html" class="menu-link activo"><span class="menu-ico">📋</span>Convenio 2026–2030</a>
-<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico">⚖️</span>Mis derechos</a>
-<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico">🧾</span>Cómo leer tu nómina</a>
-<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico">❓</span>Preguntas frecuentes</a>
+<a href="convenio-2026.html" class="menu-link activo"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="5" width="14" height="16" rx="3"/><rect x="9" y="3" width="6" height="4" rx="1.5"/><path d="M9 12h6m-6 4h6"/></svg></span>Convenio 2026–2030</a>
+<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg></span>Mis derechos</a>
+<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6m-6 4h3"/></svg></span>Cómo leer tu nómina</a>
+<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M20 11a8 8 0 0 1-8 8H8l-5 2 1.5-5A8 8 0 1 1 20 11Z"/><path d="M10 8a2 2 0 1 1 3 1.7c-1 .6-1 1.1-1 2.3m0 3h.01"/></svg></span>Preguntas frecuentes</a>
 <div class="menu-grupo">La web</div>
-<a href="contacto.html" class="menu-link"><span class="menu-ico">✉️</span>Contacto y quiénes somos</a>
-<a href="privacidad.html" class="menu-link"><span class="menu-ico">🔒</span>Política de privacidad</a>
+<a href="contacto.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span>Contacto y quiénes somos</a>
+<a href="privacidad.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg></span>Política de privacidad</a>
 </div>
 <div class="menu-pie">Herramienta gratuita e independiente<br>calculadoravigilante.com</div>
 </nav>
-<div id="cookie-banner">
-  <p>Esta web utiliza cookies de terceros (Google Analytics y AdSense) para analizar el tráfico y mostrar publicidad. Ningún dato personal se guarda en nuestros servidores. <a href="privacidad.html" style="color:var(--gold2);font-weight:600;">Más información</a></p>
-  <div class="cookie-buttons">
-    <button class="btn-cookie btn-reject" onclick="rejectCookies()">Rechazar</button>
-    <button class="btn-cookie btn-accept" onclick="acceptCookies()">Aceptar</button>
-  </div>
-</div>
+<div id="cookie-banner" hidden role="region" aria-label="Preferencias de cookies"><p>Usamos almacenamiento necesario para tu sesión y tus preferencias. Solo con tu permiso activamos Google Analytics para medir el uso de la web. Puedes cambiar tu elección cuando quieras. <a href="privacidad.html#cookies">Más información</a>.</p><div class="cookie-buttons"><button type="button" id="cookie-reject" class="btn-cookie" data-cookie-choice="reject">Rechazar analítica</button><button type="button" class="btn-cookie" data-cookie-choice="accept">Aceptar analítica</button></div></div>
 
 <div class="topbar">
 <div class="topbar-inner">
@@ -236,7 +236,7 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 <strong>Fuente oficial:</strong> Convenio Colectivo Estatal de Empresas de Seguridad publicado en el BOE el 18 de abril de 2026, con vigencia hasta el 31 de diciembre de 2030. Este resumen es orientativo — ante cualquier decisión legal, consulta el texto oficial o a un asesor laboral.
 </div>
 
-<h2><span class="h2-icon">💶</span>Tablas Salariales 2026</h2>
+<h2><span class="h2-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M15 8a4 4 0 1 0 0 8M7 10h6m-6 4h5"/></svg></span>Tablas Salariales 2026</h2>
 <div class="art">Artículo 35 — Retribuciones</div>
 <p>Estos son los importes mínimos garantizados para jornada completa de 162 horas mensuales. Ninguna empresa puede pagar por debajo de estas cifras, aunque sí puede mejorarlas.</p>
 
@@ -249,7 +249,7 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 <tr><td>VS Sin Arma</td><td class="num">1.161,28 €</td><td class="num">24,08 €</td><td class="num">—</td><td class="num">137,81 €</td><td class="num">112,28 €</td><td class="num"><strong>1.435,45 €</strong></td></tr>
 <tr><td>VS Con Arma</td><td class="num">1.161,28 €</td><td class="num">179,90 €</td><td class="num">—</td><td class="num">137,81 €</td><td class="num">112,28 €</td><td class="num"><strong>1.591,27 €</strong></td></tr>
 <tr><td>Escolta Privado</td><td class="num">1.161,28 €</td><td class="num">177,15 €</td><td class="num">—</td><td class="num">137,81 €</td><td class="num">115,67 €</td><td class="num"><strong>1.591,91 €</strong></td></tr>
-<tr><td>VS Explosivos</td><td class="num">1.161,28 €</td><td class="num">210,55 €</td><td class="num">40,17 €</td><td class="num">137,81 €</td><td class="num">113,27 €</td><td class="num"><strong>1.663,08 €</strong></td></tr>
+<tr><td>VS Explosivos</td><td class="num">1.161,28 €</td><td class="num">210,55 €</td><td class="num">40,17 €</td><td class="num">137,81 €</td><td class="num">112,25 €</td><td class="num"><strong>1.662,06 €</strong></td></tr>
 <tr><td>VS Transp. Fondos</td><td class="num">1.227,74 €</td><td class="num">179,90 €</td><td class="num">210,19 €</td><td class="num">137,81 €</td><td class="num">113,27 €</td><td class="num"><strong>1.868,91 €</strong></td></tr>
 <tr><td>VS Transp. Fondos · Conductor</td><td class="num">1.285,55 €</td><td class="num">179,90 €</td><td class="num">210,19 €</td><td class="num">137,81 €</td><td class="num">114,56 €</td><td class="num"><strong>1.928,01 €</strong></td></tr>
 <tr><td>VS Transp. Explosivos</td><td class="num">1.227,74 €</td><td class="num">191,59 €</td><td class="num">152,44 €</td><td class="num">137,81 €</td><td class="num">113,27 €</td><td class="num"><strong>1.822,85 €</strong></td></tr>
@@ -265,7 +265,7 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 <strong>La figura del conductor:</strong> en los servicios de transporte de fondos y de explosivos, quien conduce el vehículo tiene un salario base superior (1.285,55 € frente a 1.227,74 €) y un plus de vestuario algo mayor, por la habilitación y la responsabilidad añadidas que exige la conducción de estos servicios.
 </div>
 
-<h2><span class="h2-icon">⏱️</span>Jornada de Trabajo</h2>
+<h2><span class="h2-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2M9 2h6m-3 0v3m6 2 2-2"/></svg></span>Jornada de Trabajo</h2>
 <div class="art">Artículo 52 — Jornada laboral</div>
 <p>La jornada ordinaria es de <strong>1.782 horas anuales</strong> de trabajo efectivo, con cómputo mensual y un promedio de <strong>162 horas al mes</strong>. En cuadrante anual, cada mes puede oscilar entre <strong>144 y 176 horas</strong> (entre 134 y 162 en febrero) <strong>sin que varíe el salario de tablas</strong>. En contratos a tiempo parcial, la horquilla se ajusta proporcionalmente.</p>
 
@@ -297,7 +297,7 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 <p>Quien ejerce funciones de Jefe (Responsable) de Equipo percibe un plus del <strong>10% del salario base</strong> de su categoría mientras las desempeña: <strong>116,13 €/mes</strong> para VS y Escolta, <strong>122,77 €/mes</strong> en Transporte de Fondos (jornada completa).</p>
 </div>
 
-<h2><span class="h2-icon">📈</span>Antigüedad — Quinquenios</h2>
+<h2><span class="h2-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4v16h16M7 14l4-4 4 2 5-6m-5 0h5v5"/></svg></span>Antigüedad — Quinquenios</h2>
 <div class="art">Artículo 42 — Antigüedad</div>
 <p>Por cada <strong>5 años ininterrumpidos</strong> en la misma empresa se devenga un quinquenio, que suma un complemento fijo a la nómina mensual y también cuenta para el cálculo de horas extra y pagas.</p>
 
@@ -317,7 +317,7 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 </table>
 </div>
 
-<h2><span class="h2-icon">🎁</span>Pagas Extraordinarias</h2>
+<h2><span class="h2-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M3 10h18M16 13v4m-2-2h4M6 6V4h11"/></svg></span>Pagas Extraordinarias</h2>
 <div class="art">Artículo 45 — Gratificaciones</div>
 <p>El convenio garantiza <strong>tres pagas extras</strong> al año. Cada una equivale a un mes de salario base + peligrosidad + antigüedad:</p>
 <ul>
@@ -329,11 +329,11 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 <strong>Prorrateo:</strong> Muchas empresas dividen las pagas en 12 partes y las incluyen en la nómina mensual. Es legal si aparece desglosado en el recibo. En ese caso, al finalizar el contrato no quedan pagas pendientes de cobro.
 </div>
 
-<h2><span class="h2-icon">🏖️</span>Vacaciones</h2>
+<h2><span class="h2-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5"/></svg></span>Vacaciones</h2>
 <div class="art">Artículo 57 — Vacaciones</div>
 <p>Corresponden <strong>31 días naturales al año</strong> en jornada completa. Si no completas el año, se calculan proporcionalmente (unos 2,58 días por mes trabajado). Los días no disfrutados al terminar el contrato se pagan en el finiquito, calculados sobre el salario mensual completo dividido entre 30.</p>
 
-<h2><span class="h2-icon">🏥</span>Incapacidad Temporal (IT)</h2>
+<h2><span class="h2-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="4"/><path d="M12 8v8m-4-4h8"/></svg></span>Incapacidad Temporal (IT)</h2>
 <div class="art">Artículo 51 — Complemento IT</div>
 <p>El convenio mejora sustancialmente la prestación general de la Seguridad Social. Porcentajes sobre la base reguladora diaria:</p>
 
@@ -347,8 +347,8 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 <tr><td>4 – 20</td><td class="num">80%</td><td class="num">60%</td></tr>
 <tr><td>21 – 40</td><td class="num">100%</td><td class="num">75%</td></tr>
 <tr><td>41 – 60</td><td class="num">90%</td><td class="num">75%</td></tr>
-<tr><td>61 – 100</td><td class="num">80%</td><td class="num">75%</td></tr>
-<tr><td>101 en adelante</td><td class="num">75%</td><td class="num">75%</td></tr>
+<tr><td>61 – 90</td><td class="num">80%</td><td class="num">75%</td></tr>
+<tr><td>91 – 100</td><td class="num">80% si no hubo otra baja en los 12 meses anteriores; si la hubo, 75%</td><td class="num">75%</td></tr><tr><td>101 en adelante</td><td class="num">75%</td><td class="num">75%</td></tr>
 </tbody>
 </table>
 </div>
@@ -356,9 +356,9 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 
 <div class="card">
 <div class="tag">ACCIDENTE LABORAL / ENFERMEDAD PROFESIONAL</div>
-<p>El día 1 lo paga la empresa como jornada ordinaria. Del <strong>día 2 en adelante: 100%</strong> de la base reguladora, sin límite de duración.</p>
+<p>El día del accidente se abona en nómina. Después corresponde el mayor importe entre la prestación reglamentaria y el complemento hasta la tabla de convenio, conforme al artículo 51 y a la duración legal de la prestación.</p>
 <div class="tag" style="margin-top:0.7rem;">HOSPITALIZACIÓN</div>
-<p>Bajas con ingreso hospitalario: <strong>100% durante los primeros 40 días</strong>. Desde el día 41, el 75% del régimen general.</p>
+<p>La hospitalización complementa hasta el 100% desde el ingreso, durante un máximo de 40 días. Fuera de ese periodo se aplican los tramos y requisitos de la baja. El 50% de los días 1–3 se aplica una vez al año; el 80% de los días 4–20, un máximo de dos veces.</p>
 </div>
 
 <div class="alert">
@@ -371,8 +371,8 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 </div>
 
 <div class="rel-links">
-<a href="derechos-vigilante.html" class="rel-link"><div class="rel-kicker">Guía relacionada</div><div class="rel-title">⚖️ Derechos del Vigilante de Seguridad</div></a>
-<a href="guia-nomina-vigilante.html" class="rel-link"><div class="rel-kicker">Guía relacionada</div><div class="rel-title">🧾 Cómo leer tu nómina paso a paso</div></a>
+<a href="derechos-vigilante.html" class="rel-link"><div class="rel-kicker">Guía relacionada</div><div class="rel-title"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg> Derechos del Vigilante de Seguridad</div></a>
+<a href="guia-nomina-vigilante.html" class="rel-link"><div class="rel-kicker">Guía relacionada</div><div class="rel-title"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6m-6 4h3"/></svg> Cómo leer tu nómina paso a paso</div></a>
 </div>
 
 <div class="disclaimer">
@@ -380,50 +380,9 @@ Convenio Colectivo Estatal de Empresas de Seguridad 2026-2030 — BOE 18/04/2026
 Documento orientativo. Consulta el texto oficial o a un asesor laboral ante cualquier duda.
 </div>
 </div>
-<script>
-function loadGoogleScripts(){
-  var s1=document.createElement('script');
-  s1.src="https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B";
-  s1.async=true; document.head.appendChild(s1);
-  window.dataLayer=window.dataLayer||[];
-  window.gtag=function(){dataLayer.push(arguments);};
-  gtag('js',new Date());
-  gtag('config','G-NMM3MRRZ6B');
-  var s2=document.createElement('script');
-  s2.src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6334238097806445";
-  s2.async=true; s2.setAttribute('crossorigin','anonymous');
-  document.head.appendChild(s2);
-}
-function acceptCookies(){
-  localStorage.setItem('cookies_status','accepted');
-  document.getElementById('cookie-banner').style.display='none';
-  loadGoogleScripts();
-}
-function rejectCookies(){
-  localStorage.setItem('cookies_status','rejected');
-  document.getElementById('cookie-banner').style.display='none';
-}
-window.addEventListener('DOMContentLoaded',function(){
-  var st=localStorage.getItem('cookies_status');
-  if(st==='accepted'){loadGoogleScripts();}
-  else if(st!=='rejected'){document.getElementById('cookie-banner').style.display='block';}
-});
-</script>
-<script>
-(function(){
-  function listo(){
-    var b=document.getElementById("menu-btn"), p=document.getElementById("menu-panel"),
-        o=document.getElementById("menu-overlay"), x=document.getElementById("menu-cerrar");
-    if(!b||!p||!o) return;
-    function abrir(){ p.classList.add("abierto"); o.classList.add("abierto"); document.body.style.overflow="hidden"; }
-    function cerrar(){ p.classList.remove("abierto"); o.classList.remove("abierto"); document.body.style.overflow=""; }
-    b.addEventListener("click",abrir);
-    o.addEventListener("click",cerrar);
-    if(x) x.addEventListener("click",cerrar);
-    document.addEventListener("keydown",function(e){ if(e.key==="Escape") cerrar(); });
-  }
-  if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",listo); else listo();
-})();
-</script>
+
+<script src="convenio-2026-script-0.js?v=20260915"></script>
+<script src="cookies.js?v=20260915"></script>
+<footer class="legal-footer"><a href="index.html">Calculadora</a><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings>Configurar cookies</button></footer>
 </body>
 </html>
