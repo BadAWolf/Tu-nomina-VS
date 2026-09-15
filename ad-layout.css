@@ -1,0 +1,17 @@
+/* Two in-flow banners on compact screens; two non-sticky rails on wide screens. */
+.calculator-ad-layout{position:relative;}
+.calculator-ad{width:100%;margin:3rem 0;padding:1rem 0;border-block:1px solid var(--border);text-align:center;}
+.calculator-ad[hidden]{display:none!important;}
+.calculator-ad p{margin:0 0 .65rem;font-size:.65rem;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;}
+.calculator-ad ins{display:block;width:100%;height:100px;max-width:728px;margin-inline:auto;}
+/* Keep the selected creative size for the life of this page. Never request
+   additional ads merely because the window resized or the user calculated. */
+@media(min-width:1280px){
+  .calculator-ad-layout[data-ad-layout="wide"] .calculator-ad{position:absolute;top:19rem;width:160px;margin:0;}
+  .calculator-ad-layout[data-ad-layout="wide"] .calculator-ad--top{right:calc(100% + 40px);}
+  .calculator-ad-layout[data-ad-layout="wide"] .calculator-ad--bottom{left:calc(100% + 40px);}
+  .calculator-ad-layout[data-ad-layout="wide"] .calculator-ad ins{width:160px;height:600px;}
+}
+@media(max-width:1279px){.calculator-ad-layout[data-ad-layout="wide"] .calculator-ad{display:none!important;}}
+body:has(dialog[open]) .calculator-ad{visibility:hidden;}
+@media print{.calculator-ad{display:none!important;}}
