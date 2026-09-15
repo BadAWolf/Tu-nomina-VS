@@ -852,7 +852,7 @@ function calcNominaRegistrado(){
   var ant=calcAntig(an,catActual,document.getElementById('switchCond').checked);
   var antM=r2(ant*ratioFijo*factorH);
   var hJefe=esJefe?(document.getElementById('n-horasJefe').value===''?hT:Number(document.getElementById('n-horasJefe').value)):0;
-  if(hJefe>hT){err.textContent='Las horas como jefe de equipo no pueden superar las trabajadas.';err.style.display='block';document.getElementById('resultado').style.display='none';return;}
+  if(hJefe>hT){err.textContent='Las horas como responsable de equipo no pueden superar las trabajadas.';err.style.display='block';document.getElementById('resultado').style.display='none';return;}
   var je=r2(cat.salBase*0.10*hJefe/JORNADA);
   var complementoVac=r2((parseFloat(document.getElementById('n-promedioVac').value)||0)*dVac/31);
   var q=Math.floor(an/5);
@@ -919,7 +919,7 @@ function calcNominaRegistrado(){
     "Antigüedad":(an>0?an+" años  ("+q+" quinquenio"+(q!==1?"s":"")+")":"Sin antigüedad"),
     "Vacaciones disfrutadas":(pdfDiasVac>0?pdfDiasVac+" día"+(pdfDiasVac!==1?"s":"")+" = "+String(pdfHorasVac).replace(".",",")+" h de jornada":"Ninguna"),
     "Jornada computable del mes":String(hJor).replace(".",",")+" h",
-    "Jefe de Equipo":(esJefe?"Sí (10% del salario base)":"No"),
+    "Responsable de equipo":(esJefe?"Sí (10% del salario base)":"No"),
     "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
   };
@@ -1084,7 +1084,7 @@ function calcFiniquitoRegistrado(){
     "Fin del contrato":fechaES(sf),
     "Duración":dur.trim()+"  ("+dias+" días)",
     "Antigüedad reconocida":anosC+" año"+(anosC!==1?"s":"")+(q>0?"  ("+q+" quinquenio"+(q!==1?"s":"")+")":""),
-    "Jefe de Equipo":(esJefeF?"Sí (10% del salario base)":"No"),
+    "Responsable de equipo":(esJefeF?"Sí (10% del salario base)":"No"),
     "Días de vacaciones pendientes":dv+" días",
     "Motivo de la extinción":(tipo==="voluntaria"?"Baja voluntaria":tipo==="temporal"?"Fin de contrato temporal (12 días/año)":tipo==="objetivo"?"Despido objetivo (20 días/año)":"Despido improcedente (tramos y topes legales)"),
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
