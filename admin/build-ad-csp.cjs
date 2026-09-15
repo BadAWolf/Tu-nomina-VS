@@ -8,7 +8,7 @@ function build(){
   const file=path.join(root,page);let html=fs.readFileSync(file,'utf8');const hashes=[];
   html=html.replace(/<script\b([^>]*\bsrc="([^"]+)"[^>]*)>/g,(_,attrs,src)=>{
    const relative=src.split('?')[0];
-   if(!/^[a-z0-9-]+\.js$/.test(relative))throw Error('Unexpected script in editorial page: '+src);
+   if(!/^(?:[a-z0-9-]+\.js|vendor\/supabase\.js)$/.test(relative))throw Error('Unexpected script in public page: '+src);
    const hash='sha256-'+crypto.createHash('sha256').update(fs.readFileSync(path.join(root,relative))).digest('base64');
    hashes.push("'"+hash+"'");attrs=attrs.replace(/\s+integrity="[^"]*"/g,'');
    return '<script'+attrs+' integrity="'+hash+'">';
