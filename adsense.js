@@ -8,19 +8,23 @@
   if(!production || !pages.has(location.pathname) || !cleanURL || window.top!==window.self)return;
   const client='ca-pub-6334238097806445';
   let started=false, requested=false, allowed=false, revoking=false, pendingPrivacy=false;
+  let privacyStatus=null;
+  function status(text){
+    if(!privacyStatus)return;
+    privacyStatus.textContent=text;privacyStatus.hidden=!text;
+  }
   const queue=window.adsbygoogle=window.adsbygoogle||[];
   queue.pauseAdRequests=1;
   // Contextual ads only. We never build ad audiences from account data.
   queue.requestNonPersonalizedAds=1;
   function hideAds(){
-    queue.pauseAdRequests=1;allowed=false;
+    window.adsbygoogle.pauseAdRequests=1;allowed=false;
     document.querySelectorAll('[data-ad-placement]').forEach(section=>{section.hidden=true;});
   }
-  function renderAds(){
-    if(!allowed || requested)return;
+  function configureSlots(){
     const sections=Array.from(document.querySelectorAll('[data-ad-placement]'));
-    if(!sections.length)return;
-    requested=true;
+    // Register slots while requests are paused, as documented by AdSense.
+    // The empty space gives its layout code a real width. No ads are requested.
     sections.forEach(section=>{
       section.hidden=false;
       const ad=section.querySelector('.adsbygoogle');
@@ -30,13 +34,22 @@
         });
         observer.observe(ad,{attributes:true,attributeFilter:['data-ad-status']});
       }
-      queue.push({});
+      window.adsbygoogle.push({});
     });
-    queue.pauseAdRequests=0;
+  }
+  function renderAds(){
+    if(!allowed || requested)return;
+    // Google replaces the bootstrap array with its loaded API.
+    const activeQueue=window.adsbygoogle;
+    activeQueue.requestNonPersonalizedAds=1;
+    document.querySelectorAll('[data-ad-placement]').forEach(section=>{section.hidden=false;});
+    requested=true;
+    activeQueue.pauseAdRequests=0;
   }
   function consentChanged(tc, success){
-    if(!success || tc?.cmpStatus==='error'){hideAds();return;}
+    if(!success || tc?.cmpStatus==='error'){hideAds();status('No se ha podido comprobar el consentimiento. La publicidad permanece desactivada.');return;}
     if(!['tcloaded','useractioncomplete'].includes(tc?.eventStatus))return;
+    if(tc.gdprApplies!==true){hideAds();if(revoking)status('La publicidad permanece desactivada en esta visita. No hay un panel publicitario disponible.');return;}
     if(revoking && tc.eventStatus!=='useractioncomplete')return;
     // Unknown jurisdictions/choices fail closed. Google also validates the full
     // TC string. A refusal never falls back to limited ads or tracking cookies.
@@ -46,7 +59,8 @@
       hideAds();location.reload();return;
     }
     revoking=false;
-    if(!next){hideAds();return;}
+    if(!next){hideAds();if(privacyStatus)status('No se mostrarán anuncios con tus preferencias actuales.');return;}
+    status('');
     allowed=true;renderAds();
   }
   function start(){
@@ -58,10 +72,11 @@
       if(typeof window.__tcfapi==='function')window.__tcfapi('addEventListener',2,consentChanged);
       if(pendingPrivacy){pendingPrivacy=false;window.googlefc.showRevocationMessage?.();}
     }});
+    configureSlots();
     const script=document.createElement('script');
     script.async=true;script.crossOrigin='anonymous';
     script.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+client;
-    script.addEventListener('error',hideAds,{once:true});
+    script.addEventListener('error',()=>{hideAds();status('No se ha podido cargar el gestor de privacidad. La publicidad permanece desactivada.');},{once:true});
     document.head.appendChild(script);
   }
   function openPrivacy(event){
@@ -72,6 +87,8 @@
     }});
   }
   function init(){
+    const control=document.querySelector('[data-ad-privacy]');
+    if(control){privacyStatus=document.createElement('p');privacyStatus.className='ad-privacy-status';privacyStatus.setAttribute('role','status');privacyStatus.hidden=true;control.parentNode.insertBefore(privacyStatus,control.nextSibling);}
     document.querySelectorAll('[data-ad-privacy]').forEach(button=>button.addEventListener('click',openPrivacy));
     window.addEventListener('vigilante:analytics-choice',start);
     start();
