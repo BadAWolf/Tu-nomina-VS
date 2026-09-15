@@ -1,7 +1,7 @@
 /* Reglas 2026: BOE-A-2026-8569, arts. 45, 51 y 52; Estatuto, arts. 49, 53 y 56. */
 (function(root){
   'use strict';
-  const round=n=>Math.round((n+Number.EPSILON)*100)/100;
+  const round=n=>{const cents=Math.abs(n)*100;return Math.sign(n)*Math.round(cents+Number.EPSILON*Math.max(1,cents))/100;};
   const date=value=>new Date(value+'T00:00:00Z');
   const days=(start,end)=>Math.round((date(end)-date(start))/86400000)+1;
   function months(start,end){

@@ -92,3 +92,13 @@ test('Funds-driver supplements match the 2026 table and update the visible categ
   assert.match(x.d.getElementById('hint-antiguedad').textContent,/46,59/);
  }finally{x.close();}
 });
+
+test('Half-cent monetary ties round consistently despite floating-point representation',()=>{
+ const x=setup();try{
+  assert.equal(x.w.r2(1.005),1.01);assert.equal(x.w.r2(-1.005),-1.01);
+  assert.equal(x.w.r2(1435.45*10/100),143.55);
+  x.set('hTTotal',162);x.set('irpf',10);x.w.calcNominaRegistrado();
+  assert.equal(x.d.getElementById('r-irpf').textContent,'-143,55 €');
+  assert.equal(x.d.getElementById('r-neto').textContent,'1179,33 €');
+ }finally{x.close();}
+});

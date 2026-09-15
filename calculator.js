@@ -639,7 +639,7 @@ var PLUS_FEST=1.02;
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
 
-function r2(n){return Math.round(n*100)/100;}
+function r2(n){var centimos=Math.abs(n)*100;return Math.sign(n)*Math.round(centimos+Number.EPSILON*Math.max(1,centimos))/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
 function calcAntig(a,cat,conductor){return r2(Math.floor(a/5)*(conductor&&CATS[cat].cBase?50.23:QUINQUENIO[cat]));}
 function calcHoraExtra(sb,p,act,ant,esc){return r2(((sb+p+act+ant)*15+(esc||0)*12)/HORAS_ANUALES);}
