@@ -6,6 +6,9 @@
   if(!preferences || preferences.version!==1 || typeof preferences.analytics!=='boolean' || !Number.isFinite(preferences.savedAt) || preferences.savedAt>Date.now() || Date.now()-preferences.savedAt>maxAge)preferences=null;
   let analyticsLoaded=false;
   let appPageRecorded=false;
+  // Ad consent is separate. This only lets its dialog wait until the existing
+  // analytics dialog has closed, regardless of whether analytics was accepted.
+  window.VigilantePrivacy=Object.freeze({hasAnalyticsChoice:()=>Boolean(preferences)});
   const production = location.protocol === 'https:' && ['calculadoravigilante.com','www.calculadoravigilante.com'].includes(location.hostname);
   const authCallback=()=>/access_token=|refresh_token=|error_description=|type=recovery|[?&]code=|unsubscribe=/.test(location.hash+location.search);
   function pageData(){
@@ -64,6 +67,7 @@
       });
       location.reload();
     }else {loadAnalytics();recordAppPage();}
+    window.dispatchEvent(new Event('vigilante:analytics-choice'));
   }
   window.acceptCookies=()=>save(true);
   window.rejectCookies=()=>save(false);

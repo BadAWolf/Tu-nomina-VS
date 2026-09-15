@@ -51,7 +51,12 @@ test('Every public HTML page blocks inline scripts and has no executable inline 
  for(const file of files){const d=new JSDOM(read(file)).window.document;
  const policy=d.querySelector('meta[http-equiv="Content-Security-Policy"]').content;
  assert.match(policy,/script-src-attr 'none'/);assert.match(policy,/object-src 'none'/);
- assert.doesNotMatch(policy.split(';').find(p=>p.trim().startsWith('script-src ')),/unsafe-inline|unsafe-eval/);
+ const scriptPolicy=policy.split(';').find(p=>p.trim().startsWith('script-src '));
+ assert.doesNotMatch(scriptPolicy,/unsafe-inline/);
+ if(d.querySelector('script[src^="adsense.js"]')){
+  assert.match(scriptPolicy,/'strict-dynamic'/);assert.match(scriptPolicy,/'sha256-/);
+  assert.equal(d.querySelector('script[src^="auth.js"]'),null);
+ }else assert.doesNotMatch(scriptPolicy,/unsafe-eval/);
  for(const el of d.querySelectorAll('*'))for(const attr of el.attributes)assert.equal(/^on/i.test(attr.name),false,file+' '+attr.name);
  for(const script of d.querySelectorAll('script:not([src])'))assert.equal(script.type,'application/ld+json',file);
  d.defaultView.close();}
