@@ -50,5 +50,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .editorial-ad[hidden]{display:none!important;}
 .editorial-ad-label{font-size:.65rem!important;color:var(--muted);letter-spacing:.1em;text-transform:uppercase;margin-bottom:.75rem!important;}
 .editorial-ad .adsbygoogle{display:block;min-height:250px;}
-.ad-privacy-link{font:inherit;background:none;border:0;text-decoration:underline;color:var(--gold);cursor:pointer;}
-@media print{.editorial-ad,[data-ad-privacy]{display:none!important;}}
+.ad-privacy-status{flex-basis:100%;font-size:.8rem;line-height:1.5;color:var(--text2);}
+@media print{.editorial-ad,[data-ad-privacy],.ad-privacy-status{display:none!important;}}

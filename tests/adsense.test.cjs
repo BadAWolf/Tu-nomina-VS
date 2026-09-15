@@ -13,14 +13,14 @@ function setup(url='https://calculadoravigilante.com/guia-nomina-vigilante.html'
 }
 function consent(overrides={}){return {cmpStatus:'loaded',eventStatus:'useractioncomplete',gdprApplies:true,vendor:{consents:{755:true}},purpose:{consents:{1:true},legitimateInterests:{2:true,7:true,9:true,10:true}},...overrides};}
 test('Ad script waits for analytics dialog to close, not for analytics permission',()=>{
- const w=setup(undefined,false);try{assert.equal(w.document.querySelector('script'),null);w.VigilantePrivacy.hasAnalyticsChoice=()=>true;w.dispatchEvent(new w.Event('vigilante:analytics-choice'));assert.equal(w.document.querySelectorAll('script').length,1);w.dispatchEvent(new w.Event('vigilante:analytics-choice'));assert.equal(w.document.querySelectorAll('script').length,1);assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.adsbygoogle.length,1);}finally{w.close();}
+ const w=setup(undefined,false);try{assert.equal(w.document.querySelector('script'),null);w.VigilantePrivacy.hasAnalyticsChoice=()=>true;w.dispatchEvent(new w.Event('vigilante:analytics-choice'));assert.equal(w.document.querySelectorAll('script').length,1);w.dispatchEvent(new w.Event('vigilante:analytics-choice'));assert.equal(w.document.querySelectorAll('script').length,1);assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.adsbygoogle.length,0);assert.equal(w.document.querySelector('section').hidden,true);}finally{w.close();}
 });
 test('Ads are contextual and paused until a valid separate TCF choice',()=>{
  const w=setup();try{w.apiReady();assert.equal(w.adsbygoogle.requestNonPersonalizedAds,1);w.consent(consent({eventStatus:'cmpuishown'}),true);assert.equal(w.adsbygoogle.pauseAdRequests,1);w.consent(consent(),true);assert.equal(w.adsbygoogle.pauseAdRequests,0);assert.equal(w.adsbygoogle.length,1);assert.equal(w.document.querySelector('section').hidden,false);w.consent(consent(),true);assert.equal(w.adsbygoogle.length,1);}finally{w.close();}
 });
 test('Refusal, vendor refusal, missing purposes, unknown jurisdiction and CMP failure all keep ads paused',()=>{
  for(const [value,success] of [[consent({purpose:{consents:{1:false}}}),true],[consent({vendor:{consents:{755:false}}}),true],[consent({purpose:{consents:{1:true}}}),true],[consent({gdprApplies:false}),true],[consent({gdprApplies:undefined}),true],[consent({cmpStatus:'error'}),true],[undefined,false]]){
-  const w=setup();try{w.apiReady();w.consent(value,success);assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.adsbygoogle.length,1);assert.equal(w.document.querySelector('section').hidden,true);}finally{w.close();}
+  const w=setup();try{w.apiReady();w.consent(value,success);assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.adsbygoogle.length,0);assert.equal(w.document.querySelector('section').hidden,true);}finally{w.close();}
  }
 });
 test('Privacy control stops serving immediately and uses Google revocation API',()=>{
@@ -31,7 +31,7 @@ test('Consent uses the loaded AdSense API after Google replaces its bootstrap ar
   const bootstrap=w.adsbygoogle;const requests=[];
   w.adsbygoogle={pauseAdRequests:1,push:request=>requests.push(request)};
   w.apiReady();w.consent(consent(),true);
-  assert.equal(requests.length,0);assert.equal(bootstrap.length,1);
+  assert.equal(requests.length,1);assert.equal(bootstrap.length,0);
   assert.equal(w.adsbygoogle.pauseAdRequests,0);assert.equal(w.adsbygoogle.requestNonPersonalizedAds,1);
   w.document.querySelector('button').click();assert.equal(w.adsbygoogle.pauseAdRequests,1);
  }finally{w.close();}
@@ -39,6 +39,14 @@ test('Consent uses the loaded AdSense API after Google replaces its bootstrap ar
 test('Google CMP preview can exercise consent without requesting real ads',()=>{
  const w=setup('https://calculadoravigilante.com/guia-nomina-vigilante.html?fc=alwaysshow&fctype=gdpr');try{
   w.apiReady();w.consent(consent(),true);assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.document.querySelector('section').hidden,true);assert.match(w.document.querySelector('[role="status"]').textContent,/Vista previa/);
+ }finally{w.close();}
+});
+test('A missing Google consent panel gives feedback and keeps the slot hidden',()=>{
+ const w=setup();try{
+  let timeout;w.setTimeout=fn=>{timeout=fn;return 1;};w.clearTimeout=()=>{};
+  w.document.querySelector('button').click();assert.match(w.document.querySelector('[role="status"]').textContent,/Abriendo/);
+  timeout();assert.match(w.document.querySelector('[role="status"]').textContent,/Google no ha abierto/);
+  assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.adsbygoogle.length,0);assert.equal(w.document.querySelector('section').hidden,true);
  }finally{w.close();}
 });
 test('Ad loading is excluded from calculators, accounts, legal pages, previews and private URL parameters',()=>{

@@ -9,6 +9,7 @@
   if(!production || !pages.has(location.pathname) || !cleanURL || window.top!==window.self)return;
   const client='ca-pub-6334238097806445';
   let started=false, requested=false, allowed=false, revoking=false, pendingPrivacy=false;
+  let privacyTimer=null;
   let privacyStatus=null;
   function status(text){
     if(!privacyStatus)return;
@@ -24,8 +25,8 @@
   }
   function configureSlots(){
     const sections=Array.from(document.querySelectorAll('[data-ad-placement]'));
-    // Register slots while requests are paused, as documented by AdSense.
-    // The empty space gives its layout code a real width. No ads are requested.
+    // Register the slot with a real width while requests are still paused.
+    // This runs only after consent; pending approval never leaves empty panels.
     sections.forEach(section=>{
       section.hidden=false;
       const ad=section.querySelector('.adsbygoogle');
@@ -44,20 +45,22 @@
     // Google replaces the bootstrap array with its loaded API.
     const activeQueue=window.adsbygoogle;
     activeQueue.requestNonPersonalizedAds=1;
-    document.querySelectorAll('[data-ad-placement]').forEach(section=>{section.hidden=false;});
+    configureSlots();
     requested=true;
     activeQueue.pauseAdRequests=0;
   }
   function consentChanged(tc, success){
-    if(!success || tc?.cmpStatus==='error'){hideAds();status('No se ha podido comprobar el consentimiento. La publicidad permanece desactivada.');return;}
+    if(!success || tc?.cmpStatus==='error'){clearTimeout(privacyTimer);hideAds();status('No se ha podido comprobar el consentimiento. La publicidad permanece desactivada.');return;}
+    if(tc?.eventStatus==='cmpuishown'){if(requested){hideAds();revoking=true;}clearTimeout(privacyTimer);status('');return;}
     if(!['tcloaded','useractioncomplete'].includes(tc?.eventStatus))return;
-    if(tc.gdprApplies!==true){hideAds();if(revoking)status('La publicidad permanece desactivada en esta visita. No hay un panel publicitario disponible.');return;}
+    if(tc.gdprApplies!==true){clearTimeout(privacyTimer);hideAds();if(revoking)status('La publicidad permanece desactivada en esta visita. No hay un panel publicitario disponible.');return;}
     if(revoking && tc.eventStatus!=='useractioncomplete')return;
+    clearTimeout(privacyTimer);
     // Unknown jurisdictions/choices fail closed. Google also validates the full
     // TC string. A refusal never falls back to limited ads or tracking cookies.
     const basic=[2,7,9,10].every(id=>tc.purpose?.consents?.[id]===true || tc.purpose?.legitimateInterests?.[id]===true);
     const next=tc.gdprApplies===true && tc.vendor?.consents?.[755]===true && tc.purpose?.consents?.[1]===true && basic;
-    if(revoking && tc.eventStatus==='useractioncomplete' && requested){
+    if(requested && tc.eventStatus==='useractioncomplete' && (revoking || next!==allowed)){
       hideAds();location.reload();return;
     }
     revoking=false;
@@ -72,21 +75,26 @@
     window.googlefc.callbackQueue=window.googlefc.callbackQueue||[];
     window.googlefc.callbackQueue.push({CONSENT_API_READY:function(){
       if(typeof window.__tcfapi==='function')window.__tcfapi('addEventListener',2,consentChanged);
-      if(pendingPrivacy){pendingPrivacy=false;window.googlefc.showRevocationMessage?.();}
+      if(pendingPrivacy){pendingPrivacy=false;showPrivacy();}
     }});
-    configureSlots();
     const script=document.createElement('script');
     script.async=true;script.crossOrigin='anonymous';
     script.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+client;
     script.addEventListener('error',()=>{hideAds();status('No se ha podido cargar el gestor de privacidad. La publicidad permanece desactivada.');},{once:true});
     document.head.appendChild(script);
   }
-  function openPrivacy(event){
-    event?.preventDefault();hideAds();revoking=true;start();
-    if(!started){pendingPrivacy=true;window.openCookieSettings?.();return;}
+  function showPrivacy(){
+    clearTimeout(privacyTimer);
+    privacyTimer=setTimeout(()=>{hideAds();status('Google no ha abierto el panel de privacidad. La publicidad permanece desactivada. Puedes volver a intentarlo más tarde.');},8000);
     window.googlefc.callbackQueue.push({CONSENT_API_READY:function(){
       if(typeof window.googlefc.showRevocationMessage==='function')window.googlefc.showRevocationMessage();
     }});
+  }
+  function openPrivacy(event){
+    event?.preventDefault();hideAds();revoking=true;start();
+    status('Abriendo preferencias de publicidad…');
+    if(!started){pendingPrivacy=true;window.openCookieSettings?.();return;}
+    showPrivacy();
   }
   function init(){
     const control=document.querySelector('[data-ad-privacy]');
