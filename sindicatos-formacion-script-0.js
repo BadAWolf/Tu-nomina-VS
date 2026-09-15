@@ -3,8 +3,8 @@ var RESOURCE_ICONS=Object.freeze({"scales":"<svg class=\"content-icon\" aria-hid
    ZONA EDITABLE — añade o quita elementos aquí. Nada más.
 
    Mientras las tres listas estén vacías, la página muestra
-   automáticamente el mensaje de "en preparación", sin filtros
-   ni secciones vacías. En cuanto añadas el primer elemento,
+   la guía informativa sin filtros ni secciones vacías.
+   En cuanto añadas el primer elemento,
    aparecen solas las secciones y el filtro por provincia.
 
    · provincia: "Castellón", "Madrid"... o "Nacional".
@@ -76,21 +76,6 @@ function bloque(titulo,icono,sub,items,tipo,vacioTxt){
   return h;
 }
 
-function pintarVacio(){
-  document.getElementById("contenido").innerHTML =
-    '<div class="preparando">'+
-    '<div class="preparando-icon"><svg class="content-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg></div>'+
-    '<h2>Estamos preparando esta sección</h2>'+
-    '<p>Aquí vas a encontrar, organizado por provincia:</p>'+
-    '<ul>'+
-    '<li>Sindicatos del sector a los que acudir si tu empresa incumple el convenio</li>'+
-    '<li>Centros de formación para especialidades y reciclaje</li>'+
-    '<li>Cursos con plazas abiertas y su plazo de inscripción</li>'+
-    '</ul>'+
-    '<p>Iremos añadiendo contenido poco a poco. Si conoces algo que debería estar aquí, escríbenos.</p>'+
-    '</div>';
-}
-
 function pintar(){
   var sel=document.getElementById("filtro-prov");
   var prov=sel?sel.value:"";
@@ -105,7 +90,8 @@ function pintar(){
 
 (function init(){
   var hayAlgo = SINDICATOS.length || ACADEMIAS.length || cursosVigentes().length;
-  if(!hayAlgo){ pintarVacio(); return; }
+  document.getElementById("resource-empty-note").hidden=Boolean(hayAlgo);
+  if(!hayAlgo){ document.getElementById("contenido").hidden=true; return; }
 
   var provs=Object.create(null);
   SINDICATOS.concat(ACADEMIAS,cursosVigentes()).forEach(function(x){
