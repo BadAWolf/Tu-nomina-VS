@@ -10,6 +10,8 @@ Node.js 22. Instalar dependencias con `npm ci`; ejecutar `npm test`. `npm run bu
 
 Los esquemas SQL y las consultas administrativas están versionados para revisión; no se ejecutan automáticamente al publicar. `_config.yml` excluye código de desarrollo, consultas y plantillas del sitio servido por GitHub Pages. Las cabeceras de `_headers` solo se aplican en alojamientos compatibles; Pages usa las políticas CSP incluidas en el HTML y protección de interfaz contra marcos.
 
+Después de los esquemas de autenticación y marketing, `marketing-profile-schema.sql` añade el perfil publicitario opcional (franja de edad, provincia y ciudad) y `save_marketing_choices`, una transacción con permisos del usuario y RLS. El historial registra el consentimiento de personalización sin guardar copias antiguas de edad o ciudad. Retirar ese permiso borra el perfil; los clientes de marketing v1 siguen siendo compatibles y no conceden personalización. Los scripts `tests/marketing-rls.sql` y `tests/marketing-profile-rls.sql` verifican permisos y borrado con usuarios ficticios en una transacción que se revierte. Las migraciones de esta actualización se aplicaron mediante Supabase MCP, con los nombres `optional_consented_marketing_profile` y `allow_admin_personalization_withdrawal`.
+
 ## Validación
 
 Pruebas de nómina, tramos de IT, antigüedad y contratos, pagas abonadas, jornadas parciales, calendario con cruces de mes y cambios de hora, PDF de una o varias páginas, autenticación y persistencia con el SDK real, consentimiento, privacidad, entradas inválidas e instalación móvil.

@@ -101,7 +101,7 @@ test('Marketing events need independent analytics consent and contain no contact
  const events=['marketing_own_opt_in','marketing_partner_opt_in','marketing_own_opt_out','marketing_partner_opt_out'];
  for(const consent of [undefined,false,true]){
   const w=setup(undefined,consent);try{
-   for(const name of events)assert.equal(w.VigilanteAnalytics.track(name,{email:'secret@example.test',user_id:'private-id',own_news:true}),consent===true);
+   for(const name of events)assert.equal(w.VigilanteAnalytics.track(name,{email:'secret@example.test',user_id:'private-id',own_news:true,city:'Burriana',province_code:'12',age_band:'25-34'}),consent===true);
    if(consent!==true){w.acceptCookies();assert.equal(w.dataLayer.filter(e=>events.includes(e[1])).length,0);}
    else {
     assert.equal(w.dataLayer.filter(e=>events.includes(e[1])).length,4);

@@ -20,14 +20,20 @@ async function setup(state={}){
     signInWithOAuth:async data=>{calls.push(['google',data]);return {error:null};},
     signOut:async()=>{state.user=null;callback('SIGNED_OUT',null);return {error:null};}
   };
-  w.__sdk={createClient:(_url,_key,options)=>{state.clientOptions=options;return {auth,from:table=>{
+  const rpc=async(name,args)=>{
+    assert.equal(name,'save_marketing_choices');state.rpcArgs=args;
+    const data={own_news:args.p_own_news,partner_offers:args.p_partner_offers,personalize:args.p_personalize,source:args.p_source};
+    calls.push(['marketing',data]);if(state.marketingError)return {error:{code:'offline'}};
+    const same=state.preferences?.email_at_consent===state.user.email && state.preferences?.own_news===data.own_news && state.preferences?.partner_offers===data.partner_offers && Boolean(state.preferences?.personalize)===data.personalize;
+    state.preferences={...data,email_at_consent:state.user.email};
+    state.profile=data.personalize?{age_band:args.p_age_band,province_code:args.p_province_code,city:args.p_city,email_at_consent:state.user.email}:null;
+    return {error:null,data:same?[]:[data]};
+  };
+  w.__sdk={createClient:(_url,_key,options)=>{state.clientOptions=options;return {auth,rpc,from:table=>{
     const query={select:()=>query,eq:()=>query,limit:async()=>({data:(state.accepted||state.historicalAcceptance)?[{version:'previous'}]:[],error:null}),maybeSingle:async()=>{
       if(table==='marketing_preferences' && state.preferencesReadGate)await state.preferencesReadGate;
-      return {data:table==='marketing_preferences'?(state.preferences||null):state.accepted?{version:'2026-09-15'}:null,error:table==='marketing_preferences'&&state.marketingReadError?{code:'offline'}:null};
+      return {data:table==='marketing_profiles'?(state.profile||null):table==='marketing_preferences'?(state.preferences||null):state.accepted?{version:'2026-09-15'}:null,error:table==='marketing_preferences'&&state.marketingReadError?{code:'offline'}:null};
     },insert:data=>{
-      if(table==='marketing_consent_events') return {select:async()=>{calls.push(['marketing',data]);if(state.marketingError)return {error:{code:'offline'}};
-        const same=state.preferences?.email_at_consent===state.user.email && state.preferences?.own_news===data.own_news && state.preferences?.partner_offers===data.partner_offers;
-        state.preferences={...data,email_at_consent:state.user.email};return {error:null,data:same?[]:[data]};}};
       calls.push(['accept',data]);if(state.accepted)return {error:{code:'23505'}};state.accepted=true;return {error:null};}};return query;
   }};}};
   require('./load-calculator.cjs')(w);
@@ -362,4 +368,68 @@ test('Logout during a pending preference read prevents both the offer and a stal
   assert.equal(y.calls.filter(c=>c[0]==='marketing').length,0);
   assert.equal(y.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
  }finally{y.close();}
+});
+
+test('Profile is optional, separately consented and saved with the selected advertising categories',async()=>{
+ const x=await setup({user:member,accepted:true});try{
+  assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,true);
+  assert.equal(x.d.getElementById('auth-marketing-profile-fields').disabled,true);
+  x.click('auth-marketing-partners');assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,false);
+  assert.equal(x.d.getElementById('auth-marketing-personalize').checked,false);
+  x.click('auth-marketing-personalize');x.fill('auth-marketing-age','25-34');x.fill('auth-marketing-province','12');x.fill('auth-marketing-city','  Burriana  ');
+  x.click('marketing-welcome-save');await tick();await tick();
+  assert.equal(x.state.rpcArgs.p_user_id,member.id);assert.equal(x.state.preferences.personalize,true);
+  assert.equal(x.state.preferences.own_news,false);assert.equal(x.state.preferences.partner_offers,true);
+  assert.equal(x.state.profile.city,'Burriana');assert.equal(x.state.profile.age_band,'25-34');assert.equal(x.state.profile.province_code,'12');
+  assert.equal(JSON.stringify(x.state.analytics).includes('Burriana'),false);
+  assert.equal(JSON.stringify(x.state.analytics).includes('25-34'),false);
+ }finally{x.close();}
+});
+
+test('Age-only and province-only profiles work without requiring the other optional fields',async()=>{
+ for(const field of ['age','province']){
+  const x=await setup({user:member,accepted:true});try{
+   x.click('auth-marketing-own');x.click('auth-marketing-personalize');x.fill('auth-marketing-'+field,field==='age'?'35-44':'28');
+   x.click('marketing-welcome-save');await tick();await tick();assert.equal(x.d.getElementById('marketing-dialog').open,false);
+   assert.equal(x.state.profile.city,null);assert.equal(x.state.profile[field==='age'?'province_code':'age_band'],null);
+  }finally{x.close();}
+ }
+});
+
+test('City requires a province, city validation prevents formula/markup input, and declining bypasses incomplete profile',async()=>{
+ const x=await setup({user:member,accepted:true});try{
+  x.click('auth-marketing-own');x.click('auth-marketing-personalize');x.fill('auth-marketing-city','Burriana');
+  x.d.getElementById('marketing-welcome-form').dispatchEvent(new x.w.Event('submit',{bubbles:true,cancelable:true}));await tick();
+  assert.equal(x.calls.length,0);assert.equal(x.d.getElementById('auth-marketing-province').validity.valid,false);
+  for(const city of ['=IMPORTDATA(1)','<script>alert(1)</script>']){
+   x.fill('auth-marketing-province','12');x.d.getElementById('auth-marketing-province').dispatchEvent(new x.w.Event('input'));
+   x.fill('auth-marketing-city',city);x.d.getElementById('marketing-welcome-form').dispatchEvent(new x.w.Event('submit',{bubbles:true,cancelable:true}));await tick();
+   assert.equal(x.calls.length,0);assert.equal(x.d.getElementById('auth-marketing-city').validity.valid,false);
+  }
+  x.click('marketing-skip');await tick();await tick();
+  assert.equal(x.state.preferences.personalize,false);assert.equal(x.state.profile,null);
+  for(const name of ['p_age_band','p_province_code','p_city'])assert.equal(x.state.rpcArgs[name],null);
+ }finally{x.close();}
+});
+
+test('Personalization can be erased without withdrawing advertising, and saved profiles load only for the matching email',async()=>{
+ const profile={email_at_consent:member.email,age_band:'25-34',province_code:'12',city:'Burriana'};
+ const x=await setup({user:member,accepted:true,profile,preferences:{email_at_consent:member.email,own_news:true,partner_offers:true,personalize:true}});try{
+  x.d.getElementById('marketing-preferences').open=true;await tick();await tick();
+  assert.equal(x.d.getElementById('marketing-city').value,'Burriana');assert.equal(x.d.getElementById('marketing-personalize').checked,true);
+  x.click('marketing-personalize');x.click('marketing-save');await tick();await tick();
+  assert.equal(x.state.profile,null);assert.equal(x.state.preferences.own_news,true);assert.equal(x.state.preferences.partner_offers,true);
+  assert.equal(x.state.analytics.filter(e=>e[0].startsWith('marketing_')).length,0);
+ }finally{x.close();}
+ const y=await setup({user:member,accepted:true,profile:{...profile,email_at_consent:'old@example.test'},preferences:{email_at_consent:member.email,own_news:true,partner_offers:true,personalize:true}});try{
+  y.d.getElementById('marketing-preferences').open=true;await tick();await tick();
+  assert.equal(y.d.getElementById('marketing-personalize').checked,false);assert.equal(y.d.getElementById('marketing-city').value,'');
+ }finally{y.close();}
+});
+
+test('Changing only an existing profile is not an extra advertising subscription',async()=>{
+ const x=await setup({user:member,accepted:true,profile:{email_at_consent:member.email,age_band:'25-34',province_code:'12',city:'Burriana'},preferences:{email_at_consent:member.email,own_news:true,partner_offers:true,personalize:true}});try{
+  x.d.getElementById('marketing-preferences').open=true;await tick();await tick();x.fill('marketing-city','Castelló de la Plana');x.click('marketing-save');await tick();await tick();
+  assert.equal(x.state.profile.city,'Castelló de la Plana');assert.equal(x.state.analytics.filter(e=>e[0].startsWith('marketing_')).length,0);
+ }finally{x.close();}
 });
