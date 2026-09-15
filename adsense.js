@@ -4,6 +4,7 @@
   const pages=new Set(['/convenio-2026.html','/derechos-vigilante.html','/guia-nomina-vigilante.html','/preguntas-frecuentes.html']);
   const production=location.protocol==='https:' && ['calculadoravigilante.com','www.calculadoravigilante.com'].includes(location.hostname);
   const params=new URLSearchParams(location.search);
+  const preview=params.get('fc')==='alwaysshow';
   const cleanURL=Array.from(params.keys()).every(key=>['fc','fctype'].includes(key)) && (!location.hash || location.hash==='#privacidad-publicitaria');
   if(!production || !pages.has(location.pathname) || !cleanURL || window.top!==window.self)return;
   const client='ca-pub-6334238097806445';
@@ -39,6 +40,7 @@
   }
   function renderAds(){
     if(!allowed || requested)return;
+    if(preview){hideAds();status('Vista previa de privacidad: no se solicitan anuncios.');return;}
     // Google replaces the bootstrap array with its loaded API.
     const activeQueue=window.adsbygoogle;
     activeQueue.requestNonPersonalizedAds=1;

@@ -70,7 +70,7 @@ test('Installations before consent are not replayed; accepting inside the app me
  }
 });
 test('PWA events remain blocked in previews, auth callbacks and after consent is withdrawn',()=>{
- for(const url of ['http://localhost:4173/','https://calculadoravigilante.com/?code=private']){
+ for(const url of ['http://localhost:4173/','https://calculadoravigilante.com/?code=private','https://calculadoravigilante.com/guia-nomina-vigilante.html?fc=alwaysshow&fctype=gdpr']){
   const w=setup(url,true,{standalone:true});try{w.dispatchEvent(new w.Event('appinstalled'));w.dispatchEvent(new w.Event('pageshow'));assert.equal(w.document.querySelector('script'),null);assert.equal(w.dataLayer,undefined);}finally{w.close();}
  }
  const w=setup(undefined,true);try{w.rejectCookies();assert.equal(w.reloadErrors.length,1);w.dispatchEvent(new w.Event('appinstalled'));w.changeAppMode(true);assert.equal(w.dataLayer.filter(x=>['pwa_install','pwa_open'].includes(x[1])).length,0);}finally{w.close();}

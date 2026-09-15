@@ -36,6 +36,11 @@ test('Consent uses the loaded AdSense API after Google replaces its bootstrap ar
   w.document.querySelector('button').click();assert.equal(w.adsbygoogle.pauseAdRequests,1);
  }finally{w.close();}
 });
+test('Google CMP preview can exercise consent without requesting real ads',()=>{
+ const w=setup('https://calculadoravigilante.com/guia-nomina-vigilante.html?fc=alwaysshow&fctype=gdpr');try{
+  w.apiReady();w.consent(consent(),true);assert.equal(w.adsbygoogle.pauseAdRequests,1);assert.equal(w.document.querySelector('section').hidden,true);assert.match(w.document.querySelector('[role="status"]').textContent,/Vista previa/);
+ }finally{w.close();}
+});
 test('Ad loading is excluded from calculators, accounts, legal pages, previews and private URL parameters',()=>{
  for(const url of ['https://calculadoravigilante.com/','https://calculadoravigilante.com/index.html','https://calculadoravigilante.com/privacidad.html','https://calculadoravigilante.com/sindicatos-formacion.html','http://localhost:4173/guia-nomina-vigilante.html','https://evil.test/guia-nomina-vigilante.html','https://calculadoravigilante.com/guia-nomina-vigilante.html?code=secret','https://calculadoravigilante.com/guia-nomina-vigilante.html?email=private','https://calculadoravigilante.com/guia-nomina-vigilante.html#access_token=secret']){
   const w=setup(url);try{assert.equal(w.document.querySelector('script'),null);assert.equal(w.adsbygoogle,undefined);}finally{w.close();}
@@ -49,11 +54,12 @@ test('Static editorial scripts have exact SRI hashes in strict CSP; account page
   const w=new JSDOM(read(file)).window,d=w.document;try{
    const csp=d.querySelector('meta[http-equiv="Content-Security-Policy"]').content;
    if(pages.includes(file)){
+    assert.equal(d.querySelector('meta[name="referrer"]').content,'strict-origin');
     assert.match(csp,/'strict-dynamic'/);assert.doesNotMatch(csp,/nonce-|script-src 'self'|script-src https:|'unsafe-inline'/);
     for(const script of d.querySelectorAll('script[src]')){const src=script.getAttribute('src').split('?')[0],hash='sha256-'+crypto.createHash('sha256').update(fs.readFileSync(path.join(root,src))).digest('base64');assert.equal(script.integrity||script.getAttribute('integrity'),hash,file+' '+src);assert.ok(csp.includes("'"+hash+"'"));}
     assert.equal(d.querySelectorAll('[data-ad-placement]').length,1);
     assert.equal(d.querySelectorAll('script[src^="auth.js"]').length,0);
-   }else{assert.doesNotMatch(csp,/unsafe-eval|unsafe-inline(?=[^;]*; script-src)/);assert.equal(d.querySelector('[data-ad-placement]'),null);assert.equal(d.querySelector('script[src^="adsense.js"]'),null);}
+   }else{assert.equal(d.querySelector('meta[name="referrer"]').content,'no-referrer');assert.doesNotMatch(csp,/unsafe-eval|unsafe-inline(?=[^;]*; script-src)/);assert.equal(d.querySelector('[data-ad-placement]'),null);assert.equal(d.querySelector('script[src^="adsense.js"]'),null);}
   }finally{w.close();}
  }
 });
