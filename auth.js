@@ -6,6 +6,7 @@
   const dialog = $('auth-dialog'), form = $('auth-form'), status = $('auth-status');
   const email = $('auth-email'), password = $('auth-password'), confirm = $('auth-confirm');
   const terms = $('auth-terms'), submit = $('auth-submit'), google = $('auth-google');
+  const accountSection = $('account-section'), sectorResources = $('sector-resources');
   const legalVersion = '2026-09-15';
   let client = null, user = null, accepted = false, pending = null;
   let mode = 'signup', recovery = false, revision = 0, ready, busy = false;
@@ -33,6 +34,12 @@
     const member = Boolean(user && accepted && !recovery);
     $('account-guest').hidden = member;
     $('account-member').hidden = !user;
+    accountSection.setAttribute('aria-labelledby', member ? 'account-title' : 'account-heading');
+    // Move the shared card in the DOM so visual and keyboard order stay aligned.
+    // Keep the original guest order, including immediately after signing out.
+    if (user) {
+      if (sectorResources.nextElementSibling !== accountSection) accountSection.before(sectorResources);
+    } else if (accountSection.nextElementSibling !== sectorResources) accountSection.after(sectorResources);
     $('account-title').textContent = member ? 'Tu cuenta está activa' : 'Has iniciado sesión';
     $('account-benefits').textContent = member ? 'Ya puedes añadir vacaciones, descargar tus PDF y calcular la baja y el finiquito.'
       : recovery ? 'Completa el cambio de contraseña para continuar.' : 'Revisa y acepta las condiciones para activar las herramientas. También puedes cerrar la sesión.';
