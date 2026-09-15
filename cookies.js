@@ -5,6 +5,7 @@
   try{preferences=JSON.parse(localStorage.getItem(key));}catch(_){}
   if(!preferences || preferences.version!==1 || typeof preferences.analytics!=='boolean' || !Number.isFinite(preferences.savedAt) || preferences.savedAt>Date.now() || Date.now()-preferences.savedAt>maxAge)preferences=null;
   let analyticsLoaded=false;
+  let appPageRecorded=false;
   const production = location.protocol === 'https:' && ['calculadoravigilante.com','www.calculadoravigilante.com'].includes(location.hostname);
   const authCallback=()=>/access_token=|refresh_token=|error_description=|type=recovery|[?&]code=|unsubscribe=/.test(location.hash+location.search);
   function pageData(){
@@ -27,7 +28,7 @@
   // Only fixed event names and a fixed method enum can leave the calculator.
   // No email, account ID, salary, calendar, free text or historical event queue.
   window.VigilanteAnalytics = Object.freeze({track(name, details={}){
-    if(!['sign_up_start','sign_up','login','calculation_complete','pdf_export'].includes(name) || !production || authCallback() || !preferences?.analytics)return false;
+    if(!['sign_up_start','sign_up','login','calculation_complete','pdf_export','pwa_install','pwa_open'].includes(name) || !production || authCallback() || !preferences?.analytics)return false;
     loadAnalytics();
     if(!analyticsLoaded)return false;
     const params=pageData();
@@ -35,6 +36,18 @@
     window.gtag('event',name,params);
     return true;
   }});
+  // Observe the current app window, never the "Ya la tengo" button or a saved
+  // installation flag. iOS exposes standalone, but not appinstalled.
+  function recordAppPage(){
+    const inApp=navigator.standalone===true||Boolean(window.matchMedia?.('(display-mode: standalone)').matches);
+    if(appPageRecorded||!inApp||document.visibilityState==='hidden')return;
+    if(window.VigilanteAnalytics.track('pwa_open'))appPageRecorded=true;
+  }
+  // An installation that preceded consent is discarded, not replayed later.
+  window.addEventListener('appinstalled',()=>window.VigilanteAnalytics.track('pwa_install'),{once:true});
+  window.matchMedia?.('(display-mode: standalone)').addEventListener?.('change',recordAppPage);
+  document.addEventListener('visibilitychange',recordAppPage);
+  window.addEventListener('pageshow',recordAppPage);
   function save(analytics){
     const wasActive=Boolean(preferences&&preferences.analytics);
     preferences={version:1,analytics:Boolean(analytics),savedAt:Date.now()};
@@ -50,7 +63,7 @@
         for(let i=0;i<host.length-1;i++)document.cookie=name+'=; Max-Age=0; path=/; domain=.'+host.slice(i).join('.');
       });
       location.reload();
-    }else loadAnalytics();
+    }else {loadAnalytics();recordAppPage();}
   }
   window.acceptCookies=()=>save(true);
   window.rejectCookies=()=>save(false);
@@ -62,6 +75,7 @@
     document.querySelectorAll('[data-cookie-settings]').forEach(button=>button.addEventListener('click',window.openCookieSettings));
     document.querySelectorAll('[data-cookie-choice]').forEach(button=>button.addEventListener('click',()=>save(button.dataset.cookieChoice==='accept')));
     loadAnalytics();
+    recordAppPage();
   }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();

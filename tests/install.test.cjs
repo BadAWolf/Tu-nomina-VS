@@ -9,7 +9,7 @@ const android = 'Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 Chrome/130.0
 const iphone = 'Mozilla/5.0 (iPhone; CPU iPhone OS 26_0 like Mac OS X) AppleWebKit/605.1.15 Version/26.0 Mobile/15E148 Safari/604.1';
 function setup(options = {}) {
   const dom = new JSDOM(fs.readFileSync(path.join(root, 'index.html'), 'utf8'), {
-    url: 'http://localhost:4173/', runScripts: 'outside-only', pretendToBeVisual: true
+    url: options.analytics ? 'https://calculadoravigilante.com/' : 'http://localhost:4173/', runScripts: 'outside-only', pretendToBeVisual: true
   });
   const w = dom.window, d = w.document;
   Object.defineProperty(w.navigator, 'userAgent', { value: options.ua ?? android });
@@ -26,6 +26,10 @@ function setup(options = {}) {
   if (options.blockedStorage) Object.defineProperty(w, 'localStorage', { get() { throw new Error('storage unavailable'); } });
   if (options.calculator) require('./load-calculator.cjs')(w);
   else w.eval(fs.readFileSync(path.join(root, 'install.js'), 'utf8'));
+  if (options.analytics) {
+    w.localStorage.setItem('vigilante_cookie_preferences_v1', JSON.stringify({ version: 1, analytics: true, savedAt: Date.now() }));
+    w.eval(fs.readFileSync(path.join(root, 'cookies.js'), 'utf8'));
+  }
   w.cargarJsPDF = () => {};
   d.getElementById('cookie-banner').hidden = true;
   d.dispatchEvent(new w.Event('DOMContentLoaded'));
@@ -42,6 +46,20 @@ function offer(w, prompt = async () => {}, choice = Promise.resolve({ outcome: '
   return event;
 }
 const settle = () => new Promise(resolve => setImmediate(resolve));
+
+test('Analytics does not mistake the actual install controls or accepted prompt for a browser installation', async () => {
+  const x = setup({ analytics: true }); try {
+    offer(x.w, async () => {}, Promise.resolve({ outcome: 'accepted' }));
+    x.calc();
+    x.d.getElementById('inst-instalar').click(); await settle();
+    x.d.getElementById('inst-ya').click();
+    assert.equal(x.w.dataLayer.filter(event => event[1] === 'pwa_install').length, 0);
+    x.w.dispatchEvent(new x.w.Event('appinstalled'));
+    assert.equal(x.w.dataLayer.filter(event => event[1] === 'pwa_install').length, 1);
+    assert.equal(x.w.dataLayer.filter(event => event[1] === 'pwa_open').length, 0);
+    assert.equal(x.visible(), false);
+  } finally { x.close(); }
+});
 
 test('Shows after the first calculation, then after ten more, without blocking the results', () => {
   const x = setup(); try {
