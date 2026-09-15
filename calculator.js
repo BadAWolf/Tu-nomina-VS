@@ -580,6 +580,7 @@ function borrarDialogo(){
       bm.classList.add("active"); bc.classList.remove("active");
       document.getElementById("campos-manual").style.display="block";
       document.getElementById("campos-cuadrante").style.display="none";
+      document.getElementById("n-diasAlta").disabled=false;
       actualizarComplementoVacaciones();
     });
     bc.addEventListener("click",function(){
@@ -587,6 +588,7 @@ function borrarDialogo(){
       bc.classList.add("active"); bm.classList.remove("active");
       document.getElementById("campos-manual").style.display="none";
       document.getElementById("campos-cuadrante").style.display="block";
+      document.getElementById("n-diasAlta").disabled=true;
       pintarCalendario();
     });
     document.getElementById("cal-prev").addEventListener("click",function(){
@@ -836,7 +838,9 @@ function calcNominaRegistrado(){
   var hTrab=hT;                 // horas realmente trabajadas
   var hJor=r2(hT+hVac);         // jornada computable del mes
   var ratioFijo=hp/JORNADA;
-  var factorH=(parseFloat(document.getElementById("n-diasAlta").value)||30)/30;
+  // Calendar shifts describe worked hours, not the duration of the contract.
+  // A full monthly salary includes rest days, regardless of the month's length.
+  var factorH=MODO_HORAS==='cuadrante'?1:(parseFloat(document.getElementById("n-diasAlta").value)||30)/30;
   var labelSufix="";
   if(factorH<1)labelSufix=" ("+Math.round(factorH*30)+" días remunerados)";
 
@@ -908,7 +912,7 @@ function calcNominaRegistrado(){
   var pdfHorasVac = hVac;
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
-    "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)"),
+    "Tipo de jornada":(jornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+hp+" h/mes pactadas)")+(MODO_HORAS==='cuadrante'?' · Mes completo':''),
     ["Horas trabajadas (sin vacaciones)"]:String(hTrab).replace(".",",")+" h"+(hEx>0?"  ("+String(hEx).replace(".",",")+" h extraordinarias calculadas)":""),
     "Horas nocturnas":(hN>0?hN+" h  ×  "+cat.nocH.toFixed(2).replace(".",",")+" €":"Ninguna"),
     "Horas fin de semana / festivo":(hF>0?hF+" h  ×  1,02 €":"Ninguna"),

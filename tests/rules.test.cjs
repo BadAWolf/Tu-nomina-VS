@@ -61,6 +61,55 @@ test('Reduced assigned hours do not reduce a full monthly salary; explicit paid 
   x.set('n-diasAlta',30);x.set('hTTotal',170);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-extra').textContent,'+79,84 €');
  }finally{x.close();}
 });
+test('Calendar pays a full month in February, leap years, 30 and 31 day months without asking for paid days',()=>{
+ const x=setup();try{
+  x.d.dispatchEvent(new x.w.Event('DOMContentLoaded'));
+  x.set('n-diasAlta',15);x.d.getElementById('modo-cuadrante').click();
+  assert.equal(x.d.getElementById('n-diasAlta').disabled,true);
+  assert.equal(x.d.getElementById('n-diasAlta').closest('#campos-manual').style.display,'none');
+  for(const [year,month]of [[2026,1],[2028,1],[2026,3],[2026,2]]){
+   x.w.calAnio=year;x.w.calMes=month;
+   x.w.CUAD[year+'-'+String(month+1).padStart(2,'0')]={'10':{tramos:[{i:'08:00',f:'16:00'}],vac:false,fest:false}};
+   x.w.pintarCalendario();x.w.calcNominaRegistrado();
+   assert.equal(x.d.getElementById('r-base').textContent,'+1161,28 €');
+   assert.equal(x.d.getElementById('r-bruto').textContent,'1435,45 €');
+   assert.match(x.w.ctxPDF.nomina['Tipo de jornada'],/Mes completo$/);
+  }
+  assert.equal(x.d.getElementById('n-diasAlta').value,'15','The manual setting is preserved, not silently overwritten');
+  x.d.getElementById('modo-manual').click();assert.equal(x.d.getElementById('n-diasAlta').disabled,false);
+  x.set('hTTotal',81);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-base').textContent,'+580,64 €');
+ }finally{x.close();}
+});
+
+test('A hidden manual paid-days value cannot invalidate a calendar or create spurious overtime',()=>{
+ const x=setup();try{
+  x.d.dispatchEvent(new x.w.Event('DOMContentLoaded'));
+  x.w.CUAD['2026-02']={};for(let day=2;day<=21;day++)x.w.CUAD['2026-02'][day]={tramos:[{i:'08:00',f:'16:00'}],vac:false,fest:false};
+  x.d.getElementById('modo-cuadrante').click();x.w.calAnio=2026;x.w.calMes=1;
+  for(const value of [1,15,45,'']){
+   x.set('n-diasAlta',value);x.w.calcNominaRegistrado();
+   assert.equal(x.d.getElementById('errorBox').style.display,'none');
+   assert.equal(x.d.getElementById('r-base').textContent,'+1161,28 €');
+   assert.equal(x.d.getElementById('row-extra').style.display,'none');
+  }
+  x.set('n-diasAlta',45);x.d.getElementById('modo-manual').click();x.w.calcNominaRegistrado();
+  assert.equal(x.d.getElementById('errorBox').style.display,'block');
+  assert.equal(x.w.ctxPDF.nomina,null);
+ }finally{x.close();}
+});
+
+test('Calendar keeps the contracted part-time ratio and ignores incomplete-month settings from manual mode',()=>{
+ const x=setup();try{
+  x.d.dispatchEvent(new x.w.Event('DOMContentLoaded'));
+  x.d.getElementById('jorn-parcial').click();x.set('hPactadas',80);x.set('hTTotal',8);
+  x.w.calcNominaRegistrado();const base=x.d.getElementById('r-base').textContent,net=x.d.getElementById('r-neto').textContent;
+  x.set('n-diasAlta',15);x.d.getElementById('modo-cuadrante').click();
+  x.w.CUAD['2026-02']={'10':{tramos:[{i:'08:00',f:'16:00'}],vac:false,fest:false}};x.w.calAnio=2026;x.w.calMes=1;
+  x.w.calcNominaRegistrado();
+  assert.equal(x.d.getElementById('r-base').textContent,base);assert.equal(x.d.getElementById('r-neto').textContent,net);
+ }finally{x.close();}
+});
+
 test('Team-leader hours are paid once, and activity is included in extra payments',()=>{
  const x=setup();try{
   x.set('hTTotal',200);x.d.getElementById('switchJefe').checked=true;x.w.calcNominaRegistrado();
