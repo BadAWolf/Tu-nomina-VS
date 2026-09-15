@@ -47,6 +47,7 @@ test('Guest can calculate repeatedly; PDF, finiquito and baja request registrati
 
 test('Vacation switch requests registration and cancelling leaves ordinary payroll available',async()=>{
  const x=await setup();try{
+  assert.equal(x.d.getElementById('vac-plus-field').hidden,true);
   x.fill('hTTotal','162');x.click('btnCalc');const original=x.d.getElementById('r-neto').textContent;
   x.click('switchVac');await tick();
   assert.equal(x.d.getElementById('auth-dialog').open,true);
@@ -63,11 +64,13 @@ test('Signing in resumes the requested vacation switch; logging out locks it and
   x.d.querySelector('[data-auth-open="signin"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.submit();await tick();await tick();
   assert.equal(x.d.getElementById('switchVac').checked,true);
   assert.equal(x.d.getElementById('vac-field').style.display,'block');
+  assert.equal(x.d.getElementById('vac-plus-field').hidden,false);
   x.fill('hTTotal','150');x.fill('diasVac','5');x.click('btnCalc');await tick();
   assert.equal(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],'5 días = 26,13 h de jornada');
   x.click('account-signout');await tick();
   assert.equal(x.d.getElementById('switchVac').checked,false);
   assert.equal(x.d.getElementById('vac-field').style.display,'none');
+  assert.equal(x.d.getElementById('vac-plus-field').hidden,true);
   assert.equal(x.d.getElementById('resultado').style.display,'none');assert.equal(x.w.ctxPDF.nomina,null);
   x.click('btnCalc');assert.ok(x.w.ctxPDF.nomina);assert.equal(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],'Ninguna');
  }finally{x.close();}
@@ -90,9 +93,11 @@ test('Calendar vacation creation requires an account while ordinary shifts remai
   x.w.abrirDialogo(5);x.click('dlg-vac');await tick();
   x.d.querySelector('[data-auth-open="signin"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.submit();await tick();await tick();
   assert.equal(x.d.getElementById('dlg-vac').checked,true);x.click('dlg-guardar');await tick();assert.equal(x.w.CUAD[key]['5'].vac,true);
+  assert.equal(x.d.getElementById('vac-plus-field').hidden,false);
   x.click('btnCalc');await tick();assert.match(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],/^1 día/);
   const saved=x.w.localStorage.getItem('cuadrante_vigilante');x.click('account-signout');await tick();
   assert.equal(x.w.localStorage.getItem('cuadrante_vigilante'),saved);
+  assert.equal(x.d.getElementById('vac-plus-field').hidden,true);
   x.click('btnCalc');await tick();assert.equal(x.d.getElementById('auth-dialog').open,true);assert.equal(x.w.ctxPDF.nomina,null);
  }finally{x.close();}
 });

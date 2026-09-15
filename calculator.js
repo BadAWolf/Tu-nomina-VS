@@ -447,6 +447,7 @@ function pintarResumen(){
       fila("Horas totales del mes", hh(t.horas), true);
   }
   volcarTotales(t);
+  actualizarComplementoVacaciones();
 }
 
 /* Vuelca los totales a los campos que ya usa el motor de nómina */
@@ -576,6 +577,7 @@ function borrarDialogo(){
       bm.classList.add("active"); bc.classList.remove("active");
       document.getElementById("campos-manual").style.display="block";
       document.getElementById("campos-cuadrante").style.display="none";
+      actualizarComplementoVacaciones();
     });
     bc.addEventListener("click",function(){
       MODO_HORAS="cuadrante";
@@ -638,6 +640,7 @@ var SS_PCT=0.0650, JORNADA=162, HORAS_ANUALES=1782;
 var PLUS_FEST=1.02;
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
+var cuentaVacacionesActiva=false;
 
 function r2(n){var centimos=Math.abs(n)*100;return Math.sign(n)*Math.round(centimos+Number.EPSILON*Math.max(1,centimos))/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
@@ -708,11 +711,12 @@ function solicitarCuentaVacaciones(action){
   if(notice) notice.textContent='El acceso a cuentas no está disponible. Para añadir vacaciones necesitas iniciar sesión.';
 }
 function actualizarAccesoVacaciones(member){
+  cuentaVacacionesActiva=member;
   ['vac-access-note','dlg-vac-access-note'].forEach(function(id){
     var note=document.getElementById(id);
     if(note) note.textContent=member?'Incluido en tu cuenta':'Disponible con cuenta gratuita';
   });
-  if(member) return;
+  if(member){actualizarComplementoVacaciones();return;}
   document.getElementById('switchVac').checked=false;
   document.getElementById('vac-field').style.display='none';
   document.getElementById('diasVac').value='';
@@ -724,10 +728,17 @@ function actualizarAccesoVacaciones(member){
   }
 }
 function actualizarHintVac(){
+  actualizarComplementoVacaciones();
   var d=parseFloat(document.getElementById("diasVac").value)||0;
   document.getElementById("hint-vac").textContent = d>0
     ? d+" día"+(d!==1?"s":"")+" × "+horasDiaVacaciones().toFixed(3).replace(".",",")+" h = "+fmt(r2(d*horasDiaVacaciones())).replace(" €"," h")+" de jornada"
     : "31 días naturales al año. Cada día computa tu jornada mensual contratada dividida entre 31.";
+}
+function actualizarComplementoVacaciones(){
+  var vacaciones=MODO_HORAS==='manual'
+    ? document.getElementById('switchVac').checked
+    : cuentaVacacionesActiva&&totalesMes(calAnio,calMes).diasVac>0;
+  document.getElementById('vac-plus-field').hidden=!vacaciones;
 }
 document.getElementById("diasVac").addEventListener("input",actualizarHintVac);
 ["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
@@ -841,7 +852,7 @@ function calcNominaRegistrado(){
   var sbHE=cat.salBase;
   var hev=calcHoraExtra(sbHE,cat.pelig,cat.act||0,ant,cat.esc);
   var plusEscolta=r2((cat.esc||0)*ratioFijo*factorH);
-  var objetivo=parseFloat(document.getElementById('n-objetivoHoras').value)||hp*factorH;
+  var objetivo=hp*factorH;
   var hEx=Math.max(0,r2(hJor-objetivo));
   var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=r2(hF*PLUS_FEST);
   var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;

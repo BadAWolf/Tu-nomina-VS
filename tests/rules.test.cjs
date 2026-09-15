@@ -58,7 +58,7 @@ test('Part-time calendar holidays and manual holidays use the same contracted ho
 test('Reduced assigned hours do not reduce a full monthly salary; explicit paid days do',()=>{
  const x=setup();try{x.set('hTTotal',100);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-bruto').textContent,'1435,45 €');
   x.set('n-diasAlta',15);x.set('hTTotal',81);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-base').textContent,'+580,64 €');
-  x.set('n-diasAlta',30);x.set('hTTotal',170);x.set('n-objetivoHoras',180);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-extra').style.display,'none');
+  x.set('n-diasAlta',30);x.set('hTTotal',170);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-extra').textContent,'+79,84 €');
  }finally{x.close();}
 });
 test('Team-leader hours are paid once, and activity is included in extra payments',()=>{
