@@ -51,6 +51,29 @@
       ensure(20);font(9,'bold',C.ORO);doc.text(clean(text).toUpperCase(),M,y);y+=3;
       doc.setDrawColor(...C.LIN);doc.setLineWidth(.3);doc.line(M,y,W-M,y);y+=6;
     }
+    function monthTable(){
+      if(!options.monthly?.length)return;
+      const ends=[M+52,M+64,M+91.5,M+119,M+146.5,W-M];
+      function tableHead(continued){
+        section('Importes por mes'+(continued?' (continuación)':''));
+        font(7.5,'normal',C.MUT);doc.text('Solo los días de baja indicados; sueldo trabajado y extras aparte.',M,y);y+=7;
+        if(options.projection){font(7.5,'bold',C.AZU);doc.text('Proyección: también fuera de 2026 se mantienen las tablas y cotizaciones de 2026.',M,y);y+=7;}
+        doc.setFillColor(...C.ORObg);doc.rect(M,y-4,A,8,'F');font(8,'bold',C.ORO);
+        ['Mes / periodo','Días','Bruto','Seg. Social','IRPF','Neto'].forEach((label,i)=>doc.text(label,i?ends[i]:M+2,y,{align:i?'right':'left'}));y+=9;
+      }
+      ensure(53);tableHead(false);
+      options.monthly.forEach(row=>{
+        if(y+15>bottom){doc.addPage();header(options.title,true);tableHead(true);}
+        font(9,'bold',C.TXT2);doc.text(clean(row.label),M+2,y);
+        font(7,'normal',C.MUT);doc.text(clean(row.period),M+2,y+4.5);
+        [row.days,row.gross,row.ss,row.irpf,row.net].forEach((value,i)=>{
+          font(8.5,i===4?'bold':'normal',i===4?C.ORO:i===2||i===3?C.ROJ:C.TXT2);
+          doc.text(clean(value),ends[i+1],y+1,{align:'right'});
+        });
+        doc.setDrawColor(...C.LIN);doc.line(M,y+8,W-M,y+8);y+=14;
+      });
+      y+=5;
+    }
     function calendarSheet() {
       header('Tu cuadrante y tu nómina',false,true);
       y=options.calendar(doc,y,M,A,W,C);
@@ -124,6 +147,7 @@
     font(9,'bold',C.ORO);doc.text(clean(options.netLabel),M+6,y+9);
     font(8,'normal',C.MUT);doc.text('Importe estimado según los datos introducidos',M+6,y+18);
     font(25,'bold',C.ORO);doc.text(clean(options.net),W-M-6,y+18,{align:'right'});y+=33;
+    monthTable();
     section('Datos del cálculo');
     Object.entries(options.data).forEach(([key,value])=>{
       font(9,'normal',C.MUT);const left=doc.splitTextToSize(clean(key),65);
@@ -147,6 +171,14 @@
       });
       y+=5;
     });
+    }
+    if(options.notes?.length){
+      section('Alcance de la estimación');
+      options.notes.forEach(note=>{
+        font(8,'normal',C.MUT);
+        const lines=doc.splitTextToSize(clean(note),A);
+        lines.forEach(line=>{ensure(4);font(8,'normal',C.MUT);doc.text(line,M,y);y+=4;});y+=3;
+      });
     }
     const count=doc.getNumberOfPages();
     for(let page=1;page<=count;page++) {

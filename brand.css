@@ -34,3 +34,11 @@ header.page{text-align:left;}header.page h1{font-size:clamp(1.9rem,5vw,2.65rem);
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #326286;outline-offset:3px;}
 @media(max-width:540px){.brand-name{font-size:.75rem;}.topbar-inner{gap:.5rem;}.topbar-cta{font-size:.65rem;}input,select{font-size:1rem!important;}.legal-page{overflow-wrap:anywhere;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
+.b-date-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;}
+.b-date-grid input{width:100%;min-width:0;box-sizing:border-box;}
+.b-adjust{margin-top:.8rem;}.b-adjust summary{cursor:pointer;color:var(--gold);font-weight:600;line-height:1.5;}.b-adjust[open] summary{margin-bottom:1rem;}
+.b-period-summary{border-radius:10px;background:var(--goldbg);color:var(--gold);padding:.8rem;line-height:1.5;}
+.b-months h2{font-size:1.15rem;margin:0 0 .5rem;}.b-month{border:1px solid var(--border);border-radius:12px;padding:1rem;margin-top:.9rem;}
+.b-month h3{font-size:1rem;color:var(--gold);margin:0 0 .3rem;text-transform:capitalize;}.b-month dl{display:grid;grid-template-columns:1fr auto;gap:.55rem .7rem;margin:1rem 0 0;font-size:.9rem;}.b-month dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;}.b-month dt:last-of-type,.b-month dd:last-of-type{font-weight:700;color:var(--gold);border-top:1px solid var(--border);padding-top:.65rem;}
+#b-notas p{line-height:1.6;}#b-notas a{color:var(--gold);}
+@media(max-width:390px){.b-date-grid{grid-template-columns:1fr;gap:0;}}

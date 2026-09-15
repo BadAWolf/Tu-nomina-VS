@@ -19,7 +19,7 @@ test('Hospital complement begins at admission, lasts at most 40 days and retains
  assert.equal(s.length,8);assert.deepEqual(s.find(x=>x.hospital),{start:92,end:131,rate:1,hospital:true});
  assert.equal(s.reduce((n,x)=>n+x.end-x.start+1,0),150);
  assert.equal(s.at(-1).rate,.75);
- const x=setup();try{x.set('b-tipo','hospitalizacion');x.set('b-hospital-dia',92);x.set('b-dias',150);x.set('b-baseManual',1800);x.w.calcBajaRegistrado();
+ const x=setup();try{x.set('b-periodo-modo','dias');x.set('b-tipo','hospitalizacion');x.set('b-hospital-dia',92);x.set('b-dias',150);x.set('b-baseManual',1800);x.w.calcBajaRegistrado();
   // 60 euros/day * (1.5+13.6+20+18+24+.75+40+14.25) = 7926.
   assert.equal(x.d.getElementById('br-total-bruto').textContent,'7926,00 €');assert.equal(x.d.getElementById('brow-t7').style.display,'flex');
  }finally{x.close();}

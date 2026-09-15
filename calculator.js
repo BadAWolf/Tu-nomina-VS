@@ -86,6 +86,9 @@ function construirPDF(tipo){
   if(!cfg||!ctxPDF[tipo]){alert('Primero pulsa el botón de calcular.');return;}
   var doc=window.VigilantePDF.create({title:cfg.title,date:hoyLargo(),data:ctxPDF[tipo],netLabel:cfg.netLabel,
     net:document.getElementById(cfg.netoId).textContent,
+    monthly:tipo==='baja'&&informeBaja&&informeBaja.monthly[0].start?informeBaja.monthly.map(function(m){return {label:m.label,period:fechaES(m.start)+' - '+fechaES(m.end),days:String(m.days),gross:fmt(m.gross),ss:fmt(-m.ss),irpf:fmt(-m.irpf),net:fmt(m.net)};}):null,
+    notes:tipo==='baja'&&informeBaja?informeBaja.notes:null,
+    projection:tipo==='baja'&&informeBaja?informeBaja.projection:false,
     blocks:leerResultado(cfg.cont).map(function(b){return {title:b.titulo,rows:b.filas.map(function(f){return {label:f.c,value:f.v,total:f.total,negative:f.neg,exempt:f.exento};})};}),
     calendar:tipo==='nomina'&&ctxPDF.cuadrante?function(doc,y,M,A,W,C){return dibujarCuadrantePDF(doc,y,M,A,W,ctxPDF.cuadrante.anio,ctxPDF.cuadrante.mes,C);}:null
   });
@@ -1097,88 +1100,3 @@ function calcFiniquitoRegistrado(){
     if(!esCB)document.getElementById("switchCondB").checked=false;
   });
 });
-document.getElementById("b-tipo").addEventListener("change",function(){
-  var es=document.getElementById("b-field-nbaja");
-  if(this.value!=="laboral"){es.style.display="block";document.getElementById("b-hint-nbaja").textContent="El 80% de los días 4–20 se aplica como máximo dos veces al año";}
-  else{es.style.display="none";}
-});
-document.getElementById("btnCalcBaja").addEventListener("click",function(){calcBaja();});
-
-function tramoRow(rid,lid,vid,d1,d2,pct,base,lbl){
-  if(d1>d2)return 0;
-  var n=d2-d1+1;
-  var imp=r2(n*base*pct);
-  document.getElementById(rid).style.display="flex";
-  document.getElementById(lid).textContent=lbl+" — "+n+" día"+(n>1?"s":"");
-  document.getElementById(vid).textContent="+"+fmt(imp);
-  return imp;
-}
-
-function calcBaja(){
-  if(window.VigilanteAuth) window.VigilanteAuth.require(calcBajaRegistrado);
-}
-function calcBajaRegistrado(){
-  ctxPDF.baja=null;
-  if(!window.VigilanteSecurity.validateInputs('view-baja','b-errorBox','resultado-baja')){ctxPDF.baja=null;return;}
-  var cat=catEf(bcatActual,document.getElementById("switchCondB").checked);
-  var an=parseFloat(document.getElementById("b-anios").value)||0;
-  var dias=parseInt(document.getElementById("b-dias").value)||0;
-  var ip=parseFloat(document.getElementById("b-irpf").value)||0;
-  var tipo=document.getElementById("b-tipo").value;
-  var nbaja=parseInt(document.getElementById("b-nbaja").value)||1;
-  var err=document.getElementById("b-errorBox");
-  if(dias<=0){err.textContent="Introduce el número de días de baja.";err.style.display="block";document.getElementById("resultado-baja").style.display="none";return;}
-  if(dias>545){err.textContent="El máximo legal son 545 días de baja.";err.style.display="block";document.getElementById("resultado-baja").style.display="none";return;}
-  err.style.display="none";
-  var ant=calcAntig(an,bcatActual,document.getElementById('switchCondB').checked);
-  var baseManual=parseFloat(document.getElementById("b-baseManual").value)||0;
-  var prorrata=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*3/12);
-  var baseCotizMens;
-  if(baseManual>0){baseCotizMens=baseManual;}
-  else{baseCotizMens=r2(cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant+prorrata);}
-  var brDiario=baseCotizMens/30;
-  var baseATMens=r2(cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant+prorrata);
-  var brATDiario=(baseATMens-prorrata)/30;
-  for(var i=0;i<=7;i++){document.getElementById("brow-t"+i).style.display="none";}
-  var totalBruto=0;
-  var hospitalStart=tipo==='hospitalizacion'?(parseInt(document.getElementById('b-hospital-dia').value)||1):0;
-  if(hospitalStart>dias){err.textContent='El inicio de hospitalización no puede superar la duración de la baja.';err.style.display='block';document.getElementById('resultado-baja').style.display='none';ctxPDF.baja=null;return;}
-  var noPrevious=document.getElementById('b-sin-procesos').checked;
-  if(tipo==='laboral'){
-    document.getElementById('brow-t0').style.display='flex';
-    document.getElementById('blbl-t0').textContent='Día del accidente — a cargo de la empresa, en nómina';
-    document.getElementById('br-t0').textContent='no incluido aquí';
-    totalBruto=tramoRow('brow-t1','blbl-t1','br-t1',2,dias,1,Math.max(brATDiario,brDiario*0.75),'Mayor entre prestación legal y tabla del convenio');
-  }else{
-    VigilanteRules.illnessSegments(dias,nbaja,noPrevious,hospitalStart).forEach(function(segment,index){
-      totalBruto+=tramoRow('brow-t'+index,'blbl-t'+index,'br-t'+index,segment.start,segment.end,segment.rate,brDiario,
-        'Días '+segment.start+'–'+segment.end+' ('+Math.round(segment.rate*100)+'%'+(segment.hospital?', hospitalización':'')+')');
-    });
-  }
-  totalBruto=r2(totalBruto);
-  var baseParaSS=r2(brDiario*(tipo==="laboral"?Math.max(0,dias-1):dias));
-  var dSS=r2(baseParaSS*(document.getElementById('b-contrato').value==='temporal'?0.0655:SS_PCT));
-  var dIP=r2(totalBruto*ip/100);
-  var neto=r2(totalBruto-dSS-dIP);
-  document.getElementById("b-info-base").innerHTML="<strong>Base reguladora diaria:</strong> "+fmt(brDiario)+"/día (cotización "+fmt(baseCotizMens)+" ÷ 30)"+(ant>0&&baseManual===0?" | Antigüedad inc.: "+fmt(ant)+"/m":"");
-  document.getElementById("br-total-bruto").textContent=fmt(totalBruto);
-  document.getElementById("br-ss").textContent="-"+fmt(dSS);
-  if(ip>0){document.getElementById("brow-irpf").style.display="flex";document.getElementById("brow-irpf0").style.display="none";document.getElementById("blbl-irpf").textContent="Retención IRPF ("+ip+"%)";document.getElementById("br-irpf").textContent="-"+fmt(dIP);}
-  else{document.getElementById("brow-irpf").style.display="none";document.getElementById("brow-irpf0").style.display="flex";}
-  document.getElementById("br-neto").textContent=fmt(neto);
-  document.getElementById("resultado-baja").style.display="block";
-  cargarJsPDF(function(){});
-  window.VigilanteInstall?.calculationCompleted();
-  window.VigilanteAnalytics?.track('calculation_complete');
-  ctxPDF.baja={
-    "Categoría":nombreCat(bcatActual,document.getElementById("switchCondB").checked),
-    "Tipo de baja":(tipo==="comun"?"Enfermedad común o accidente no laboral":(tipo==="laboral"?"Accidente laboral o enfermedad profesional":"Hospitalización")),
-    "Número de baja en el año":(tipo!=="laboral"?(nbaja===1?"1.ª del año":(nbaja===2?"2.ª del año":"3.ª o posterior")):"No aplica"),
-    "Duración de la baja":dias+" días",
-    "Antigüedad":(an>0?an+" años":"Sin antigüedad"),
-    "Base de cotización":(baseManual>0?fmt(baseManual)+"/mes  (introducida por el usuario)":fmt(baseCotizMens)+"/mes  (mínimo de convenio)"),
-    "Base reguladora diaria":fmt(brDiario)+"/día",
-    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
-  };
-  setTimeout(function(){document.getElementById("resultado-baja").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
-}
