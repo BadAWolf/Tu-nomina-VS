@@ -37,9 +37,10 @@
       // Hidden conditional fields do not participate in the calculation.
       if(input.disabled)continue;
       let hidden=false;for(let parent=input;parent&&parent!==container;parent=parent.parentElement)if(parent.hidden||parent.style.display==='none'){hidden=true;break;}
-      if(hidden||input.value==='')continue;
+      if(hidden)continue;
+      if(input.value===''&&!input.validity.badInput&&!input.required)continue;
       const value=input.type==='number'?Number(input.value):Date.parse(input.value);
-      let invalid=!Number.isFinite(value);
+      let invalid=!Number.isFinite(value)||input.validity.badInput||(input.required&&input.value==='');
       if(input.type==='number'){
         const min=input.min===''?0:Number(input.min),max=input.max===''?1000000:Number(input.max);
         invalid=invalid||value<min||value>max;

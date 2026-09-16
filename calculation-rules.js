@@ -4,6 +4,26 @@
   const round=n=>{const cents=Math.abs(n)*100;return Math.sign(n)*Math.round(cents+Number.EPSILON*Math.max(1,cents))/100;};
   const date=value=>new Date(value+'T00:00:00Z');
   const days=(start,end)=>Math.round((date(end)-date(start))/86400000)+1;
+  // Cada cuota se redondea por separado. CC no incluye las horas extra;
+  // CP sí, y las horas extra llevan una cotización adicional sin MEI.
+  function contributions(cc,cp,extra=0,temporary=false,force=0){
+    if([cc,cp,extra,force].some(n=>!Number.isFinite(n)||n<0))throw new RangeError('Revisa las bases de cotización.');
+    const parts={common:round(cc*.047),mei:round(cc*.0015),unemployment:round(cp*(temporary?.016:.0155)),training:round(cp*.001),overtime:round(extra*.047),force:round(force*.02)};
+    return {...parts,total:round(Object.values(parts).reduce((a,b)=>a+b,0))};
+  }
+  function seniorityYears(start,end){
+    if(!validDate(start)||!validDate(end)||start>end)throw new RangeError('Revisa la fecha de antigüedad reconocida.');
+    // Art. 42: el quinquenio se devenga desde el primer día de su mes.
+    return Number(end.slice(0,4))-Number(start.slice(0,4))-(end.slice(5,7)<start.slice(5,7)?1:0);
+  }
+  function nightPremium(workedMinutes,nightMinutes){
+    return nightMinutes>=240?Math.min(workedMinutes,480):nightMinutes;
+  }
+  function annualTarget(hours,month,ratio=1){
+    const min=(month===1?134:144)*ratio,max=(month===1?162:176)*ratio;
+    if(!Number.isFinite(hours)||hours<min-1e-8||hours>max+1e-8)throw new RangeError('El reparto anual de este mes debe estar entre '+round(min)+' y '+round(max)+' horas (art. 52).');
+    return hours;
+  }
   function months(start,end){
     if(end<start)return 0;
     const a=date(start),b=date(end);b.setUTCDate(b.getUTCDate()+1);
@@ -91,7 +111,7 @@
       }
       month.cotDays=cotDays;
       const cc=round(o.cotCC*cotDays),cp=round(o.cotCP*cotDays);
-      month.ss=round(round(cc*.0485)+round(cp*(o.temporary?.017:.0165)));
+      month.ss=contributions(cc,cp,round((o.extraDaily||0)*cotDays),o.temporary,round((o.forceDaily||0)*cotDays)).total;
       month.irpf=round(month.gross*o.irpf/100);
       month.net=round(month.gross-month.ss-month.irpf);
       delete month.pieces;
@@ -99,6 +119,6 @@
     const sum=key=>round(monthly.reduce((n,m)=>n+m[key],0));
     return {days:total,prior,segments,monthly,gross:sum('gross'),ss:sum('ss'),irpf:sum('irpf'),net:sum('net')};
   }
-  const rules=Object.freeze({round,days,months,severance,illnessRate,illnessSegments,validDate,illnessPeriod,illnessReport});
+  const rules=Object.freeze({round,days,months,severance,illnessRate,illnessSegments,validDate,illnessPeriod,illnessReport,contributions,seniorityYears,nightPremium,annualTarget});
   if(typeof module==='object'&&module.exports)module.exports=rules;else root.VigilanteRules=rules;
 })(typeof window==='object'?window:globalThis);

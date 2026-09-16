@@ -68,7 +68,7 @@ test('UI defaults to calendars, shows monthly results and invalidates stale expo
 test('Optional conditional fields reject incomplete partial bases and ignore hidden stale inputs',()=>{
  const x=setup();try{
   x.set('b-jornada','parcial');x.w.calcBajaRegistrado();assert.match(x.d.getElementById('b-errorBox').textContent,/base reguladora diaria/);
-  x.set('b-base-diaria',30);x.set('b-cot-cc',35);x.w.calcBajaRegistrado();assert.ok(x.w.informeBaja);assert.equal(x.w.informeBaja.monthly[0].cotDays,7);
+  x.set('b-base-diaria',30);x.w.calcBajaRegistrado();assert.ok(x.w.informeBaja);assert.equal(x.w.informeBaja.monthly[0].cotDays,7);
   x.set('b-jornada','completa');x.set('b-base-diaria',-5);x.set('b-hospital-fecha','2027-12-01');x.w.calcBajaRegistrado();assert.equal(x.d.getElementById('br-neto').textContent,'615,60 €');
   x.set('b-tipo','hospitalizacion');x.w.calcBajaRegistrado();assert.match(x.d.getElementById('b-errorBox').textContent,/ingreso/);
   x.set('b-hospital-fecha','2026-02-01');x.w.calcBajaRegistrado();assert.ok(x.w.informeBaja);
@@ -81,11 +81,11 @@ test('New monthly data stays local and analytics receives only the generic compl
 test('Monthly PDF keeps each month, dates, deductions, total and assumptions with repeated headings',()=>{
  const x=setup();try{
   const calls=[];x.w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),original=doc.text.bind(doc);doc.text=(value,a,b,...rest)=>{calls.push({value:[value].flat().join(' '),x:a,y:b,page:doc.internal.getCurrentPageInfo().pageNumber});return original(value,a,b,...rest);};return doc;};
-  x.set('b-inicio','2026-01-15');x.set('b-fin','2027-07-13');x.set('b-tipo','hospitalizacion');x.set('b-hospital-fecha','2026-04-16');x.w.calcBajaRegistrado();
+  x.set('b-inicio','2026-01-15');x.set('b-fin','2026-12-31');x.set('b-tipo','hospitalizacion');x.set('b-hospital-fecha','2026-04-16');x.w.calcBajaRegistrado();
   const doc=x.w.construirPDF('baja');assert.ok(doc.getNumberOfPages()>=3);
   for(const m of x.w.informeBaja.monthly){assert.ok(calls.some(c=>c.value===m.label));assert.ok(calls.some(c=>c.value===x.w.fmt(m.net)));assert.ok(calls.some(c=>c.value===x.w.fechaES(m.start)+' - '+x.w.fechaES(m.end)));}
   assert.ok(calls.some(c=>c.value===x.d.getElementById('br-neto').textContent&&c.page===1));
-  assert.ok(calls.some(c=>c.value==='IMPORTES POR MES (CONTINUACIÓN)'));assert.ok(calls.some(c=>c.value.includes('Proyección fuera de 2026')));
+  assert.ok(calls.some(c=>c.value==='IMPORTES POR MES (CONTINUACIÓN)'));assert.ok(!calls.some(c=>c.value.includes('Proyección fuera de 2026')));
   assert.ok(calls.every(c=>c.y>=0&&c.y<=289));assert.equal(calls.filter(c=>c.value==='Nómina Vigilante').length,doc.getNumberOfPages());
   if(process.env.PDF_SAMPLES==='1'){const dir=path.resolve(__dirname,'../../../output/pdf');fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'baja-calendario-larga.pdf'),Buffer.from(doc.output('arraybuffer')));}
  }finally{x.w.close();}

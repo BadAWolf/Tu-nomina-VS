@@ -8,8 +8,7 @@ header{text-align:left;padding:2rem 0 1.5rem;}
 h1{font-family:'DM Sans',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-.055em;line-height:1.12;}
 h1 em{color:var(--gold);}
 .header-sub{font-size:.92rem;line-height:1.65;max-width:38rem;margin-top:1rem;}
-.hero-notes{display:flex;gap:.65rem;flex-wrap:wrap;margin-top:1rem;}
-.hero-notes span{font-size:.7rem;border:1px solid var(--border);border-radius:20px;padding:.35rem .7rem;background:#ffffffb3;color:var(--text2);}
+.header-story{font-size:.94rem;line-height:1.7;max-width:40rem;margin-top:.85rem;color:var(--text2);}
 .tab-selector{border-radius:14px;padding:5px;margin-bottom:1.25rem;box-shadow:none;}
 .tab-btn{font-size:.83rem;padding:.8rem .3rem;border-radius:10px;}
 .tab-btn-sub{font-size:.66rem;margin-top:.2rem;}
@@ -28,16 +27,14 @@ input[type=number],input[type=date],select{padding:.8rem;border-radius:10px;min-
 .neto-box{border-radius:14px;}
 .account-card{margin:1.5rem 0;background:linear-gradient(135deg,#f1f7ef,#e8f2e3);padding:1.75rem;border-radius:20px;}
 .account-card h2{font-size:1.5rem;letter-spacing:-.03em;max-width:32rem;margin:.7rem 0;}
-.account-comparison{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.3rem;}
-.account-plan{background:#ffffffb3;border:1px solid var(--border);border-radius:14px;padding:1.2rem;}
-.account-plan h3{font-size:1rem;margin-bottom:.45rem;}
-.account-plan-featured{background:#fff;border:1.5px solid var(--gold);}
-.account-plan ul{list-style:none;padding:0;}
+.account-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.3rem;}
+.account-plan{background:#ffffffb3;border:1px solid var(--border);border-radius:14px;padding:1.2rem;min-width:0;}
+.account-plan h3{font-size:1.06rem;line-height:1.4;margin:0;}
+.account-plan-featured{background:#fff;border-color:var(--gold);}
+.account-plan ul{list-style:none;padding:0;margin:.8rem 0 0;}
 .account-plan li{position:relative;padding-left:1.3rem;margin:.6rem 0;}
 .account-plan li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-weight:700;}
-.account-plan .plan-price{font-size:.75rem;color:var(--muted);}
-.account-plan .plan-note{font-size:.73rem;line-height:1.5;color:var(--muted);border-top:1px solid var(--border);padding-top:.75rem;}
-.plan-badge{display:inline-block;font-size:.65rem;color:var(--gold);font-weight:700;background:var(--goldbg);border-radius:20px;padding:.3rem .55rem;margin-bottom:.65rem;}
+@supports(grid-template-rows:subgrid){.account-plan{display:grid;grid-row:span 2;grid-template-rows:subgrid;row-gap:0;}}
 .account-actions .account-primary{flex:1;}
 .disclaimer{line-height:1.8;}
 @media(max-width:540px){.cat-grid{grid-template-columns:1fr 1fr;}.account-comparison{grid-template-columns:1fr;}.account-card{padding:1.15rem;}.account-card h2{font-size:1.3rem;}.account-actions{flex-direction:column;}.card{padding:1.05rem;}header{padding-top:1.5rem;}}

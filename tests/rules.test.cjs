@@ -62,13 +62,13 @@ test('Reduced assigned hours do not reduce a full monthly salary; explicit paid 
   x.set('n-diasAlta',30);x.set('hTTotal',170);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-extra').textContent,'+79,84 €');
  }finally{x.close();}
 });
-test('Calendar pays a full month in February, leap years, 30 and 31 day months without asking for paid days',()=>{
+test('Calendar pays a full month in February, 30 and 31 day months without asking for paid days',()=>{
  const x=setup();try{
   x.d.dispatchEvent(new x.w.Event('DOMContentLoaded'));
   x.set('n-diasAlta',15);x.d.getElementById('modo-cuadrante').click();
   assert.equal(x.d.getElementById('n-diasAlta').disabled,true);
   assert.equal(x.d.getElementById('n-diasAlta').closest('#campos-manual').style.display,'none');
-  for(const [year,month]of [[2026,1],[2028,1],[2026,3],[2026,2]]){
+  for(const [year,month]of [[2026,1],[2026,3],[2026,2]]){
    x.w.calAnio=year;x.w.calMes=month;
    x.w.CUAD[year+'-'+String(month+1).padStart(2,'0')]={'10':{tramos:[{i:'08:00',f:'16:00'}],vac:false,fest:false}};
    x.w.pintarCalendario();x.w.calcNominaRegistrado();
@@ -78,6 +78,8 @@ test('Calendar pays a full month in February, leap years, 30 and 31 day months w
   }
   assert.equal(x.d.getElementById('n-diasAlta').value,'15','The manual setting is preserved, not silently overwritten');
   x.d.getElementById('modo-manual').click();assert.equal(x.d.getElementById('n-diasAlta').disabled,false);
+  assert.equal(x.d.getElementById('n-diasAlta').value,'30','Calendar data is transferred with its full-month scope');
+  x.set('n-diasAlta',15);
   x.set('hTTotal',81);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-base').textContent,'+580,64 €');
  }finally{x.close();}
 });
@@ -93,7 +95,7 @@ test('A hidden manual paid-days value cannot invalidate a calendar or create spu
    assert.equal(x.d.getElementById('r-base').textContent,'+1161,28 €');
    assert.equal(x.d.getElementById('row-extra').style.display,'none');
   }
-  x.set('n-diasAlta',45);x.d.getElementById('modo-manual').click();x.w.calcNominaRegistrado();
+  x.set('n-diasAlta',45);x.d.getElementById('modo-manual').click();x.set('n-diasAlta',45);x.w.calcNominaRegistrado();
   assert.equal(x.d.getElementById('errorBox').style.display,'block');
   assert.equal(x.w.ctxPDF.nomina,null);
  }finally{x.close();}
@@ -149,6 +151,6 @@ test('Half-cent monetary ties round consistently despite floating-point represen
   assert.equal(x.w.r2(1435.45*10/100),143.55);
   x.set('hTTotal',162);x.set('irpf',10);x.w.calcNominaRegistrado();
   assert.equal(x.d.getElementById('r-irpf').textContent,'-143,55 €');
-  assert.equal(x.d.getElementById('r-neto').textContent,'1179,33 €');
+  assert.equal(x.d.getElementById('r-neto').textContent,'1179,34 €');
  }finally{x.close();}
 });

@@ -12,7 +12,7 @@
     ],
     "expected": {
       "r-bruto": "1435,45 €",
-      "r-neto": "1179,33 €"
+      "r-neto": "1179,34 €"
     }
   },
   {
@@ -75,13 +75,14 @@
       "f-inicio": "2025-01-01",
       "f-fin": "2026-01-01",
       "f-vacas": "10",
+      "f-ss-vac": "31.10",
       "f-irpf": "10"
     },
     "outputs": [
       "fr-total-neto"
     ],
     "expected": {
-      "fr-total-neto": "2012,94 €"
+      "fr-total-neto": "2012,93 €"
     }
   }
 ]

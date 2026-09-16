@@ -11,13 +11,22 @@ function actualizarCamposBaja(){
   bajaEl('b-field-nbaja').hidden=laboral;
   bajaEl('b-base-mensual-fields').hidden=parcial;bajaEl('b-base-parcial-fields').hidden=!parcial;
   bajaEl('b-profesional-fields').hidden=!laboral||parcial;
+  var estimada=!parcial&&bajaEl('b-origen').value==='estimada';
+  bajaEl('b-origen').closest('.field').hidden=parcial;
+  bajaEl('bbtn-sin_arma').closest('.card').hidden=!estimada&&tipo!=='laboral';
+  bajaEl('b-anios').closest('.card').hidden=!estimada&&tipo!=='laboral';
+  bajaEl('card-condB').hidden=!estimada&&tipo!=='laboral';
+  bajaEl('b-baseManual').disabled=estimada;
+  bajaEl('b-baseManual').required=!parcial&&!estimada;
+  bajaEl('b-base-diaria').required=parcial;
+  bajaEl('b-br-profesional').required=laboral&&!parcial;
   bajaEl('b-parcial-porcentaje-field').hidden=!parcial||tipo!=='laboral';
   bajaEl('b-cotizacion-field').hidden=parcial;
   var dias=bajaNumber('b-dias');
   if(fechas){
     var inicio=bajaEl('b-inicio').value,fin=bajaEl('b-fin').value;
     bajaEl('b-fin').min=inicio;
-    bajaEl('b-hospital-fecha').min=inicio;bajaEl('b-hospital-fecha').max=fin;
+    bajaEl('b-hospital-fecha').min='2026-01-01';bajaEl('b-hospital-fecha').max=fin;
     try{dias=VigilanteRules.illnessPeriod(inicio,fin);bajaEl('b-periodo-resumen').textContent=dias+' días de baja · ambas fechas incluidas';}
     catch(_){dias=0;bajaEl('b-periodo-resumen').textContent=inicio&&fin?'Revisa las fechas: el fin debe ser igual o posterior al inicio y el periodo no puede superar 545 días.':'Elige las dos fechas para ver la duración.';}
   }
@@ -28,6 +37,12 @@ bajaEl('view-baja').addEventListener('input',invalidarBaja);
 bajaEl('view-baja').addEventListener('change',invalidarBaja);
 bajaEl('view-baja').querySelectorAll('.cat-btn').forEach(function(btn){btn.addEventListener('click',function(){informeBaja=null;ctxPDF.baja=null;bajaEl('resultado-baja').style.display='none';});});
 bajaEl('btnCalcBaja').addEventListener('click',function(){calcBaja();});
+var ajustesBaja=bajaEl('b-alcance').closest('.card');
+bajaEl('view-baja').prepend(ajustesBaja);
+var cotizacionBaja=bajaEl('b-cot-cp').closest('details');
+cotizacionBaja.append(bajaEl('b-extra-diaria').closest('.field'),bajaEl('b-fuerza-diaria').closest('.field'));
+bajaEl('b-anios').closest('.card').append(bajaEl('b-antig-importe').closest('.field'));
+ajustesBaja.querySelector('details').remove();
 actualizarCamposBaja();
 function calcBaja(){if(window.VigilanteAuth)window.VigilanteAuth.require(calcBajaRegistrado);}
 function calcBajaRegistrado(){
@@ -39,29 +54,38 @@ function calcBajaRegistrado(){
   var dias;
   try{dias=fechas?VigilanteRules.illnessPeriod(inicio,fin):bajaNumber('b-dias');}catch(e){fail(e.message);return;}
   var prior=bajaNumber('b-dias-previos'),tipo=bajaEl('b-tipo').value,laboral=tipo==='laboral'||tipo==='profesional',parcial=bajaEl('b-jornada').value==='parcial';
+  if(bajaEl('b-alcance').value!=='ordinaria'){fail('Este cálculo cubre IT ordinaria con contrato vigente y derecho reconocido. Las IT especiales, el pluriempleo o el contrato extinguido necesitan las reglas y bases específicas de tu resolución.');return;}
+  if(fechas&&(inicio.slice(0,4)!=='2026'||fin.slice(0,4)!=='2026')){fail('Este cálculo utiliza tablas y cotizaciones de 2026. Divide el periodo por ejercicios y utiliza las reglas del año correspondiente; no se aplican las de 2026 a otro año.');return;}
+  if(prior&&tipo==='hospitalizacion'){fail('Para no reiniciar los 40 días de hospitalización, calcula el proceso continuo desde su inicio e indica la fecha original de ingreso. La hospitalización en una recaída discontinua requiere cálculo individual.');return;}
   var nbaja=bajaNumber('b-nbaja'),ip=bajaNumber('b-irpf'),hospitalStart=0;
   if(tipo==='hospitalizacion'){
     if(fechas){
       var ingreso=bajaEl('b-hospital-fecha').value||inicio;
-      if(!VigilanteRules.validDate(ingreso)||ingreso<inicio||ingreso>fin){fail('La fecha de ingreso debe estar dentro del periodo de baja.');return;}
+      if(!VigilanteRules.validDate(ingreso)||ingreso<inicio||ingreso>fin){fail('Incluye el inicio del proceso y la fecha original del ingreso hospitalario dentro del periodo calculado.');return;}
       hospitalStart=VigilanteRules.days(inicio,ingreso);
     }else hospitalStart=bajaNumber('b-hospital-dia');
     if(!Number.isInteger(hospitalStart)||hospitalStart<1||hospitalStart>dias){fail('El día de ingreso debe estar dentro de la duración de la baja.');return;}
   }
   var conductor=bajaEl('switchCondB').checked,cat=catEf(bcatActual,conductor),an=bajaNumber('b-anios'),ant=calcAntig(an,bcatActual,conductor);
+  if(bajaEl('b-antig-importe').value!=='')ant=bajaNumber('b-antig-importe');
   var factor=parcial&&tipo==='laboral'?bajaNumber('b-parcial-porcentaje')/100:1;
   if(parcial&&tipo==='laboral'&&!(factor>0&&factor<=1)){fail('Indica el porcentaje de jornada para ajustar el complemento por accidente laboral.');return;}
-  var tabla=r2((cat.salBase+cat.pelig+(cat.act||0)+(cat.esc||0)+cat.trans+cat.vest+ant)*factor);
-  var prorrata=r2((cat.salBase+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*3/12);
-  var manual=bajaNumber('b-baseManual'),divisor=bajaNumber('b-base-dias');
+  var tabla=r2((cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*factor);
+  var prorrata=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*3/12);
+  var manual=bajaEl('b-origen').value==='estimada'?0:bajaNumber('b-baseManual'),divisor=bajaNumber('b-base-dias');
   if(!parcial&&(!Number.isInteger(divisor)||divisor<1||divisor>31)){fail('Indica entre 1 y 31 días cotizados para la base.');return;}
   if(!parcial&&!manual&&divisor!==30){fail('Introduce la base real correspondiente a esos días cotizados, o deja el divisor habitual de 30.');return;}
-  var cc=parcial?bajaNumber('b-cot-cc'):(manual||r2(tabla+prorrata))/divisor;
-  var base=parcial?bajaNumber('b-base-diaria'):(laboral?bajaNumber('b-br-profesional')||cc:cc);
-  if(parcial&&(!base||!cc)){fail('Para jornada parcial o fijo discontinuo, introduce la base reguladora diaria y la base diaria de cotización CC.');return;}
+  if(!parcial&&!manual&&bajaEl('b-origen').value!=='estimada'){fail('Copia la base de contingencias comunes de tu nómina anterior, o elige explícitamente la aproximación de tablas.');return;}
+  if(bcatActual==='con_arma'&&(bajaEl('b-origen').value==='estimada'||tipo==='laboral')){fail('El mínimo de peligrosidad con arma depende de horas y garantías reconocidas. Para baja común usa tu base real; el complemento de accidente laboral con arma requiere revisar esos importes con la empresa.');return;}
+  var cc=parcial?bajaNumber('b-base-diaria'):(manual||r2(tabla+(cat.esc||0)+prorrata))/divisor;
+  var base=parcial?bajaNumber('b-base-diaria'):(laboral?bajaNumber('b-br-profesional'):cc);
+  if(parcial&&!base){fail('Para jornada parcial o fijo discontinuo, introduce la base reguladora diaria reconocida. Se aplica también como base diaria de cotización CC (art. 40).');return;}
   var cp=bajaNumber('b-cot-cp')||cc;
+  if(!base){fail('Indica la base reguladora diaria reconocida por la mutua para la contingencia profesional.');return;}
+  if(cc>170.04+1e-8||cp>170.04+1e-8||(!parcial&&(cc<47.48-1e-8||cp<47.48-1e-8))){fail('Revisa las bases: en este supuesto ordinario de 2026, la diaria completa está entre 47,48 y 170,04 €. En parcial se aplica la base reguladora reconocida, sin imponer el mínimo mensual completo.');return;}
+  var extraDaily=bajaNumber('b-extra-diaria'),forceDaily=bajaNumber('b-fuerza-diaria');
   var report;
-  try{report=VigilanteRules.illnessReport({start:inicio,end:fin,total:dias,prior:prior,base:base,cotCC:cc,cotCP:cp,tableDaily:tabla/30,irpf:ip,number:nbaja,noPrevious:bajaEl('b-sin-procesos').checked,hospitalStart:hospitalStart,laboral:laboral,professional:tipo==='profesional',temporary:bajaEl('b-contrato').value==='temporal',monthlyContribution:!parcial&&bajaEl('b-cotizacion').value==='mensual'});}
+  try{report=VigilanteRules.illnessReport({start:inicio,end:fin,total:dias,prior:prior,base:base,cotCC:cc,cotCP:cp,extraDaily:extraDaily,forceDaily:forceDaily,tableDaily:tabla/30,irpf:ip,number:nbaja,noPrevious:bajaEl('b-sin-procesos').checked,hospitalStart:hospitalStart,laboral:laboral,professional:tipo==='profesional',temporary:bajaEl('b-contrato').value==='temporal',monthlyContribution:!parcial&&bajaEl('b-cotizacion').value==='mensual'});}
   catch(e){fail(e.message);return;}
   err.style.display='none';
   for(var i=0;i<=7;i++)bajaEl('brow-t'+i).style.display='none';
@@ -71,8 +95,7 @@ function calcBajaRegistrado(){
     bajaEl('br-t'+index).textContent=s.excluded?'no incluido':'+'+fmt(s.amount);
   });
   var origen=parcial?'Base diaria aportada':manual?'Base CC aportada: '+fmt(manual)+' ÷ '+divisor:'Aproximación de convenio de 2026, sin variables';
-  var proyeccion=fechas&&(inicio.slice(0,4)!=='2026'||fin.slice(0,4)!=='2026');
-  bajaEl('b-info-base').textContent='Base reguladora: '+fmt(base)+'/día. '+origen+'.'+(proyeccion?' Proyección fuera de 2026: mantiene las tablas y los tipos de cotización de 2026.':'');
+  bajaEl('b-info-base').textContent='Base reguladora: '+fmt(base)+'/día. '+origen+'.';
   bajaEl('br-total-bruto').textContent=fmt(report.gross);bajaEl('br-ss').textContent='-'+fmt(report.ss);
   bajaEl('brow-irpf').style.display=ip>0?'flex':'none';bajaEl('brow-irpf0').style.display=ip>0?'none':'flex';
   bajaEl('blbl-irpf').textContent='Retención IRPF ('+ip+'%)';bajaEl('br-irpf').textContent='-'+fmt(report.irpf);bajaEl('br-neto').textContent=fmt(report.net);
@@ -91,13 +114,12 @@ function calcBajaRegistrado(){
     'Supone contrato vigente y derecho a la prestación. La enfermedad común exige, con carácter general, 180 días cotizados en los últimos 5 años; los accidentes no exigen ese periodo. No cubre extinción de contrato, situaciones especiales de IT ni mejoras de empresa.',
     'Bases e IRPF constantes durante el periodo; tipos de cotización de 2026. El neto puede variar por la retención real, topes de cotización y otras incidencias de nómina.'
   ];
+  if(extraDaily||forceDaily)notas.push('Incluye la cotización adicional por horas extra: base diaria ordinaria '+fmt(extraDaily)+' al 4,70% y fuerza mayor '+fmt(forceDaily)+' al 2%.');
   if(!parcial&&bajaEl('b-cotizacion').value==='mensual')notas.push('La cotización mensual se ajusta a 30 días, suponiendo empleo ordinario el resto del mes. La prestación se calcula por días naturales.');
   if(!fechas)notas.push('Sin fechas, las deducciones se estiman por los días indicados; no se aplican los ajustes de cotización de cada mes.');
   if(!parcial&&!manual)notas.push('Al faltar tu base real, se ha usado una aproximación de convenio sin pluses variables. Introduce la base de tu nómina para afinar el resultado.');
-  if(laboral&&!parcial&&!bajaNumber('b-br-profesional'))notas.push('La base del accidente laboral se ha estimado sin horas extra. Para incluirlas utiliza la base reguladora reconocida por la mutua.');
   if(!bajaNumber('b-cot-cp'))notas.push('Se ha supuesto la misma base de cotización para contingencias comunes y profesionales.');
-  if(proyeccion)notas.push('Proyección fuera de 2026: mantiene las tablas y cotizaciones de 2026. Revisa las cuantías y tipos del año correspondiente antes de compararla con una nómina.');
-  if(prior)notas.push('Continúa desde el día '+(prior+1)+' del proceso. Los '+prior+' días anteriores no se incluyen en los importes. El complemento hospitalario solo considera el ingreso indicado en este periodo.');
+  if(prior)notas.push('Continúa desde el día '+(prior+1)+' del proceso reconocido. Los '+prior+' días anteriores no se incluyen en los importes.');
   if(report.net<0||report.monthly.some(function(m){return m.net<0;}))notas.push('Un neto negativo refleja cotizaciones superiores a la prestación de esos días; no implica por sí solo un cobro bancario, pues se regulariza con el resto de la nómina.');
   notas.push(tipo==='laboral'?'En accidente laboral, el complemento de convenio preserva las pagas extraordinarias.':tipo==='profesional'?'La enfermedad profesional se estima al 75% legal; el complemento del art. 51.a está previsto para accidente laboral.':'La base diaria ya contiene prorrata de extras. Su liquidación posterior depende del devengo y de las mejoras aplicables; no las sumes otra vez a esta estimación.');
   var notesEl=bajaEl('b-notas');notesEl.replaceChildren();notas.forEach(function(t){var p=document.createElement('p');p.textContent=t;notesEl.appendChild(p);});
@@ -110,11 +132,12 @@ function calcBajaRegistrado(){
     'Número de baja del año':laboral?'No aplica':String(nbaja),'Antigüedad':an+' años',
     'Origen de la base':origen,'Base reguladora diaria':fmt(base)+'/día',
     'Cotización diaria CC / CP':fmt(cc)+' / '+fmt(cp),
+    'Base diaria adicional HE / fuerza mayor':fmt(extraDaily)+' / '+fmt(forceDaily),
     'Retención IRPF':ip+'%','Contrato':bajaEl('b-contrato').selectedOptions[0].textContent
   };
   if(hospitalStart)ctxPDF.baja['Ingreso hospitalario']=fechas?fechaES(bajaEl('b-hospital-fecha').value||inicio):'Día '+hospitalStart+' de este periodo';
   if(!laboral&&dias+prior>90)ctxPDF.baja['Sin otro proceso en los 12 meses anteriores']=bajaEl('b-sin-procesos').checked?'Sí':'No';
-  report.notes=notas;report.projection=proyeccion;informeBaja=report;
+  report.notes=notas;informeBaja=report;
   bajaEl('resultado-baja').style.display='block';cargarJsPDF(function(){});
   window.VigilanteInstall?.calculationCompleted();window.VigilanteAnalytics?.track('calculation_complete');
   setTimeout(function(){bajaEl('resultado-baja').scrollIntoView({behavior:'smooth',block:'nearest'});},60);

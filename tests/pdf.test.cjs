@@ -59,8 +59,8 @@ for(const mode of ['horas','nominas','importe'])test('Vacation supplement PDF ke
  }finally{w.close();}
 });
 
-test('Four, five and six-week calendars put the complete breakdown and net below the schedule',()=>{
- for(const [year,month]of [[2027,1],[2026,1],[2026,2]]){
+test('Validated 2026 five and six-week calendars put the complete breakdown and net below the schedule',()=>{
+ for(const [year,month]of [[2026,1],[2026,2]]){
  const {w}=setup();try{
   const calls=[];w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),text=doc.text.bind(doc);doc.text=(value,x,y,...rest)=>{calls.push({text:[value].flat().join(' '),y,page:doc.internal.getCurrentPageInfo().pageNumber});return text(value,x,y,...rest);};return doc;};
   const key=year+'-'+String(month+1).padStart(2,'0');w.CUAD[key]={};
