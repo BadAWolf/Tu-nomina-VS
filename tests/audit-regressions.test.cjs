@@ -66,16 +66,15 @@ run('C04: later calendars remain editable but cannot silently pay 2026 rates; en
  x.termination();x.set('f-fin','2027-01-01');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);
  x.illness();x.set('b-fin','2027-01-01');x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja,null);
 });
-run('N02: a valid annual assignment of 170 hours is ordinary; February limits and partial assignments are enforced',x=>{
+run('Standard monthly hours still determine overtime after removing the contract adjustment panel',x=>{
  x.set('hTTotal',170);x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),79.84);
- x.set('n-reparto','anual');x.set('n-asignadas',170);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-extra').style.display,'none');assert.equal(x.money('r-bruto'),1435.45);
- x.set('n-mes','2026-02');x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
- x.d.getElementById('jorn-parcial').click();x.set('hPactadas',81);x.set('hTTotal',80);x.set('n-asignadas',80);x.w.calcNominaRegistrado();assert.ok(x.w.ctxPDF.nomina);
+ x.set('hTTotal',162);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-extra').style.display,'none');assert.equal(x.money('r-bruto'),1435.45);
+ x.d.getElementById('jorn-parcial').click();x.set('hPactadas',81);x.set('hTTotal',80);x.w.calcNominaRegistrado();assert.ok(x.w.ctxPDF.nomina);assert.equal(x.d.getElementById('n-complementarias-field').hidden,true);
 });
-run('Annual holiday credit uses assigned hours, and exceptional calendar paid days are requested only for partial employment',x=>{
- x.calendar({1:{tramos:[],vac:true}});x.set('n-reparto','anual');x.set('n-asignadas',170);assert.equal(x.w.totalesMes(2026,8).horas,5.48);
- x.set('n-incidencia','alta');x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);x.set('n-dias-cuadrante',15);x.w.calcNominaRegistrado();assert.equal(x.money('r-base'),580.64);
- x.set('n-incidencia','especial');x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
+run('Calendar vacation credit and full monthly pay work without removed controls; manual partial months remain available',x=>{
+ x.calendar({1:{tramos:[],vac:true}});assert.equal(x.w.totalesMes(2026,8).horas,5.23);x.w.calcNominaRegistrado();assert.equal(x.money('r-base'),1161.28);
+ x.d.getElementById('modo-manual').click();x.d.getElementById('switchVac').checked=false;x.set('diasVac',0);x.set('hTTotal',81);x.set('n-diasAlta',15);x.w.calcNominaRegistrado();assert.equal(x.money('r-base'),580.64);
+ for(const id of ['n-reparto','n-asignadas','n-mes','n-incidencia','n-dias-cuadrante','n-festivos-derecho','n-noches-especiales','n-compensacion-noche','n-antig-fecha'])assert.equal(x.d.getElementById(id),null);
 });
 run('N01: armed hours, minimum, known guarantees and extra-payment share are explicit',x=>{
  x.d.getElementById('btn-con_arma').click();x.set('hTTotal',100);x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
@@ -84,16 +83,17 @@ run('N01: armed hours, minimum, known guarantees and extra-payment share are exp
  x.set('n-arma-horas',101);x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
  x.set('n-arma-modo','importe');x.set('n-arma-importe',179.90);x.w.calcNominaRegistrado();assert.equal(x.money('r-pelig'),179.90);
 });
-run('N03: festive exclusion, category scope and Christmas compensation are separate',x=>{
+run('Festive category scope and automatic Christmas monetary estimates remain available',x=>{
  x.set('hTTotal',162);x.set('hFest',8);x.w.calcNominaRegistrado();assert.equal(x.money('r-fest'),8.16);
- x.set('n-festivos-derecho','excluido');x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-fest').style.display,'none');
- x.set('n-festivos-derecho','convenio');x.d.getElementById('btn-fondos').click();x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-fest').style.display,'none');
+ x.d.getElementById('btn-fondos').click();x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-fest').style.display,'none');
  x.w.CUAD={'2026-12':{24:{tramos:[{i:'22:00',f:'06:00'}]},31:{tramos:[{i:'22:00',f:'06:00'}]}}};x.w.calAnio=2026;x.w.calMes=11;x.w.MODO_HORAS='cuadrante';x.w.calcNominaRegistrado();assert.equal(x.money('r-navidad'),166.96);
- x.set('n-compensacion-noche','descanso');x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-navidad').style.display,'none');assert.match(x.w.ctxPDF.nomina['Nochebuena / Nochevieja'],/descanso/);
+ assert.match(x.w.ctxPDF.nomina['Nochebuena / Nochevieja'],/compensación económica estimada/);
 });
 run('Partial complementary hours need their ordinary agreed value instead of borrowing an overtime price',x=>{
  x.d.getElementById('jorn-parcial').click();x.set('hPactadas',80);x.set('hTTotal',90);x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
+ assert.equal(x.d.getElementById('n-complementarias-field').hidden,false);assert.ok(x.d.getElementById('parcial-field').contains(x.d.getElementById('n-hora-ordinaria')));
  x.set('n-hora-ordinaria',11);x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),110);
+ x.set('hTTotal',80);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('n-complementarias-field').hidden,true);assert.equal(x.d.getElementById('row-extra').style.display,'none');
 });
 run('Special service complements use their recognised extra-payment and overtime amounts',x=>{
  x.set('hTTotal',170);x.d.getElementById('switchPlus').checked=true;x.set('plusServicio',100);x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
@@ -102,6 +102,8 @@ run('Special service complements use their recognised extra-payment and overtime
 run('Legacy seniority requires its recognised amount instead of replacing consolidated trienios',x=>{
  x.set('hTTotal',162);x.set('aniosAntiguedad',35);x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
  x.set('n-antig-importe',400);x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),400);assert.equal(x.text('lbl-antig'),'Antigüedad reconocida');
+ assert.equal(x.d.getElementById('n-antig-importe-field').hidden,false);
+ x.set('aniosAntiguedad',5);x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),45.86);assert.equal(x.d.getElementById('n-antig-importe-field').hidden,true);
  x.termination();x.set('f-antig-fecha','1990-01-01');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);x.set('f-antig-importe',400);x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);
 });
 run('B01/B02: real bases reject implausible full-time amounts and include additional overtime quotas',x=>{
@@ -125,7 +127,7 @@ run('Professional IT requires the recognised BR; a hospital relapse cannot resta
 run('F01/F02: daily money stays unrounded until total; quinquenio starts the first day of the anniversary month',x=>{
  x.termination();x.set('f-vacas',15);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),717.73);assert.match(x.text('f-total-label'),/PENDIENTE/);assert.equal(x.text('fr-ss-liq'),'Pendiente');
  x.set('f-inicio','2021-09-20');x.set('f-fin','2026-09-16');x.w.calcFiniquitoRegistrado();assert.match(x.w.ctxPDF.finiquito['Antigüedad reconocida'],/45,86/);
- x.set('hTTotal',162);x.set('n-antig-fecha','2021-09-20');x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),45.86);
+ x.set('hTTotal',162);x.set('aniosAntiguedad',5);x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),45.86);
 });
 run('F03: actual annual salary includes customary variables; vacation average and known L13 quota are accounted once',x=>{
  x.termination();x.set('f-tipodespido','objetivo');x.set('f-salario-anual',36500);x.set('f-fiscalidad','exenta');x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),3000);

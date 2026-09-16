@@ -19,11 +19,6 @@
   function nightPremium(workedMinutes,nightMinutes){
     return nightMinutes>=240?Math.min(workedMinutes,480):nightMinutes;
   }
-  function annualTarget(hours,month,ratio=1){
-    const min=(month===1?134:144)*ratio,max=(month===1?162:176)*ratio;
-    if(!Number.isFinite(hours)||hours<min-1e-8||hours>max+1e-8)throw new RangeError('El reparto anual de este mes debe estar entre '+round(min)+' y '+round(max)+' horas (art. 52).');
-    return hours;
-  }
   function months(start,end){
     if(end<start)return 0;
     const a=date(start),b=date(end);b.setUTCDate(b.getUTCDate()+1);
@@ -119,6 +114,6 @@
     const sum=key=>round(monthly.reduce((n,m)=>n+m[key],0));
     return {days:total,prior,segments,monthly,gross:sum('gross'),ss:sum('ss'),irpf:sum('irpf'),net:sum('net')};
   }
-  const rules=Object.freeze({round,days,months,severance,illnessRate,illnessSegments,validDate,illnessPeriod,illnessReport,contributions,seniorityYears,nightPremium,annualTarget});
+  const rules=Object.freeze({round,days,months,severance,illnessRate,illnessSegments,validDate,illnessPeriod,illnessReport,contributions,seniorityYears,nightPremium});
   if(typeof module==='object'&&module.exports)module.exports=rules;else root.VigilanteRules=rules;
 })(typeof window==='object'?window:globalThis);
