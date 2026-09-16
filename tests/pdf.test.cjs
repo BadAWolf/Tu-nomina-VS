@@ -35,6 +35,30 @@ for(const [type,index]of [['nomina',1],['baja',3],['finiquito',4],['cuadrante',1
  }finally{w.close();}
 });
 
+for(const mode of ['horas','nominas','importe'])test('Vacation supplement PDF keeps the method, average and final amount: '+mode,()=>{
+ const {w}=setup();try{
+  const d=w.document,calls=[];
+  w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),text=doc.text.bind(doc);doc.text=(value,x,y,...rest)=>{calls.push({text:[value].flat().join(' '),y,page:doc.internal.getCurrentPageInfo().pageNumber});return text(value,x,y,...rest);};return doc;};
+  d.getElementById('vac-metodo').value=mode;d.getElementById('vac-metodo').dispatchEvent(new w.Event('change',{bubbles:true}));
+  d.getElementById('vac-horas-noche').value=64;d.getElementById('vac-horas-festivo').value=32;
+  d.getElementById('n-promedioVac').value=113.28;
+  d.getElementById('vac-meses').value=2;d.getElementById('vac-meses').dispatchEvent(new w.Event('change',{bubbles:true}));
+  d.getElementById('vac-mes-1-night').value=126;d.getElementById('vac-mes-1-weekend').value=100.56;d.getElementById('vac-mes-2-night').value=0;
+  w.CUAD['2026-09']={};for(let day=1;day<=30;day++)w.CUAD['2026-09'][day]={tramos:day>15&&day<=25?[{i:'08:00',f:'16:00'}]:[],vac:day<=15,fest:false};
+  w.MODO_HORAS='cuadrante';w.calAnio=2026;w.calMes=8;w.actualizarAccesoVacaciones(true);w.calcNominaRegistrado();
+  assert.equal(d.getElementById('r-vacplus').textContent,'+54,81 €');
+  const doc=w.construirPDF('nomina');
+  assert.ok(calls.some(c=>c.text.includes('113,28 €')));
+  assert.ok(calls.some(c=>c.text.includes('54,81 €')));
+  assert.ok(calls.some(c=>c.text.includes(mode==='horas'?'Estimación por horas':mode==='nominas'?'Media de 2 nóminas':'Media mensual indicada')));
+  assert.ok(calls.some(c=>c.text==='NETO ESTIMADO A COBRAR'&&c.page===1));
+  assert.ok(calls.every(c=>c.y<=289));
+  if(process.env.PDF_SAMPLES==='1'){
+   const out=path.resolve(root,'../../output/pdf');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'vacaciones-'+mode+'.pdf'),Buffer.from(doc.output('arraybuffer')));
+  }
+ }finally{w.close();}
+});
+
 test('Four, five and six-week calendars put the complete breakdown and net below the schedule',()=>{
  for(const [year,month]of [[2027,1],[2026,1],[2026,2]]){
  const {w}=setup();try{

@@ -42,3 +42,18 @@ input[type=number],input[type=date],select{padding:.8rem;border-radius:10px;min-
 .disclaimer{line-height:1.8;}
 @media(max-width:540px){.cat-grid{grid-template-columns:1fr 1fr;}.account-comparison{grid-template-columns:1fr;}.account-card{padding:1.15rem;}.account-card h2{font-size:1.3rem;}.account-actions{flex-direction:column;}.card{padding:1.05rem;}header{padding-top:1.5rem;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
+.vac-intro{font-size:.92rem;line-height:1.55;margin:0 0 1rem;color:var(--text);}
+.vac-hours-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.vac-hours-grid .field{margin-bottom:.35rem;}
+.vac-details{margin:.85rem 0;padding:.8rem 0;border-top:1px solid var(--border);}
+.vac-details summary{cursor:pointer;color:var(--gold);font-size:.82rem;font-weight:600;line-height:1.5;}
+.vac-details .field,.vac-details p{margin-top:.7rem;}
+.vac-preview{background:var(--goldbg);border:1px solid var(--goldline);border-radius:10px;padding:.9rem;margin:1rem 0 .65rem;color:var(--text);font-size:.83rem;line-height:1.6;}
+.vac-source{margin:0;}.vac-source a{color:var(--gold);}
+.vac-month-table{width:100%;table-layout:fixed;border-collapse:collapse;margin:.85rem 0;}
+.vac-month-table caption{text-align:left;font-size:.73rem;line-height:1.5;padding:0 0 .65rem;color:var(--muted);}
+.vac-month-table th{font-size:.7rem;text-align:left;line-height:1.4;font-weight:600;color:var(--text2);}
+.vac-month-table th:first-child{width:17%;}
+.vac-month-table td,.vac-month-table th{padding:.3rem .2rem;}
+.vac-month-table input{width:100%;min-width:0;padding:.55rem .3rem;font-size:.85rem;}
+@media(max-width:540px){.vac-hours-grid{grid-template-columns:1fr;gap:.5rem;}.vac-month-table input{font-size:16px;}.vac-month-table th{font-size:.66rem;}}

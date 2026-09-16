@@ -646,6 +646,12 @@ var PLUS_FEST=1.02;
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
 var cuentaVacacionesActiva=false;
+var vacationPlusesUI=window.VigilanteVacationPluses.mount(function(){
+  var days=MODO_HORAS==='cuadrante'
+    ? (cuentaVacacionesActiva?totalesMes(calAnio,calMes).diasVac:0)
+    : (document.getElementById('switchVac').checked?Number(document.getElementById('diasVac').value)||0:0);
+  return {days:days,nightRate:catEf(catActual,document.getElementById('switchCond').checked).nocH,weekendRate:PLUS_FEST};
+});
 
 function r2(n){var centimos=Math.abs(n)*100;return Math.sign(n)*Math.round(centimos+Number.EPSILON*Math.max(1,centimos))/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
@@ -688,6 +694,7 @@ function actualizarPlusesCategoria(){
   document.getElementById("hint-antiguedad").textContent=a<5
     ?"Sin antigüedad — el plus aplica cada 5 años ("+fmt(importeQuinquenio)+"/quinquenio)"
     :q+" quinquenio"+(q>1?"s":"")+" = +"+fmt(calcAntig(a,catActual,conductor))+"/mes";
+  vacationPlusesUI.refresh();
 }
 document.getElementById('aniosAntiguedad').addEventListener('input',actualizarPlusesCategoria);
 document.getElementById('switchCond').addEventListener('change',actualizarPlusesCategoria);
@@ -744,6 +751,7 @@ function actualizarComplementoVacaciones(){
     ? document.getElementById('switchVac').checked
     : cuentaVacacionesActiva&&totalesMes(calAnio,calMes).diasVac>0;
   document.getElementById('vac-plus-field').hidden=!vacaciones;
+  vacationPlusesUI.refresh();
 }
 document.getElementById("diasVac").addEventListener("input",actualizarHintVac);
 ["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
@@ -854,7 +862,12 @@ function calcNominaRegistrado(){
   var hJefe=esJefe?(document.getElementById('n-horasJefe').value===''?hT:Number(document.getElementById('n-horasJefe').value)):0;
   if(hJefe>hT){err.textContent='Las horas como responsable de equipo no pueden superar las trabajadas.';err.style.display='block';document.getElementById('resultado').style.display='none';return;}
   var je=r2(cat.salBase*0.10*hJefe/JORNADA);
-  var complementoVac=r2((parseFloat(document.getElementById('n-promedioVac').value)||0)*dVac/31);
+  var vacationSupplement;
+  try{vacationSupplement=vacationPlusesUI.read(dVac);}catch(error){
+    err.textContent=error.message;err.style.display='block';
+    document.getElementById('resultado').style.display='none';return;
+  }
+  var complementoVac=vacationSupplement.amount;
   var q=Math.floor(an/5);
   var sbHE=cat.salBase;
   var hev=calcHoraExtra(sbHE,cat.pelig,cat.act||0,ant,cat.esc);
@@ -891,7 +904,7 @@ function calcNominaRegistrado(){
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent="Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
   else{document.getElementById("row-antig").style.display="none";}
   showR("row-jefe","lbl-jefe","r-jefe","Responsable de equipo — "+hJefe+" h",je,"up");
-  showR("row-vacplus","lbl-vacplus","r-vacplus","Promedio de pluses en vacaciones",complementoVac,"up");
+  showR("row-vacplus","lbl-vacplus","r-vacplus",vacationSupplement.mode==='horas'?"Pluses de vacaciones (estimación por horas)":"Promedio de pluses en vacaciones",complementoVac,"up");
   if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
   else{document.getElementById("row-plusserv").style.display="none";}
   showR("row-extra","lbl-extra","r-extra",(jornActual==="parcial"?"Horas complementarias estimadas — ":"Horas extra — ")+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
@@ -923,6 +936,9 @@ function calcNominaRegistrado(){
     "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
   };
+  if(dVac>0&&vacationSupplement.provided){
+    ctxPDF.nomina['Pluses de vacaciones']=(vacationSupplement.mode==='horas'?'Estimación por horas con tarifas de 2026':vacationSupplement.mode==='nominas'?'Media de '+document.getElementById('vac-meses').value+' nóminas':'Media mensual indicada')+' · '+fmt(vacationSupplement.average)+' / 31 × '+dVac+' días = '+fmt(complementoVac)+' brutos';
+  }
   setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
 }
 

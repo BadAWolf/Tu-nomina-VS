@@ -32,6 +32,8 @@ Después de los esquemas de autenticación y marketing, `marketing-profile-schem
 
 Pruebas de nómina, tramos de IT, antigüedad y contratos, pagas abonadas, jornadas parciales, calendario con cruces de mes y cambios de hora, PDF de una o varias páginas, autenticación y persistencia con el SDK real, consentimiento, privacidad, entradas inválidas e instalación móvil.
 
+El complemento de vacaciones se gestiona en `vacation-pluses.js`: por defecto estima con horas medias y las tarifas de la categoría de 2026. También admite importes de 1 a 12 nóminas de referencia o una media mensual ya conocida. Los métodos son excluyentes, los meses sin pluses cuentan en el divisor y se rechaza un historial parcialmente vacío. La media conserva sus decimales hasta prorratearla por días / 31; no se reduce de nuevo por jornada parcial. Los datos permanecen en el formulario del dispositivo. La estimación por horas, los meses incompletos de alta y los complementos con reglas específicas tienen las limitaciones indicadas en la interfaz. El PDF conserva el método, la media y el importe; el cuadrante mantiene calendario, desglose y neto en la primera página y puede continuar los datos en otra hoja.
+
 Fuentes: [Convenio BOE-A-2026-8569](https://www.boe.es/eli/es/res/2026/04/08/(5)), [Estatuto de los Trabajadores](https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430). No se garantiza la cobertura de todos los regímenes o circunstancias laborales.
 
 ## Iconos y actualizaciones

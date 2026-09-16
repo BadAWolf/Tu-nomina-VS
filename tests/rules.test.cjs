@@ -52,6 +52,7 @@ test('Part-time calendar holidays and manual holidays use the same contracted ho
   const calendarGross=x.d.getElementById('r-bruto').textContent;
   x.w.MODO_HORAS='manual';x.d.getElementById('switchVac').checked=true;x.set('diasVac',1);x.set('hTTotal',0);x.w.calcNominaRegistrado();
   assert.equal(x.d.getElementById('r-bruto').textContent,calendarGross);assert.equal(x.w.resumenDia(2026,3,5).horas,80/31);
+  x.set('vac-metodo','importe');x.d.getElementById('vac-metodo').dispatchEvent(new x.w.Event('change'));
   x.set('n-promedioVac',310);x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('r-vacplus').textContent,'+10,00 €');
  }finally{x.close();}
 });
