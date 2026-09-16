@@ -1,13 +1,16 @@
 /* Identity shared by the calculator, guides, account, legal pages and app. */
 html{font-size:106.25%;}
-@media(max-width:540px){html{font-size:100%;}}
+/* Half a pixel less at the default browser setting, only on phones. */
+@media(max-width:540px){html{font-size:96.875%;}}
+:root{--type-body:.94rem;--type-note:.875rem;--type-meta:.78rem;--type-page:2.2rem;--type-section:1.25rem;--type-heading:1.06rem;}
+@media(max-width:540px){:root{--type-page:1.7rem;--type-section:1.2rem;}}
 :root{--bg:#f7f6f2;--surface:#f7f8f5;--card:#fff;--border:#dfe5dd;--border2:#bfcabd;--gold:#21634f;--gold2:#28765c;--goldbg:#eef6ed;--goldline:#b9d4b4;--text:#213e33;--text2:#3d554a;--muted:#607367;--subtle:#667b6b;--green:#21634f;--greenbg:#eef6ed;--red:#a53838;--blue:#326286;}
 body,body.legal-page,h1,h2,h3,button,input,select,.brand-name,.menu-marca-nombre,.header-label,.card-label,.btn-calc,.inst-tit,.inst-btn,.neto-val,.bruto-val,.page-title,.dlg-title{font-family:Arial,Helvetica,sans-serif;}
 body{background:var(--bg);color:var(--text);}
 .topbar{background:#fffffff5;border-bottom:1px solid var(--border);}
 .brand{gap:.6rem;}.brand-icon{width:2.25rem;height:2.25rem;border-radius:8px;}
 .brand-name{font-size:1.05rem;line-height:1.25;letter-spacing:-.02em;font-weight:700;max-width:none;}.brand-name em{color:var(--gold);}
-.menu-btn{width:2.75rem;min-height:2.75rem;}.menu-btn span{width:1.375rem;}
+.menu-btn{width:max(44px,2.75rem);min-height:max(44px,2.75rem);}.menu-btn span{width:1.375rem;}
 .topbar-cta,.inst-btn{background:var(--gold);box-shadow:none;}
 .menu-marca-ico{border-radius:12px;}.menu-panel{background:var(--surface);}
 .menu-marca-nombre{font-weight:700;font-size:1.1rem;letter-spacing:0;}
@@ -25,7 +28,7 @@ body{background:var(--bg);color:var(--text);}
 .preparando-icon .content-icon{width:34px;height:34px;}
 .guide-icon .content-icon{width:28px;height:28px;}
 .wrap{max-width:792px;}.topbar-inner{max-width:824px;}
-header.page{text-align:left;}header.page h1{font-size:clamp(1.9rem,5vw,2.65rem);letter-spacing:-.04em;line-height:1.15;font-weight:700;}
+header.page{text-align:left;}header.page h1,.legal-page h1{font-size:var(--type-page);letter-spacing:-.035em;line-height:1.2;font-weight:700;}
 .card,.info-card,.guide-card{border-color:var(--border);border-radius:14px;}
 .neto-box{background:var(--goldbg);border-color:var(--goldline);}.neto-val,.neto-label{color:var(--gold);}
 .guide-card.guide-destacada{background:var(--goldbg);border-color:var(--goldline);}
@@ -37,7 +40,7 @@ header.page{text-align:left;}header.page h1{font-size:clamp(1.9rem,5vw,2.65rem);
 .legal-page h1{font-family:Arial,Helvetica,sans-serif;}.legal-page table{background:#fff;}
 .auth-dialog{border-radius:18px;}.auth-dialog input{font-size:1rem;}.auth-dialog form button[type=submit]{width:100%;}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #326286;outline-offset:3px;}
-@media(max-width:540px){.topbar-inner{gap:.5rem;}.topbar-cta{font-size:.65rem;}input,select{font-size:1rem!important;}.legal-page{overflow-wrap:anywhere;}}
+@media(max-width:540px){.topbar-inner{gap:.5rem;}input,select,textarea{font-size:max(1rem,16px)!important;}.legal-page{overflow-wrap:anywhere;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
 .b-date-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;}
 .b-date-grid input{width:100%;min-width:0;box-sizing:border-box;}
@@ -56,22 +59,51 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 @media print{.editorial-ad,[data-ad-privacy],.ad-privacy-status{display:none!important;}}
 /* Larger reading text and controls, respecting the browser's font preference. */
 .header-sub{font-size:1rem;line-height:1.65;}
-.field-label,.switch-text,.account-card p,.account-card li,.auth-dialog p,.auth-dialog label,.account-primary,.account-secondary,.menu-link{font-size:.94rem;line-height:1.6;}
-.field-hint,.switch-sub,.info-box,.source-note,.guide-desc,.disclaimer,.dlg-sub,.dlg-nota,.cal-leyenda span,.cal-vacio-msg{font-size:.875rem;line-height:1.65;}
+.field-label,.switch-text,.account-card p,.account-card li,.auth-dialog p,.auth-dialog label,.account-primary,.account-secondary,.menu-link,.legal-page .menu-link{font-size:var(--type-body);line-height:1.6;}
+.field-hint,.switch-sub,.info-box,.source-note,.guide-desc,.disclaimer,.dlg-sub,.dlg-nota,.cal-leyenda span,.cal-vacio-msg{font-size:var(--type-note);line-height:1.65;}
 .switch-row{gap:.75rem;}
-.tab-btn,.cat-btn,.jorn-btn,.paga-btn,.btn-pdf,.res-row,.cal-res-row,.dlg-btn{font-size:.94rem;}
+.tab-btn,.cat-btn,.jorn-btn,.paga-btn,.btn-pdf,.res-row,.cal-res-row,.dlg-btn{font-size:var(--type-body);}
 .paga-row{grid-template-columns:repeat(3,minmax(0,1fr));}
 .paga-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:4.25rem;line-height:1.45;transition:background .15s,border-color .15s,color .15s;}
-.paga-sub{font-size:.78rem;line-height:1.45;margin-top:.2rem;max-width:100%;overflow-wrap:anywhere;}
+.paga-sub{font-size:var(--type-meta);line-height:1.45;margin-top:.2rem;max-width:100%;overflow-wrap:anywhere;}
 .date-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.date-grid input{min-width:0;}
-.tab-btn-sub,.cat-salary,.jorn-sub,.card-label,.dlg-label,.header-label,.guide-kicker,.field-badge{font-size:.78rem;}
+.tab-btn-sub,.cat-salary,.jorn-sub,.card-label,.dlg-label,.header-label,.guide-kicker,.field-badge{font-size:var(--type-meta);}
 .guide-title,.guide-card.guide-destacada .guide-title,.rel-title{font-size:1rem;}
 .account-card .account-kicker{font-size:.8rem;}
-.auth-dialog .auth-check,.marketing-preferences .auth-check{font-size:.94rem;}
-.wrap>p,.card p,.card li,.info-card p,.info-card li,.preparando p,.preparando li,.item-desc,.faq-answer,.sec-sub{font-size:.94rem;line-height:1.7;}
-.card .field-hint{font-size:.875rem;}
-.wrap table{font-size:.875rem;}
-#cookie-banner,#cookie-banner p,.btn-cookie{font-size:.875rem;}
+.auth-dialog .auth-check,.marketing-preferences .auth-check{font-size:var(--type-body);}
+.wrap>p,.card p,.card li,.info-card p,.info-card li,.preparando p,.preparando li,.item-desc,.faq-answer,.sec-sub{font-size:var(--type-body);line-height:1.7;}
+.card .field-hint{font-size:var(--type-note);}
+.wrap table{font-size:var(--type-note);}
+#cookie-banner,#cookie-banner p,.btn-cookie,#cookie-banner .btn-cookie{font-size:var(--type-note);}
 .cookie-buttons{flex-wrap:wrap;}
 @media(max-width:540px){.tab-btn{font-size:.85rem;}.tab-btn-sub{font-size:.72rem;}.brand-name{font-size:.94rem;}.topbar-inner{flex-wrap:wrap;row-gap:.65rem;}.topbar-cta{flex:0 1 7rem;white-space:normal;text-align:center;padding:.4rem .5rem;line-height:1.35;margin-left:auto;}.date-grid{grid-template-columns:1fr;}}
-@media(max-width:360px){.paga-row{grid-template-columns:1fr;}.paga-btn{flex-direction:row;justify-content:space-between;gap:.5rem;min-height:2.75rem;padding:.6rem .75rem;}.paga-sub{margin-top:0;}}
+@media(max-width:360px){.paga-row{grid-template-columns:1fr;}.paga-btn{flex-direction:row;justify-content:space-between;gap:.5rem;min-height:max(44px,2.75rem);padding:.6rem .75rem;}.paga-sub{margin-top:0;}}
+
+/* A single hierarchy for guides, legal documents and the shared navigation. */
+.content-page .wrap p,.content-page .wrap li,.legal-content p,.legal-content li,.content-page .info-texto,.content-page .faq-answer{font-size:var(--type-body);line-height:1.7;}
+.content-page header.page .header-sub{font-size:var(--type-body);line-height:1.65;max-width:40rem;margin:.75rem 0 0;color:var(--muted);}
+.content-page h2,.content-page .preparando h2,.legal-content h2{font-size:var(--type-section);line-height:1.35;letter-spacing:-.02em;align-items:flex-start;}
+.content-page h3,.content-page .card h3,.content-page .info-titulo,.content-page .item-nombre,.content-page .faq-question,.legal-content h3{font-size:var(--type-heading);line-height:1.45;letter-spacing:0;}
+.content-page h4{font-size:var(--type-body);line-height:1.5;}
+.content-page .highlight,.content-page .alert,.content-page .info,.content-page .aviso,.content-page .vacio{font-size:var(--type-body);line-height:1.7;}
+.content-page .source-note p,.content-page .table-note,.content-page .sec-sub,.content-page .item-meta{font-size:var(--type-note);line-height:1.65;}
+.table-note{color:var(--muted);margin-top:.4rem;}
+.crumbs,.art,.tag,.chip,.rel-kicker,.filtro-label,.menu-grupo,.menu-marca-sub,.menu-pie{font-size:var(--type-meta);line-height:1.5;letter-spacing:.03em;}
+.menu-marca-txt{font-size:1.05rem;font-weight:700;letter-spacing:0;line-height:1.25;}
+.content-page thead th{font-size:var(--type-meta);letter-spacing:.03em;}
+.content-page .num,.content-page .concept-name,.content-page .concept-val,.legal-page table{font-size:var(--type-note);line-height:1.6;font-variant-numeric:tabular-nums;}
+.content-page .cta-btn,.content-page .item-link,.content-page .volver a{font-size:var(--type-body);line-height:1.5;letter-spacing:0;}
+.content-page .cta-btn,.content-page .item-link{min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
+.topbar-cta,.legal-page .topbar-cta{font-size:var(--type-meta);line-height:1.35;letter-spacing:0;min-height:44px;display:inline-flex;align-items:center;justify-content:center;}
+.legal-footer,.legal-page .legal-footer{font-size:var(--type-meta);line-height:1.6;}
+
+/* Secondary account and calculator settings use the same body/note scale. */
+.marketing-profile-fields label,.marketing-profile-fields legend,.marketing-options legend,.marketing-preferences summary,.vac-details summary,.b-adjust summary,.dlg-add,.auth-link{font-size:var(--type-body);line-height:1.6;}
+.auth-dialog h2{font-size:var(--type-section);line-height:1.35;}
+.auth-dialog #auth-password-hint,.auth-dialog #auth-google-note,.marketing-profile-fields p{font-size:var(--type-note);line-height:1.65;}
+.marketing-welcome .marketing-kicker{font-size:var(--type-meta);}
+.marketing-welcome .auth-check strong{font-size:var(--type-body);}
+.vac-month-table caption{font-size:var(--type-note);}.vac-month-table th{font-size:var(--type-meta);}
+.error-box,.exento-box{font-size:var(--type-note);line-height:1.65;}
+.res-concept,.res-val,.cal-res-row{font-size:var(--type-body);line-height:1.55;}
+.neto-label{font-size:var(--type-heading);font-weight:700;letter-spacing:0;}.neto-label span{font-size:var(--type-note);line-height:1.5;}

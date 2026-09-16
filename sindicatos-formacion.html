@@ -40,35 +40,35 @@
 --green:#2d7a3a;--greenbg:#edf7ef;
 --blue:#2a5ea8;--bluebg:#eef4fc;
 }
-html,body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;}
+html,body{background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;}
 body{display:flex;flex-direction:column;align-items:center;padding:0 0 4rem;}
 .topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
 .topbar-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;}
 .brand{display:flex;align-items:center;gap:0.4rem;text-decoration:none;}
 .brand-icon{width:1.4rem;height:1.4rem;border-radius:4px;display:block;flex-shrink:0;}
-.brand-name{font-family:'Bebas Neue',sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
+.brand-name{font-family:Arial,Helvetica,sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
 .brand-name em{color:var(--gold2);font-style:normal;}
 .topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(33,99,79,0.25);}
 .topbar-cta:hover{background:var(--gold);}
 .wrap{width:100%;max-width:680px;padding:1.5rem 1rem 0;}
-.crumbs{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.06em;color:var(--subtle);margin-bottom:1.2rem;}
+.crumbs{font-family:Arial,Helvetica,sans-serif;font-size:0.58rem;letter-spacing:0.06em;color:var(--subtle);margin-bottom:1.2rem;}
 .crumbs a{color:var(--gold2);text-decoration:none;}
 header.page{text-align:center;padding:0.5rem 0 1.5rem;}
-.header-label{font-family:'DM Mono',monospace;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.45rem;font-weight:600;}
-h1{font-family:'Bebas Neue',sans-serif;font-size:2.1rem;letter-spacing:0.04em;line-height:1.08;color:var(--text);margin-bottom:0.5rem;}
+.header-label{font-family:Arial,Helvetica,sans-serif;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.45rem;font-weight:600;}
+h1{font-family:Arial,Helvetica,sans-serif;font-size:2.1rem;letter-spacing:0.04em;line-height:1.08;color:var(--text);margin-bottom:0.5rem;}
 h1 em{color:var(--gold2);font-style:normal;}
 .header-sub{font-size:0.76rem;color:var(--muted);font-weight:500;max-width:470px;margin:0 auto;line-height:1.55;}
 .filtro-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.4rem;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
-.filtro-label{font-family:'DM Mono',monospace;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.6rem;font-weight:600;}
-select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;padding:0.65rem 0.85rem;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a65' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;padding-right:2.2rem;}
-h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--text);margin:1.9rem 0 0.5rem;display:flex;align-items:center;gap:0.5rem;}
+.filtro-label{font-family:Arial,Helvetica,sans-serif;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.6rem;font-weight:600;}
+select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:0.95rem;font-weight:600;padding:0.65rem 0.85rem;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a65' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;padding-right:2.2rem;}
+h2{font-family:Arial,Helvetica,sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--text);margin:1.9rem 0 0.5rem;display:flex;align-items:center;gap:0.5rem;}
 .sec-sub{font-size:0.73rem;color:var(--muted);margin-bottom:0.9rem;line-height:1.5;}
 .item{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;margin-bottom:0.6rem;box-shadow:0 1px 4px rgba(44,36,22,0.05);}
 .item.destacado{border:1.5px solid var(--goldline);background:linear-gradient(135deg,var(--goldbg),#fdf7ec);box-shadow:0 2px 9px rgba(33,99,79,0.13);}
 .item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem;margin-bottom:0.3rem;}
 .item-nombre{font-size:0.9rem;font-weight:700;color:var(--text);line-height:1.25;}
 .item.destacado .item-nombre{color:var(--gold);}
-.chip{font-family:'DM Mono',monospace;font-size:0.55rem;font-weight:600;letter-spacing:0.06em;padding:0.15rem 0.45rem;border-radius:4px;white-space:nowrap;flex-shrink:0;background:var(--surface);border:1px solid var(--border2);color:var(--muted);}
+.chip{font-family:Arial,Helvetica,sans-serif;font-size:0.55rem;font-weight:600;letter-spacing:0.06em;padding:0.15rem 0.45rem;border-radius:4px;white-space:nowrap;flex-shrink:0;background:var(--surface);border:1px solid var(--border2);color:var(--muted);}
 .chip.zona{background:var(--bluebg);border-color:#b4c8e0;color:var(--blue);}
 .chip.fecha{background:var(--greenbg);border-color:#b4d8bc;color:var(--green);}
 .item-desc{font-size:0.73rem;color:var(--text2);line-height:1.55;margin-bottom:0.55rem;}
@@ -80,7 +80,7 @@ h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;co
 /* Estado inicial sin contenido */
 .preparando{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.6rem 1.3rem;text-align:center;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
 .preparando-icon{font-size:2rem;margin-bottom:0.6rem;}
-.preparando h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--text);margin:0 0 0.6rem;display:block;}
+.preparando h2{font-family:Arial,Helvetica,sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--text);margin:0 0 0.6rem;display:block;}
 .preparando p{font-size:0.77rem;color:var(--text2);line-height:1.65;margin-bottom:0.7rem;}
 .preparando p:last-child{margin-bottom:0;}
 .preparando ul{text-align:left;max-width:400px;margin:0 auto 0.9rem;padding-left:1.2rem;}
@@ -95,7 +95,7 @@ h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;co
 .rel-links{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1.4rem;}
 .rel-link{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;text-decoration:none;}
 .rel-link:hover{border-color:var(--gold2);}
-.rel-kicker{font-family:'DM Mono',monospace;font-size:0.53rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.2rem;}
+.rel-kicker{font-family:Arial,Helvetica,sans-serif;font-size:0.53rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.2rem;}
 .rel-title{font-size:0.74rem;font-weight:700;color:var(--gold2);line-height:1.3;}
 @media(max-width:480px){.rel-links{grid-template-columns:1fr;}}
 .disclaimer{font-size:0.6rem;color:var(--subtle);text-align:center;margin-top:2rem;line-height:1.7;padding:0 1rem;}
@@ -105,7 +105,7 @@ h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;co
 #cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:1rem;text-align:center;border-top:1px solid var(--border);box-shadow:0 -2px 10px rgba(0,0,0,0.05);z-index:9999;font-size:0.75rem;color:var(--text2);display:none;}
 #cookie-banner p{font-size:0.75rem;margin:0;line-height:1.55;}
 .cookie-buttons{margin-top:0.8rem;display:flex;justify-content:center;gap:10px;}
-.btn-cookie{border:none;border-radius:5px;padding:0.5rem 1rem;font-family:'DM Sans',sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;}
+.btn-cookie{border:none;border-radius:5px;padding:0.5rem 1rem;font-family:Arial,Helvetica,sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;}
 .btn-accept{background:var(--gold2);color:#fff;}
 .btn-reject{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
 
@@ -119,24 +119,24 @@ h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;co
 .menu-cab{background:linear-gradient(135deg,var(--gold2),var(--gold));padding:1.1rem 1.1rem 1rem;display:flex;align-items:center;justify-content:space-between;}
 .menu-marca{display:flex;align-items:center;gap:0.5rem;}
 .menu-marca-ico{width:2.1rem;height:2.1rem;border-radius:8px;display:block;flex-shrink:0;box-shadow:0 1px 5px rgba(44,36,22,0.22);}
-.menu-marca-txt{font-family:'Bebas Neue',sans-serif;font-size:1.05rem;letter-spacing:0.07em;color:#fff;line-height:1.1;}
+.menu-marca-txt{font-family:Arial,Helvetica,sans-serif;font-size:1.05rem;letter-spacing:0.07em;color:#fff;line-height:1.1;}
 .menu-marca-sub{font-size:0.58rem;color:rgba(255,255,255,0.85);font-weight:500;margin-top:0.1rem;}
-.menu-x{background:transparent;border:none;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 0.2rem;font-family:'DM Sans',sans-serif;}
+.menu-x{background:transparent;border:none;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 0.2rem;font-family:Arial,Helvetica,sans-serif;}
 .menu-lista{flex:1;overflow-y:auto;padding:0.6rem 0 1.2rem;}
-.menu-grupo{font-family:'DM Mono',monospace;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);font-weight:600;padding:0.9rem 1.1rem 0.4rem;}
+.menu-grupo{font-family:Arial,Helvetica,sans-serif;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);font-weight:600;padding:0.9rem 1.1rem 0.4rem;}
 .menu-link{display:flex;align-items:center;gap:0.7rem;padding:0.72rem 1.1rem;text-decoration:none;color:var(--text2);font-size:0.82rem;font-weight:600;border-left:3px solid transparent;transition:background 0.15s;}
 .menu-link:hover{background:var(--surface);}
 .menu-link.activo{background:var(--goldbg);border-left-color:var(--gold2);color:var(--gold);}
 .menu-ico{font-size:1rem;width:1.3rem;text-align:center;flex-shrink:0;}
 .menu-pie{border-top:1px solid var(--border);padding:0.8rem 1.1rem;font-size:0.6rem;color:var(--subtle);line-height:1.5;}
 </style>
-<link rel="stylesheet" href="legal.css?v=2026091609">
-<link rel="stylesheet" href="brand.css?v=2026091609"><script src="frame-protection.js?v=2026091609"></script>
+<link rel="stylesheet" href="legal.css?v=2026091610">
+<link rel="stylesheet" href="brand.css?v=2026091610"><script src="frame-protection.js?v=2026091610"></script>
 <meta name="application-version" content="2026-09-15">
 <link rel="icon" type="image/x-icon" sizes="32x32 192x192" href="/favicon.ico">
 <link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
 <link rel="icon" type="image/svg+xml" sizes="any" href="/brand.svg"></head>
-<body>
+<body class="content-page">
 <div class="menu-overlay" id="menu-overlay"></div>
 <nav class="menu-panel" id="menu-panel" aria-label="Menú principal">
 <div class="menu-cab">
@@ -178,7 +178,7 @@ h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;letter-spacing:0.04em;co
 
 <header class="page">
 <div class="header-label">Recursos para el vigilante</div>
-<h1>SINDICATOS Y<br><em>FORMACIÓN</em></h1>
+<h1>Sindicatos y<br><em>formación</em></h1>
 <p class="header-sub">Apoyo sindical y cursos de especialización y reciclaje para vigilantes de seguridad</p>
 </header>
 
@@ -202,10 +202,10 @@ Verifica siempre las condiciones directamente con el sindicato o centro de forma
 </div>
 </div>
 
-<script src="sindicatos-formacion-script-0.js?v=2026091609"></script>
+<script src="sindicatos-formacion-script-0.js?v=2026091610"></script>
 
-<script src="sindicatos-formacion-script-1.js?v=2026091609"></script>
-<script src="cookies.js?v=2026091609"></script>
+<script src="sindicatos-formacion-script-1.js?v=2026091610"></script>
+<script src="cookies.js?v=2026091610"></script>
 <footer class="legal-footer"><a href="index.html">Calculadora</a><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings>Configurar cookies</button><a href="guia-nomina-vigilante.html#privacidad-publicitaria" data-ad-privacy>Privacidad publicitaria</a></footer>
 </body>
 </html>

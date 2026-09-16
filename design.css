@@ -4,8 +4,8 @@ body{background:radial-gradient(ellipse at 85% 0,#eaf2e5 0,transparent 40%),var(
 .topbar{background:#ffffffed;border-bottom:1px solid var(--border);}
 .topbar-inner{max-width:792px;padding-top:.85rem;padding-bottom:.85rem;}
 header{text-align:left;padding:2rem 0 1.5rem;}
-.header-label{font-family:'DM Sans',sans-serif;font-size:.66rem;letter-spacing:.13em;margin-bottom:.85rem;}
-h1{font-family:'DM Sans',sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-.055em;line-height:1.12;}
+.header-label{font-family:Arial,Helvetica,sans-serif;font-size:.66rem;letter-spacing:.13em;margin-bottom:.85rem;}
+h1{font-family:Arial,Helvetica,sans-serif;font-size:clamp(2rem,5vw,3.2rem);font-weight:700;letter-spacing:-.055em;line-height:1.12;}
 h1 em{color:var(--gold);}
 .header-sub{font-size:.92rem;line-height:1.65;max-width:38rem;margin-top:1rem;}
 .header-story{font-size:.94rem;line-height:1.7;max-width:40rem;margin-top:.85rem;color:var(--text2);}
@@ -14,7 +14,7 @@ h1 em{color:var(--gold);}
 .tab-btn-sub{font-size:.66rem;margin-top:.2rem;}
 .tab-btn.active{background:var(--gold);color:white;box-shadow:none;}
 .card{border-radius:16px;padding:1.4rem;margin-bottom:1rem;box-shadow:0 3px 15px #213e3305;}
-.card-label{font-family:'DM Sans',sans-serif;font-size:.72rem;letter-spacing:.1em;color:var(--muted);}
+.card-label{font-family:Arial,Helvetica,sans-serif;font-size:.72rem;letter-spacing:.1em;color:var(--muted);}
 .cat-grid{grid-template-columns:repeat(3,1fr);gap:.65rem;}
 .cat-btn{padding:.9rem .5rem;font-size:.8rem;border-radius:10px;}
 .cat-salary{font-size:.66rem;}
@@ -22,7 +22,7 @@ h1 em{color:var(--gold);}
 .field-hint{font-size:.75rem;line-height:1.6;}
 input[type=number],input[type=date],select{padding:.8rem;border-radius:10px;min-height:46px;}
 .jorn-btn{padding:.9rem;border-radius:10px;font-size:.85rem;}
-.btn-calc{font-family:'DM Sans',sans-serif;font-size:1rem;font-weight:700;letter-spacing:0;text-transform:none;padding:1rem;border-radius:12px;box-shadow:0 5px 15px #21634f1a;}
+.btn-calc{font-family:Arial,Helvetica,sans-serif;font-size:1rem;font-weight:700;letter-spacing:0;text-transform:none;padding:1rem;border-radius:12px;box-shadow:0 5px 15px #21634f1a;}
 .btn-pdf{padding:.9rem;font-size:.88rem;border-radius:10px;}
 .neto-box{border-radius:14px;}
 .account-card{margin:1.5rem 0;background:linear-gradient(135deg,#f1f7ef,#e8f2e3);padding:1.75rem;border-radius:20px;}
