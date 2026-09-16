@@ -5,8 +5,9 @@ html{font-size:106.25%;}
 body,body.legal-page,h1,h2,h3,button,input,select,.brand-name,.menu-marca-nombre,.header-label,.card-label,.btn-calc,.inst-tit,.inst-btn,.neto-val,.bruto-val,.page-title,.dlg-title{font-family:Arial,Helvetica,sans-serif;}
 body{background:var(--bg);color:var(--text);}
 .topbar{background:#fffffff5;border-bottom:1px solid var(--border);}
-.brand{gap:.6rem;}.brand-icon{width:32px;height:32px;border-radius:8px;}
-.brand-name{font-size:.87rem;letter-spacing:-.02em;font-weight:700;}.brand-name em{color:var(--gold);}
+.brand{gap:.6rem;}.brand-icon{width:2.25rem;height:2.25rem;border-radius:8px;}
+.brand-name{font-size:1.05rem;line-height:1.25;letter-spacing:-.02em;font-weight:700;}.brand-name em{color:var(--gold);}
+.menu-btn{width:2.75rem;min-height:2.75rem;}.menu-btn span{width:1.375rem;}
 .topbar-cta,.inst-btn{background:var(--gold);box-shadow:none;}
 .menu-marca-ico{border-radius:12px;}.menu-panel{background:var(--surface);}
 .menu-marca-nombre{font-weight:700;font-size:1.1rem;letter-spacing:0;}
@@ -36,7 +37,7 @@ header.page{text-align:left;}header.page h1{font-size:clamp(1.9rem,5vw,2.65rem);
 .legal-page h1{font-family:Arial,Helvetica,sans-serif;}.legal-page table{background:#fff;}
 .auth-dialog{border-radius:18px;}.auth-dialog input{font-size:1rem;}.auth-dialog form button[type=submit]{width:100%;}
 button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #326286;outline-offset:3px;}
-@media(max-width:540px){.brand-name{font-size:.75rem;}.topbar-inner{gap:.5rem;}.topbar-cta{font-size:.65rem;}input,select{font-size:1rem!important;}.legal-page{overflow-wrap:anywhere;}}
+@media(max-width:540px){.topbar-inner{gap:.5rem;}.topbar-cta{font-size:.65rem;}input,select{font-size:1rem!important;}.legal-page{overflow-wrap:anywhere;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}
 .b-date-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;}
 .b-date-grid input{width:100%;min-width:0;box-sizing:border-box;}
@@ -58,7 +59,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .field-label,.switch-text,.account-card p,.account-card li,.auth-dialog p,.auth-dialog label,.account-primary,.account-secondary,.menu-link{font-size:.94rem;line-height:1.6;}
 .field-hint,.switch-sub,.info-box,.source-note,.guide-desc,.disclaimer,.dlg-sub,.dlg-nota,.cal-leyenda span,.cal-vacio-msg{font-size:.875rem;line-height:1.65;}
 .switch-row{gap:.75rem;}
-.tab-btn,.cat-btn,.jorn-btn,.btn-pdf,.res-row,.cal-res-row,.dlg-btn{font-size:.94rem;}
+.tab-btn,.cat-btn,.jorn-btn,.paga-btn,.btn-pdf,.res-row,.cal-res-row,.dlg-btn{font-size:.94rem;}
+.paga-row{grid-template-columns:repeat(3,minmax(0,1fr));}
+.paga-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:4.25rem;line-height:1.45;transition:background .15s,border-color .15s,color .15s;}
+.paga-sub{font-size:.78rem;line-height:1.45;margin-top:.2rem;max-width:100%;overflow-wrap:anywhere;}
+.date-grid{grid-template-columns:repeat(2,minmax(0,1fr));}.date-grid input{min-width:0;}
 .tab-btn-sub,.cat-salary,.jorn-sub,.card-label,.dlg-label,.header-label,.guide-kicker,.field-badge{font-size:.78rem;}
 .guide-title,.guide-card.guide-destacada .guide-title,.rel-title{font-size:1rem;}
 .account-card .account-kicker{font-size:.8rem;}
@@ -68,4 +73,5 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .wrap table{font-size:.875rem;}
 #cookie-banner,#cookie-banner p,.btn-cookie{font-size:.875rem;}
 .cookie-buttons{flex-wrap:wrap;}
-@media(max-width:540px){.tab-btn{font-size:.85rem;}.tab-btn-sub{font-size:.72rem;}.brand-name{font-size:.82rem;}.topbar-inner{flex-wrap:wrap;row-gap:.65rem;}.topbar-cta{flex:0 1 7rem;white-space:normal;text-align:center;padding:.4rem .5rem;line-height:1.35;margin-left:auto;}}
+@media(max-width:540px){.tab-btn{font-size:.85rem;}.tab-btn-sub{font-size:.72rem;}.brand-name{font-size:.94rem;}.topbar-inner{flex-wrap:wrap;row-gap:.65rem;}.topbar-cta{flex:0 1 7rem;white-space:normal;text-align:center;padding:.4rem .5rem;line-height:1.35;margin-left:auto;}.date-grid{grid-template-columns:1fr;}}
+@media(max-width:360px){.paga-row{grid-template-columns:1fr;}.paga-btn{flex-direction:row;justify-content:space-between;gap:.5rem;min-height:2.75rem;padding:.6rem .75rem;}.paga-sub{margin-top:0;}}
