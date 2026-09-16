@@ -21,10 +21,11 @@
   function syncProfile(welcome) {
     const prefix = profilePrefix(welcome), hasMail = $(prefix+'-own').checked || $(prefix+'-partners').checked;
     const permission = $(prefix+'-personalize');
-    $(prefix+'-targeting').hidden = !hasMail;
+    // Explain the optional profile from the first visit, before any opt-in.
+    $(prefix+'-targeting').hidden = false;
     if (!hasMail) permission.checked = false;
     permission.disabled = loading || !hasMail;
-    $(prefix+'-profile-fields').hidden = !permission.checked;
+    $(prefix+'-profile-fields').hidden = false;
     $(prefix+'-profile-fields').disabled = loading || !permission.checked;
     for (const field of ['age','province','city']) {
       const input = $(prefix+'-'+field);

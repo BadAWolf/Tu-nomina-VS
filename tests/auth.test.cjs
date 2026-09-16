@@ -372,7 +372,8 @@ test('Logout during a pending preference read prevents both the offer and a stal
 
 test('Profile is optional, separately consented and saved with the selected advertising categories',async()=>{
  const x=await setup({user:member,accepted:true});try{
-  assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,true);
+  assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,false);
+  assert.equal(x.d.getElementById('auth-marketing-profile-fields').hidden,false);
   assert.equal(x.d.getElementById('auth-marketing-profile-fields').disabled,true);
   x.click('auth-marketing-partners');assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,false);
   assert.equal(x.d.getElementById('auth-marketing-personalize').checked,false);
@@ -432,4 +433,23 @@ test('Changing only an existing profile is not an extra advertising subscription
   x.d.getElementById('marketing-preferences').open=true;await tick();await tick();x.fill('marketing-city','Castelló de la Plana');x.click('marketing-save');await tick();await tick();
   assert.equal(x.state.profile.city,'Castelló de la Plana');assert.equal(x.state.analytics.filter(e=>e[0].startsWith('marketing_')).length,0);
  }finally{x.close();}
+});
+
+
+test('Restored email and Google accounts finish activation before seeing the optional profile',async()=>{
+ for(const provider of ['email','google']){
+  const x=await setup({user:{...member,app_metadata:{provider}}});try{
+   assert.equal(x.d.getElementById('auth-dialog').open,true);
+   assert.equal(x.d.getElementById('auth-title').textContent,'Antes de continuar');
+   assert.equal(x.d.getElementById('marketing-dialog').open,false);
+   x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();
+   assert.equal(x.d.getElementById('marketing-dialog').open,true);
+   assert.equal(x.d.getElementById('auth-marketing-profile-fields').hidden,false);
+   assert.equal(x.d.getElementById('auth-marketing-profile-fields').disabled,true);
+   for(const id of ['auth-marketing-own','auth-marketing-partners','auth-marketing-personalize'])assert.equal(x.d.getElementById(id).checked,false);
+   x.click('marketing-skip');await tick();await tick();
+   assert.equal(x.state.profile,null);assert.equal(x.state.preferences.own_news,false);
+   assert.equal(x.d.getElementById('marketing-dialog').open,false);
+  }finally{x.close();}
+ }
 });

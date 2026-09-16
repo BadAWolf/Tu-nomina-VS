@@ -241,5 +241,6 @@
   ready.then(async()=>{
     await verifiedUser();
     if(location.hash.includes('error=')){open('signin');message('El enlace ha caducado o no es válido. Solicita uno nuevo.',true);history.replaceState(null,'',location.pathname);}
+    else if(user && !accepted && !recovery && !dialog.open) open('consent');
   });
 })();
