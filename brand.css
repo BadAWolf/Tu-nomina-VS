@@ -107,3 +107,35 @@ button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{ou
 .error-box,.exento-box{font-size:var(--type-note);line-height:1.65;}
 .res-concept,.res-val,.cal-res-row{font-size:var(--type-body);line-height:1.55;}
 .neto-label{font-size:var(--type-heading);font-weight:700;letter-spacing:0;}.neto-label span{font-size:var(--type-note);line-height:1.5;}
+
+/* Calculator-only balance: mobile content below the tabs, desktop introduction. */
+@media(max-width:540px){
+  .calculator-page :where(#view-nomina,#view-finiquito,#view-baja,#account-section,#sector-resources,.wrap>.disclaimer,.legal-footer,#dlg-overlay,.auth-dialog){
+    --type-step:.032258rem;
+    --type-body:calc(.94rem - var(--type-step));
+    --type-note:calc(.875rem - var(--type-step));
+    --type-meta:calc(.78rem - var(--type-step));
+    --type-heading:calc(1.06rem - var(--type-step));
+    --type-section:calc(1.2rem - var(--type-step));
+    font-size:calc(1rem - var(--type-step));
+  }
+  .calculator-page .btn-calc,.calculator-page .guide-title,.calculator-page .guide-card.guide-destacada .guide-title,.calculator-page .b-month h3{font-size:calc(1rem - var(--type-step));}
+  .calculator-page .account-card h2{font-size:calc(1.3rem - var(--type-step));}
+  .calculator-page .account-plan h3{font-size:var(--type-heading);}
+  .calculator-page .account-card .account-kicker{font-size:calc(.8rem - var(--type-step));}
+  .calculator-page .b-months h2,.calculator-page .cal-mes{font-size:calc(1.15rem - var(--type-step));}
+  .calculator-page .b-month dl{font-size:calc(.9rem - var(--type-step));}
+  .calculator-page .bruto-val,.calculator-page .dlg-title{font-size:calc(1.1rem - var(--type-step));}
+  .calculator-page .bruto-label{font-size:calc(.85rem - var(--type-step));}
+  .calculator-page .neto-val{font-size:calc(1.9rem - var(--type-step));}
+  .calculator-page .wrap>.disclaimer{font-size:var(--type-note);}
+  .calculator-page .legal-footer{font-size:var(--type-meta);}
+}
+@media(min-width:541px){
+  .calculator-page .wrap>header h1{font-size:clamp(2.03rem,calc(5vw + .03rem),3.23rem);}
+  .calculator-page .wrap>header .header-label{font-size:.81rem;}
+  .calculator-page .wrap>header .header-sub{font-size:1.03rem;}
+  .calculator-page .wrap>header .header-story{font-size:.97rem;}
+  .calculator-page .tab-selector .tab-btn{font-size:1rem;}
+  .calculator-page .tab-selector .tab-btn-sub{font-size:.81rem;}
+}
