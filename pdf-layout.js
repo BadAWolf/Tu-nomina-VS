@@ -35,7 +35,7 @@
       doc.setFillColor(...C.SURF); doc.rect(0,0,W,35,'F');
       logo(doc,M,10,14);
       font(14,'bold'); doc.text('Nómina Vigilante',M+19,16);
-      font(8,'normal',C.MUT); doc.text('Tu trabajo cuenta. Tu nómina, clara.',M+19,22);
+      font(8,'normal',C.MUT); doc.text('Tu trabajo cuenta. Tu nómina clara.',M+19,22);
       font(7.5,'normal',C.MUT); doc.text(options.date,W-M,16,{align:'right'});
       doc.text('calculadoravigilante.com',W-M,22,{align:'right'});
       doc.setDrawColor(...C.LIN); doc.setLineWidth(.3); doc.line(M,35,W-M,35);
