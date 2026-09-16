@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "test": "node --test tests/*.test.cjs",
+    "build:favicon": "node admin/build-favicon.cjs",
     "build:auth": "esbuild node_modules/@supabase/supabase-js/dist/index.mjs --bundle --minify --format=esm --platform=browser --outfile=vendor/supabase.js"
   },
   "dependencies": {
