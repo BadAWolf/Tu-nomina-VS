@@ -6,7 +6,7 @@ body,body.legal-page,h1,h2,h3,button,input,select,.brand-name,.menu-marca-nombre
 body{background:var(--bg);color:var(--text);}
 .topbar{background:#fffffff5;border-bottom:1px solid var(--border);}
 .brand{gap:.6rem;}.brand-icon{width:2.25rem;height:2.25rem;border-radius:8px;}
-.brand-name{font-size:1.05rem;line-height:1.25;letter-spacing:-.02em;font-weight:700;}.brand-name em{color:var(--gold);}
+.brand-name{font-size:1.05rem;line-height:1.25;letter-spacing:-.02em;font-weight:700;max-width:none;}.brand-name em{color:var(--gold);}
 .menu-btn{width:2.75rem;min-height:2.75rem;}.menu-btn span{width:1.375rem;}
 .topbar-cta,.inst-btn{background:var(--gold);box-shadow:none;}
 .menu-marca-ico{border-radius:12px;}.menu-panel{background:var(--surface);}
