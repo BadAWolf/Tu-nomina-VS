@@ -28,17 +28,61 @@
     const script=document.createElement('script');script.async=true;
     script.src='https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B';document.head.appendChild(script);
   }
-  // Only fixed event names and a fixed method enum can leave the calculator.
+  const sections=Object.freeze({
+    '/':'calculadora','/index.html':'calculadora','/sindicatos-formacion.html':'colaboradores',
+    '/sindicatos.html':'sindicatos','/formacion.html':'formacion','/material.html':'material',
+    '/comunidad.html':'comunidad','/convenio-2026.html':'convenio','/derechos-vigilante.html':'derechos',
+    '/guia-nomina-vigilante.html':'guia_nomina','/preguntas-frecuentes.html':'preguntas_frecuentes',
+    '/contacto.html':'contacto','/privacidad.html':'privacidad','/condiciones.html':'condiciones'
+  });
+  const placements=['menu','recursos','cabecera','pie','contenido'];
+  // Only fixed event names and enumerated, non-personal fields can leave the calculator.
   // No email, account ID, salary, calendar, free text or historical event queue.
   window.VigilanteAnalytics = Object.freeze({track(name, details={}){
-    if(!['community_open','sign_up_start','sign_up','login','calculation_complete','pdf_export','pwa_install','pwa_open','marketing_own_opt_in','marketing_partner_opt_in','marketing_own_opt_out','marketing_partner_opt_out'].includes(name) || !production || authCallback() || !preferences?.analytics)return false;
+    if(!['navigation_click','menu_open','contact_click','community_open','sign_up_start','sign_up','login','calculation_complete','pdf_export','pwa_install','pwa_open','marketing_own_opt_in','marketing_partner_opt_in','marketing_own_opt_out','marketing_partner_opt_out'].includes(name) || !production || authCallback() || !preferences?.analytics)return false;
     loadAnalytics();
     if(!analyticsLoaded)return false;
     const params=pageData();
     if(['Google','Email','Share','Download'].includes(details.method))params.method=details.method;
+    if(['navigation_click','contact_click'].includes(name)){
+      if(Object.values(sections).includes(details.section))params.section=details.section;
+      if(placements.includes(details.placement))params.placement=details.placement;
+    }
     window.gtag('event',name,params);
     return true;
   }});
+  function linkPlacement(link){
+    if(link.closest('#menu-panel'))return 'menu';
+    if(link.closest('#sector-resources'))return 'recursos';
+    if(link.closest('.topbar'))return 'cabecera';
+    if(link.closest('.legal-footer'))return 'pie';
+    return 'contenido';
+  }
+  // One delegated listener covers icons, keyboard activation and new tab clicks.
+  // Never read form values, link text, invitation URLs or mail subject/body into GA.
+  function recordNavigation(event){
+    if(event.defaultPrevented || (event.type==='click'&&event.button!==0) || (event.type==='auxclick'&&event.button!==1))return;
+    const target=event.target instanceof Element?event.target:null;
+    if(!target)return;
+    if(event.type==='click'&&target.closest('#menu-btn[aria-expanded="true"]')){
+      window.VigilanteAnalytics.track('menu_open');return;
+    }
+    const link=target.closest('a[href]');
+    if(!link)return;
+    let url;
+    try{url=new URL(link.getAttribute('href'),location.href);}catch(_){return;}
+    const placement=linkPlacement(link);
+    if(url.protocol==='mailto:'&&url.pathname.toLowerCase()==='badawolfprivado@gmail.com'){
+      if(link.closest('.partner-contact')||location.pathname==='/contacto.html')
+        window.VigilanteAnalytics.track('contact_click',{section:sections[location.pathname],placement});
+      return;
+    }
+    if(url.origin!==location.origin||url.search||url.hash||!Object.hasOwn(sections,url.pathname))return;
+    if(sections[url.pathname]===sections[location.pathname])return;
+    window.VigilanteAnalytics.track('navigation_click',{section:sections[url.pathname],placement});
+  }
+  document.addEventListener('click',recordNavigation);
+  document.addEventListener('auxclick',recordNavigation);
   // Observe the current app window, never the "Ya la tengo" button or a saved
   // installation flag. iOS exposes standalone, but not appinstalled.
   function recordAppPage(){

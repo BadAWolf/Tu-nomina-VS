@@ -2,6 +2,12 @@ const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),{JSDOM,VirtualConsole}=require('jsdom');
 const code=fs.readFileSync(path.join(__dirname,'../cookies.js'),'utf8');
+function click(w,selector,options={}){
+  const event=new w.MouseEvent(options.type||'click',{bubbles:true,cancelable:true,button:options.button||0,ctrlKey:Boolean(options.ctrlKey)});
+  // Stop jsdom navigation after our delegate observes the user's activation.
+  const prevent=e=>e.preventDefault();w.document.addEventListener(event.type,prevent,{once:true});
+  w.document.querySelector(selector).dispatchEvent(event);
+}
 function setup(url='https://calculadoravigilante.com/',consent,options={}){
   const reloadErrors=[];
   const virtualConsole=new VirtualConsole();
@@ -113,4 +119,55 @@ test('Marketing events need independent analytics consent and contain no contact
  for(const url of ['http://localhost:4173/','https://calculadoravigilante.com/?code=private']){
   const w=setup(url,true);try{for(const name of events)assert.equal(w.VigilanteAnalytics.track(name),false);}finally{w.close();}
  }
+});
+
+test('Section clicks distinguish menu and cards, including SVG and opening a new tab; no duplicate on DOM ready',()=>{
+ const w=setup(undefined,true);try{
+  w.document.body.insertAdjacentHTML('beforeend','<nav id="menu-panel"><a href="material.html"><svg><path id="material-icon"></path></svg></a></nav><section id="sector-resources"><a id="community-card" href="comunidad.html">Comunidad</a></section>');
+  w.document.dispatchEvent(new w.Event('DOMContentLoaded'));
+  click(w,'#material-icon');click(w,'#community-card',{type:'auxclick',button:1});
+  click(w,'#community-card',{button:2});
+  const events=w.dataLayer.filter(e=>e[1]==='navigation_click');assert.equal(events.length,2);
+  assert.equal(events[0][2].section,'material');assert.equal(events[0][2].placement,'menu');
+  assert.equal(events[1][2].section,'comunidad');assert.equal(events[1][2].placement,'recursos');
+  assert.equal(w.dataLayer.filter(e=>e[1]==='community_open').length,0);
+ }finally{w.close();}
+});
+
+test('Navigation never replays unconsented clicks and is suppressed in preview, callbacks and after withdrawal',()=>{
+ for(const [url,consent] of [[undefined,undefined],[undefined,false],['http://localhost:4181/',true],['https://calculadoravigilante.com/?code=private',true]]){
+  const w=setup(url,consent);try{
+   w.document.body.insertAdjacentHTML('beforeend','<a id="nav" href="material.html">Material</a>');click(w,'#nav');
+   assert.equal(w.dataLayer,undefined);
+   w.acceptCookies();assert.equal((w.dataLayer||[]).filter(e=>e[1]==='navigation_click').length,0);
+  }finally{w.close();}
+ }
+ const w=setup(undefined,true);try{
+  w.document.body.insertAdjacentHTML('beforeend','<a id="nav" href="material.html">Material</a>');
+  w.rejectCookies();click(w,'#nav');assert.equal(w.dataLayer.filter(e=>e[1]==='navigation_click').length,0);
+ }finally{w.close();}
+});
+
+test('Only known destinations leave the site; sensitive links, current section and arbitrary parameters are ignored',()=>{
+ const w=setup('https://calculadoravigilante.com/material.html',true);try{
+  w.document.body.insertAdjacentHTML('beforeend','<a id="same" href="material.html">Same</a><a id="foreign" href="https://other.test/formacion.html">Other</a><a id="private" href="index.html?code=secret">Callback</a><a id="anchor" href="privacidad.html#correo">Preferences</a><a id="unknown" href="secret@example.test">Unknown</a><aside class="partner-contact"><a id="contact" href="mailto:badawolfprivado@gmail.com?subject=secret&body=private">Contact</a></aside>');
+  for(const id of ['same','foreign','private','anchor','unknown','contact'])click(w,'#'+id);
+  assert.equal(w.dataLayer.filter(e=>e[1]==='navigation_click').length,0);
+  const contact=w.dataLayer.filter(e=>e[1]==='contact_click');assert.equal(contact.length,1);
+  assert.equal(contact[0][2].section,'material');assert.equal(contact[0][2].placement,'contenido');
+  w.VigilanteAnalytics.track('navigation_click',{section:'secret@example.test',placement:'private',email:'secret@example.test',link_url:'https://chat.whatsapp.com/private'});
+  w.VigilanteAnalytics.track('community_open',{section:'material',placement:'menu'});
+  const last=w.dataLayer.filter(e=>e[1]==='navigation_click')[0][2];assert.equal(last.section,undefined);assert.equal(last.placement,undefined);
+  assert.equal(w.dataLayer.find(e=>e[1]==='community_open')[2].section,undefined);
+  for(const value of ['secret','private','badawolfprivado@','chat.whatsapp.com','link_url'])assert.equal(JSON.stringify(w.dataLayer).includes(value),false,value);
+ }finally{w.close();}
+});
+
+test('Menu openings count only when expanded and cancelled link actions do not count',()=>{
+ const w=setup(undefined,true);try{
+  w.document.body.insertAdjacentHTML('beforeend','<button id="menu-btn" aria-expanded="true"><span>Menu</span></button><a id="cancel" href="material.html">Material</a>');
+  click(w,'#menu-btn span');w.document.getElementById('menu-btn').setAttribute('aria-expanded','false');click(w,'#menu-btn');
+  w.document.getElementById('cancel').addEventListener('click',e=>e.preventDefault());click(w,'#cancel');
+  assert.equal(w.dataLayer.filter(e=>e[1]==='menu_open').length,1);assert.equal(w.dataLayer.filter(e=>e[1]==='navigation_click').length,0);
+ }finally{w.close();}
 });
