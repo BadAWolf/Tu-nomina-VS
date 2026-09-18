@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="google-adsense-account" content="ca-pub-6334238097806445">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://www.googletagmanager.com https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://*.google-analytics.com https://www.googletagmanager.com; connect-src 'self' https://qhqbrtxzbfokqdlhstuo.supabase.co https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; font-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-src https://challenges.cloudflare.com">
+<meta name="referrer" content="no-referrer">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Un punto de encuentro en WhatsApp para ayudarnos y compartir oportunidades.">
+<title>Comunidad de vigilantes | Nómina Vigilante</title>
+<link rel="canonical" href="https://calculadoravigilante.com/comunidad.html">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#21634f">
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png?v=20260914">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Nómina VS">
+
+
+
+
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+--bg:#f5f3ef;--surface:#faf8f5;--card:#ffffff;
+--border:#e8e3da;--border2:#d6cfc4;
+--gold:#21634f;--gold2:#28765c;--goldbg:#eef6ed;--goldline:#b9d4b4;
+--text:#2c2416;--text2:#4a3f2f;--muted:#8a7a65;--subtle:#b5a898;
+--green:#2d7a3a;--greenbg:#edf7ef;
+--blue:#2a5ea8;--bluebg:#eef4fc;
+}
+html,body{background:var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif;}
+body{display:flex;flex-direction:column;align-items:center;padding:0 0 4rem;}
+.topbar{position:sticky;top:0;z-index:100;width:100%;background:rgba(250,248,245,0.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border);}
+.topbar-inner{max-width:680px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:0.6rem 1rem;}
+.brand{display:flex;align-items:center;gap:0.4rem;text-decoration:none;}
+.brand-icon{width:1.4rem;height:1.4rem;border-radius:4px;display:block;flex-shrink:0;}
+.brand-name{font-family:Arial,Helvetica,sans-serif;font-size:0.95rem;letter-spacing:0.08em;color:var(--text);}
+.brand-name em{color:var(--gold2);font-style:normal;}
+.topbar-cta{font-size:0.62rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.85rem;border-radius:20px;letter-spacing:0.03em;transition:background 0.15s;white-space:nowrap;box-shadow:0 1px 4px rgba(33,99,79,0.25);}
+.topbar-cta:hover{background:var(--gold);}
+.wrap{width:100%;max-width:680px;padding:1.5rem 1rem 0;}
+.crumbs{font-family:Arial,Helvetica,sans-serif;font-size:0.58rem;letter-spacing:0.06em;color:var(--subtle);margin-bottom:1.2rem;}
+.crumbs a{color:var(--gold2);text-decoration:none;}
+header.page{text-align:center;padding:0.5rem 0 1.5rem;}
+.header-label{font-family:Arial,Helvetica,sans-serif;font-size:0.58rem;letter-spacing:0.22em;color:var(--gold2);text-transform:uppercase;margin-bottom:0.45rem;font-weight:600;}
+h1{font-family:Arial,Helvetica,sans-serif;font-size:2.1rem;letter-spacing:0.04em;line-height:1.08;color:var(--text);margin-bottom:0.5rem;}
+h1 em{color:var(--gold2);font-style:normal;}
+.header-sub{font-size:0.76rem;color:var(--muted);font-weight:500;max-width:470px;margin:0 auto;line-height:1.55;}
+.filtro-box{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1rem 1.1rem;margin-bottom:1.4rem;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
+.filtro-label{font-family:Arial,Helvetica,sans-serif;font-size:0.57rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.6rem;font-weight:600;}
+select{width:100%;background:var(--surface);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-family:Arial,Helvetica,sans-serif;font-size:0.95rem;font-weight:600;padding:0.65rem 0.85rem;outline:none;-webkit-appearance:none;appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238a7a65' stroke-width='1.5' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 0.85rem center;padding-right:2.2rem;}
+h2{font-family:Arial,Helvetica,sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--text);margin:1.9rem 0 0.5rem;display:flex;align-items:center;gap:0.5rem;}
+.sec-sub{font-size:0.73rem;color:var(--muted);margin-bottom:0.9rem;line-height:1.5;}
+.item{background:var(--card);border:1px solid var(--border);border-radius:11px;padding:1rem 1.1rem;margin-bottom:0.6rem;box-shadow:0 1px 4px rgba(44,36,22,0.05);}
+.item.destacado{border:1.5px solid var(--goldline);background:linear-gradient(135deg,var(--goldbg),#fdf7ec);box-shadow:0 2px 9px rgba(33,99,79,0.13);}
+.item-top{display:flex;justify-content:space-between;align-items:flex-start;gap:0.6rem;margin-bottom:0.3rem;}
+.item-nombre{font-size:0.9rem;font-weight:700;color:var(--text);line-height:1.25;}
+.item.destacado .item-nombre{color:var(--gold);}
+.chip{font-family:Arial,Helvetica,sans-serif;font-size:0.55rem;font-weight:600;letter-spacing:0.06em;padding:0.15rem 0.45rem;border-radius:4px;white-space:nowrap;flex-shrink:0;background:var(--surface);border:1px solid var(--border2);color:var(--muted);}
+.chip.zona{background:var(--bluebg);border-color:#b4c8e0;color:var(--blue);}
+.chip.fecha{background:var(--greenbg);border-color:#b4d8bc;color:var(--green);}
+.item-desc{font-size:0.73rem;color:var(--text2);line-height:1.55;margin-bottom:0.55rem;}
+.item-meta{font-size:0.68rem;color:var(--muted);font-weight:600;margin-bottom:0.5rem;}
+.item-link{display:inline-block;font-size:0.7rem;font-weight:700;color:#fff;background:var(--gold2);text-decoration:none;padding:0.4rem 0.9rem;border-radius:6px;}
+.item-link.suave{background:transparent;color:var(--gold2);border:1.5px solid var(--goldline);}
+.vacio{background:var(--surface);border:1px dashed var(--border2);border-radius:11px;padding:1rem;text-align:center;font-size:0.73rem;color:var(--muted);line-height:1.6;}
+
+/* Estado inicial sin contenido */
+.preparando{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:1.6rem 1.3rem;text-align:center;box-shadow:0 1px 5px rgba(44,36,22,0.06);}
+.preparando-icon{font-size:2rem;margin-bottom:0.6rem;}
+.preparando h2{font-family:Arial,Helvetica,sans-serif;font-size:1.3rem;letter-spacing:0.04em;color:var(--text);margin:0 0 0.6rem;display:block;}
+.preparando p{font-size:0.77rem;color:var(--text2);line-height:1.65;margin-bottom:0.7rem;}
+.preparando p:last-child{margin-bottom:0;}
+.preparando ul{text-align:left;max-width:400px;margin:0 auto 0.9rem;padding-left:1.2rem;}
+.preparando li{font-size:0.76rem;color:var(--text2);line-height:1.6;margin-bottom:0.35rem;}
+.preparando li::marker{color:var(--gold2);}
+
+.aviso{background:var(--bluebg);border-left:3px solid var(--blue);padding:0.8rem 0.95rem;border-radius:0 8px 8px 0;margin:1.4rem 0;font-size:0.75rem;color:#1e3f6a;line-height:1.6;}
+.aviso strong{color:var(--blue);font-weight:700;}
+.volver{text-align:center;margin-top:1.8rem;}
+.volver a{font-size:0.76rem;font-weight:600;color:var(--gold2);text-decoration:none;}
+.volver a:hover{text-decoration:underline;}
+.rel-links{display:grid;grid-template-columns:1fr 1fr;gap:0.6rem;margin-top:1.4rem;}
+.rel-link{display:block;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:0.85rem 1rem;text-decoration:none;}
+.rel-link:hover{border-color:var(--gold2);}
+.rel-kicker{font-family:Arial,Helvetica,sans-serif;font-size:0.53rem;letter-spacing:0.12em;text-transform:uppercase;color:var(--subtle);margin-bottom:0.2rem;}
+.rel-title{font-size:0.74rem;font-weight:700;color:var(--gold2);line-height:1.3;}
+@media(max-width:480px){.rel-links{grid-template-columns:1fr;}}
+.disclaimer{font-size:0.6rem;color:var(--subtle);text-align:center;margin-top:2rem;line-height:1.7;padding:0 1rem;}
+
+.rel-links a:nth-child(3){grid-column:1 / -1;}
+
+#cookie-banner{position:fixed;bottom:0;left:0;right:0;background:#fff;padding:1rem;text-align:center;border-top:1px solid var(--border);box-shadow:0 -2px 10px rgba(0,0,0,0.05);z-index:9999;font-size:0.75rem;color:var(--text2);display:none;}
+#cookie-banner p{font-size:0.75rem;margin:0;line-height:1.55;}
+.cookie-buttons{margin-top:0.8rem;display:flex;justify-content:center;gap:10px;}
+.btn-cookie{border:none;border-radius:5px;padding:0.5rem 1rem;font-family:Arial,Helvetica,sans-serif;font-size:0.75rem;font-weight:600;cursor:pointer;}
+.btn-accept{background:var(--gold2);color:#fff;}
+.btn-reject{background:var(--surface);color:var(--muted);border:1px solid var(--border);}
+
+/* ═══ MENÚ LATERAL ═══ */
+.menu-btn{background:transparent;border:none;cursor:pointer;padding:0.35rem 0.5rem 0.35rem 0;display:flex;flex-direction:column;justify-content:center;gap:4px;width:2rem;flex-shrink:0;}
+.menu-btn span{display:block;height:2px;width:19px;background:var(--gold2);border-radius:2px;}
+.menu-overlay{position:fixed;inset:0;background:rgba(44,36,22,0.45);z-index:10500;opacity:0;visibility:hidden;transition:opacity 0.22s;backdrop-filter:blur(2px);}
+.menu-overlay.abierto{opacity:1;visibility:visible;}
+.menu-panel{position:fixed;top:0;left:0;bottom:0;width:82%;max-width:300px;background:var(--card);z-index:10600;transform:translateX(-100%);transition:transform 0.26s cubic-bezier(.4,0,.2,1);display:flex;flex-direction:column;box-shadow:4px 0 22px rgba(44,36,22,0.2);}
+.menu-panel.abierto{transform:translateX(0);}
+.menu-cab{background:linear-gradient(135deg,var(--gold2),var(--gold));padding:1.1rem 1.1rem 1rem;display:flex;align-items:center;justify-content:space-between;}
+.menu-marca{display:flex;align-items:center;gap:0.5rem;}
+.menu-marca-ico{width:2.1rem;height:2.1rem;border-radius:8px;display:block;flex-shrink:0;box-shadow:0 1px 5px rgba(44,36,22,0.22);}
+.menu-marca-txt{font-family:Arial,Helvetica,sans-serif;font-size:1.05rem;letter-spacing:0.07em;color:#fff;line-height:1.1;}
+.menu-marca-sub{font-size:0.58rem;color:rgba(255,255,255,0.85);font-weight:500;margin-top:0.1rem;}
+.menu-x{background:transparent;border:none;color:#fff;font-size:1.5rem;line-height:1;cursor:pointer;padding:0 0.2rem;font-family:Arial,Helvetica,sans-serif;}
+.menu-lista{flex:1;overflow-y:auto;padding:0.6rem 0 1.2rem;}
+.menu-grupo{font-family:Arial,Helvetica,sans-serif;font-size:0.54rem;letter-spacing:0.16em;text-transform:uppercase;color:var(--subtle);font-weight:600;padding:0.9rem 1.1rem 0.4rem;}
+.menu-link{display:flex;align-items:center;gap:0.7rem;padding:0.72rem 1.1rem;text-decoration:none;color:var(--text2);font-size:0.82rem;font-weight:600;border-left:3px solid transparent;transition:background 0.15s;}
+.menu-link:hover{background:var(--surface);}
+.menu-link.activo{background:var(--goldbg);border-left-color:var(--gold2);color:var(--gold);}
+.menu-ico{font-size:1rem;width:1.3rem;text-align:center;flex-shrink:0;}
+.menu-pie{border-top:1px solid var(--border);padding:0.8rem 1.1rem;font-size:0.6rem;color:var(--subtle);line-height:1.5;}
+</style>
+<link rel="stylesheet" href="legal.css?v=2026091801">
+<link rel="stylesheet" href="auth.css?v=2026091801"><link rel="stylesheet" href="brand.css?v=2026091801"><script src="frame-protection.js?v=2026091801" integrity="sha256-AdyJH2OZ6J+IKnpQ71OlHxRXXqDXLkni7JXeCTNGT1A="></script>
+<meta name="application-version" content="2026-09-15">
+<link rel="icon" type="image/x-icon" sizes="32x32 192x192" href="/favicon.ico">
+<link rel="icon" type="image/png" sizes="192x192" href="/favicon.png">
+<link rel="icon" type="image/svg+xml" sizes="any" href="/brand.svg"></head>
+<body class="content-page">
+<div class="menu-overlay" id="menu-overlay"></div>
+<nav class="menu-panel" id="menu-panel" aria-label="Menú principal" aria-hidden="true" inert>
+<div class="menu-cab">
+<div class="menu-marca"><img src="icon-192.png" alt="Nómina Vigilante" class="menu-marca-ico"><div>
+<div class="menu-marca-txt">NÓMINA VIGILANTE</div>
+<div class="menu-marca-sub">Convenio 2026–2030</div>
+</div></div>
+<button type="button" class="menu-x" id="menu-cerrar" aria-label="Cerrar menú">&times;</button>
+</div>
+<div class="menu-lista">
+<div class="menu-grupo">Calculadora</div>
+<a href="index.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="3" width="14" height="18" rx="3"/><path d="M8 7h8M8 11h1m6 0h1M8 15h1m6 0h1M8 18h1m6 0h1"/></svg></span>Calcular mi nómina</a>
+<div class="menu-grupo">Colaboradores</div><a href="sindicatos.html" class="menu-link"><span class="menu-ico"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg></span>Sindicatos</a>
+<a href="formacion.html" class="menu-link"><span class="menu-ico"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg></span>Formación</a>
+<a href="material.html" class="menu-link"><span class="menu-ico"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="7" width="16" height="14" rx="3"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 12h16m-10 0v3h4v-3"/></svg></span>Material</a><div class="menu-grupo">Redes</div><a href="comunidad.html" class="menu-link activo" aria-current="page"><span class="menu-ico"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.5 8.5 0 0 1-12.8 7.3L3 21l1.8-5.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8 11h8m-8 4h5"/></svg></span>Comunidad</a>
+<div class="menu-grupo">Guías del sector</div>
+<a href="convenio-2026.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="5" width="14" height="16" rx="3"/><rect x="9" y="3" width="6" height="4" rx="1.5"/><path d="M9 12h6m-6 4h6"/></svg></span>Convenio 2026–2030</a>
+<a href="derechos-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg></span>Mis derechos</a>
+<a href="guia-nomina-vigilante.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M6 3h12v18l-3-2-3 2-3-2-3 2V3Zm3 5h6m-6 4h6m-6 4h3"/></svg></span>Cómo leer tu nómina</a>
+<a href="preguntas-frecuentes.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><path d="M7 3h10a4 4 0 0 1 4 4v8a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4Z"/><path d="M9.75 8.5a2.25 2.25 0 1 1 3.75 1.68c-.8.7-1.5 1.07-1.5 2.32"/><path d="M12 15.5h.01"/></svg></span>Preguntas frecuentes</a>
+<div class="menu-grupo">La web</div>
+<a href="contacto.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="m4 7 8 6 8-6"/></svg></span>Contacto y quiénes somos</a>
+<a href="privacidad.html" class="menu-link"><span class="menu-ico" aria-hidden="true"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" focusable="false"><rect x="5" y="10" width="14" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3m-4 5v2"/></svg></span>Política de privacidad</a>
+</div>
+<div class="menu-pie">Herramienta gratuita e independiente<br>calculadoravigilante.com</div>
+</nav>
+<div id="cookie-banner" hidden role="region" aria-label="Preferencias de cookies"><p>Usamos almacenamiento necesario para tu sesión y tus preferencias. Solo con tu permiso activamos Google Analytics para medir el uso de la web. Puedes cambiar tu elección cuando quieras. <a href="privacidad.html#cookies">Más información</a>.</p><div class="cookie-buttons"><button type="button" id="cookie-reject" class="btn-cookie" data-cookie-choice="reject">Rechazar analítica</button><button type="button" class="btn-cookie" data-cookie-choice="accept">Aceptar analítica</button></div></div>
+
+<div class="topbar">
+<div class="topbar-inner">
+<div style="display:flex;align-items:center;gap:0.5rem;">
+<button type="button" class="menu-btn" id="menu-btn" aria-label="Abrir menú" aria-controls="menu-panel" aria-expanded="false"><span></span><span></span><span></span></button>
+<a href="index.html" class="brand"><img src="icon-192.png" alt="" class="brand-icon"><span class="brand-name">NÓMINA <em>VIGILANTE</em></span></a>
+</div>
+<a href="index.html" class="topbar-cta">IR A LA CALCULADORA</a>
+</div>
+</div>
+
+<main class="wrap partner-page"><div class="crumbs"><a href="index.html">Inicio</a> › Comunidad de vigilantes</div><header class="page"><div class="header-label">Redes</div><h1>Comunidad de vigilantes</h1><p class="header-sub">Un punto de encuentro en WhatsApp para ayudarnos y compartir oportunidades.</p></header><section class="partner-intro"><h2>Estamos empezando. Crezcamos juntos.</h2><p>Esta comunidad nace para que los vigilantes tengamos un espacio donde preguntar, compartir experiencias y echarnos una mano. Al principio puede haber pocos compañeros: iremos creciendo poco a poco.</p><h3>Un espacio general para tus dudas</h3><p>Un grupo de conversación donde plantear preguntas y ayudarnos entre todos. La experiencia de otros compañeros puede orientarte, aunque no sustituye el asesoramiento profesional cuando lo necesites.</p><h3>Ofertas de empleo por provincias</h3><p>Empezaremos compartiendo ofertas que encontremos y ampliaremos las provincias según crezca la comunidad. Más adelante nos gustaría colaborar con empresas para acercar nuevas oportunidades.</p><div class="community-access"><h3>Entra con tu cuenta gratuita</h3><p>Pulsa el botón para abrir la comunidad en WhatsApp. Si aún no has iniciado sesión, te pediremos entrar o crear y confirmar tu cuenta gratuita.</p><button type="button" id="community-access" class="account-primary">Abrir comunidad en WhatsApp</button><p id="community-status" role="status" aria-live="polite"></p><p class="community-note">Unirte es voluntario y no te suscribe a publicidad por correo. Al abrir WhatsApp se aplican sus condiciones y privacidad. Los participantes de los grupos pueden ver tu número de teléfono. <a href="https://faq.whatsapp.com/236979282604093" target="_blank" rel="noopener noreferrer">Más información sobre privacidad en WhatsApp</a>.</p></div><h3>Para cuidarnos entre todos</h3><p>Respeta a los compañeros, evita el spam y no publiques nóminas, documentos ni datos personales de otras personas. Contrasta las condiciones de las ofertas con la empresa antes de facilitar datos.</p></section><aside class="partner-contact"><h2>¿Quieres proponer una oferta o colaborar?</h2><p>Si representas a una empresa o quieres hacernos llegar una propuesta para la comunidad, escríbenos.</p><a href="mailto:badawolfprivado@gmail.com">badawolfprivado@gmail.com</a></aside><section id="account-section" class="account-card" aria-labelledby="account-heading">
+  <div id="account-guest">
+    <p class="account-kicker">Tu nómina, a tu ritmo</p>
+    <h2 id="account-heading">Calcula sin límites. Regístrate para ir un paso más allá.</h2>
+    <p>Empieza con tu nómina. Crea una cuenta cuando quieras tener todas las herramientas a mano.</p>
+    <div class="account-comparison">
+      <div class="account-plan"><h3>Sin cuenta</h3><ul><li>Calcular tu nómina sin límites</li><li>Horas extras, noches y festivos</li><li>Cuadrante de turnos en este dispositivo</li></ul></div>
+      <div class="account-plan account-plan-featured"><h3>Con cuenta gratuita</h3><ul><li>Todo lo anterior</li><li>Añadir vacaciones a tu nómina y cuadrante</li><li>Descargar y compartir PDF</li><li>Calcular la baja por incapacidad temporal</li><li>Calcular finiquito e indemnización</li><li>Acceso a nuestra comunidad</li></ul></div>
+    </div>
+    <div class="account-actions"><button type="button" class="account-primary" data-auth-open="signup">Crear cuenta gratis</button><button type="button" class="account-secondary" data-auth-open="signin">Ya tengo cuenta</button></div>
+    <p>Los importes de tus cálculos siguen en tu dispositivo.</p>
+  </div>
+  <div id="account-member" hidden>
+    <h2 id="account-title">Tu cuenta está activa</h2><p class="account-email" id="account-email"></p>
+    <p id="account-benefits">Ya puedes añadir vacaciones, descargar tus PDF y calcular la baja y el finiquito.</p>
+    <button type="button" class="account-secondary" id="account-signout">Cerrar sesión</button>
+    <details id="marketing-preferences" class="marketing-preferences" hidden>
+      <summary>Mis preferencias de correo</summary>
+      <p>Elige qué quieres recibir de Nómina Vigilante (Carlos Adán Miro). Todo es opcional y puedes cambiarlo cuando quieras.</p>
+      <form id="marketing-form">
+        <label class="auth-check"><input type="checkbox" id="marketing-own"><span>Quiero recibir por correo novedades de la calculadora, consejos y ofertas propias de Nómina Vigilante relacionadas con la seguridad privada.</span></label>
+        <label class="auth-check"><input type="checkbox" id="marketing-partners"><span>Quiero recibir por correo promociones de formación, productos y servicios de colaboradores del sector de la seguridad privada, enviadas por Nómina Vigilante, sin ceder mi correo a esos colaboradores.</span></label>
+<div class="marketing-targeting" id="marketing-targeting">
+ <p>¿Qué edad tienes y de dónde eres? Para completar estos datos, elige una categoría de correo y autoriza la personalización. También puedes recibir correos sin dar estos datos.</p>
+ <label class="auth-check"><input type="checkbox" id="marketing-personalize"><span><strong>Promociones más cerca de ti · Opcional</strong>Soy mayor de edad y autorizo a Nómina Vigilante a usar la franja de edad y la ciudad o provincia que indique para adaptar los correos publicitarios que haya aceptado. Puedo retirar este permiso y borrar estos datos sin perder mi cuenta.</span></label>
+ <fieldset class="marketing-profile-fields" id="marketing-profile-fields" disabled>
+  <legend>Tu perfil opcional</legend>
+  <label for="marketing-age">Franja de edad</label><select id="marketing-age"><option value="">Prefiero no indicarla</option><option value="18-24">18–24 años</option><option value="25-34">25–34 años</option><option value="35-44">35–44 años</option><option value="45-54">45–54 años</option><option value="55-64">55–64 años</option><option value="65+">65 años o más</option></select>
+  <label for="marketing-province">Provincia</label><select id="marketing-province" autocomplete="address-level1"><option value="">Prefiero no indicarla</option><option value="02">Albacete</option><option value="03">Alicante / Alacant</option><option value="04">Almería</option><option value="01">Araba / Álava</option><option value="33">Asturias</option><option value="05">Ávila</option><option value="06">Badajoz</option><option value="07">Illes Balears</option><option value="08">Barcelona</option><option value="48">Bizkaia</option><option value="09">Burgos</option><option value="10">Cáceres</option><option value="11">Cádiz</option><option value="39">Cantabria</option><option value="12">Castellón / Castelló</option><option value="13">Ciudad Real</option><option value="14">Córdoba</option><option value="15">A Coruña</option><option value="16">Cuenca</option><option value="20">Gipuzkoa</option><option value="17">Girona</option><option value="18">Granada</option><option value="19">Guadalajara</option><option value="21">Huelva</option><option value="22">Huesca</option><option value="23">Jaén</option><option value="24">León</option><option value="25">Lleida</option><option value="27">Lugo</option><option value="28">Madrid</option><option value="29">Málaga</option><option value="30">Murcia</option><option value="31">Navarra</option><option value="32">Ourense</option><option value="34">Palencia</option><option value="35">Las Palmas</option><option value="36">Pontevedra</option><option value="26">La Rioja</option><option value="37">Salamanca</option><option value="38">Santa Cruz de Tenerife</option><option value="40">Segovia</option><option value="41">Sevilla</option><option value="42">Soria</option><option value="43">Tarragona</option><option value="44">Teruel</option><option value="45">Toledo</option><option value="46">Valencia / València</option><option value="47">Valladolid</option><option value="49">Zamora</option><option value="50">Zaragoza</option><option value="51">Ceuta</option><option value="52">Melilla</option><option value="99">Fuera de España</option></select>
+  <label for="marketing-city">Ciudad o municipio</label><input type="text" id="marketing-city" autocomplete="address-level2" maxlength="80" placeholder="Por ejemplo, Burriana">
+  <p>Todos estos datos son opcionales. Para personalizar, indica al menos tu franja de edad o provincia. Si añades una ciudad, elige también su provincia. No necesitamos tu dirección ni fecha de nacimiento.</p>
+ </fieldset>
+</div>
+        <div class="account-actions"><button type="submit" class="account-primary" id="marketing-save" disabled>Guardar preferencias</button><button type="button" class="account-secondary" id="marketing-withdraw">Dar de baja toda la publicidad</button></div>
+      </form>
+      <p id="marketing-status" class="auth-status" role="status" aria-live="polite"></p>
+      <p>La baja no elimina tu cuenta. También puedes <a href="mailto:badawolfprivado@gmail.com?subject=Baja%20de%20publicidad">solicitar la baja por correo</a>. <a href="privacidad.html#publicidad" target="_blank" rel="noopener">Cómo tratamos estos datos</a>.</p>
+    </details>
+  </div>
+  <p id="account-notice" role="status"></p>
+</section><div class="volver"><a href="index.html">← Volver a la calculadora</a></div></main>
+
+
+<script src="legal-navigation.js?v=2026091801" integrity="sha256-6RVO6I0olmc5jzj3CU9QigzDKgi7upNpJv91VXnjiZY="></script>
+<script src="cookies.js?v=2026091801" integrity="sha256-pr235H3Q9Vsmob4o+7gMSzH7kjRY6jnCuszBCPRWajE="></script>
+<section id="sector-resources" class="resource-links" aria-label="Colaboradores y comunidad"><h2>Colaboradores</h2><div class="resource-grid"><a class="resource-card" href="sindicatos.html"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3v17m-5 1h10M4 7h16M6 7l-3 7h6L6 7Zm12 0-3 7h6l-3-7ZM3 14c0 3 6 3 6 0m6 0c0 3 6 3 6 0"/></svg><strong>Sindicatos</strong><span>Apoyo y asesoramiento laboral</span></a><a class="resource-card" href="formacion.html"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="m2 9 10-5 10 5-10 5-10-5Zm4 2v6c4 3 8 3 12 0v-6m4-2v7"/></svg><strong>Formación</strong><span>Academias y cursos del sector</span></a><a class="resource-card" href="material.html"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="4" y="7" width="16" height="14" rx="3"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M4 12h16m-10 0v3h4v-3"/></svg><strong>Material</strong><span>Equipamiento para tu día a día</span></a></div><a class="resource-card resource-community" href="comunidad.html"><svg class="content-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M21 11.5a8.5 8.5 0 0 1-12.8 7.3L3 21l1.8-5.2A8.5 8.5 0 1 1 21 11.5Z"/><path d="M8 11h8m-8 4h5"/></svg><div><strong>Comunidad de vigilantes</strong><span>Dudas, apoyo entre compañeros y ofertas de empleo por provincias. Acceso con cuenta gratuita.</span></div><span class="resource-arrow" aria-hidden="true">›</span></a></section>
+<footer class="legal-footer"><a href="index.html">Calculadora</a><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings>Configurar cookies</button><a href="guia-nomina-vigilante.html#privacidad-publicitaria" data-ad-privacy>Privacidad publicitaria</a></footer>
+<dialog class="auth-dialog" id="auth-dialog" aria-labelledby="auth-title" aria-describedby="auth-intro">
+  <button class="auth-close" id="auth-close" type="button" aria-label="Cerrar registro">×</button>
+  <h2 id="auth-title">Crea tu cuenta gratis</h2>
+  <p id="auth-intro">Añade vacaciones y accede a los PDF, la baja y el finiquito.</p>
+  <div id="auth-provider-options"><button type="button" class="account-secondary auth-google" id="auth-google">Continuar con Google</button><p id="auth-google-note">Disponible próximamente. Estamos preparando la conexión con Google.</p><p class="auth-divider">o con tu correo electrónico</p></div>
+  <form id="auth-form">
+    <div id="auth-email-field"><label for="auth-email">Correo electrónico</label>
+    <input type="email" id="auth-email" name="email" required autocomplete="email" maxlength="254" placeholder="tu@correo.com">
+    </div>
+    <div id="auth-password-field"><label for="auth-password">Contraseña</label><input id="auth-password" type="password" name="password" required minlength="12" autocomplete="new-password"><p id="auth-password-hint">Mínimo 12 caracteres.</p></div>
+    <div id="auth-confirm-field"><label for="auth-confirm">Repite la contraseña</label><input id="auth-confirm" type="password" required autocomplete="new-password"></div>
+    <div id="auth-terms-field"><label class="auth-check"><input type="checkbox" id="auth-terms" required><span>He leído y acepto las <a href="condiciones.html" target="_blank" rel="noopener">condiciones de uso</a> y he leído la <a href="privacidad.html" target="_blank" rel="noopener">información sobre privacidad</a>.</span></label></div>
+    <p>Gestionamos el correo y la sesión para prestarte el servicio. Puedes ejercer tus derechos y solicitar la eliminación de tu cuenta desde <a href="privacidad.html" target="_blank" rel="noopener">Privacidad</a>. No implica aceptar publicidad.</p>
+    <div id="auth-captcha" hidden><div id="auth-captcha-widget"></div><p id="auth-captcha-status" class="auth-status" role="status" aria-live="polite"></p><button type="button" id="auth-captcha-retry" class="auth-link">Reintentar comprobación</button></div>
+    <button type="submit" class="account-primary" id="auth-submit">Crear cuenta gratis</button>
+    <p id="auth-status" class="auth-status" role="status" aria-live="polite"></p>
+  </form>
+  <div id="auth-switches" class="account-actions"><button type="button" class="auth-link" data-auth-open="signin">Ya tengo cuenta</button><button type="button" class="auth-link" data-auth-open="signup">Crear cuenta</button><button type="button" class="auth-link" data-auth-open="reset">He olvidado mi contraseña</button></div>
+  <button type="button" class="auth-link" id="auth-resend" hidden>Reenviar verificación</button>
+</dialog>
+<dialog class="auth-dialog marketing-welcome" id="marketing-dialog" aria-labelledby="marketing-title" aria-describedby="marketing-intro">
+  <button class="auth-close" id="marketing-close" type="button" aria-label="Cerrar preferencias de correo">×</button>
+  <p class="marketing-kicker">Tu cuenta ya está lista</p>
+  <h2 id="marketing-title">Completa tu perfil opcional</h2>
+  <p id="marketing-intro">Elige si quieres recibir novedades y promociones. También puedes indicar tu franja de edad y ciudad para recibir propuestas más relevantes. Todo es opcional: puedes continuar sin publicidad.</p>
+  <form id="marketing-welcome-form">
+    <fieldset id="auth-marketing-fields" class="marketing-options">
+      <legend>Publicidad por correo · Opcional</legend>
+      <label class="auth-check"><input type="checkbox" id="auth-marketing-own"><span><strong>Novedades y consejos</strong>Quiero recibir por correo novedades de la calculadora, consejos y ofertas propias de Nómina Vigilante relacionadas con la seguridad privada.</span></label>
+      <label class="auth-check"><input type="checkbox" id="auth-marketing-partners"><span><strong>Formación y ofertas del sector</strong>Quiero recibir por correo promociones de formación, productos y servicios de colaboradores del sector de la seguridad privada, enviadas por Nómina Vigilante, sin ceder mi correo a esos colaboradores.</span></label>
+    </fieldset>
+    <p>Las envía Carlos Adán Miro, responsable de Nómina Vigilante. Puedes cambiar tu elección o darte de baja desde «Mis preferencias de correo» o por correo cuando quieras. <a href="privacidad.html#publicidad" target="_blank" rel="noopener">Más información</a>.</p>
+<div class="marketing-targeting" id="auth-marketing-targeting">
+ <p>¿Qué edad tienes y de dónde eres? Para completar estos datos, elige una categoría de correo y autoriza la personalización. También puedes recibir correos sin dar estos datos.</p>
+ <label class="auth-check"><input type="checkbox" id="auth-marketing-personalize"><span><strong>Promociones más cerca de ti · Opcional</strong>Soy mayor de edad y autorizo a Nómina Vigilante a usar la franja de edad y la ciudad o provincia que indique para adaptar los correos publicitarios que haya aceptado. Puedo retirar este permiso y borrar estos datos sin perder mi cuenta.</span></label>
+ <fieldset class="marketing-profile-fields" id="auth-marketing-profile-fields" disabled>
+  <legend>Tu perfil opcional</legend>
+  <label for="auth-marketing-age">Franja de edad</label><select id="auth-marketing-age"><option value="">Prefiero no indicarla</option><option value="18-24">18–24 años</option><option value="25-34">25–34 años</option><option value="35-44">35–44 años</option><option value="45-54">45–54 años</option><option value="55-64">55–64 años</option><option value="65+">65 años o más</option></select>
+  <label for="auth-marketing-province">Provincia</label><select id="auth-marketing-province" autocomplete="address-level1"><option value="">Prefiero no indicarla</option><option value="02">Albacete</option><option value="03">Alicante / Alacant</option><option value="04">Almería</option><option value="01">Araba / Álava</option><option value="33">Asturias</option><option value="05">Ávila</option><option value="06">Badajoz</option><option value="07">Illes Balears</option><option value="08">Barcelona</option><option value="48">Bizkaia</option><option value="09">Burgos</option><option value="10">Cáceres</option><option value="11">Cádiz</option><option value="39">Cantabria</option><option value="12">Castellón / Castelló</option><option value="13">Ciudad Real</option><option value="14">Córdoba</option><option value="15">A Coruña</option><option value="16">Cuenca</option><option value="20">Gipuzkoa</option><option value="17">Girona</option><option value="18">Granada</option><option value="19">Guadalajara</option><option value="21">Huelva</option><option value="22">Huesca</option><option value="23">Jaén</option><option value="24">León</option><option value="25">Lleida</option><option value="27">Lugo</option><option value="28">Madrid</option><option value="29">Málaga</option><option value="30">Murcia</option><option value="31">Navarra</option><option value="32">Ourense</option><option value="34">Palencia</option><option value="35">Las Palmas</option><option value="36">Pontevedra</option><option value="26">La Rioja</option><option value="37">Salamanca</option><option value="38">Santa Cruz de Tenerife</option><option value="40">Segovia</option><option value="41">Sevilla</option><option value="42">Soria</option><option value="43">Tarragona</option><option value="44">Teruel</option><option value="45">Toledo</option><option value="46">Valencia / València</option><option value="47">Valladolid</option><option value="49">Zamora</option><option value="50">Zaragoza</option><option value="51">Ceuta</option><option value="52">Melilla</option><option value="99">Fuera de España</option></select>
+  <label for="auth-marketing-city">Ciudad o municipio</label><input type="text" id="auth-marketing-city" autocomplete="address-level2" maxlength="80" placeholder="Por ejemplo, Burriana">
+  <p>Todos estos datos son opcionales. Para personalizar, indica al menos tu franja de edad o provincia. Si añades una ciudad, elige también su provincia. No necesitamos tu dirección ni fecha de nacimiento.</p>
+ </fieldset>
+</div>
+    <div class="marketing-welcome-actions">
+      <button type="submit" class="account-primary" id="marketing-welcome-save">Guardar mi elección</button>
+      <button type="button" class="account-secondary" id="marketing-skip">Continuar sin publicidad</button>
+    </div>
+    <p id="marketing-welcome-status" class="auth-status" role="status" aria-live="polite"></p>
+  </form>
+</dialog>
+<script src="auth-config.js?v=2026091801" integrity="sha256-AO2QH58p5NZ+sNR/9MAY59VytkE67zi2ck0RPoy5JAI="></script><script src="captcha.js?v=2026091801" integrity="sha256-FNyqvFtv/GNo8RaWj2yZwKUr5n9BZIiuW2XcGJ1Nfew="></script><script src="marketing.js?v=2026091801" integrity="sha256-c1pAayuzxsaLS//ezwbgFsuQ6OO8Lwqh05Hw1+O+uns="></script><script src="community.js?v=2026091801" integrity="sha256-BRHw/BADY3toW19as7nsKm+4quxyw+hnF4TwW4wJg70="></script><script src="auth.js?v=2026091801" integrity="sha256-b20YF1no+yCQp/wenm57QePNSpq1+YR7TyA02Lk7MiA="></script>
+</body>
+</html>

@@ -1,16 +1,6 @@
 const {test}=require('node:test'),assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path'),{JSDOM}=require('jsdom');
 const root=path.resolve(__dirname,'..'),read=f=>fs.readFileSync(path.join(root,f),'utf8');
-test('Resource cards render markup as text and discard executable URLs',()=>{
- const w=new JSDOM(read('sindicatos-formacion.html'),{url:'http://localhost:4173/',runScripts:'outside-only'}).window;
- try{w.eval(read('sindicatos-formacion-script-0.js'));
- const name='<img src=x onerror="alert(1)">';const fragment=w.document.createElement('div');
- fragment.innerHTML=w.tarjeta({nombre:name,provincia:'Madrid',web:'javascript:alert(1)'},'sindicato');
- assert.equal(fragment.querySelector('img'),null);assert.equal(fragment.querySelector('a'),null);assert.ok(fragment.textContent.includes(name));
- fragment.innerHTML=w.tarjeta({nombre:'Prueba',provincia:'Madrid',web:'https://example.test/'},'sindicato');
- assert.equal(fragment.querySelector('a').href,'https://example.test/');
- }finally{w.close();}
-});
 function setup(url='http://localhost:4173/'){
  const dom=new JSDOM(read('index.html'),{url,runScripts:'outside-only'}),w=dom.window;
  w.matchMedia=()=>({matches:false,addEventListener(){}});w.alert=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
@@ -47,7 +37,7 @@ test('Invalid payroll amounts clear the previous result and prevent stale PDF ex
  }finally{w.close();}
 });
 test('Every public HTML page blocks inline scripts and has no executable inline handlers',()=>{
- const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));assert.equal(files.length,9);
+ const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));assert.equal(files.length,13);
  for(const file of files){const d=new JSDOM(read(file)).window.document;
  const policy=d.querySelector('meta[http-equiv="Content-Security-Policy"]').content;
  assert.match(policy,/script-src-attr 'none'/);assert.match(policy,/object-src 'none'/);

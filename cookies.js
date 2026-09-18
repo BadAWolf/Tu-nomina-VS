@@ -31,7 +31,7 @@
   // Only fixed event names and a fixed method enum can leave the calculator.
   // No email, account ID, salary, calendar, free text or historical event queue.
   window.VigilanteAnalytics = Object.freeze({track(name, details={}){
-    if(!['sign_up_start','sign_up','login','calculation_complete','pdf_export','pwa_install','pwa_open','marketing_own_opt_in','marketing_partner_opt_in','marketing_own_opt_out','marketing_partner_opt_out'].includes(name) || !production || authCallback() || !preferences?.analytics)return false;
+    if(!['community_open','sign_up_start','sign_up','login','calculation_complete','pdf_export','pwa_install','pwa_open','marketing_own_opt_in','marketing_partner_opt_in','marketing_own_opt_out','marketing_partner_opt_out'].includes(name) || !production || authCallback() || !preferences?.analytics)return false;
     loadAnalytics();
     if(!analyticsLoaded)return false;
     const params=pageData();

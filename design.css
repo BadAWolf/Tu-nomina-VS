@@ -27,15 +27,7 @@ input[type=number],input[type=date],select{padding:.8rem;border-radius:10px;min-
 .neto-box{border-radius:14px;}
 .account-card{margin:1.5rem 0;background:linear-gradient(135deg,#f1f7ef,#e8f2e3);padding:1.75rem;border-radius:20px;}
 .account-card h2{font-size:1.5rem;letter-spacing:-.03em;max-width:32rem;margin:.7rem 0;}
-.account-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.3rem;}
-.account-plan{background:#ffffffb3;border:1px solid var(--border);border-radius:14px;padding:1.2rem;min-width:0;}
-.account-plan h3{font-size:1.06rem;line-height:1.4;margin:0;}
-.account-plan-featured{background:#fff;border-color:var(--gold);}
-.account-plan ul{list-style:none;padding:0;margin:.8rem 0 0;}
-.account-plan li{position:relative;padding-left:1.3rem;margin:.6rem 0;}
-.account-plan li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-weight:700;}
-@supports(grid-template-rows:subgrid){.account-plan{display:grid;grid-row:span 2;grid-template-rows:subgrid;row-gap:0;}}
-.account-actions .account-primary{flex:1;}
+
 .disclaimer{line-height:1.8;}
 @media(max-width:540px){.cat-grid{grid-template-columns:1fr 1fr;}.account-comparison{grid-template-columns:1fr;}.account-card{padding:1.15rem;}.account-card h2{font-size:1.3rem;}.account-actions{flex-direction:column;}.card{padding:1.05rem;}header{padding-top:1.5rem;}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}}

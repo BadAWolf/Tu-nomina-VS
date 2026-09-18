@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..');const read=f=>fs.readFileSync(path.join(
 const tick=()=>new Promise(resolve=>setTimeout(resolve,20));
 const member={id:'test-user',email:'test@example.test',email_confirmed_at:'2026-09-14',is_anonymous:false};
 async function setup(state={}){
-  const dom=new JSDOM(read('index.html'),{url:state.url||'http://localhost:4173/',runScripts:'outside-only'});
+  const dom=new JSDOM(read(state.page||'index.html'),{url:state.url||'http://localhost:4173/',runScripts:'outside-only'});
   const w=dom.window,d=w.document;w.alert=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.matchMedia=()=>({matches:false,addListener(){},addEventListener(){}});
   for (const dialog of d.querySelectorAll('dialog')) {dialog.showModal=function(){this.open=true;};dialog.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};}
@@ -31,12 +31,13 @@ async function setup(state={}){
   };
   w.__sdk={createClient:(_url,_key,options)=>{state.clientOptions=options;return {auth,rpc,from:table=>{
     const query={select:()=>query,eq:()=>query,limit:async()=>({data:(state.accepted||state.historicalAcceptance)?[{version:'previous'}]:[],error:null}),maybeSingle:async()=>{
+      if(table==='community_links'){calls.push(['community']);if(state.communityGate)await state.communityGate;return {data:state.invite?{invite_url:state.invite}:null,error:state.communityError?{code:'offline'}:null};}
       if(table==='marketing_preferences' && state.preferencesReadGate)await state.preferencesReadGate;
       return {data:table==='marketing_profiles'?(state.profile||null):table==='marketing_preferences'?(state.preferences||null):state.accepted?{version:'2026-09-15'}:null,error:table==='marketing_preferences'&&state.marketingReadError?{code:'offline'}:null};
     },insert:data=>{
       calls.push(['accept',data]);if(state.accepted)return {error:{code:'23505'}};state.accepted=true;return {error:null};}};return query;
   }};}};
-  require('./load-calculator.cjs')(w);
+  if(!state.page)require('./load-calculator.cjs')(w);
   w.eval(read('auth-config.js').replace('googleEnabled: false','googleEnabled: true'));
   w.VIGILANTE_AUTH_CONFIG={...w.VIGILANTE_AUTH_CONFIG,captcha:{enabled:false,siteKey:''}};
   if(state.captcha){
@@ -45,6 +46,7 @@ async function setup(state={}){
   }
   w.eval(read('marketing.js'));
   state.analytics=[];w.VigilanteAnalytics={track:(...args)=>state.analytics.push(args)};
+  if(state.page==='comunidad.html'){w.__navigate=url=>{state.navigation=url;};w.eval(read('community.js').replace('location.assign(url.href)','window.__navigate(url.href)'));}
   w.eval(read('auth.js').replace("import('./vendor/supabase.js')","Promise.resolve(window.__sdk)"));
   await tick();
   return {w,d,state,calls,close:()=>w.close(),emit:event=>callback(event,{user:state.user}),click:id=>d.getElementById(id).click(),fill:(id,value)=>{d.getElementById(id).value=value;},submit:()=>d.getElementById('auth-form').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}))};
@@ -451,5 +453,44 @@ test('Restored email and Google accounts finish activation before seeing the opt
    assert.equal(x.state.profile,null);assert.equal(x.state.preferences.own_news,false);
    assert.equal(x.d.getElementById('marketing-dialog').open,false);
   }finally{x.close();}
+ }
+});
+
+test('Community guests register before any invitation fetch, with no public invite',async()=>{
+ const x=await setup({page:'comunidad.html'});try{
+  assert.doesNotMatch(x.d.documentElement.innerHTML,/chat\.whatsapp\.com\//);
+  x.click('community-access');await tick();assert.equal(x.d.getElementById('auth-dialog').open,true);
+  assert.equal(x.calls.filter(c=>c[0]==='community').length,0);assert.equal(x.state.navigation,undefined);
+ }finally{x.close();}
+});
+test('One community click opens WhatsApp for confirmed members and tracks only an event name',async()=>{
+ const invite='https://chat.whatsapp.com/SyntheticTestOnly1234';
+ const x=await setup({page:'comunidad.html',user:member,accepted:true,invite});try{
+  x.click('community-access');await tick();await tick();
+  assert.equal(x.state.navigation,invite);assert.deepEqual(x.state.analytics.filter(a=>a[0]==='community_open'),[['community_open']]);
+  assert.equal(x.d.querySelectorAll('a[href*="chat.whatsapp.com"]').length,0);
+ }finally{x.close();}
+});
+test('Community login by email resumes the original button, and Google returns to Community',async()=>{
+ const x=await setup({page:'comunidad.html',accepted:true,invite:'https://chat.whatsapp.com/SyntheticTestOnly1234',url:'https://calculadoravigilante.com/comunidad.html'});try{
+  x.click('community-access');await tick();
+  x.click('auth-google');await tick();assert.equal(x.calls.find(c=>c[0]==='google')[1].options.redirectTo,'https://calculadoravigilante.com/comunidad.html');
+  x.d.querySelector('[data-auth-open="signin"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.submit();await tick();await tick();await tick();
+  assert.equal(x.state.navigation,x.state.invite);
+ }finally{x.close();}
+});
+test('Community ignores stale invite responses after logout and rejects invalid destinations',async()=>{
+ let release;const communityGate=new Promise(resolve=>release=resolve);
+ const x=await setup({page:'comunidad.html',user:member,accepted:true,invite:'https://chat.whatsapp.com/SyntheticTestOnly1234',communityGate});try{
+  x.click('community-access');await tick();x.click('account-signout');await tick();release();await tick();
+  assert.equal(x.state.navigation,undefined);assert.equal(x.state.analytics.some(a=>a[0]==='community_open'),false);
+ }finally{release();x.close();}
+ for(const invite of ['https://evil.example/SyntheticTestOnly1234','https://chat.whatsapp.com/SyntheticTestOnly1234?redirect=evil','javascript:alert(1)']){
+  const y=await setup({page:'comunidad.html',user:member,accepted:true,invite});try{y.click('community-access');await tick();assert.equal(y.state.navigation,undefined);assert.match(y.d.getElementById('community-status').textContent,/No se ha podido/);assert.equal(y.d.getElementById('community-access').disabled,false);}finally{y.close();}
+ }
+});
+test('Community unavailable access can be retried, and unverified users cannot retrieve invites',async()=>{
+ for(const state of [{user:member,accepted:true,communityError:true},{user:member,accepted:true},{user:{...member,email_confirmed_at:null},accepted:true}]){
+  const x=await setup({page:'comunidad.html',...state});try{x.click('community-access');await tick();assert.equal(x.state.navigation,undefined);assert.equal(x.d.getElementById('community-access').disabled,false);if(!state.user.email_confirmed_at)assert.equal(x.calls.some(c=>c[0]==='community'),false);}finally{x.close();}
  }
 });

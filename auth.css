@@ -47,3 +47,15 @@
 .marketing-profile-fields select,.marketing-profile-fields input{width:100%;box-sizing:border-box;min-height:44px;padding:.6rem;border:1px solid var(--border);border-radius:8px;font:inherit;background:var(--surface,#fff);color:var(--text);}
 .marketing-profile-fields p{margin:.75rem 0 0;}
 .account-primary:focus-visible,.account-secondary:focus-visible,.auth-close:focus-visible{outline:3px solid var(--gold);outline-offset:3px;}
+
+/* Shared account comparison in calculator and community. */
+.account-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem;margin-top:1.3rem;}
+.account-plan{background:#ffffffb3;border:1px solid var(--border);border-radius:14px;padding:1.2rem;min-width:0;}
+.account-plan h3{font-size:1.06rem;line-height:1.4;margin:0;}
+.account-plan-featured{background:#fff;border-color:var(--gold);}
+.account-plan ul{list-style:none;padding:0;margin:.8rem 0 0;}
+.account-plan li{position:relative;padding-left:1.3rem;margin:.6rem 0;}
+.account-plan li::before{content:'✓';position:absolute;left:0;color:var(--gold);font-weight:700;}
+@supports(grid-template-rows:subgrid){.account-plan{display:grid;grid-row:span 2;grid-template-rows:subgrid;row-gap:0;}}
+.account-actions .account-primary{flex:1;}
+@media(max-width:540px){.account-comparison{grid-template-columns:1fr;}.account-actions{flex-direction:column;}}

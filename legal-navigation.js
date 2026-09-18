@@ -5,7 +5,7 @@
   var overlay = document.getElementById('menu-overlay');
   var close = document.getElementById('menu-cerrar');
   if (!button || !panel || !overlay || !close) return;
-  var background = Array.from(document.querySelectorAll('.topbar, .legal-content, .legal-footer, #cookie-banner'));
+  var background = [];
   var previousOverflow = '';
   var previousInert = [];
   var opened = false;
@@ -13,6 +13,7 @@
   function openMenu() {
     if (opened) return;
     opened = true;
+    background = Array.from(document.querySelectorAll('.topbar, .wrap, .legal-content, .resource-links, .legal-footer, #cookie-banner'));
     previousOverflow = document.body.style.overflow;
     previousInert = background.map(function (element) { return element.inert; });
     panel.inert = false;

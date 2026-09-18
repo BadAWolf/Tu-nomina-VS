@@ -2,7 +2,7 @@
 // to scripts they create. Never publish a fixed, reusable CSP nonce.
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const root=path.resolve(__dirname,'..');
-const pages=['index.html','convenio-2026.html','derechos-vigilante.html','guia-nomina-vigilante.html','preguntas-frecuentes.html'];
+const pages=['index.html','convenio-2026.html','derechos-vigilante.html','guia-nomina-vigilante.html','preguntas-frecuentes.html','comunidad.html'];
 function build(){
  for(const page of pages){
   const file=path.join(root,page);let html=fs.readFileSync(file,'utf8');const hashes=[];
@@ -16,7 +16,8 @@ function build(){
   // Script execution is limited to these exact files and their dependency tree.
   // AdSense needs dynamic cross-origin resources; legal pages do not load it.
   const resources=page==='index.html'?"default-src 'self'; connect-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; frame-src https:; ":'';
-  const policy=resources+"script-src "+[...new Set(hashes)].join(' ')+" 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests";
+  // Community has no advertising: preserve the narrower account-only policy.
+  const policy=page==='comunidad.html'?JSON.parse(fs.readFileSync(path.join(root,'security-policy.json'),'utf8')).csp:resources+"script-src "+[...new Set(hashes)].join(' ')+" 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests";
   html=html.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*(">)/,(_,a,b)=>a+policy+b);
   fs.writeFileSync(file,html);
  }
