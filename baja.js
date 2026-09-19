@@ -42,7 +42,7 @@ bajaEl('view-baja').prepend(ajustesBaja);
 var cotizacionBaja=bajaEl('b-cot-cp').closest('details');
 cotizacionBaja.append(bajaEl('b-extra-diaria').closest('.field'),bajaEl('b-fuerza-diaria').closest('.field'));
 bajaEl('b-anios').closest('.card').append(bajaEl('b-antig-importe').closest('.field'));
-ajustesBaja.querySelector('details').remove();
+ajustesBaja.querySelector('details.b-adjust').remove();
 actualizarCamposBaja();
 function calcBaja(){if(window.VigilanteAuth)window.VigilanteAuth.require(calcBajaRegistrado);}
 function calcBajaRegistrado(){

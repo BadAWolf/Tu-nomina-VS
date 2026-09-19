@@ -11,6 +11,19 @@ function setup(){
  set('b-inicio','2026-01-25');set('b-fin','2026-02-10');set('b-baseManual',1800);set('b-irpf',10);
  return {w,d:w.document,set};
 }
+test('Baja layout preserves eligibility help while relocating contribution fields',()=>{
+ const x=setup();try{
+  const card=x.d.getElementById('b-alcance').closest('.card');
+  assert.match(card.querySelector('.field-explanation .explanation-content').textContent,/180 días cotizados/);
+  assert.equal(card.querySelector('.field-explanation').open,false);
+  assert.equal(card.querySelector('.b-adjust'),null);
+  const contribution=x.d.getElementById('b-cot-cp').closest('details');
+  assert.ok(contribution.contains(x.d.getElementById('b-extra-diaria')));
+  assert.ok(contribution.contains(x.d.getElementById('b-fuerza-diaria')));
+  assert.ok(x.d.getElementById('b-anios').closest('.card').contains(x.d.getElementById('b-antig-importe')));
+  x.w.calcBajaRegistrado();assert.equal(x.d.getElementById('br-neto').textContent,'615,60 €');
+ }finally{x.w.close();}
+});
 test('Inclusive dates: one day, leap day, year boundary and both Spanish DST changes',()=>{
  for(const [a,b,n]of [['2026-01-01','2026-01-01',1],['2028-02-28','2028-03-01',3],['2026-12-31','2027-01-01',2],['2026-03-28','2026-03-30',3],['2026-10-24','2026-10-26',3]])assert.equal(rules.illnessPeriod(a,b),n);
  for(const [a,b]of [['',''],['2026-02-29','2026-03-01'],['2026-04-31','2026-05-02'],['2026-02-02','2026-02-01'],['2026-01-01','2028-01-01']])assert.throws(()=>rules.illnessPeriod(a,b),RangeError);
