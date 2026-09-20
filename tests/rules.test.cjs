@@ -115,10 +115,10 @@ test('Calendar keeps the contracted part-time ratio and ignores incomplete-month
 
 test('Team-leader hours are paid once, and activity is included in extra payments',()=>{
  const x=setup();try{
-  x.set('hTTotal',200);x.d.getElementById('switchJefe').checked=true;x.w.calcNominaRegistrado();
-  assert.equal(x.d.getElementById('r-jefe').textContent,'+143,37 €');
+  x.set('hTTotal',200);x.d.getElementById('switchResponsable').checked=true;x.w.calcNominaRegistrado();
+  assert.equal(x.d.getElementById('r-responsable').textContent,'+143,37 €');
   assert.equal(x.d.getElementById('r-extra').textContent,'+379,24 €');
-  x.d.getElementById('btn-fondos').click();x.set('hTTotal',162);x.d.getElementById('switchJefe').checked=false;x.d.getElementById('paga-julio').click();x.w.calcNominaRegistrado();
+  x.d.getElementById('btn-fondos').click();x.set('hTTotal',162);x.d.getElementById('switchResponsable').checked=false;x.d.getElementById('paga-julio').click();x.w.calcNominaRegistrado();
   assert.equal(x.d.getElementById('r-prorr').textContent,'+134,82 €');
  }finally{x.close();}
 });

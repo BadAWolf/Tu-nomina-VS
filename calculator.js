@@ -709,7 +709,12 @@ var vacationPlusesUI=window.VigilanteVacationPluses.mount(function(){
 function r2(n){var centimos=Math.abs(n)*100;return Math.sign(n)*Math.round(centimos+Number.EPSILON*Math.max(1,centimos))/100;}
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
 function calcAntig(a,cat,conductor){return r2(Math.floor(a/5)*(conductor&&CATS[cat].cBase?50.23:QUINQUENIO[cat]));}
-function calcHoraExtra(sb,p,act,ant,esc){return r2(((sb+p+act+ant)*15+(esc||0)*12)/HORAS_ANUALES);}
+function calcHoraExtra(sb,p,act,ant,esc,peligrosidadExtra){
+  // Art. 53: 12 mensualidades y 3 extras; la peligrosidad de las extras
+  // puede diferir del mínimo fijo. Las horas con arma se abonan aparte.
+  var peligPaga=peligrosidadExtra===undefined?p:peligrosidadExtra;
+  return r2(((sb+p+act+ant)*12+(sb+peligPaga+act+ant)*3+(esc||0)*12)/HORAS_ANUALES);
+}
 function valor(id){return document.getElementById(id).value;}
 function numero(id){return Number(valor(id))||0;}
 function nochesEspeciales(a,m){
@@ -785,7 +790,7 @@ function actualizarPlusesCategoria(){
 }
 document.getElementById('aniosAntiguedad').addEventListener('input',actualizarPlusesCategoria);
 document.getElementById('switchCond').addEventListener('change',actualizarPlusesCategoria);
-document.getElementById('switchJefe').addEventListener('change',function(){document.getElementById('jefe-field').hidden=!this.checked;});
+document.getElementById('switchResponsable').addEventListener('change',function(){document.getElementById('responsable-field').hidden=!this.checked;});
 document.getElementById("switchPlus").addEventListener("change",function(){
   document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
 });
@@ -921,7 +926,7 @@ function calcNominaRegistrado(){
   var ip=parseFloat(document.getElementById("irpf").value)||0;
   var an=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
   var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
-  var esJefe=document.getElementById("switchJefe").checked;
+  var esResponsable=document.getElementById("switchResponsable").checked;
   var dVac=(MODO_HORAS==="manual"&&document.getElementById("switchVac").checked)
              ? (parseFloat(document.getElementById("diasVac").value)||0) : 0;
   var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
@@ -961,9 +966,9 @@ function calcNominaRegistrado(){
   if(antigReconocida&&valor('n-antig-importe')===''){fail('Indica el plus reconocido en el apartado de antigüedad para conservar tus trienios consolidados.');return;}
   if(antigReconocida)ant=numero('n-antig-importe');
   var antM=r2(ant*ratioFijo*factorH);
-  var hJefe=esJefe?(document.getElementById('n-horasJefe').value===''?hT:Number(document.getElementById('n-horasJefe').value)):0;
-  if(hJefe>hT){err.textContent='Las horas como responsable de equipo no pueden superar las trabajadas.';err.style.display='block';document.getElementById('resultado').style.display='none';return;}
-  var je=r2(cat.salBase*0.10*hJefe/JORNADA);
+  var hResponsable=esResponsable?(document.getElementById('n-horasResponsable').value===''?hT:Number(document.getElementById('n-horasResponsable').value)):0;
+  if(hResponsable>hT){err.textContent='Las horas como responsable de equipo no pueden superar las trabajadas.';err.style.display='block';document.getElementById('resultado').style.display='none';return;}
+  var plusResponsable=r2(cat.salBase*0.10*hResponsable/JORNADA);
   var vacationSupplement;
   try{vacationSupplement=vacationPlusesUI.read(dVac);}catch(error){
     err.textContent=error.message;err.style.display='block';
@@ -982,7 +987,9 @@ function calcNominaRegistrado(){
     if(pe<r2(24.08*ratioFijo*factorH)){fail('El importe reconocido no puede estar por debajo de la peligrosidad mínima garantizada para esta jornada.');return;}
     peligrosidadPaga=numero('n-arma-paga');
   }
-  var hev=calcHoraExtra(sbHE,catActual==='con_arma'?24.08:cat.pelig,cat.act||0,ant,cat.esc);
+  // La paga indicada corresponde a la jornada contractual, no a los días
+  // remunerados de este mes. La tarifa anual se calcula a jornada completa.
+  var hev=calcHoraExtra(sbHE,catActual==='con_arma'?24.08:cat.pelig,cat.act||0,ant,cat.esc,catActual==='con_arma'?peligrosidadPaga/ratioFijo:undefined);
   var plusEscolta=r2((cat.esc||0)*ratioFijo*factorH);
   var objetivo=jornadaMes*factorH;
   var hEx=Math.max(0,r2(hJor-objetivo));
@@ -1004,7 +1011,7 @@ function calcNominaRegistrado(){
   if(ps>0&&valor('n-base-paga')===''){fail('Indica el importe completo de una paga extra para tu jornada: el plus de servicio por sí solo no determina qué conceptos entran en las extras.');return;}
   if(especiales&&valor('n-base-paga')!=='')bP=numero('n-base-paga');
   var pP=r2((pa*bP*factorH)/12);
-  var bruto=r2(sb+pe+ac+tr+ve+antM+je+ps+plusEscolta+complementoVac+pEx+pN+pFe+pP+pNavidad);
+  var bruto=r2(sb+pe+ac+tr+ve+antM+plusResponsable+ps+plusEscolta+complementoVac+pEx+pN+pFe+pP+pNavidad);
   var pNP=3-pa;
   var ssB=r2(bruto+r2(pNP*bP*factorH/12));
   // Orden PJC/297/2026, arts. 38 y 39: mínimo por hora efectiva en parcial.
@@ -1031,7 +1038,7 @@ function calcNominaRegistrado(){
   document.getElementById("r-vest").textContent="+"+fmt(ve);
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent=antigReconocida?'Antigüedad reconocida':"Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
   else{document.getElementById("row-antig").style.display="none";}
-  showR("row-jefe","lbl-jefe","r-jefe","Responsable de equipo — "+hJefe+" h",je,"up");
+  showR("row-responsable","lbl-responsable","r-responsable","Responsable de equipo — "+hResponsable+" h",plusResponsable,"up");
   showR("row-vacplus","lbl-vacplus","r-vacplus",vacationSupplement.mode==='horas'?"Pluses de vacaciones (estimación por horas)":"Promedio de pluses en vacaciones",complementoVac,"up");
   if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
   else{document.getElementById("row-plusserv").style.display="none";}
@@ -1061,7 +1068,7 @@ function calcNominaRegistrado(){
     "Antigüedad":fmt(antM)+' este mes'+(antigReconocida?' · importe reconocido':''),
     "Vacaciones disfrutadas":(pdfDiasVac>0?pdfDiasVac+" día"+(pdfDiasVac!==1?"s":"")+" = "+String(pdfHorasVac).replace(".",",")+" h de jornada":"Ninguna"),
     "Jornada computable del mes":String(hJor).replace(".",",")+" h",
-    "Responsable de equipo":(esJefe?"Sí (10% del salario base)":"No"),
+    "Responsable de equipo":(esResponsable?"Sí (10% del salario base)":"No"),
     "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
   };
@@ -1175,16 +1182,16 @@ function calcFiniquitoRegistrado(){
   var anosAnt=VigilanteRules.seniorityYears(antigFecha,sf);
   if(antigFecha<'1997-01-01'&&valor('f-antig-importe')===''){fail('Indica la antigüedad mensual reconocida: los trienios anteriores a 1997 no se pueden sustituir automáticamente por quinquenios.');return;}
   var ant=valor('f-antig-importe')!==''?numero('f-antig-importe'):calcAntig(anosAnt,fcatActual,document.getElementById('switchCondF').checked);
-  var esJefeF=document.getElementById("switchJefeF").checked;
-  if(esJefeF&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-media')==='')){fail('Para responsable de equipo, indica el salario regulador anual si hay indemnización y la media real de pluses para vacaciones (0 si no procede).');return;}
-  var sbJE=cat.salBase;
+  var esResponsableF=document.getElementById("switchResponsableF").checked;
+  if(esResponsableF&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-media')==='')){fail('Para responsable de equipo, indica el salario regulador anual si hay indemnización y la media real de pluses para vacaciones (0 si no procede).');return;}
+  var salarioBaseMensual=cat.salBase;
   // Salario mensual completo: se usa para valorar las vacaciones pendientes
-  var sMens=r2((sbJE+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
+  var sMens=r2((salarioBaseMensual+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
   if(valor('f-vac-mensual')!=='')sMens=numero('f-vac-mensual');
   var bPaga=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*ratio);
   // Salario regulador de la indemnización (doctrina TS): conceptos salariales
   // + prorrata de pagas extras, excluyendo transporte y vestuario (extrasalariales)
-  var salReg=r2((sbJE+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio+bPaga*3/12);
+  var salReg=r2((salarioBaseMensual+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio+bPaga*3/12);
   var anualReal=tieneIndemnizacion?numero('f-salario-anual'):0,anual=anualReal||r2(salReg*12+(tieneIndemnizacion?numero('f-variable-anual'):0));
   salReg=anual/12;
   var vDia=sMens/30+numero('f-vac-media')/31;
@@ -1262,7 +1269,7 @@ function calcFiniquitoRegistrado(){
     "Fin del contrato":fechaES(sf),
     "Duración":dur.trim()+"  ("+dias+" días)",
     "Antigüedad reconocida":fechaES(antigFecha)+' · complemento mensual a jornada completa '+fmt(ant),
-    "Responsable de equipo":(esJefeF?"Incluido en los importes reales indicados":"No"),
+    "Responsable de equipo":(esResponsableF?"Incluido en los importes reales indicados":"No"),
     "Días de vacaciones pendientes":dv+" días",
     "Motivo de la extinción":(tipo==="voluntaria"?"Baja voluntaria":tipo==="temporal"?"Fin de contrato temporal (12 días/año)":tipo==="objetivo"?"Despido objetivo (20 días/año)":"Despido improcedente (tramos y topes legales)"),
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")

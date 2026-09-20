@@ -83,6 +83,58 @@ run('N01: armed hours, minimum, known guarantees and extra-payment share are exp
  x.set('n-arma-horas',101);x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
  x.set('n-arma-modo','importe');x.set('n-arma-importe',179.90);x.w.calcNominaRegistrado();assert.equal(x.money('r-pelig'),179.90);
 });
+run('Armed overtime includes the declared extra-payment danger without paying variable armed hours twice',x=>{
+ x.d.getElementById('btn-con_arma').click();x.set('hTTotal',170);x.set('n-arma-horas',170);x.set('n-arma-paga',24.08);
+ x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),79.84);assert.equal(x.money('r-pelig'),188.70);
+ // Art. 53: (1161.28 + 24.08) * 12 + (1161.28 + 179.90) * 3 = 18247.86 annually.
+ // 18247.86 / 1782 = 10.24/hour (rounded); the 170 armed hours remain 188.70 separately.
+ x.set('n-arma-paga',179.90);x.w.calcNominaRegistrado();
+ assert.equal(x.money('r-extra'),81.92);assert.equal(x.money('r-pelig'),188.70);assert.equal(x.money('r-bruto'),1681.99);
+ for(const id of ['paga-julio','paga-dic','paga-mar'])x.d.getElementById(id).click();
+ x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),81.92);assert.equal(x.money('r-prorr'),335.30);assert.equal(x.money('r-bruto'),2017.29);
+ x.set('aniosAntiguedad',5);x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),85.04);assert.equal(x.money('r-antig'),45.86);
+});
+run('Armed overtime rate survives an incomplete payroll month and does not replace part-time complementary rates',x=>{
+ x.d.getElementById('btn-con_arma').click();x.set('n-arma-paga',179.90);x.set('n-diasAlta',15);x.set('hTTotal',90);x.set('n-arma-horas',90);
+ x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),92.16);assert.equal(x.money('r-pelig'),99.90);
+ x.set('n-diasAlta',30);x.d.getElementById('jorn-parcial').click();x.set('hPactadas',81);x.set('n-arma-paga',89.95);
+ x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);
+ x.set('n-hora-ordinaria',12);x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),108);assert.equal(x.money('r-pelig'),99.90);
+});
+run('Armed calendar and manual payroll share the corrected overtime amount',x=>{
+ x.d.getElementById('btn-con_arma').click();x.set('hTTotal',170);x.set('hFest',40);x.set('n-arma-horas',170);x.set('n-arma-paga',179.90);
+ x.w.calcNominaRegistrado();const gross=x.money('r-bruto'),net=x.money('r-neto');
+ const days={};for(let day=1;day<=17;day++)days[day]={tramos:[{i:'08:00',f:'18:00'}]};
+ x.calendar(days);x.w.calcNominaRegistrado();
+ assert.equal(x.money('r-extra'),81.92);assert.equal(x.money('r-pelig'),188.70);assert.equal(x.money('r-bruto'),gross);assert.equal(x.money('r-neto'),net);
+});
+run('Armed guarantees still require and use their recognised overtime value',x=>{
+ x.d.getElementById('btn-con_arma').click();x.set('hTTotal',170);x.set('n-arma-modo','importe');x.set('n-arma-importe',179.90);x.set('n-arma-paga',179.90);
+ x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);assert.match(x.text('errorBox'),/precio reconocido/);
+ x.set('n-valor-extra',12);x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),96);assert.equal(x.money('r-pelig'),179.90);
+});
+run('Responsible allowance keeps its hours validation and real severance salary after renaming the controls',x=>{
+ x.d.getElementById('switchResponsable').click();assert.equal(x.d.getElementById('responsable-field').hidden,false);
+ x.set('hTTotal',170);x.set('n-horasResponsable',171);x.w.calcNominaRegistrado();
+ assert.equal(x.w.ctxPDF.nomina,null);assert.match(x.text('errorBox'),/responsable de equipo/);
+ x.set('n-horasResponsable',80);x.w.calcNominaRegistrado();assert.equal(x.money('r-responsable'),57.35);
+ x.d.getElementById('switchResponsable').click();assert.equal(x.d.getElementById('responsable-field').hidden,true);
+ x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-responsable').style.display,'none');
+ x.termination();x.set('f-tipodespido','objetivo');x.d.getElementById('switchResponsableF').click();x.w.calcFiniquitoRegistrado();
+ assert.equal(x.w.ctxPDF.finiquito,null);
+ x.set('f-salario-anual',24000);x.set('f-vac-media',0);x.w.calcFiniquitoRegistrado();
+ assert.ok(x.w.ctxPDF.finiquito);assert.equal(x.money('fr-salreg'),2000);
+ assert.equal(x.w.ctxPDF.finiquito['Responsable de equipo'],'Incluido en los importes reales indicados');
+});
+run('BOE 2026 night and clothing tariffs remain distinct for explosives guards and transport drivers',x=>{
+ // BOE-A-2026-8569, annex I (2026) and annex II, section 10.
+ for(const [category,driver,night,clothing]of [['fondos',false,12.70,113.27],['fondos',true,13.60,114.56],['tr_explo',false,12.70,113.27],['tr_explo',true,13.60,114.56],['explosivos',false,12.60,112.25]]){
+  x.d.getElementById('btn-'+category).click();x.d.getElementById('switchCond').checked=driver;
+  x.d.getElementById('switchCond').dispatchEvent(new x.w.Event('change'));
+  x.set('hTTotal',162);x.set('hNoc',10);x.w.calcNominaRegistrado();
+  assert.equal(x.money('r-noc'),night,category+' night');assert.equal(x.money('r-vest'),clothing,category+' clothing');
+ }
+});
 run('Festive category scope and automatic Christmas monetary estimates remain available',x=>{
  x.set('hTTotal',162);x.set('hFest',8);x.w.calcNominaRegistrado();assert.equal(x.money('r-fest'),8.16);
  x.d.getElementById('btn-fondos').click();x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-fest').style.display,'none');

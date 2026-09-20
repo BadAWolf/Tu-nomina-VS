@@ -35,6 +35,29 @@ for(const [type,index]of [['nomina',1],['baja',3],['finiquito',4],['cuadrante',1
  }finally{w.close();}
 });
 
+for(const mode of ['manual','cuadrante'])test('Armed payroll PDF keeps corrected overtime, separate danger and the responsible allowance: '+mode,()=>{
+ const {w}=setup();try{
+  const d=w.document,calls=[];
+  w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),text=doc.text.bind(doc);doc.text=(value,x,y,...rest)=>{calls.push({text:[value].flat().join(' '),y,page:doc.internal.getCurrentPageInfo().pageNumber});return text(value,x,y,...rest);};return doc;};
+  d.getElementById('btn-con_arma').click();
+  for(const [id,value]of Object.entries({hTTotal:170,'n-arma-horas':170,'n-arma-paga':179.90,'n-horasResponsable':80}))d.getElementById(id).value=value;
+  d.getElementById('switchResponsable').checked=true;
+  if(mode==='cuadrante'){
+   w.CUAD={'2026-09':{}};for(let day=1;day<=17;day++)w.CUAD['2026-09'][day]={tramos:[{i:'08:00',f:'18:00'}]};
+   w.MODO_HORAS='cuadrante';w.calAnio=2026;w.calMes=8;
+  }
+  w.calcNominaRegistrado();const doc=w.construirPDF('nomina');
+  assert.ok(calls.some(c=>c.text.includes('8h × 10,24 €')));
+  for(const value of ['+81,92 €','+188,70 €','+57,35 €',d.getElementById('r-neto').textContent])assert.ok(calls.some(c=>c.text===value),value+' is exported');
+  assert.ok(calls.some(c=>c.text.includes('Responsable de equipo')));
+  assert.ok(calls.every(c=>c.y<=289));
+  if(mode==='cuadrante')assert.equal(doc.getNumberOfPages(),1,'The corrected breakdown stays with the calendar');
+  if(process.env.PDF_SAMPLES==='1'){
+   const out=path.resolve(root,'../../output/pdf');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'arma-corregida-'+mode+'.pdf'),Buffer.from(doc.output('arraybuffer')));
+  }
+ }finally{w.close();}
+});
+
 for(const mode of ['horas','nominas','importe'])test('Vacation supplement PDF keeps the method, average and final amount: '+mode,()=>{
  const {w}=setup();try{
   const d=w.document,calls=[];
