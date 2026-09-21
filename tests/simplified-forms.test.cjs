@@ -10,10 +10,9 @@ function setup(){
 }
 const run=(name,fn)=>test(name,()=>{const x=setup();try{fn(x);}finally{x.w.close();}});
 run('Ordinary finiquito needs no paid amounts or optional corrections',x=>{
- assert.equal(x.d.getElementById('f-casos-especiales').open,false);
- for(const id of ['f-pagado-julio','f-pagado-dic','f-pagado-mar','f-variable-anual','b-origen'])assert.equal(x.d.getElementById(id),null);
+ for(const id of ['f-casos-especiales','f-salario-anual','f-vac-mensual','f-vac-media','f-ss-vac','f-antig-fecha','f-antig-importe','f-historial','f-extra-julio','f-extra-dic','f-extra-mar','f-pendiente','f-ss-pendiente','f-ajuste-neto','f-fiscalidad','f-pagado-julio','f-pagado-dic','f-pagado-mar','f-variable-anual','b-origen'])assert.equal(x.d.getElementById(id),null,id+' removed');
  x.set('f-inicio','2026-01-01');x.set('f-fin','2026-12-31');x.w.calcFiniquitoRegistrado();
- assert.ok(x.w.ctxPDF.finiquito);assert.equal(x.d.getElementById('f-casos-especiales').open,false);
+ assert.ok(x.w.ctxPDF.finiquito);
  assert.equal(x.d.getElementById('frow-navidad').style.display,'none');
  // Extra salary 1161.28 + danger 24.08 = 1185.36. July's next cycle:
  // July–December = 184/365; March 2027: full 2026.
@@ -34,19 +33,17 @@ run('On-time payments across all three contractual deadlines and new Christmas s
  assert.equal(x.w.propPaga(new Date('2026-12-31'),new Date('2026-12-31'),'navidad'),1/365);
  assert.equal(x.w.propPaga(new Date('2026-12-15'),new Date('2026-12-15'),'navidad'),0);
 });
-run('Prorated extras stay excluded; exceptional pending balances are never subtracted twice',x=>{
+run('Prorated extras stay excluded and turning one off only adds its pending cycle',x=>{
  x.set('f-inicio','2026-01-01');x.set('f-fin','2026-12-31');
  for(const p of ['julio','dic','mar'])x.d.getElementById('fpaga-'+p).click();
  x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-total-neto'),0);
- x.set('f-extra-dic',100);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-navidad'),100);assert.equal(x.money('fr-total-neto'),100);
- assert.match(x.d.getElementById('flbl-navidad').textContent,/pendiente indicada/);
+ x.d.getElementById('fpaga-julio').click();x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-julio'),597.55);assert.equal(x.money('fr-total-neto'),597.55);
 });
-run('Exceptional antigüedad remains available and a missing historical amount opens its section',x=>{
+run('The simple form does not silently substitute quinquenios for pre-1997 trienios',x=>{
  x.set('f-inicio','1990-01-01');x.set('f-fin','2026-09-30');x.w.calcFiniquitoRegistrado();
- assert.equal(x.w.ctxPDF.finiquito,null);assert.equal(x.d.getElementById('f-casos-especiales').open,true);
- x.set('f-antig-importe',400);x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);
- x.set('f-antig-importe',-1);x.d.getElementById('f-casos-especiales').open=false;x.w.calcFiniquitoRegistrado();
- assert.equal(x.w.ctxPDF.finiquito,null);assert.equal(x.d.getElementById('f-casos-especiales').open,true);
+ assert.equal(x.w.ctxPDF.finiquito,null);assert.match(x.d.getElementById('f-errorBox').textContent,/revisión individual/);
+ x.set('f-inicio','2021-09-20');x.set('f-fin','2026-09-16');x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);
+ assert.match(x.w.ctxPDF.finiquito['Antigüedad estimada'],/45,86/);
 });
 run('IT requires a real base, keeps the net unchanged and cannot fall back to category tables',x=>{
  x.set('b-inicio','2026-01-25');x.set('b-fin','2026-02-10');x.set('b-irpf',10);
@@ -62,9 +59,23 @@ run('PDF preserves on-time payment assumptions and labels unknown deductions ins
  assert.equal(x.d.getElementById('frow-navidad').style.display,'none');
  const calls=[];x.w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),original=doc.text.bind(doc);doc.text=(text,...args)=>{calls.push([text].flat().join(' '));return original(text,...args);};return doc;};
  const doc=x.w.construirPDF('finiquito');
+ assert.equal(doc.getNumberOfPages(),1,'A basic finiquito fits without an orphaned note on a second sheet');
  assert.ok(calls.some(t=>t.includes('día 15')));assert.ok(calls.some(t=>t.includes('IMPORTE PENDIENTE DE DEDUCCIONES')));
- assert.ok(calls.join(' ').includes('Navidad se considera cobrada'));
+ assert.ok(calls.join(' ').includes('No incluye la nómina del último mes'));
+ assert.ok(calls.join(' ').includes('No se descuenta la Seguridad Social'));
+ assert.doesNotMatch(calls.join(' '),/casos especiales|saldos indicados|opción fiscal elegida/);
  if(process.env.PDF_SAMPLES==='1'){
   const dir=path.resolve(__dirname,'../../../output/pdf');fs.mkdirSync(dir,{recursive:true});fs.writeFileSync(path.join(dir,'finiquito-simplificado.pdf'),Buffer.from(doc.output('arraybuffer')));
  }
+});
+run('All available categories and termination reasons calculate without removed inputs',x=>{
+ x.set('f-inicio','2025-01-01');x.set('f-fin','2026-06-30');x.set('f-vacas',15);x.set('f-irpf',10);
+ for(const category of ['sin_arma','con_arma','escolta','explosivos','fondos','tr_explo'])for(const type of ['voluntaria','temporal','sustitucion','objetivo','improcedente'])for(const responsible of [false,true]){
+  x.d.getElementById('fbtn-'+category).click();x.d.getElementById('switchResponsableF').checked=responsible;x.set('f-tipodespido',type);x.w.calcFiniquitoRegistrado();
+  assert.ok(x.w.ctxPDF.finiquito,category+' '+type+' '+responsible);
+  assert.equal(x.d.getElementById('f-errorBox').style.display,'none');
+  assert.ok(Number.isFinite(x.money('fr-total-neto')));
+ }
+ x.d.getElementById('switchResponsableF').checked=false;x.d.getElementById('fbtn-escolta').click();x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),947.40);
+ x.d.getElementById('fbtn-con_arma').click();x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),795.64);assert.match(x.d.getElementById('f-notas-calculo').textContent,/179,90/);
 });

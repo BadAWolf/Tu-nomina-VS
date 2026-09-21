@@ -113,7 +113,7 @@ run('Armed guarantees still require and use their recognised overtime value',x=>
  x.w.calcNominaRegistrado();assert.equal(x.w.ctxPDF.nomina,null);assert.match(x.text('errorBox'),/precio reconocido/);
  x.set('n-valor-extra',12);x.w.calcNominaRegistrado();assert.equal(x.money('r-extra'),96);assert.equal(x.money('r-pelig'),179.90);
 });
-run('Responsible allowance keeps its hours validation and real severance salary after renaming the controls',x=>{
+run('Responsible allowance keeps payroll hours validation and a stable-function finiquito estimate',x=>{
  x.d.getElementById('switchResponsable').click();assert.equal(x.d.getElementById('responsable-field').hidden,false);
  x.set('hTTotal',170);x.set('n-horasResponsable',171);x.w.calcNominaRegistrado();
  assert.equal(x.w.ctxPDF.nomina,null);assert.match(x.text('errorBox'),/responsable de equipo/);
@@ -121,10 +121,8 @@ run('Responsible allowance keeps its hours validation and real severance salary 
  x.d.getElementById('switchResponsable').click();assert.equal(x.d.getElementById('responsable-field').hidden,true);
  x.w.calcNominaRegistrado();assert.equal(x.d.getElementById('row-responsable').style.display,'none');
  x.termination();x.set('f-tipodespido','objetivo');x.d.getElementById('switchResponsableF').click();x.w.calcFiniquitoRegistrado();
- assert.equal(x.w.ctxPDF.finiquito,null);
- x.set('f-salario-anual',24000);x.set('f-vac-media',0);x.w.calcFiniquitoRegistrado();
- assert.ok(x.w.ctxPDF.finiquito);assert.equal(x.money('fr-salreg'),2000);
- assert.equal(x.w.ctxPDF.finiquito['Responsable de equipo'],'Incluido en los importes reales indicados');
+ assert.ok(x.w.ctxPDF.finiquito);assert.equal(x.money('fr-salreg'),1597.83);
+ assert.equal(x.w.ctxPDF.finiquito['Responsable de equipo'],'10% del salario base; funciones estables');
 });
 run('BOE 2026 night and clothing tariffs remain distinct for explosives guards and transport drivers',x=>{
  // BOE-A-2026-8569, annex I (2026) and annex II, section 10.
@@ -156,7 +154,7 @@ run('Legacy seniority requires its recognised amount instead of replacing consol
  x.set('n-antig-importe',400);x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),400);assert.equal(x.text('lbl-antig'),'Antigüedad reconocida');
  assert.equal(x.d.getElementById('n-antig-importe-field').hidden,false);
  x.set('aniosAntiguedad',5);x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),45.86);assert.equal(x.d.getElementById('n-antig-importe-field').hidden,true);
- x.termination();x.set('f-antig-fecha','1990-01-01');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);x.set('f-antig-importe',400);x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);
+ x.termination();x.set('f-inicio','1990-01-01');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);assert.match(x.text('f-errorBox'),/revisión individual/);
 });
 run('B01/B02: real bases reject implausible full-time amounts and include additional overtime quotas',x=>{
  x.illness();for(const base of [1,20000]){x.set('b-baseManual',base);x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja,null);}
@@ -177,26 +175,25 @@ run('Professional IT requires the recognised BR; a hospital relapse cannot resta
  x.set('b-tipo','hospitalizacion');x.set('b-dias-previos',40);x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja,null);assert.match(x.text('b-errorBox'),/reiniciar/);
 });
 run('F01/F02: daily money stays unrounded until total; quinquenio starts the first day of the anniversary month',x=>{
- x.termination();x.set('f-vacas',15);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),717.73);assert.match(x.text('f-total-label'),/PENDIENTE/);assert.equal(x.text('fr-ss-liq'),'Pendiente');
- x.set('f-inicio','2021-09-20');x.set('f-fin','2026-09-16');x.w.calcFiniquitoRegistrado();assert.match(x.w.ctxPDF.finiquito['Antigüedad reconocida'],/45,86/);
+ x.termination();x.set('f-vacas',15);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),717.73);assert.match(x.text('f-total-label'),/PENDIENTE/);assert.equal(x.text('fr-ss-liq'),'No incluida');
+ x.set('f-inicio','2021-09-20');x.set('f-fin','2026-09-16');x.w.calcFiniquitoRegistrado();assert.match(x.w.ctxPDF.finiquito['Antigüedad estimada'],/45,86/);
  x.set('hTTotal',162);x.set('aniosAntiguedad',5);x.w.calcNominaRegistrado();assert.equal(x.money('r-antig'),45.86);
 });
-run('F03: actual annual salary includes customary variables; vacation average and known L13 quota are accounted once',x=>{
- x.termination();x.set('f-tipodespido','objetivo');x.set('f-salario-anual',36500);x.set('f-fiscalidad','exenta');x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),3000);
- x.set('f-salario-anual',37700);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),3098.63);
- x.set('f-vacas',15);x.set('f-vac-media',310);x.set('f-ss-vac',60);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),867.73);assert.equal(x.money('fr-ss-liq'),-60);assert.equal(x.text('f-total-label'),'NETO ESTIMADO');
+run('F03: simple indemnity uses salary tables and adds the stable responsible function once',x=>{
+ x.termination();x.set('f-tipodespido','objetivo');x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),1461.40);
+ x.d.getElementById('switchResponsableF').click();x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),1575.94);
+ x.set('f-vacas',15);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-vacas'),773.92);assert.equal(x.text('fr-ss-liq'),'No incluida');assert.match(x.text('f-total-label'),/PENDIENTE/);
  x.set('f-vacas',45);x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);
 });
 run('F04: exemption is never assumed; temporal contracts are taxable and substitution/training have no statutory indemnity',x=>{
- x.termination();x.set('f-tipodespido','objetivo');x.set('f-salario-anual',36500);x.set('f-irpf',10);x.w.calcFiniquitoRegistrado();assert.match(x.text('f-total-label'),/PENDIENTE/);
- const pending=x.money('fr-total-neto');x.set('f-fiscalidad','sujeta');x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-total-neto'),pending-300);assert.equal(x.money('fr-irpf-indem'),-300);
- x.set('f-tipodespido','temporal');x.w.calcFiniquitoRegistrado();assert.ok(x.money('fr-irpf-indem')<0);
+ x.termination();x.set('f-tipodespido','objetivo');x.set('f-irpf',10);x.w.calcFiniquitoRegistrado();assert.match(x.text('f-total-label'),/PENDIENTE/);
+ assert.equal(x.d.getElementById('frow-irpf-indem').style.display,'none');assert.match(x.text('f-notas-calculo'),/IRPF depende/);
+ x.set('f-tipodespido','temporal');x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-irpf-indem'),-87.44);
  x.set('f-tipodespido','sustitucion');x.w.calcFiniquitoRegistrado();assert.equal(x.d.getElementById('frow-indem').style.display,'none');
 });
-run('Termination incident history, subrogation, salary arrears and advances are explicit',x=>{
- x.termination();x.set('f-historial','cambios');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);
- for(const p of ['julio','dic','mar'])x.set('f-extra-'+p,0);
- x.set('f-pendiente',1000);x.set('f-ss-pendiente',65);x.set('f-ajuste-neto',100);x.set('f-irpf',10);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-total-neto'),735);
- x.set('f-antig-fecha','2026-01-01');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);
- x.set('f-antig-fecha','2024-01-01');x.set('f-tipodespido','objetivo');x.set('f-salario-anual',36500);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),5000);
+run('Simple termination lists its scope without inviting removed corrections',x=>{
+ x.termination();x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);
+ assert.match(x.text('f-notas-calculo'),/No incluye la nómina del último mes/);
+ assert.doesNotMatch(x.text('f-notas-calculo'),/introduce|añade|casos especiales/);
+ x.set('f-inicio','2026-07-01');x.w.calcFiniquitoRegistrado();assert.equal(x.w.ctxPDF.finiquito,null);
 });

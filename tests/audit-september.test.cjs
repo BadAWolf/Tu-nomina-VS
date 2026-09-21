@@ -116,8 +116,8 @@ run('30 minute-based shift oracles also reconcile daily calendar totals, includi
  x.w.CUAD={'2026-08':{31:{tramos:[{i:'22:00',f:'06:00'}]}},'2026-09':{1:{tramos:[{i:'14:00',f:'18:00'}]}}};
  assert.equal(x.w.resumenDia(2026,8,1).horas,10);assert.equal(x.w.resumenDia(2026,8,1).lineas[0],'2 tramos');
 });
-run('Automatic severance uses the exact annual salary, matching a direct annual input',x=>{
- x.d.getElementById('fbtn-fondos').click();x.set('f-inicio','2000-01-01');x.set('f-fin','2026-09-30');x.set('f-antig-importe',0);x.set('f-tipodespido','objetivo');x.set('f-fiscalidad','exenta');
- x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),23935.02);
- x.set('f-salario-anual',24267.45);x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),23935.02);
+run('Automatic severance retains annual precision including five quinquenios',x=>{
+ x.d.getElementById('fbtn-fondos').click();x.set('f-inicio','2000-01-01');x.set('f-fin','2026-09-30');x.set('f-tipodespido','objetivo');
+ // Annual table 24267.45 + five seniority steps (232.95 × 15); 360-day cap.
+ x.w.calcFiniquitoRegistrado();assert.equal(x.money('fr-indem'),27381.40);
 });

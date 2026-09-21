@@ -767,9 +767,6 @@ function actualizarOpcionesCalculo(){
   document.getElementById('n-especiales-card').hidden=!particulares;
   document.getElementById('n-especiales-importes').hidden=!particulares;
   document.getElementById('hint-extras').textContent=jornActual==='parcial'?'El exceso requiere pacto y valor de hora complementaria.':'Si superas 162 h, el exceso se cobra como hora extra';
-  document.getElementById('f-fiscalidad-field').hidden=!['objetivo','improcedente'].includes(valor('f-tipodespido'));
-  document.getElementById('f-salario-anual').closest('.field').hidden=['voluntaria','sustitucion'].includes(valor('f-tipodespido'));
-  ['f-vac-mensual','f-vac-media','f-ss-vac'].forEach(function(id){document.getElementById(id).closest('.field').hidden=numero('f-vacas')<=0;});
 }
 ['view-nomina','view-finiquito'].forEach(function(id){
   ['input','change','click'].forEach(function(event){document.getElementById(id).addEventListener(event,actualizarOpcionesCalculo);});
@@ -1194,128 +1191,91 @@ function calcFiniquito(){
 }
 function calcFiniquitoRegistrado(){
   ctxPDF.finiquito=null;
-  actualizarOpcionesCalculo();
-  function fail(message,especial){var e=document.getElementById('f-errorBox');e.textContent=message;e.style.display='block';invalidarCalculo('finiquito');if(especial)document.getElementById('f-casos-especiales').open=true;}
-  if(!window.VigilanteSecurity.validateInputs('view-finiquito','f-errorBox','resultado-finiquito')){ctxPDF.finiquito=null;return;}
-  var cat=catEf(fcatActual,document.getElementById("switchCondF").checked);
-  var dv=parseFloat(document.getElementById("f-vacas").value)||0;
-  var ip=parseFloat(document.getElementById("f-irpf").value)||0;
-  var tipo=document.getElementById("f-tipodespido").value;
-  var si=document.getElementById("f-inicio").value, sf=document.getElementById("f-fin").value;
-  var err=document.getElementById("f-errorBox");
-  if(!si||!sf){err.textContent="Introduce las fechas de inicio y fin del contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  var d1=new Date(si),d2=new Date(sf);
-  if(d2<d1){err.textContent="La fecha de fin no puede ser anterior a la de inicio.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  if(sf.slice(0,4)!=='2026'){fail('Las tablas y reglas monetarias disponibles son las de 2026. El fin del contrato debe estar en 2026; el inicio puede ser anterior.');return;}
-  var antigFecha=valor('f-antig-fecha')||si;
-  if(!VigilanteRules.validDate(antigFecha)||antigFecha>si){fail('La antigüedad reconocida debe ser igual o anterior al inicio del contrato.',true);return;}
-  var tieneIndemnizacion=['objetivo','improcedente','temporal'].includes(tipo);
-  if(fcatActual==='con_arma'&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-mensual')==='')){fail('Para trabajo con arma, indica el salario regulador anual real si hay indemnización y, si hay vacaciones, su remuneración fija reconocida. La tabla no determina las horas armadas ni las garantías históricas.',true);return;}
-  var fhp=fjornActual==="completa"?JORNADA:(parseFloat(document.getElementById("fhPactadas").value)||0);
-  if(fjornActual==="parcial"&&fhp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  if(fjornActual==="parcial"&&fhp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
-  err.style.display="none";
-  var ratio=fhp/JORNADA;
-  var dias=VigilanteRules.days(si,sf);
-  var anosAnt=VigilanteRules.seniorityYears(antigFecha,sf);
-  if(antigFecha<'1997-01-01'&&valor('f-antig-importe')===''){fail('Indica la antigüedad mensual reconocida: los trienios anteriores a 1997 no se pueden sustituir automáticamente por quinquenios.',true);return;}
-  var ant=valor('f-antig-importe')!==''?numero('f-antig-importe'):calcAntig(anosAnt,fcatActual,document.getElementById('switchCondF').checked);
-  var esResponsableF=document.getElementById("switchResponsableF").checked;
-  if(esResponsableF&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-media')==='')){fail('Para responsable de equipo, indica el salario regulador anual si hay indemnización y la media real de pluses para vacaciones (0 si no procede).',true);return;}
-  var salarioBaseMensual=cat.salBase;
-  // Salario mensual completo: se usa para valorar las vacaciones pendientes
-  var sMens=r2((salarioBaseMensual+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
-  if(valor('f-vac-mensual')!=='')sMens=numero('f-vac-mensual');
+  function fail(message){var e=document.getElementById('f-errorBox');e.textContent=message;e.style.display='block';invalidarCalculo('finiquito');}
+  if(!window.VigilanteSecurity.validateInputs('view-finiquito','f-errorBox','resultado-finiquito'))return;
+  var si=valor('f-inicio'),sf=valor('f-fin');
+  if(!si||!sf){fail('Introduce las fechas de inicio y fin del contrato.');return;}
+  if(!VigilanteRules.validDate(si)||!VigilanteRules.validDate(sf)||sf<si){fail('La fecha de fin debe ser igual o posterior a la de inicio.');return;}
+  if(sf.slice(0,4)!=='2026'){fail('Las tablas disponibles son las de 2026. El fin del contrato debe estar en 2026; el inicio puede ser anterior.');return;}
+  if(si<'1997-01-01'){fail('La estimación automática de antigüedad cubre inicios desde 1997. Los trienios anteriores necesitan una revisión individual del finiquito.');return;}
+  var fhp=fjornActual==='completa'?JORNADA:numero('fhPactadas');
+  if(fjornActual==='parcial'&&!(fhp>0&&fhp<JORNADA)){fail('Introduce unas horas pactadas mayores que 0 y menores que 162.');return;}
+  var conductor=document.getElementById('switchCondF').checked,cat=catEf(fcatActual,conductor);
+  var ratio=fhp/JORNADA,dv=numero('f-vacas'),ip=numero('f-irpf'),tipo=valor('f-tipodespido');
+  var dias=VigilanteRules.days(si,sf),anosAnt=VigilanteRules.seniorityYears(si,sf),ant=calcAntig(anosAnt,fcatActual,conductor);
+  var responsable=document.getElementById('switchResponsableF').checked;
+  // Stable-category estimate only: full assigned function throughout the reference
+  // period. Real variable averages and historical armed guarantees are not inferred.
+  var responsableMes=responsable?cat.salBase*.10*ratio:0;
+  var funcionalMes=(cat.esc||0)*ratio+responsableMes;
+  var sMens=r2((cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
   var bPaga=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*ratio);
-  // Salario regulador de la indemnización (doctrina TS): conceptos salariales
-  // + prorrata de pagas extras, excluyendo transporte y vestuario (extrasalariales)
-  var fijoAnual=(salarioBaseMensual+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio*12+bPaga*3;
-  var anualReal=tieneIndemnizacion?numero('f-salario-anual'):0,anual=anualReal||r2(fijoAnual);
-  var salReg=anual/12;
-  var vDia=sMens/30+numero('f-vac-media')/31;
-  var totVacas=r2(dv*vDia);
-  var pJulio=document.getElementById("fpaga-julio").classList.contains("active");
-  var pDic=document.getElementById("fpaga-dic").classList.contains("active");
-  var pMar=document.getElementById("fpaga-mar").classList.contains("active");
-  var impJulio=0,impNavidad=0,impMarzo=0;
-  var pJulTxt="",pNavTxt="",pMarTxt="";
-  if(!pJulio){var pr=propPaga(d1,d2,"julio");impJulio=r2(bPaga*pr);pJulTxt="Paga Julio proporcional ("+(pr*100).toFixed(1).replace('.',',')+"% del periodo)";}
-  if(!pDic){var pr2=propPaga(d1,d2,"navidad");impNavidad=r2(bPaga*pr2);pNavTxt="Paga Navidad proporcional ("+(pr2*100).toFixed(1).replace('.',',')+"% del periodo)";}
-  if(!pMar){var pr3=propPaga(d1,d2,"marzo");impMarzo=r2(bPaga*pr3);pMarTxt="Paga Marzo proporcional ("+(pr3*100).toFixed(1).replace('.',',')+"% del periodo)";}
-  var extrasReales=['julio','dic','mar'].map(function(p){return valor('f-extra-'+p);});
-  if((valor('f-historial')==='cambios'||fcatActual==='con_arma')&&extrasReales.some(function(v){return v==='';})){fail('Indica los tres saldos pendientes de extras para este historial (0 si no procede o ya estaban prorrateadas).',true);return;}
-  if(extrasReales[0]!==''){impJulio=Number(extrasReales[0]);pJulTxt='Paga Julio pendiente indicada';}
-  if(extrasReales[1]!==''){impNavidad=Number(extrasReales[1]);pNavTxt='Paga Navidad pendiente indicada';}
-  if(extrasReales[2]!==''){impMarzo=Number(extrasReales[2]);pMarTxt='Paga Marzo pendiente indicada';}
-  var pendiente=numero('f-pendiente'),ajuste=numero('f-ajuste-neto');
-  var liqBruta=r2(totVacas+impJulio+impNavidad+impMarzo+pendiente);
-  // L13 depende de meses/topes y de bases ya cotizadas. No inventar un neto
-  // aplicando un porcentaje al bruto de vacaciones sin esos datos.
-  var faltaSS=dv>0&&valor('f-ss-vac')===''||pendiente>0&&valor('f-ss-pendiente')==='';
-  var ssLiq=r2((dv>0?numero('f-ss-vac'):0)+(pendiente>0?numero('f-ss-pendiente'):0));
-  var irpfLiq=r2(liqBruta*ip/100);
-  var liqNeto=r2(liqBruta-ssLiq-irpfLiq);
-  var indem=VigilanteRules.severance(antigFecha,sf,tipo,anual);
-  var fiscal=valor('f-fiscalidad'),faltaFiscal=indem>0&&['objetivo','improcedente'].includes(tipo)&&fiscal==='pendiente';
-  var sujeto=tipo==='temporal'||fiscal==='sujeta'?indem:fiscal==='exenta'?Math.max(0,indem-180000):0;
-  var irpfIndem=r2(sujeto*ip/100);
-  var totalNeto=r2(liqNeto+indem-irpfIndem-ajuste);
-  var incompleto=faltaSS||faltaFiscal;
-  document.getElementById('f-total-label').textContent=incompleto?'IMPORTE PENDIENTE DE DEDUCCIONES':'NETO ESTIMADO';
-  document.getElementById('f-total-hint').textContent=incompleto?'Aún faltan datos para determinar el neto':'De los conceptos incluidos en este cálculo';
-  var notasF=['Estimación con condiciones estables. Se consideran cobradas las pagas vencidas el 15 de marzo, julio y diciembre, salvo los saldos pendientes que hayas indicado. No se incluyen impagos ni se presumen descuentos por anticipos.'];
-  if(sf.slice(5)>='12-15'&&sf.slice(5)<'12-31'&&si<=sf.slice(0,4)+'-12-15'&&!pDic)notasF.push('Navidad se considera cobrada. Si la empresa debe regularizar un anticipo hasta el 31 de diciembre, introduce únicamente el descuento neto reconocido en los casos especiales.');
-  if(faltaSS)notasF.push('Falta la cuota del trabajador de vacaciones (L13) o de salarios pendientes. No está descontada: el total no es el neto.');
-  if(faltaFiscal)notasF.push('Indemnización mostrada bruta, pendiente de comprobar la exención y descontar el IRPF que corresponda.');
-  notasF.push(anualReal?'Salario regulador anual indicado: '+fmt(anual)+'.':'Salario regulador orientativo con tablas de 2026: '+fmt(anual)+'.');
-  notasF.push('Se incluyen exclusivamente los conceptos desglosados. La indemnización no sustituye la liquidación de salarios; añade las cantidades pendientes reales sin duplicarlas. Vacaciones: parte fija mensual / 30 y promedio de variables / 31, sin redondear el valor diario antes del producto.');
-  document.getElementById('f-notas-calculo').textContent=notasF.join(' ');
-  var anosN=Math.floor(dias/365),mN=Math.floor((dias%365)/30),dN=(dias%365)%30;
-  var dur="";
-  if(anosN>0)dur+=anosN+" año"+(anosN>1?"s":"")+" ";
-  if(mN>0)dur+=mN+" mes"+(mN>1?"es":"")+" ";
-  if(dN>0)dur+=dN+" día"+(dN>1?"s":"");
-  var sufRatio=fjornActual==="parcial"?" (Ajuste parcial: "+fhp+"h)":"";
-  document.getElementById('f-info-duracion').textContent='Contrato: '+dias+' días naturales. Antigüedad reconocida desde '+fechaES(antigFecha)+'; complemento mensual a jornada completa '+fmt(ant)+'.';
-  showR("frow-vacas","flbl-vacas","fr-vacas","Vacaciones ("+dv+" días × "+fmt(vDia)+")"+sufRatio,totVacas,"up");
-  showR("frow-julio","flbl-julio","fr-julio",pJulTxt,impJulio,"up");
-  showR("frow-navidad","flbl-navidad","fr-navidad",pNavTxt,impNavidad,"up");
-  showR("frow-marzo","flbl-marzo","fr-marzo",pMarTxt,impMarzo,"up");
-  showR('frow-pendiente',null,'fr-pendiente','',pendiente,'up');
-  showR('frow-ajuste',null,'fr-ajuste','',ajuste,'down');
+  var anual=r2((cat.salBase+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio*12+responsableMes*12+bPaga*3);
+  var salReg=anual/12,vDia=sMens/30+funcionalMes/31,totVacas=r2(dv*vDia);
+  var d1=new Date(si),d2=new Date(sf);
+  var pJulio=document.getElementById('fpaga-julio').classList.contains('active');
+  var pDic=document.getElementById('fpaga-dic').classList.contains('active');
+  var pMar=document.getElementById('fpaga-mar').classList.contains('active');
+  var pr=pJulio?0:propPaga(d1,d2,'julio'),pr2=pDic?0:propPaga(d1,d2,'navidad'),pr3=pMar?0:propPaga(d1,d2,'marzo');
+  var impJulio=r2(bPaga*pr),impNavidad=r2(bPaga*pr2),impMarzo=r2(bPaga*pr3);
+  var liqBruta=r2(totVacas+impJulio+impNavidad+impMarzo),irpfLiq=r2(liqBruta*ip/100),liqNeto=r2(liqBruta-irpfLiq);
+  var indem=VigilanteRules.severance(si,sf,tipo,anual),irpfIndem=tipo==='temporal'?r2(indem*ip/100):0;
+  // No L13 amount or tax-exemption declaration is collected in this simple form.
+  // Keep unknown deductions explicit instead of inventing an exact net amount.
+  var faltaSS=dv>0,faltaFiscal=indem>0&&['objetivo','improcedente'].includes(tipo),incompleto=faltaSS||faltaFiscal;
+  var total=r2(liqNeto+indem-irpfIndem);
+  var notas=[
+    'Tablas de 2026. Antigüedad desde la fecha de inicio; categoría y jornada estables.',
+    'Incluye vacaciones pendientes, extras no prorrateadas e indemnización si procede. No incluye la nómina del último mes, otros pluses variables, impagos ni anticipos.',
+    'Las pagas vencidas se consideran cobradas el 15 de marzo, julio y diciembre. Los abonos anticipados y su regularización pueden modificar el resultado.'
+  ];
+  if(faltaSS)notas.push('No se descuenta la Seguridad Social de las vacaciones: el importe queda pendiente de esa cotización.');
+  if(faltaFiscal)notas.push('La indemnización por despido se muestra bruta; su IRPF depende de si cumple los requisitos de exención.');
+  if(fcatActual==='con_arma')notas.push('Con arma: se toma la referencia mensual de 179,90 € durante todo el periodo, incluidas extras y vacaciones. Las horas armadas y garantías reconocidas pueden cambiar este importe.');
+  if(funcionalMes)notas.push('Se supone que las funciones de escolta o responsable se mantuvieron durante todo el periodo de referencia. Su promedio de vacaciones se estima con la mensualidad de esas funciones, dividida entre 31.');
+  document.getElementById('f-errorBox').style.display='none';
+  document.getElementById('f-info-duracion').textContent='Contrato: '+dias+' días naturales. Antigüedad desde '+fechaES(si)+': '+fmt(ant)+'/mes a jornada completa.';
+  var sufRatio=fjornActual==='parcial'?' ('+fhp+' h contratadas)':'';
+  showR('frow-vacas','flbl-vacas','fr-vacas','Vacaciones ('+dv+' días)'+sufRatio,totVacas,'up');
+  showR('frow-julio','flbl-julio','fr-julio','Paga Julio proporcional ('+(pr*100).toFixed(1).replace('.',',')+'% del periodo)',impJulio,'up');
+  showR('frow-navidad','flbl-navidad','fr-navidad','Paga Navidad proporcional ('+(pr2*100).toFixed(1).replace('.',',')+'% del periodo)',impNavidad,'up');
+  showR('frow-marzo','flbl-marzo','fr-marzo','Paga Marzo proporcional ('+(pr3*100).toFixed(1).replace('.',',')+'% del periodo)',impMarzo,'up');
   showR('frow-irpf-indem',null,'fr-irpf-indem','',irpfIndem,'down');
-  document.getElementById("fr-liq-bruta").textContent=fmt(liqBruta);
-  document.getElementById("fr-ss-liq").textContent=faltaSS&&ssLiq===0?'Pendiente':'-'+fmt(ssLiq)+(faltaSS?' (parcial)':'');
-  if(ip>0){document.getElementById("frow-irpf-liq").style.display="flex";document.getElementById("flbl-irpf-liq").textContent="Retención IRPF ("+ip+"%)";document.getElementById("fr-irpf-liq").textContent="-"+fmt(irpfLiq);}
-  else{document.getElementById("frow-irpf-liq").style.display="none";}
-  document.getElementById("fr-liq-neto").textContent=fmt(liqNeto);
-  document.getElementById('f-liq-label').textContent=faltaSS?'Liquidación pendiente de cotización':'Neto liquidación estimado';
-  if(indem>0){document.getElementById("frow-indem-label").style.display="block";document.getElementById("frow-indem").style.display="flex";document.getElementById("flbl-indem").textContent=(tipo==="improcedente"?"Indemnización bruta (tramos 45/33 días y topes legales)":tipo==="temporal"?"Indemnización bruta fin temporal (12 días/año)":"Indemnización bruta objetivo (20 días/año, máx. 12 meses)")+sufRatio;document.getElementById("fr-indem").textContent="+"+fmt(indem);document.getElementById("fr-salreg").textContent=fmt(salReg);document.getElementById("f-exento-info").style.display="block";}
-  else{document.getElementById("frow-indem-label").style.display="none";document.getElementById("frow-indem").style.display="none";document.getElementById("f-exento-info").style.display="none";}
-  document.getElementById("fr-total-neto").textContent=fmt(totalNeto);
-  document.getElementById("resultado-finiquito").style.display="block";
+  showR('frow-irpf-liq','flbl-irpf-liq','fr-irpf-liq','Retención IRPF ('+ip+'%)',irpfLiq,'down');
+  document.getElementById('fr-liq-bruta').textContent=fmt(liqBruta);
+  document.getElementById('fr-ss-liq').textContent=faltaSS?'No incluida':fmt(0);
+  document.getElementById('fr-liq-neto').textContent=fmt(liqNeto);
+  document.getElementById('f-liq-label').textContent=faltaSS?'Liquidación antes de cotizar vacaciones':'Neto liquidación orientativo';
+  document.getElementById('frow-indem-label').style.display=indem>0?'block':'none';
+  document.getElementById('f-exento-info').style.display=indem>0?'block':'none';
+  var indemLabel=tipo==='improcedente'?'Indemnización bruta (tramos 45/33 días y topes legales)':tipo==='temporal'?'Indemnización bruta fin temporal (12 días/año)':'Indemnización bruta objetivo (20 días/año, máx. 12 meses)';
+  showR('frow-indem','flbl-indem','fr-indem',indemLabel+sufRatio,indem,'up');
+  document.getElementById('fr-salreg').textContent=fmt(salReg);
+  document.getElementById('fr-total-neto').textContent=fmt(total);
+  document.getElementById('f-total-label').textContent=incompleto?'IMPORTE PENDIENTE DE DEDUCCIONES':'NETO ORIENTATIVO';
+  document.getElementById('f-total-hint').textContent=incompleto?'Revisa las deducciones indicadas en el desglose':'Solo los conceptos desglosados';
+  document.getElementById('f-notas-calculo').textContent=notas.join(' ');
+  ctxPDF.finiquito={
+    'Categoría':nombreCat(fcatActual,conductor),
+    'Tipo de jornada':fjornActual==='completa'?'Jornada completa (162 h/mes)':'Jornada parcial ('+fhp+' h/mes)',
+    'Inicio del contrato':fechaES(si),'Fin del contrato':fechaES(sf),'Duración':dias+' días naturales',
+    'Antigüedad estimada':fechaES(si)+' · '+fmt(ant)+'/mes a jornada completa',
+    'Responsable de equipo':responsable?'10% del salario base; funciones estables':'No',
+    'Días de vacaciones pendientes':dv+' días',
+    'Motivo de la extinción':document.getElementById('f-tipodespido').selectedOptions[0].textContent,
+    'Retención IRPF aplicada':ip+' %',
+    'Pagas extra':'Pagas vencidas abonadas el día 15; solo se incluyen las pendientes.',
+    'Estado del resultado':document.getElementById('f-total-label').textContent,
+    'Deducciones pendientes':faltaSS&&faltaFiscal?'Cotización de vacaciones e IRPF de indemnización':faltaSS?'Cotización de vacaciones':faltaFiscal?'IRPF de indemnización':'Ninguna de los conceptos incluidos'
+  };
+  if(indem>0)ctxPDF.finiquito['Salario regulador estimado']=fmt(salReg)+'/mes';
+  document.getElementById('resultado-finiquito').style.display='block';
   cargarJsPDF(function(){});
   window.VigilanteInstall?.calculationCompleted();
   window.VigilanteAnalytics?.track('calculation_complete');
-  ctxPDF.finiquito={
-    "Categoría":nombreCat(fcatActual,document.getElementById("switchCondF").checked),
-    "Tipo de jornada":(fjornActual==="completa"?"Jornada completa (162 h/mes)":"Jornada parcial ("+fhp+" h/mes pactadas)"),
-    "Inicio del contrato":fechaES(si),
-    "Fin del contrato":fechaES(sf),
-    "Duración":dur.trim()+"  ("+dias+" días)",
-    "Antigüedad reconocida":fechaES(antigFecha)+' · '+fmt(ant)+'/mes a jornada completa',
-    "Responsable de equipo":(esResponsableF?"Incluido en los importes reales indicados":"No"),
-    "Días de vacaciones pendientes":dv+" días",
-    "Motivo de la extinción":document.getElementById('f-tipodespido').selectedOptions[0].textContent,
-    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
-  };
-  ctxPDF.finiquito['Pagas extra']='Pagas vencidas abonadas el día 15; se incluyen solo las pendientes, salvo los saldos indicados.';
-  ctxPDF.finiquito['Estado del resultado']=document.getElementById('f-total-label').textContent;
-  ctxPDF.finiquito['Fiscalidad de la indemnización']=tipo==='temporal'?'Sujeta a IRPF':indem>0?document.getElementById('f-fiscalidad').selectedOptions[0].textContent:'Sin indemnización';
-  ctxPDF.finiquito['Pluses variables de vacaciones']=fmt(numero('f-vac-media'))+' de media mensual / 31 × '+dv+' días';
-  if(indem>0){ctxPDF.finiquito["Salario regulador"]=fmt(salReg)+"/mes";}
-  setTimeout(function(){document.getElementById("resultado-finiquito").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+  setTimeout(function(){document.getElementById('resultado-finiquito').scrollIntoView({behavior:'smooth',block:'nearest'});},60);
 }
+
 
 ["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
   document.getElementById("bbtn-"+c).addEventListener("click",function(){

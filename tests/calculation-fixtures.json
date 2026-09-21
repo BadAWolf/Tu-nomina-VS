@@ -75,14 +75,13 @@
       "f-inicio": "2025-01-01",
       "f-fin": "2026-01-01",
       "f-vacas": "10",
-      "f-ss-vac": "31.10",
       "f-irpf": "10"
     },
     "outputs": [
       "fr-total-neto"
     ],
     "expected": {
-      "fr-total-neto": "2012,93 €"
+      "fr-total-neto": "2044,03 €"
     }
   }
 ]
