@@ -16,12 +16,12 @@
     let average=0,provided=false;
     if(o.mode==='horas'){
       const night=number(o.night,744,'las horas nocturnas medias');
-      const weekend=number(o.weekend,744,'las horas medias de fin de semana o festivo');
+      const weekend=Number(o.weekendRate)>0?number(o.weekend,744,'las horas medias de fin de semana o festivo'):0;
       const other=number(o.other,10000,'los otros complementos');
       const nightRate=number(o.nightRate,100,'la tarifa nocturna');
       const weekendRate=number(o.weekendRate,100,'la tarifa de fin de semana');
       average=night*nightRate+weekend*weekendRate+other;
-      provided=[o.night,o.weekend,o.other].some(value=>!blank(value));
+      provided=[o.night,weekendRate>0?o.weekend:undefined,o.other].some(value=>!blank(value));
     }else if(o.mode==='nominas'){
       if(!Array.isArray(o.months)||o.months.length<1||o.months.length>12)throw new RangeError('Elige entre 1 y 12 meses de referencia.');
       provided=o.months.some(month=>[month.night,month.weekend,month.other].some(value=>!blank(value)));
@@ -57,11 +57,15 @@
       rows.append(row);
     }
     function sync(){
+      const c=context(),weekend=d.getElementById('vac-horas-festivo');
       d.getElementById('vac-intro').textContent=method.value==='horas'?'Dinos las horas que sueles cobrar al mes. Nosotros hacemos las cuentas.':method.value==='nominas'?'Copia los importes de tus nóminas. Nosotros calculamos la media.':'Introduce tu media mensual y calculamos la parte de tus vacaciones.';
       for(const mode of ['horas','nominas','importe']){
         const panel=d.getElementById('vac-mode-'+mode);panel.hidden=method.value!==mode;
         panel.querySelectorAll('input,select').forEach(input=>{input.disabled=panel.hidden;});
       }
+      weekend.closest('.field').hidden=!(c.weekendRate>0);
+      weekend.disabled=method.value!=='horas'||!(c.weekendRate>0);
+      d.getElementById('vac-transport-hint').hidden=c.weekendRate>0||method.value!=='horas';
       rows.querySelectorAll('tr').forEach(row=>{
         row.hidden=Number(row.dataset.month)>Number(months.value);
         row.querySelectorAll('input').forEach(input=>{input.disabled=method.value!=='nominas'||row.hidden;});
@@ -76,7 +80,7 @@
       };
       const o={mode:method.value,days:days===undefined?c.days:days};
       if(!o.days)return calculate(o);
-      if(o.mode==='horas')Object.assign(o,{night:value('vac-horas-noche'),weekend:value('vac-horas-festivo'),other:value('vac-otros'),nightRate:c.nightRate,weekendRate:c.weekendRate});
+      if(o.mode==='horas')Object.assign(o,{night:value('vac-horas-noche'),weekend:c.weekendRate>0?value('vac-horas-festivo'):'',other:value('vac-otros'),nightRate:c.nightRate,weekendRate:c.weekendRate});
       if(o.mode==='importe')o.average=value('n-promedioVac');
       if(o.mode==='nominas'){
         const count=Number(months.value);
@@ -89,7 +93,7 @@
       sync();
       if(card.hidden)return;
       const c=context();
-      d.getElementById('vac-rate-hint').textContent='Tarifas de tu categoría en 2026: noche '+money(c.nightRate)+'/h · fin de semana o festivo '+money(c.weekendRate)+'/h.';
+      d.getElementById('vac-rate-hint').textContent='Tarifas de tu categoría en 2026: noche '+money(c.nightRate)+'/h'+(c.weekendRate>0?' · fin de semana o festivo '+money(c.weekendRate)+'/h.':'. El plus de fin de semana y festivos de vigilancia no se aplica a transporte.');
       const preview=d.getElementById('vac-preview');
       try{
         const result=read();

@@ -213,6 +213,9 @@ function dibujarCuadrantePDF(doc, y, MG, ancho, W, anio, mes, C){
     fila++;
   }
   y += ch*fila + 4.5;
+  doc.setFont('helvetica','normal');doc.setFontSize(6);
+  doc.setTextColor(C.MUT[0],C.MUT[1],C.MUT[2]);
+  doc.text('Horas por día natural. Un tramo desde las 00:00 puede continuar el turno del día anterior.',MG,y-1.5);
 
   /* Franja resumen del mes */
   var hh=function(n){ return String(Math.round(n*100)/100).replace(".",",")+" h"; };
@@ -414,21 +417,30 @@ function totalesMes(a,m){
   return t;
 }
 
-/* ── Resumen compacto de un día para la celda ── */
-function resumenDia(a,m,d){
-  var dd=datosDia(a,m,d);
-  if(!dd) return null;
-  if(dd.tramos&&dd.tramos.length){
-    var mins=0;
-    dd.tramos.forEach(function(tr){
-      var ff=tramoAFechas(a,m,d,tr);
-      if(ff) mins+=trocearTramo(ff.ini,ff.fin).total;
+/* Horas del día natural, incluida la continuación de la noche anterior. */
+function tramosDelDia(a,m,d){
+  var inicio=new Date(a,m,d),fin=new Date(a,m,d+1),tramos=[];
+  [new Date(a,m,d-1),inicio].forEach(function(fecha){
+    var dd=datosDia(fecha.getFullYear(),fecha.getMonth(),fecha.getDate());
+    (dd&&dd.tramos||[]).forEach(function(tr){
+      var ff=tramoAFechas(fecha.getFullYear(),fecha.getMonth(),fecha.getDate(),tr);
+      if(!ff||ff.ini>=fin||ff.fin<=inicio)return;
+      tramos.push({ini:new Date(Math.max(+inicio,+ff.ini)),fin:new Date(Math.min(+fin,+ff.fin)),continua:ff.ini<inicio});
     });
-    var lineas = dd.tramos.length===1
-      ? [dd.tramos[0].i, dd.tramos[0].f]
-      : [dd.tramos.length+" tramos"];
-    return {tipo:"trab", lineas:lineas, horas:Math.round(mins/60*100)/100, fest:!!dd.fest};
+  });
+  return tramos.sort(function(x,y){return x.ini-y.ini;});
+}
+
+/* ── Resumen compacto de un día para la celda y el PDF ── */
+function resumenDia(a,m,d){
+  var dd=datosDia(a,m,d),tramos=tramosDelDia(a,m,d);
+  if(tramos.length){
+    var mins=tramos.reduce(function(total,tr){return total+(tr.fin-tr.ini)/60000;},0);
+    var hora=function(fecha){return +fecha===+new Date(a,m,d+1)?'24:00':String(fecha.getHours()).padStart(2,'0')+':'+String(fecha.getMinutes()).padStart(2,'0');};
+    var lineas=tramos.length===1?[hora(tramos[0].ini),hora(tramos[0].fin)]:[tramos.length+' tramos'];
+    return {tipo:'trab',lineas:lineas,horas:Math.round(mins/60*100)/100,fest:!!(dd&&dd.fest),continua:tramos.some(function(tr){return tr.continua;})};
   }
+  if(!dd)return null;
   if(dd.vac) return {tipo:"vac", lineas:["V"], horas:horasDiaVacaciones(), fest:!!dd.fest};
   if(dd.fest) return {tipo:"libre", lineas:[], horas:0, fest:true};
   return null;
@@ -455,7 +467,7 @@ function pintarCalendario(){
     else if(r&&r.tipo==="vac") cls+=" vac";
     if((r&&r.fest)||esFestivoNacional(fecha)) cls+=" festivo";
     if(fecha.toDateString()===hoy.toDateString()) cls+=" hoy";
-    h+='<div class="'+cls+'" data-dia="'+d+'">';
+    h+='<div class="'+cls+'" data-dia="'+d+'"'+(r&&r.continua?' title="Incluye la continuación del turno del día anterior"':'')+'>';
     h+='<span class="cal-num">'+d+'</span>';
     if(r&&r.lineas&&r.lineas.length){
       h+='<span class="cal-tag">'+r.lineas.join('<br>')+'</span>';
@@ -559,6 +571,13 @@ function abrirDialogo(d){
   if(esFestivoNacional(fecha)) sub+="  ·  Festivo nacional";
   else if(fecha.getDay()===0||fecha.getDay()===6) sub+="  ·  Fin de semana";
   document.getElementById("dlg-subtitulo").textContent=sub;
+  var continuacion=tramosDelDia(calAnio,calMes,d).filter(function(tr){return tr.continua;});
+  var avisoContinuacion=document.getElementById('dlg-continuacion');
+  avisoContinuacion.hidden=!continuacion.length;
+  if(continuacion.length){
+    var anterior=new Date(calAnio,calMes,d-1);
+    avisoContinuacion.textContent='Este día incluye la continuación de un turno del '+anterior.getDate()+' de '+MESES_ES[anterior.getMonth()].toLowerCase()+'. Para cambiar esa parte, edita el día en que empezó el turno.';
+  }
 
   var dd=datosDia(calAnio,calMes,d);
   var cont=document.getElementById("dlg-tramos");
@@ -696,6 +715,7 @@ function catEf(k,esCond){
 }
 var JORNADA=162, HORAS_ANUALES=1782;
 var PLUS_FEST=1.02;
+function tienePlusFestivo(categoria){return !['fondos','tr_explo'].includes(categoria);}
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
 var cuentaVacacionesActiva=false;
@@ -703,7 +723,7 @@ var vacationPlusesUI=window.VigilanteVacationPluses.mount(function(){
   var days=MODO_HORAS==='cuadrante'
     ? (cuentaVacacionesActiva?totalesMes(calAnio,calMes).diasVac:0)
     : (document.getElementById('switchVac').checked?Number(document.getElementById('diasVac').value)||0:0);
-  return {days:days,nightRate:catEf(catActual,document.getElementById('switchCond').checked).nocH,weekendRate:PLUS_FEST};
+  return {days:days,nightRate:catEf(catActual,document.getElementById('switchCond').checked).nocH,weekendRate:tienePlusFestivo(catActual)?PLUS_FEST:0};
 });
 
 function r2(n){var centimos=Math.abs(n)*100;return Math.sign(n)*Math.round(centimos+Number.EPSILON*Math.max(1,centimos))/100;}
@@ -729,6 +749,13 @@ function nochesEspeciales(a,m){
   return count;
 }
 function actualizarOpcionesCalculo(){
+  var resumenMes=MODO_HORAS==='cuadrante'?totalesMes(calAnio,calMes):null;
+  var diasVacMes=resumenMes?resumenMes.diasVac:(document.getElementById('switchVac').checked?numero('diasVac'):0);
+  var horasTrabajadas=resumenMes?resumenMes.horasTrabajadas:numero('hTTotal');
+  var escoltaMixto=catActual==='escolta'&&diasVacMes>0&&horasTrabajadas>0;
+  document.getElementById('n-escolta-field').hidden=!escoltaMixto;
+  document.getElementById('n-escolta-trabajado').disabled=!escoltaMixto;
+  document.getElementById('n-escolta-trabajado').required=escoltaMixto;
   document.getElementById('n-arma-fields').hidden=catActual!=='con_arma';
   document.getElementById('n-arma-horas-field').hidden=valor('n-arma-modo')!=='horas';
   document.getElementById('n-arma-importe-field').hidden=valor('n-arma-modo')!=='importe';
@@ -748,6 +775,7 @@ function actualizarOpcionesCalculo(){
   ['input','change','click'].forEach(function(event){document.getElementById(id).addEventListener(event,actualizarOpcionesCalculo);});
 });
 document.getElementById('btn-sin_arma').closest('.card').after(document.getElementById('n-arma-fields'));
+document.getElementById('n-arma-fields').after(document.getElementById('n-escolta-field'));
 actualizarOpcionesCalculo();
 
 function showR(rid,lid,vid,lbl,val,cls){
@@ -991,6 +1019,10 @@ function calcNominaRegistrado(){
   // remunerados de este mes. La tarifa anual se calcula a jornada completa.
   var hev=calcHoraExtra(sbHE,catActual==='con_arma'?24.08:cat.pelig,cat.act||0,ant,cat.esc,catActual==='con_arma'?peligrosidadPaga/ratioFijo:undefined);
   var plusEscolta=r2((cat.esc||0)*ratioFijo*factorH);
+  if(cat.esc&&dVac>0){
+    if(hT>0&&valor('n-escolta-trabajado')===''){fail('Indica el plus de escolta por el trabajo de este mes, sin incluir vacaciones. Su promedio vacacional se añade por separado.');return;}
+    plusEscolta=hT>0?numero('n-escolta-trabajado'):0;
+  }
   var objetivo=jornadaMes*factorH;
   var hEx=Math.max(0,r2(hJor-objetivo));
   var especiales=ps>0||catActual==='con_arma'&&valor('n-arma-modo')==='importe';
@@ -1002,7 +1034,7 @@ function calcNominaRegistrado(){
     if(!(numero('n-hora-ordinaria')>0)){fail('Indica el valor de tu hora complementaria en el apartado de jornada parcial.');return;}
     hev=numero('n-hora-ordinaria');
   }
-  var festAplicable=!['fondos','tr_explo'].includes(catActual);
+  var festAplicable=tienePlusFestivo(catActual);
   var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=festAplicable?r2(hF*PLUS_FEST):0;
   var noches=MODO_HORAS==='cuadrante'?nochesEspeciales(calAnio,calMes):0;
   var pNavidad=r2(noches*83.48);
@@ -1016,7 +1048,8 @@ function calcNominaRegistrado(){
   var ssB=r2(bruto+r2(pNP*bP*factorH/12));
   // Orden PJC/297/2026, arts. 38 y 39: mínimo por hora efectiva en parcial.
   if(jornActual==='parcial')ssB=Math.max(ssB,r2(hT*8.58));
-  if(ssB>5101.20){err.textContent='La base supera el máximo de 2026. Este caso requiere calcular topes y cotización de solidaridad con tu nómina real.';err.style.display='block';document.getElementById('resultado').style.display='none';ctxPDF.nomina=null;return;}
+  var topeCotizacion=r2(5101.20*factorH);
+  if(ssB>topeCotizacion){fail('La base supera el máximo de '+fmt(topeCotizacion)+' para '+diasSalario+' días de alta en 2026. Este caso requiere calcular topes y cotización de solidaridad con tu nómina real.');return;}
   var cotExtra=jornActual==='completa'?pEx:0;
   var cuotas=VigilanteRules.contributions(r2(ssB-cotExtra),ssB,cotExtra,valor('n-contrato')==='temporal');
   var dSS=cuotas.total, dIP=r2(bruto*ip/100);
@@ -1033,7 +1066,7 @@ function calcNominaRegistrado(){
     document.getElementById("r-vacinfo").textContent=String(hVac).replace(".",",")+" h de jornada";
   } else { document.getElementById("row-vacinfo").style.display="none"; }
   showR("row-act","lbl-act","r-act","Plus de actividad"+suf,ac,"up");
-  showR("row-escolta","lbl-escolta","r-escolta","Plus escolta (función todo el mes)",plusEscolta,"up");
+  showR("row-escolta","lbl-escolta","r-escolta",dVac>0?'Plus escolta por trabajo (sin vacaciones)':'Plus escolta (función todo el mes)',plusEscolta,"up");
   document.getElementById("r-trans").textContent="+"+fmt(tr);
   document.getElementById("r-vest").textContent="+"+fmt(ve);
   if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent=antigReconocida?'Antigüedad reconocida':"Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
@@ -1191,9 +1224,9 @@ function calcFiniquitoRegistrado(){
   var bPaga=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*ratio);
   // Salario regulador de la indemnización (doctrina TS): conceptos salariales
   // + prorrata de pagas extras, excluyendo transporte y vestuario (extrasalariales)
-  var salReg=r2((salarioBaseMensual+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio+bPaga*3/12);
-  var anualReal=tieneIndemnizacion?numero('f-salario-anual'):0,anual=anualReal||r2(salReg*12+(tieneIndemnizacion?numero('f-variable-anual'):0));
-  salReg=anual/12;
+  var fijoAnual=(salarioBaseMensual+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio*12+bPaga*3;
+  var anualReal=tieneIndemnizacion?numero('f-salario-anual'):0,anual=anualReal||r2(fijoAnual+(tieneIndemnizacion?numero('f-variable-anual'):0));
+  var salReg=anual/12;
   var vDia=sMens/30+numero('f-vac-media')/31;
   var totVacas=r2(dv*vDia);
   var pJulio=document.getElementById("fpaga-julio").classList.contains("active");

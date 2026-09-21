@@ -39,7 +39,7 @@
     if(day<=40)return 1;
     if(day<=60)return 0.9;
     if(day<=90)return 0.8;
-    if(day<=100 && noPrevious)return 0.8;
+    if(day<=100 && number===1 && noPrevious)return 0.8;
     return 0.75;
   }
   function illnessSegments(total,number,noPrevious,hospitalStart){
@@ -82,7 +82,7 @@
       const hospital=!o.laboral&&o.hospitalStart>0&&i>=o.hospitalStart&&i<o.hospitalStart+40;
       const rate=o.laboral?1:hospital?1:illnessRate(day,o.number,o.noPrevious);
       const legalRate=day<=3?0:day<=20?.6:.75;
-      const hasComplement=hospital||(day<=3?o.number===1:day<=20?o.number<=2:day<=90||day<=100&&o.noPrevious);
+      const hasComplement=hospital||(day<=3?o.number===1:day<=20?o.number<=2:day<=90||day<=100&&o.number===1&&o.noPrevious);
       const daily=excluded?0:o.laboral?Math.max(o.base*.75,o.professional?0:o.tableDaily):Math.max(o.base*legalRate,hasComplement?o.cotCC*rate:0);
       let segment=segments.at(-1);
       if(!segment||segment.rate!==rate||segment.hospital!==hospital||segment.excluded!==excluded){segment={start:day,end:day,rate,hospital,excluded,amount:0};segments.push(segment);}

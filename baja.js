@@ -30,7 +30,10 @@ function actualizarCamposBaja(){
     try{dias=VigilanteRules.illnessPeriod(inicio,fin);bajaEl('b-periodo-resumen').textContent=dias+' días de baja · ambas fechas incluidas';}
     catch(_){dias=0;bajaEl('b-periodo-resumen').textContent=inicio&&fin?'Revisa las fechas: el fin debe ser igual o posterior al inicio y el periodo no puede superar 545 días.':'Elige las dos fechas para ver la duración.';}
   }
-  bajaEl('b-sin-procesos-field').hidden=laboral||dias+bajaNumber('b-dias-previos')<91;
+  var puedeNoTenerProcesos=!laboral&&bajaNumber('b-nbaja')===1;
+  bajaEl('b-sin-procesos').disabled=!puedeNoTenerProcesos;
+  if(!puedeNoTenerProcesos)bajaEl('b-sin-procesos').checked=false;
+  bajaEl('b-sin-procesos-field').hidden=!puedeNoTenerProcesos||dias+bajaNumber('b-dias-previos')<91;
 }
 function invalidarBaja(){informeBaja=null;ctxPDF.baja=null;bajaEl('resultado-baja').style.display='none';actualizarCamposBaja();}
 bajaEl('view-baja').addEventListener('input',invalidarBaja);

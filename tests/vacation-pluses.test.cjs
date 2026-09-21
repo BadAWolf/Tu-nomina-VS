@@ -50,10 +50,10 @@ test('Default interface uses hours, follows category rates, and never adds the i
     assert.match(x.d.getElementById('vac-preview').textContent,/113,28 €.*54,81 €/);
     assert.match(x.w.ctxPDF.nomina['Pluses de vacaciones'],/Estimación por horas/);
     x.d.getElementById('btn-fondos').click();x.d.getElementById('switchCond').click();
-    x.w.calcNomina();assert.equal(x.d.getElementById('r-vacplus').textContent,'+57,91 €');
+    x.w.calcNomina();assert.equal(x.d.getElementById('r-vacplus').textContent,'+42,12 €');
     assert.match(x.d.getElementById('vac-rate-hint').textContent,/1,36 €/);
     x.mode('importe');x.w.calcNomina();assert.equal(x.d.getElementById('r-vacplus').textContent,'+150,00 €');
-    x.mode('horas');x.w.calcNomina();assert.equal(x.d.getElementById('r-vacplus').textContent,'+57,91 €');
+    x.mode('horas');x.w.calcNomina();assert.equal(x.d.getElementById('r-vacplus').textContent,'+42,12 €');
   }finally{x.close();}
 });
 test('Monthly input selects only the declared reference months and missing rows prevent export',()=>{

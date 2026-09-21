@@ -36,6 +36,8 @@ El complemento de vacaciones se gestiona en `vacation-pluses.js`: por defecto es
 
 Fuentes: [Convenio BOE-A-2026-8569](https://www.boe.es/eli/es/res/2026/04/08/(5)), [Estatuto de los Trabajadores](https://www.boe.es/buscar/act.php?id=BOE-A-2015-11430). No se garantiza la cobertura de todos los regímenes o circunstancias laborales.
 
+Correcciones de la auditoría del 22/09/2026: la escolta con trabajo y vacaciones pide el importe funcional real separado del promedio vacacional; un mes sin trabajo no duplica el plus. El control de tope de cotización se ajusta a los días remunerados y detiene los casos que requieren solidaridad. La segunda o posterior IT no admite la ausencia de procesos previos. La estimación de vacaciones de transporte no aplica el plus festivo de vigilancia, pero conserva importes históricos reales. El calendario y el PDF muestran las continuaciones por día natural. La indemnización conserva la precisión al formar el salario anual. Las reproducciones están en `tests/audit-september.test.cjs`.
+
 ## Iconos y actualizaciones
 
 `brand.svg` es el dibujo maestro del escudo verde. Las imágenes PNG de 32, 180, 192 y 512 píxeles son versiones de ese mismo dibujo; las versiones para iOS y Android adaptable tienen fondo opaco. No son copias del logotipo anterior.
