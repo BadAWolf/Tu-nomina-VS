@@ -124,9 +124,9 @@ test('Team-leader hours are paid once, and activity is included in extra payment
 });
 test('A December payment already received is not counted again; one-day contracts are accepted',()=>{
  const x=setup();try{
-  x.set('f-inicio','2026-01-01');x.set('f-fin','2026-12-31');x.set('f-pagado-dic',1185.67);x.w.calcFiniquitoRegistrado();
+  x.set('f-inicio','2026-01-01');x.set('f-fin','2026-12-31');x.w.calcFiniquitoRegistrado();
   assert.equal(x.d.getElementById('frow-navidad').style.display,'none');
-  x.set('f-pagado-dic',0);x.set('f-inicio','2026-12-31');x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);assert.match(x.w.ctxPDF.finiquito['Duración'],/1 días/);
+  x.set('f-inicio','2026-12-31');x.w.calcFiniquitoRegistrado();assert.ok(x.w.ctxPDF.finiquito);assert.match(x.w.ctxPDF.finiquito['Duración'],/1 días/);
  }finally{x.close();}
 });
 

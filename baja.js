@@ -11,13 +11,10 @@ function actualizarCamposBaja(){
   bajaEl('b-field-nbaja').hidden=laboral;
   bajaEl('b-base-mensual-fields').hidden=parcial;bajaEl('b-base-parcial-fields').hidden=!parcial;
   bajaEl('b-profesional-fields').hidden=!laboral||parcial;
-  var estimada=!parcial&&bajaEl('b-origen').value==='estimada';
-  bajaEl('b-origen').closest('.field').hidden=parcial;
-  bajaEl('bbtn-sin_arma').closest('.card').hidden=!estimada&&tipo!=='laboral';
-  bajaEl('b-anios').closest('.card').hidden=!estimada&&tipo!=='laboral';
-  bajaEl('card-condB').hidden=!estimada&&tipo!=='laboral';
-  bajaEl('b-baseManual').disabled=estimada;
-  bajaEl('b-baseManual').required=!parcial&&!estimada;
+  bajaEl('bbtn-sin_arma').closest('.card').hidden=tipo!=='laboral';
+  bajaEl('b-anios').closest('.card').hidden=tipo!=='laboral';
+  bajaEl('card-condB').hidden=tipo!=='laboral';
+  bajaEl('b-baseManual').required=!parcial;
   bajaEl('b-base-diaria').required=parcial;
   bajaEl('b-br-profesional').required=laboral&&!parcial;
   bajaEl('b-parcial-porcentaje-field').hidden=!parcial||tipo!=='laboral';
@@ -74,13 +71,11 @@ function calcBajaRegistrado(){
   var factor=parcial&&tipo==='laboral'?bajaNumber('b-parcial-porcentaje')/100:1;
   if(parcial&&tipo==='laboral'&&!(factor>0&&factor<=1)){fail('Indica el porcentaje de jornada para ajustar el complemento por accidente laboral.');return;}
   var tabla=r2((cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*factor);
-  var prorrata=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*3/12);
-  var manual=bajaEl('b-origen').value==='estimada'?0:bajaNumber('b-baseManual'),divisor=bajaNumber('b-base-dias');
+  var manual=bajaNumber('b-baseManual'),divisor=bajaNumber('b-base-dias');
   if(!parcial&&(!Number.isInteger(divisor)||divisor<1||divisor>31)){fail('Indica entre 1 y 31 días cotizados para la base.');return;}
-  if(!parcial&&!manual&&divisor!==30){fail('Introduce la base real correspondiente a esos días cotizados, o deja el divisor habitual de 30.');return;}
-  if(!parcial&&!manual&&bajaEl('b-origen').value!=='estimada'){fail('Copia la base de contingencias comunes de tu nómina anterior, o elige explícitamente la aproximación de tablas.');return;}
-  if(bcatActual==='con_arma'&&(bajaEl('b-origen').value==='estimada'||tipo==='laboral')){fail('El mínimo de peligrosidad con arma depende de horas y garantías reconocidas. Para baja común usa tu base real; el complemento de accidente laboral con arma requiere revisar esos importes con la empresa.');return;}
-  var cc=parcial?bajaNumber('b-base-diaria'):(manual||r2(tabla+(cat.esc||0)+prorrata))/divisor;
+  if(!parcial&&!manual){fail('Copia la base de contingencias comunes de tu nómina anterior. Es necesaria para calcular la baja.');return;}
+  if(bcatActual==='con_arma'&&tipo==='laboral'){fail('El mínimo de peligrosidad con arma depende de horas y garantías reconocidas. Para baja común usa tu base real; el complemento de accidente laboral con arma requiere revisar esos importes con la empresa.');return;}
+  var cc=parcial?bajaNumber('b-base-diaria'):manual/divisor;
   var base=parcial?bajaNumber('b-base-diaria'):(laboral?bajaNumber('b-br-profesional'):cc);
   if(parcial&&!base){fail('Para jornada parcial o fijo discontinuo, introduce la base reguladora diaria reconocida. Se aplica también como base diaria de cotización CC (art. 40).');return;}
   var cp=bajaNumber('b-cot-cp')||cc;
@@ -97,7 +92,7 @@ function calcBajaRegistrado(){
     bajaEl('blbl-t'+index).textContent=s.excluded?'Primer día: salario a cargo de la empresa, aparte':'Días '+s.start+'–'+s.end+' ('+(laboral?(tipo==='profesional'?'75% de la base reguladora':'mayor entre 75% legal y tabla del convenio'):Math.round(s.rate*100)+'%'+(s.hospital?', hospitalización':''))+') · '+(s.end-s.start+1)+' días';
     bajaEl('br-t'+index).textContent=s.excluded?'no incluido':'+'+fmt(s.amount);
   });
-  var origen=parcial?'Base diaria aportada':manual?'Base CC aportada: '+fmt(manual)+' ÷ '+divisor:'Aproximación de convenio de 2026, sin variables';
+  var origen=parcial?'Base diaria aportada':'Base CC aportada: '+fmt(manual)+' ÷ '+divisor;
   bajaEl('b-info-base').textContent='Base reguladora: '+fmt(base)+'/día. '+origen+'.';
   bajaEl('br-total-bruto').textContent=fmt(report.gross);bajaEl('br-ss').textContent='-'+fmt(report.ss);
   bajaEl('brow-irpf').style.display=ip>0?'flex':'none';bajaEl('brow-irpf0').style.display=ip>0?'none':'flex';
@@ -120,7 +115,6 @@ function calcBajaRegistrado(){
   if(extraDaily||forceDaily)notas.push('Incluye la cotización adicional por horas extra: base diaria ordinaria '+fmt(extraDaily)+' al 4,70% y fuerza mayor '+fmt(forceDaily)+' al 2%.');
   if(!parcial&&bajaEl('b-cotizacion').value==='mensual')notas.push('La cotización mensual se ajusta a 30 días, suponiendo empleo ordinario el resto del mes. La prestación se calcula por días naturales.');
   if(!fechas)notas.push('Sin fechas, las deducciones se estiman por los días indicados; no se aplican los ajustes de cotización de cada mes.');
-  if(!parcial&&!manual)notas.push('Al faltar tu base real, se ha usado una aproximación de convenio sin pluses variables. Introduce la base de tu nómina para afinar el resultado.');
   if(!bajaNumber('b-cot-cp'))notas.push('Se ha supuesto la misma base de cotización para contingencias comunes y profesionales.');
   if(prior)notas.push('Continúa desde el día '+(prior+1)+' del proceso reconocido. Los '+prior+' días anteriores no se incluyen en los importes.');
   if(report.net<0||report.monthly.some(function(m){return m.net<0;}))notas.push('Un neto negativo refleja cotizaciones superiores a la prestación de esos días; no implica por sí solo un cobro bancario, pues se regulariza con el resto de la nómina.');

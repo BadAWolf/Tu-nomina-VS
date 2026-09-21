@@ -768,7 +768,7 @@ function actualizarOpcionesCalculo(){
   document.getElementById('n-especiales-importes').hidden=!particulares;
   document.getElementById('hint-extras').textContent=jornActual==='parcial'?'El exceso requiere pacto y valor de hora complementaria.':'Si superas 162 h, el exceso se cobra como hora extra';
   document.getElementById('f-fiscalidad-field').hidden=!['objetivo','improcedente'].includes(valor('f-tipodespido'));
-  ['f-salario-anual','f-variable-anual'].forEach(function(id){document.getElementById(id).closest('.field').hidden=['voluntaria','sustitucion'].includes(valor('f-tipodespido'));});
+  document.getElementById('f-salario-anual').closest('.field').hidden=['voluntaria','sustitucion'].includes(valor('f-tipodespido'));
   ['f-vac-mensual','f-vac-media','f-ss-vac'].forEach(function(id){document.getElementById(id).closest('.field').hidden=numero('f-vacas')<=0;});
 }
 ['view-nomina','view-finiquito'].forEach(function(id){
@@ -1168,6 +1168,11 @@ function solapamiento(a1,a2,b1,b2){
 }
 function propPaga(d1,d2,paga){
   var y=d2.getUTCFullYear();
+  // On-time payments are assumed on the last contractual payment day.
+  // Christmas is paid before its accrual ends; an established employee's
+  // payment is not added again. Recognized advance adjustments remain explicit.
+  var pagoNavidad=new Date(Date.UTC(y,11,15));
+  if(paga==='navidad'&&d2>=pagoNavidad&&d1<=pagoNavidad)return 0;
   var ds,de;
   if(paga==='julio'){
     ds=new Date(Date.UTC(d2.getUTCMonth()>=6?y:y-1,6,1));
@@ -1190,7 +1195,7 @@ function calcFiniquito(){
 function calcFiniquitoRegistrado(){
   ctxPDF.finiquito=null;
   actualizarOpcionesCalculo();
-  function fail(message){var e=document.getElementById('f-errorBox');e.textContent=message;e.style.display='block';invalidarCalculo('finiquito');}
+  function fail(message,especial){var e=document.getElementById('f-errorBox');e.textContent=message;e.style.display='block';invalidarCalculo('finiquito');if(especial)document.getElementById('f-casos-especiales').open=true;}
   if(!window.VigilanteSecurity.validateInputs('view-finiquito','f-errorBox','resultado-finiquito')){ctxPDF.finiquito=null;return;}
   var cat=catEf(fcatActual,document.getElementById("switchCondF").checked);
   var dv=parseFloat(document.getElementById("f-vacas").value)||0;
@@ -1203,9 +1208,9 @@ function calcFiniquitoRegistrado(){
   if(d2<d1){err.textContent="La fecha de fin no puede ser anterior a la de inicio.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
   if(sf.slice(0,4)!=='2026'){fail('Las tablas y reglas monetarias disponibles son las de 2026. El fin del contrato debe estar en 2026; el inicio puede ser anterior.');return;}
   var antigFecha=valor('f-antig-fecha')||si;
-  if(!VigilanteRules.validDate(antigFecha)||antigFecha>si){fail('La antigüedad reconocida debe ser igual o anterior al inicio del contrato.');return;}
+  if(!VigilanteRules.validDate(antigFecha)||antigFecha>si){fail('La antigüedad reconocida debe ser igual o anterior al inicio del contrato.',true);return;}
   var tieneIndemnizacion=['objetivo','improcedente','temporal'].includes(tipo);
-  if(fcatActual==='con_arma'&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-mensual')==='')){fail('Para trabajo con arma, indica el salario regulador anual real si hay indemnización y, si hay vacaciones, su remuneración fija reconocida. La tabla no determina las horas armadas ni las garantías históricas.');return;}
+  if(fcatActual==='con_arma'&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-mensual')==='')){fail('Para trabajo con arma, indica el salario regulador anual real si hay indemnización y, si hay vacaciones, su remuneración fija reconocida. La tabla no determina las horas armadas ni las garantías históricas.',true);return;}
   var fhp=fjornActual==="completa"?JORNADA:(parseFloat(document.getElementById("fhPactadas").value)||0);
   if(fjornActual==="parcial"&&fhp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
   if(fjornActual==="parcial"&&fhp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado-finiquito").style.display="none";return;}
@@ -1213,10 +1218,10 @@ function calcFiniquitoRegistrado(){
   var ratio=fhp/JORNADA;
   var dias=VigilanteRules.days(si,sf);
   var anosAnt=VigilanteRules.seniorityYears(antigFecha,sf);
-  if(antigFecha<'1997-01-01'&&valor('f-antig-importe')===''){fail('Indica la antigüedad mensual reconocida: los trienios anteriores a 1997 no se pueden sustituir automáticamente por quinquenios.');return;}
+  if(antigFecha<'1997-01-01'&&valor('f-antig-importe')===''){fail('Indica la antigüedad mensual reconocida: los trienios anteriores a 1997 no se pueden sustituir automáticamente por quinquenios.',true);return;}
   var ant=valor('f-antig-importe')!==''?numero('f-antig-importe'):calcAntig(anosAnt,fcatActual,document.getElementById('switchCondF').checked);
   var esResponsableF=document.getElementById("switchResponsableF").checked;
-  if(esResponsableF&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-media')==='')){fail('Para responsable de equipo, indica el salario regulador anual si hay indemnización y la media real de pluses para vacaciones (0 si no procede).');return;}
+  if(esResponsableF&&(tieneIndemnizacion&&!numero('f-salario-anual')||dv>0&&valor('f-vac-media')==='')){fail('Para responsable de equipo, indica el salario regulador anual si hay indemnización y la media real de pluses para vacaciones (0 si no procede).',true);return;}
   var salarioBaseMensual=cat.salBase;
   // Salario mensual completo: se usa para valorar las vacaciones pendientes
   var sMens=r2((salarioBaseMensual+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
@@ -1225,7 +1230,7 @@ function calcFiniquitoRegistrado(){
   // Salario regulador de la indemnización (doctrina TS): conceptos salariales
   // + prorrata de pagas extras, excluyendo transporte y vestuario (extrasalariales)
   var fijoAnual=(salarioBaseMensual+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio*12+bPaga*3;
-  var anualReal=tieneIndemnizacion?numero('f-salario-anual'):0,anual=anualReal||r2(fijoAnual+(tieneIndemnizacion?numero('f-variable-anual'):0));
+  var anualReal=tieneIndemnizacion?numero('f-salario-anual'):0,anual=anualReal||r2(fijoAnual);
   var salReg=anual/12;
   var vDia=sMens/30+numero('f-vac-media')/31;
   var totVacas=r2(dv*vDia);
@@ -1238,14 +1243,10 @@ function calcFiniquitoRegistrado(){
   if(!pDic){var pr2=propPaga(d1,d2,"navidad");impNavidad=r2(bPaga*pr2);pNavTxt="Paga Navidad proporcional ("+(pr2*100).toFixed(1).replace('.',',')+"% del periodo)";}
   if(!pMar){var pr3=propPaga(d1,d2,"marzo");impMarzo=r2(bPaga*pr3);pMarTxt="Paga Marzo proporcional ("+(pr3*100).toFixed(1).replace('.',',')+"% del periodo)";}
   var extrasReales=['julio','dic','mar'].map(function(p){return valor('f-extra-'+p);});
-  if((valor('f-historial')==='cambios'||fcatActual==='con_arma')&&extrasReales.some(function(v){return v==='';})){fail('Indica los tres importes realmente devengados de extras para este historial (0 si no procede o ya estaban prorrateadas).');return;}
-  if(extrasReales[0]!==''){impJulio=Number(extrasReales[0]);pJulTxt='Paga Julio devengada indicada';}
-  if(extrasReales[1]!==''){impNavidad=Number(extrasReales[1]);pNavTxt='Paga Navidad devengada indicada';}
-  if(extrasReales[2]!==''){impMarzo=Number(extrasReales[2]);pMarTxt='Paga Marzo devengada indicada';}
-  var pagos=['julio','dic','mar'].map(function(p){return Number(document.getElementById('f-pagado-'+p).value)||0;});
-  if(pagos[0]>impJulio||pagos[1]>impNavidad||pagos[2]>impMarzo){err.textContent='Una paga ya cobrada supera lo devengado en el periodo. Revisa el importe; la regularización de anticipos debe hacerse con las nóminas reales.';err.style.display='block';document.getElementById('resultado-finiquito').style.display='none';return;}
-  impJulio=r2(impJulio-pagos[0]);impNavidad=r2(impNavidad-pagos[1]);impMarzo=r2(impMarzo-pagos[2]);
-  if(pagos[0])pJulTxt+=' − ya cobrado';if(pagos[1])pNavTxt+=' − ya cobrado';if(pagos[2])pMarTxt+=' − ya cobrado';
+  if((valor('f-historial')==='cambios'||fcatActual==='con_arma')&&extrasReales.some(function(v){return v==='';})){fail('Indica los tres saldos pendientes de extras para este historial (0 si no procede o ya estaban prorrateadas).',true);return;}
+  if(extrasReales[0]!==''){impJulio=Number(extrasReales[0]);pJulTxt='Paga Julio pendiente indicada';}
+  if(extrasReales[1]!==''){impNavidad=Number(extrasReales[1]);pNavTxt='Paga Navidad pendiente indicada';}
+  if(extrasReales[2]!==''){impMarzo=Number(extrasReales[2]);pMarTxt='Paga Marzo pendiente indicada';}
   var pendiente=numero('f-pendiente'),ajuste=numero('f-ajuste-neto');
   var liqBruta=r2(totVacas+impJulio+impNavidad+impMarzo+pendiente);
   // L13 depende de meses/topes y de bases ya cotizadas. No inventar un neto
@@ -1262,10 +1263,11 @@ function calcFiniquitoRegistrado(){
   var incompleto=faltaSS||faltaFiscal;
   document.getElementById('f-total-label').textContent=incompleto?'IMPORTE PENDIENTE DE DEDUCCIONES':'NETO ESTIMADO';
   document.getElementById('f-total-hint').textContent=incompleto?'Aún faltan datos para determinar el neto':'De los conceptos incluidos en este cálculo';
-  var notasF=[];
+  var notasF=['Estimación con condiciones estables. Se consideran cobradas las pagas vencidas el 15 de marzo, julio y diciembre, salvo los saldos pendientes que hayas indicado. No se incluyen impagos ni se presumen descuentos por anticipos.'];
+  if(sf.slice(5)>='12-15'&&sf.slice(5)<'12-31'&&si<=sf.slice(0,4)+'-12-15'&&!pDic)notasF.push('Navidad se considera cobrada. Si la empresa debe regularizar un anticipo hasta el 31 de diciembre, introduce únicamente el descuento neto reconocido en los casos especiales.');
   if(faltaSS)notasF.push('Falta la cuota del trabajador de vacaciones (L13) o de salarios pendientes. No está descontada: el total no es el neto.');
   if(faltaFiscal)notasF.push('Indemnización mostrada bruta, pendiente de comprobar la exención y descontar el IRPF que corresponda.');
-  notasF.push(anualReal?'Salario regulador anual indicado: '+fmt(anual)+'.':'Salario regulador estimado con tablas de 2026 y los complementos anuales indicados: '+fmt(anual)+'.');
+  notasF.push(anualReal?'Salario regulador anual indicado: '+fmt(anual)+'.':'Salario regulador orientativo con tablas de 2026: '+fmt(anual)+'.');
   notasF.push('Se incluyen exclusivamente los conceptos desglosados. La indemnización no sustituye la liquidación de salarios; añade las cantidades pendientes reales sin duplicarlas. Vacaciones: parte fija mensual / 30 y promedio de variables / 31, sin redondear el valor diario antes del producto.');
   document.getElementById('f-notas-calculo').textContent=notasF.join(' ');
   var anosN=Math.floor(dias/365),mN=Math.floor((dias%365)/30),dN=(dias%365)%30;
@@ -1301,12 +1303,13 @@ function calcFiniquitoRegistrado(){
     "Inicio del contrato":fechaES(si),
     "Fin del contrato":fechaES(sf),
     "Duración":dur.trim()+"  ("+dias+" días)",
-    "Antigüedad reconocida":fechaES(antigFecha)+' · complemento mensual a jornada completa '+fmt(ant),
+    "Antigüedad reconocida":fechaES(antigFecha)+' · '+fmt(ant)+'/mes a jornada completa',
     "Responsable de equipo":(esResponsableF?"Incluido en los importes reales indicados":"No"),
     "Días de vacaciones pendientes":dv+" días",
-    "Motivo de la extinción":(tipo==="voluntaria"?"Baja voluntaria":tipo==="temporal"?"Fin de contrato temporal (12 días/año)":tipo==="objetivo"?"Despido objetivo (20 días/año)":"Despido improcedente (tramos y topes legales)"),
+    "Motivo de la extinción":document.getElementById('f-tipodespido').selectedOptions[0].textContent,
     "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
   };
+  ctxPDF.finiquito['Pagas extra']='Pagas vencidas abonadas el día 15; se incluyen solo las pendientes, salvo los saldos indicados.';
   ctxPDF.finiquito['Estado del resultado']=document.getElementById('f-total-label').textContent;
   ctxPDF.finiquito['Fiscalidad de la indemnización']=tipo==='temporal'?'Sujeta a IRPF':indem>0?document.getElementById('f-fiscalidad').selectedOptions[0].textContent:'Sin indemnización';
   ctxPDF.finiquito['Pluses variables de vacaciones']=fmt(numero('f-vac-media'))+' de media mensual / 31 × '+dv+' días';

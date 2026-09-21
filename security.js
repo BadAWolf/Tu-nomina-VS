@@ -48,7 +48,9 @@
       if(invalid){
         const label=document.querySelector('label[for="'+input.id+'"]');
         error.textContent='Revisa '+(label?label.textContent.toLowerCase():'el valor introducido')+'. Debe estar dentro del rango permitido.';
-        error.style.display='block';document.getElementById(resultId).style.display='none';input.focus();return false;
+        error.style.display='block';document.getElementById(resultId).style.display='none';
+        for(let parent=input.parentElement;parent&&parent!==container;parent=parent.parentElement)if(parent.tagName==='DETAILS')parent.open=true;
+        input.focus();return false;
       }
     }
     return true;

@@ -163,9 +163,9 @@ run('B01/B02: real bases reject implausible full-time amounts and include additi
  x.set('b-baseManual',1800);x.set('b-cot-cp',70);x.set('b-extra-diaria',10);x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja.ss,136.05);
  x.set('b-baseManual','');x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja,null);
 });
-run('B03/B04: escort functional pay does not enter extra-payment proration or the accident table minimum',x=>{
- x.illness();x.d.getElementById('bbtn-escolta').click();x.set('b-origen','estimada');x.w.calcBajaRegistrado();assert.match(x.w.ctxPDF.baja['Base reguladora diaria'],/74,65/);
- x.set('b-origen','real');x.set('b-baseManual',2239.51);x.set('b-tipo','laboral');x.set('b-br-profesional',2239.51/30);x.set('b-fin','2026-09-02');x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja.gross,55.99);
+run('B03/B04: escort uses the real contribution base and functional pay does not enter the accident table minimum',x=>{
+ x.illness();x.d.getElementById('bbtn-escolta').click();x.set('b-baseManual',2239.51);x.w.calcBajaRegistrado();assert.match(x.w.ctxPDF.baja['Base reguladora diaria'],/74,65/);
+ x.set('b-tipo','laboral');x.set('b-br-profesional',2239.51/30);x.set('b-fin','2026-09-02');x.w.calcBajaRegistrado();assert.equal(x.w.informeBaja.gross,55.99);
 });
 run('Partial IT derives CC from the recognised daily BR without requiring a duplicate field',x=>{
  x.illness();x.set('b-jornada','parcial');x.set('b-base-diaria',30);x.w.calcBajaRegistrado();assert.ok(x.w.informeBaja);assert.match(x.w.ctxPDF.baja['Cotización diaria CC / CP'],/^30,00 € \/ 30,00 €/);assert.equal(x.d.getElementById('b-cot-cc'),null);
