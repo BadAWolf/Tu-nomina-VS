@@ -1,0 +1,5 @@
+# Merge this stanza into the actual Supabase deployment config only after review.
+# JWT validation is replaced by the handler's two distinct custom bearer tokens.
+# Both endpoints reject requests before any database or provider I/O when unauthorized.
+[functions.brevo-marketing]
+verify_jwt = false

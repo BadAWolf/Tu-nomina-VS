@@ -1,0 +1,88 @@
+{
+  "status": "saved_in_brevo_inactive",
+  "active": false,
+  "createdOn": "2026-09-23",
+  "locale": "es",
+  "provider": "Brevo",
+  "intendedPlan": "Free",
+  "intendedAccount": {
+    "name": "Calculadora Vigilante",
+    "reuseExistingAccount": true,
+    "previousName": "SOBREVO",
+    "exclusiveToCalculator": true,
+    "note": "Cuenta renombrada y dominio autenticado. La sincronización se documenta en admin/brevo."
+  },
+  "sender": {
+    "name": "Calculadora Vigilante",
+    "email": "novedades@correo.calculadoravigilante.com",
+    "note": "Remitente ID 2 verificado con DKIM y DMARC; aplicado a ambas plantillas inactivas."
+  },
+  "replyTo": "badawolfprivado@gmail.com",
+  "recipients": [],
+  "listIds": [],
+  "segmentIds": [],
+  "scheduledAt": null,
+  "automationEnabled": false,
+  "audience": {
+    "category": "comunicaciones_propias",
+    "requiresCurrentExplicitConsent": true,
+    "excludeUnsubscribedAndSuppressed": true,
+    "welcomePurpose": "Bienvenida al boletín tras aceptar comunicaciones propias; no es un correo de verificación ni una bienvenida automática por crear cuenta.",
+    "collaboratorPromotionsIncluded": false,
+    "demographicAttributesTransferred": false,
+    "demographicSegmentation": "Seleccionar en Supabase solo con permiso vigente de personalización. Enviar a Brevo únicamente los correos seleccionados; no añadir edad, provincia o ciudad como atributos ni nombres de listas."
+  },
+  "tracking": {
+    "embeddedPixels": false,
+    "recipientIdentifiersInLinks": false,
+    "utmSource": "nomina_vigilante",
+    "utmMedium": "email",
+    "note": "Los enlaces principales llevan UTM neutras, sin datos personales. La analítica actual de la web sanea las URL; estos parámetros no garantizan atribución de campañas. No se ha modificado la analítica ni el seguimiento que Brevo pueda añadir al enviar."
+  },
+  "templates": [
+    {
+      "name": "Calculadora Vigilante · Boletín",
+      "brevoTemplateId": 1,
+      "file": "brevo-newsletter.html",
+      "subject": "Una revisión sencilla para entender tu nómina",
+      "previewText": "Revisa tu nómina paso a paso.",
+      "utmCampaign": "boletin",
+      "active": false,
+      "recipients": []
+    },
+    {
+      "name": "Calculadora Vigilante · Bienvenida al boletín",
+      "brevoTemplateId": 2,
+      "file": "brevo-welcome.html",
+      "subject": "Gracias por suscribirte a Nómina Vigilante",
+      "previewText": "Tú eliges qué correos recibir.",
+      "utmCampaign": "bienvenida",
+      "active": false,
+      "recipients": []
+    }
+  ],
+  "unsubscribePlaceholder": "{{ unsubscribe }}",
+  "footer": {
+    "brandOnly": true,
+    "includesPersonalNameOrHomeAddress": false,
+    "legalUrl": "https://calculadoravigilante.com/condiciones.html",
+    "privacyUrl": "https://calculadoravigilante.com/privacidad.html#publicidad",
+    "existingCampaignFooterModified": false
+  },
+  "referenceSources": [
+    "https://help.brevo.com/hc/en-us/articles/209553645-Insert-a-custom-unsubscribe-link-in-your-emails",
+    "https://help.brevo.com/hc/en-us/articles/360019876839-Activate-or-deactivate-an-email-template",
+    "https://calculadoravigilante.com/",
+    "https://calculadoravigilante.com/comunidad.html"
+  ],
+  "preSendReview": [
+    "Importar como borradores inactivos; no asignar destinatarios ni activar automatizaciones durante la preparación.",
+    "Confirmar remitente verificado y Reply-To en los ajustes de Brevo, que no se configuran desde el HTML.",
+    "Revisar la previsualización de escritorio y móvil y comprobar la sustitución del enlace de baja dentro de Brevo.",
+    "Revisar el pie final que añada Brevo y los ajustes de seguimiento antes de cualquier envío autorizado.",
+    "Verificar que la audiencia cuenta con consentimiento vigente para comunicaciones propias y que se respetan las bajas.",
+    "La cuenta se dedicará exclusivamente a Calculadora Vigilante. La baja nativa gratuita retira ambas categorías publicitarias; los cambios de una sola categoría se gestionan en la web.",
+    "Publicar la información del proveedor, comprobar el acuerdo de tratamiento y verificar la sincronización de bajas antes de transferir destinatarios o autorizar envíos.",
+    "No transferir edad, provincia ni ciudad a Brevo; mantener esa segmentación en Supabase y desactivar el seguimiento individual de aperturas y clics en los ajustes del envío."
+  ]
+}
