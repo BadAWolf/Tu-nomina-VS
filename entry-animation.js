@@ -17,10 +17,10 @@
       (document.activeElement && document.activeElement !== document.body)) return;
 
   var animations = [];
-  var interactions = ['pointerdown', 'keydown', 'focusin', 'scroll', 'pagehide', 'beforeprint', 'visibilitychange'];
+  var lifecycle = ['pagehide', 'beforeprint', 'visibilitychange'];
   function finish() {
     animations.forEach(function (animation) { animation.cancel(); });
-    interactions.forEach(function (event) { window.removeEventListener(event, finish, true); });
+    lifecycle.forEach(function (event) { window.removeEventListener(event, finish); });
     if (motion.removeEventListener) motion.removeEventListener('change', finish);
   }
 
@@ -28,29 +28,30 @@
     // Only the heading moves; the calculator fades in without changing the
     // containing block of its desktop advertisements or its layout dimensions.
     [
-      ['.topbar .brand', 0, 6],
-      ['.wrap > header .header-label', 0, 6],
-      ['.wrap > header h1', 50, 10],
-      ['.wrap > header .header-sub', 120, 8],
-      ['.wrap > header .header-story', 190, 8],
-      ['.tab-selector', 260, 0],
-      ['#view-nomina', 320, 0]
+      ['.topbar .brand', 0, 4, 0.55, 900],
+      ['.wrap > header .header-label', 40, 4, 0, 980],
+      ['.wrap > header h1', 80, 8, 0, 1120],
+      ['.wrap > header .header-sub', 180, 6, 0, 1080],
+      ['.wrap > header .header-story', 280, 6, 0, 1080],
+      ['.tab-selector', 340, 0, 0.8, 1060],
+      ['#view-nomina', 340, 0, 0.86, 1060]
     ].forEach(function (step) {
       var element = document.querySelector(step[0]);
       if (!element) return;
-      var from = { opacity: 0.15 }, to = { opacity: 1 };
+      var from = { opacity: step[3] }, to = { opacity: 1 };
       if (step[2]) {
         from.transform = 'translateY(' + step[2] + 'px)';
         to.transform = 'translateY(0)';
       }
       animations.push(element.animate([from, to], {
-        duration: 440, delay: step[1], easing: 'cubic-bezier(.2,.7,.2,1)', fill: 'backwards'
+        duration: step[4], delay: step[1], easing: 'cubic-bezier(.22,.55,.35,1)', fill: 'backwards'
       }));
     });
     if (!animations.length) return;
-    // Any intent to use the page ends the effect immediately, without consuming
-    // that click, keystroke or scroll. Finished animations leave no inline styles.
-    interactions.forEach(function (event) { window.addEventListener(event, finish, { capture: true, passive: true }); });
+    // Controls stay readable and interactive throughout. Ordinary input/scroll
+    // must not cancel animations: cancellation would snap the heading into place.
+    // Lifecycle and accessibility changes still restore the default view at once.
+    lifecycle.forEach(function (event) { window.addEventListener(event, finish); });
     if (motion.addEventListener) motion.addEventListener('change', finish);
     animations[animations.length - 1].onfinish = finish;
   } catch (_) { finish(); }
