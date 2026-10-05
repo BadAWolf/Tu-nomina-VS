@@ -4,12 +4,14 @@
   const config = window.VIGILANTE_AUTH_CONFIG;
   const $ = id => document.getElementById(id);
   const dialog = $('auth-dialog'), form = $('auth-form'), status = $('auth-status');
+  if (!config || !dialog || !form) return;
   const email = $('auth-email'), password = $('auth-password'), confirm = $('auth-confirm');
   const terms = $('auth-terms'), submit = $('auth-submit'), google = $('auth-google');
   const accountSection = $('account-section'), sectorResources = $('sector-resources');
   const legalVersion = '2026-09-15';
+  const pendingKey = 'nv_pending_signup';
   let client = null, user = null, accepted = false, pending = null;
-  let mode = 'signup', recovery = false, revision = 0, ready, busy = false;
+  let mode = 'signup', recovery = false, revision = 0, ready, busy = false, activating = false;
   let verificationTask=null, verifiedAt=0;
   function invalidate(){revision++;verifiedAt=0;verificationTask=null;}
   // Bounds stalled network requests; database RLS remains the authorization boundary.
@@ -21,59 +23,79 @@
     try{return await fetch(input,{...init,signal:controller.signal});}
     finally{clearTimeout(timer);init.signal?.removeEventListener('abort',abort);}
   }
-  const titles = {signup:'Crea tu cuenta gratis',signin:'Te damos la bienvenida',reset:'Recupera tu contraseña',recovery:'Elige una contraseña nueva',consent:'Antes de continuar'};
-  const buttons = {signup:'Crear cuenta gratis',signin:'Iniciar sesión',reset:'Enviar enlace de recuperación',recovery:'Guardar contraseña',consent:'Aceptar y continuar'};
+  const titles = {signup:'Crea tu cuenta gratis',signin:'Te damos la bienvenida',reset:'Recupera tu contraseña',recovery:'Elige una contraseña nueva',consent:'Último paso'};
+  const buttons = {signup:'Crear cuenta gratis',signin:'Iniciar sesión',reset:'Enviar enlace de recuperación',recovery:'Guardar contraseña',consent:'Activar mi cuenta'};
+  const intros = {
+    signup:'Accede a las guías del sector, los PDF, la baja, el finiquito y las vacaciones.',
+    signin:'Entra con tu cuenta para usar todas las herramientas.',
+    reset:'Te enviaremos un enlace para elegir una nueva contraseña.',
+    recovery:'Usa al menos 12 caracteres y una contraseña que no utilices en otras webs.',
+    consent:'Acepta las condiciones para activar tu cuenta. Si quieres, elige también qué correos recibir.'
+  };
   function message(text, error) { status.textContent = text; status.dataset.error = String(Boolean(error)); }
+  function notice(text) {
+    const box = $('account-notice');
+    if (box) box.textContent = text;
+    window.VigilanteAuthUI?.toast(text);
+  }
   function captchaToken(){
     if(!config.captcha?.enabled)return undefined;
     if(!window.VigilanteCaptcha)throw Object.assign(new Error('captcha_required'),{code:'captcha_required'});
     return window.VigilanteCaptcha.take();
   }
+  function readPending(){try{return JSON.parse(sessionStorage.getItem(pendingKey)||'null');}catch(_){return null;}}
+  function writePending(value){try{if(value)sessionStorage.setItem(pendingKey,JSON.stringify(value));else sessionStorage.removeItem(pendingKey);}catch(_){}}
   function render(nextUser) {
     user = nextUser && nextUser.email_confirmed_at && !nextUser.is_anonymous ? nextUser : null;
     const member = Boolean(user && accepted && !recovery);
-    $('account-guest').hidden = member;
-    $('account-member').hidden = !user;
-    accountSection.setAttribute('aria-labelledby', member ? 'account-title' : 'account-heading');
-    // Move the shared card in the DOM so visual and keyboard order stay aligned.
-    // Keep the original guest order, including immediately after signing out.
-    if (user) {
-      if (sectorResources.nextElementSibling !== accountSection) accountSection.before(sectorResources);
-    } else if (accountSection.nextElementSibling !== sectorResources) accountSection.after(sectorResources);
-    $('account-title').textContent = member ? 'Tu cuenta está activa' : 'Has iniciado sesión';
-    $('account-benefits').textContent = member ? 'Ya puedes añadir vacaciones, descargar tus PDF y calcular la baja y el finiquito.'
-      : recovery ? 'Completa el cambio de contraseña para continuar.' : 'Revisa y acepta las condiciones para activar las herramientas. También puedes cerrar la sesión.';
-    $('account-email').textContent = user ? user.email : '';
+    if ($('account-guest')) $('account-guest').hidden = member;
+    if ($('account-member')) $('account-member').hidden = !user;
+    if (accountSection) {
+      accountSection.setAttribute('aria-labelledby', member ? 'account-title' : 'account-heading');
+      // Move the shared card in the DOM so visual and keyboard order stay aligned.
+      if (sectorResources) {
+        if (user) { if (sectorResources.nextElementSibling !== accountSection) accountSection.before(sectorResources); }
+        else if (accountSection.nextElementSibling !== sectorResources) accountSection.after(sectorResources);
+      }
+    }
+    if ($('account-title')) $('account-title').textContent = member ? 'Tu cuenta está activa' : 'Has iniciado sesión';
+    if ($('account-benefits')) $('account-benefits').textContent = member ? 'Ya tienes acceso a las guías del sector, los PDF, las vacaciones, la baja y el finiquito.'
+      : recovery ? 'Completa el cambio de contraseña para continuar.' : 'Acepta las condiciones para activar tu cuenta. También puedes cerrar la sesión.';
+    if ($('account-email')) $('account-email').textContent = user ? user.email : '';
     window.VigilanteMarketing?.setUser(recovery ? null : user, member);
     window.VigilanteCommunity?.setUser(recovery ? null : user, member);
     window.actualizarAccesoVacaciones?.(member);
     ['Nomina','Finiquito','Baja'].forEach(kind => {
-      if ($('btnPdf'+kind)) $('btnPdf'+kind).textContent = member ? 'Compartir / Descargar PDF' : 'Regístrate para descargar el PDF';
+      if ($('btnPdf'+kind)) $('btnPdf'+kind).textContent = member ? 'Compartir / Descargar PDF' : 'Regístrate gratis para descargar el PDF';
     });
     if (!member) $('tab-nomina')?.click();
+    document.documentElement.classList.toggle('nv-member', member);
+    document.dispatchEvent(new CustomEvent('vigilante:account', {detail: {member, signedIn: Boolean(user)}}));
   }
   function open(nextMode) {
     if (busy) return;
     mode = recovery ? 'recovery' : nextMode || 'signup';
     $('auth-title').textContent = titles[mode];
-    $('auth-intro').textContent = mode === 'reset' ? 'Te enviaremos un enlace para elegir una nueva contraseña.'
-      : mode === 'recovery' ? 'Usa al menos 12 caracteres y una contraseña que no utilices en otras webs.'
-      : mode === 'consent' ? 'Lee las condiciones y la información sobre tus datos para activar las funciones de tu cuenta.'
-      : 'Añade vacaciones y accede a los PDF, la baja y el finiquito. Puedes seguir calculando tu nómina sin vacaciones de forma gratuita y sin cuenta.';
+    $('auth-intro').textContent = intros[mode];
     const showEmail = ['signup','signin','reset'].includes(mode);
     const showPassword = ['signup','signin','recovery'].includes(mode);
     const showConfirm = ['signup','recovery'].includes(mode);
+    const showMarketing = ['signup','consent'].includes(mode);
     $('auth-email-field').hidden = !showEmail; email.disabled = !showEmail;
     $('auth-password-field').hidden = !showPassword; password.disabled = !showPassword;
     password.minLength = mode === 'signin' ? 1 : 12;
     password.autocomplete = mode === 'signin' ? 'current-password' : 'new-password';
     $('auth-password-hint').hidden = mode === 'signin';
     $('auth-confirm-field').hidden = !showConfirm; confirm.disabled = !showConfirm;
-    $('auth-terms-field').hidden = !['signup','consent'].includes(mode);
-    terms.disabled = !['signup','consent'].includes(mode); terms.checked = false;
+    $('auth-marketing-step').hidden = !showMarketing;
+    $('signup-fields').disabled = !showMarketing;
+    if (showMarketing) window.VigilanteAuthUI?.fill('signup', mode === 'consent' ? readPending() : null);
+    $('auth-terms-field').hidden = !showMarketing;
+    terms.disabled = !showMarketing; terms.checked = false;
     if(mode === 'signup') window.VigilanteAnalytics?.track('sign_up_start');
     $('auth-provider-options').hidden = !['signup','signin'].includes(mode);
     $('auth-switches').hidden = !['signup','signin','reset'].includes(mode);
+    $('auth-switches').querySelectorAll('[data-auth-open]').forEach(link => { link.hidden = link.dataset.authOpen === mode; });
     $('auth-resend').hidden = mode !== 'signin';
     submit.textContent = buttons[mode];
     password.value = ''; confirm.value = ''; confirm.setCustomValidity('');
@@ -82,7 +104,6 @@
     window.VigilanteCaptcha?.show(mode);
     (showEmail ? email : showPassword ? password : terms).focus();
   }
-  function accountNotice(text) { $('account-notice').textContent = text; }
   async function verifiedUser(force=false) {
     await ready;
     if (!client) return null;
@@ -105,14 +126,15 @@
     })();
     return verificationTask;
   }
-  function finish() {
+  function finish(text) {
     const action = pending; pending = null;
     if(dialog.open) dialog.close();
-    accountNotice('Tu cuenta está lista. Ya tienes acceso a todas las herramientas.');
+    notice(text || 'Tu cuenta está lista. Ya tienes acceso a todas las herramientas.');
     if(action) action();
   }
-  async function recordAcceptance() {
-    if(!user || !terms.checked) throw new Error('acceptance');
+  // termsAccepted: the person ticked the conditions box, now or when registering by email.
+  async function recordAcceptance(termsAccepted) {
+    if(!user || !termsAccepted) throw new Error('acceptance');
     const previous = await client.from('legal_acceptances').select('version').eq('user_id',user.id).limit(1);
     if(previous.error) throw previous.error;
     const result = await client.from('legal_acceptances').insert({user_id:user.id,version:legalVersion});
@@ -122,13 +144,47 @@
     if(!accepted) throw new Error('acceptance');
     if(newlyActivated) window.VigilanteAnalytics?.track('sign_up', {method: user.app_metadata?.provider === 'google' ? 'Google' : 'Email'});
   }
-  window.VigilanteAuth = {require: async function(action){
-    await verifiedUser();
-    if(user && accepted && !recovery) return action();
-    pending = action;
-    open(recovery ? 'recovery' : user ? 'consent' : 'signup');
-  }};
-  document.querySelectorAll('[data-auth-open]').forEach(button=>button.addEventListener('click',()=>open(button.dataset.authOpen)));
+  async function saveMarketing(choice) {
+    if (!window.VigilanteMarketing || !choice) return;
+    try { await window.VigilanteMarketing.applyChoice(choice); }
+    catch (_) { window.VigilanteMarketing.releaseChoice(); }
+  }
+  // Email sign-up: the choices travel with the account until the address is confirmed.
+  async function completeEmailSignup() {
+    const saved = user?.user_metadata?.nv_signup;
+    if (activating || accepted || !saved || saved.terms !== legalVersion) return false;
+    activating = true;
+    window.VigilanteMarketing?.expectChoice();
+    try {
+      await recordAcceptance(true);
+      await saveMarketing(saved);
+      client.auth.updateUser({data:{nv_signup:null}}).catch(()=>{});
+      finish('Correo confirmado. Tu cuenta está lista.');
+      return true;
+    } catch (_) { window.VigilanteMarketing?.releaseChoice(); return false; }
+    finally { activating = false; }
+  }
+  async function afterSignIn() {
+    if (recovery || !user || accepted) return;
+    if (await completeEmailSignup()) return;
+    if (!accepted && !dialog.open) open('consent');
+  }
+  window.VigilanteAuth = {
+    require: async function(action){
+      await verifiedUser();
+      if(user && accepted && !recovery) return action();
+      pending = action;
+      open(recovery ? 'recovery' : user ? 'consent' : 'signup');
+    },
+    open: mode => open(mode),
+    get member(){ return Boolean(user && accepted && !recovery); }
+  };
+  document.addEventListener('click', event => {
+    const trigger = event.target.closest('[data-auth-open]');
+    if (!trigger) return;
+    event.preventDefault();
+    open(trigger.dataset.authOpen);
+  });
   $('auth-close').addEventListener('click',()=>dialog.close());
   dialog.addEventListener('close',()=>{pending=null;password.value='';confirm.value='';window.VigilanteCaptcha?.close();});
   confirm.addEventListener('input',()=>confirm.setCustomValidity(''));
@@ -146,7 +202,11 @@
     try {
       const verification=['signup','signin','reset'].includes(currentMode)?captchaToken():undefined;
       if(currentMode==='consent'){
-        await recordAcceptance();
+        const choice=window.VigilanteAuthUI?.read('signup');
+        window.VigilanteMarketing?.expectChoice();
+        await recordAcceptance(terms.checked);
+        await saveMarketing(choice);
+        writePending(null);
         finish();
         return;
       }
@@ -160,15 +220,21 @@
         if(result.error) throw result.error;
         recovery=false; password.value='';confirm.value='';
         await verifiedUser(true); busy=false;
-        if(accepted) finish(); else open('consent');
-        accountNotice('Contraseña actualizada.');return;
+        if(accepted) finish('Contraseña actualizada.'); else open('consent');
+        return;
       }
       if(currentMode==='signup'){
-        const result=await client.auth.signUp({email:email.value.trim(),password:password.value,options:{emailRedirectTo:config.redirectTo,captchaToken:verification}});
+        const choice=window.VigilanteAuthUI?.read('signup')||{};
+        const data={nv_signup:{terms:legalVersion,own:Boolean(choice.own),partners:Boolean(choice.partners),personalize:Boolean(choice.personalize),province:choice.province||null}};
+        const result=await client.auth.signUp({email:email.value.trim(),password:password.value,options:{emailRedirectTo:config.redirectTo,captchaToken:verification,data}});
         if(result.error) throw result.error;
         password.value='';confirm.value='';
-        if(result.data.session){await verifiedUser(true);await recordAcceptance();finish();}
-        else message('Revisa tu correo para confirmar el registro. Si ya tenías cuenta, inicia sesión o recupera tu contraseña.');
+        if(result.data.session){
+          await verifiedUser(true);
+          window.VigilanteMarketing?.expectChoice();
+          await recordAcceptance(true);await saveMarketing(choice);finish();
+        }
+        else message('¡Casi está! Te hemos enviado un correo: pulsa el enlace para confirmar tu cuenta. Revisa también el spam.');
         return;
       }
       const result=await client.auth.signInWithPassword({email:email.value.trim(),password:password.value,options:{captchaToken:verification}});
@@ -177,12 +243,15 @@
       if(!user) throw new Error('verification');
       window.VigilanteAnalytics?.track('login',{method:'Email'});
       busy=false;
-      if(accepted) finish(); else open('consent');
+      if(accepted) finish('Has iniciado sesión.');
+      else if(!(await completeEmailSignup())) open('consent');
     } catch(error){
+      window.VigilanteMarketing?.releaseChoice();
       message(error.code==='captcha_required' ? 'Completa la comprobación de seguridad antes de continuar.'
         : error.code==='captcha_failed' ? 'La comprobación de seguridad no es válida. Reinténtalo.'
         : error.status===429 ? 'Demasiados intentos. Espera un minuto y vuelve a intentarlo.'
         : error.code==='email_not_confirmed' ? 'Confirma primero tu correo. Puedes solicitar otro mensaje de verificación.'
+        : error.message==='acceptance' ? 'Marca la casilla de las condiciones para continuar.'
         : currentMode==='signin' ? 'No se pudo iniciar sesión. Comprueba el correo y la contraseña.'
         : 'No se pudo completar la operación. Inténtalo más tarde.',true);
     } finally {busy=false;submit.disabled=false;google.disabled=!config.googleEnabled;window.VigilanteCaptcha?.reset();}
@@ -203,19 +272,21 @@
   google.addEventListener('click',async()=>{
     await ready;if(!client || !config.googleEnabled || busy)return;
     busy=true;google.disabled=true;
+    // Keep any choice already ticked, to show it again in the last step after Google.
+    if(mode==='signup')writePending(window.VigilanteAuthUI?.read('signup'));
     try{
       const result=await client.auth.signInWithOAuth({provider:'google',options:{redirectTo:config.redirectTo}});
       if(result.error)throw result.error;
     }catch(_){message('No se pudo conectar con Google. Inténtalo de nuevo.',true);}
     finally{busy=false;google.disabled=!config.googleEnabled;}
   });
-  $('account-signout').addEventListener('click',async()=>{
+  $('account-signout')?.addEventListener('click',async()=>{
     if(!client)return;
     try{
       const result=await client.auth.signOut({scope:'local'});
       if(result.error)throw result.error;
-      invalidate();accepted=false;recovery=false;pending=null;render(null);accountNotice('Has cerrado la sesión.');
-    }catch(_){accountNotice('No se pudo cerrar la sesión. Inténtalo de nuevo.');}
+      invalidate();accepted=false;recovery=false;pending=null;render(null);notice('Has cerrado la sesión.');
+    }catch(_){notice('No se pudo cerrar la sesión. Inténtalo de nuevo.');}
   });
   render(null);
   ready=(async()=>{
@@ -233,16 +304,16 @@
         if(event==='SIGNED_IN') setTimeout(async()=>{
           if(busy)return;
           await verifiedUser();
-          if(recovery || !user)return;
-          if(!accepted && !dialog.open)open('consent');
+          await afterSignIn();
         },0);
       });
-    }catch(_){client=null;accountNotice('El acceso a cuentas no está disponible. Puedes seguir calculando tu nómina.');}
+    }catch(_){client=null;notice('El acceso a cuentas no está disponible ahora mismo. Puedes seguir calculando tu nómina.');}
   })();
   document.addEventListener('visibilitychange',()=>{if(document.hidden)verifiedAt=0;});
   ready.then(async()=>{
     await verifiedUser();
     if(location.hash.includes('error=')){open('signin');message('El enlace ha caducado o no es válido. Solicita uno nuevo.',true);history.replaceState(null,'',location.pathname);}
-    else if(user && !accepted && !recovery && !dialog.open) open('consent');
+    else if(location.hash==='#registro' && !user){history.replaceState(null,'',location.pathname);open('signup');}
+    else await afterSignIn();
   });
 })();

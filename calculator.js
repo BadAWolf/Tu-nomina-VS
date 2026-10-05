@@ -8,7 +8,7 @@ function invalidarCalculo(tipo){
   var result=document.getElementById(tipo==='nomina'?'resultado':'resultado-'+tipo);
   if(result)result.style.display='none';
 }
-['nomina','finiquito'].forEach(function(tipo){
+['nomina','finiquito','baja'].forEach(function(tipo){
   var view=document.getElementById('view-'+tipo);
   ['input','change'].forEach(function(event){view.addEventListener(event,function(){invalidarCalculo(tipo);});});
   // Botones de categoría, jornada, pagas y modo también alteran las bases.
@@ -112,16 +112,16 @@ function exportarPDFRegistrado(tipo,btn){
 }
 function construirPDF(tipo){
   var cfg={
-    nomina:{title:'Tu nómina mensual',cont:'resultado',netoId:'r-neto',netLabel:'NETO ESTIMADO',archivo:'nomina'},
-    finiquito:{title:'Tu finiquito',cont:'resultado-finiquito',netoId:'fr-total-neto',netLabel:document.getElementById('f-total-label').textContent,archivo:'finiquito'},
+    nomina:{title:'Tu nómina mensual',cont:'resultado',netoId:'r-neto',netLabel:'NETO A COBRAR',archivo:'nomina'},
+    finiquito:{title:'Tu finiquito',cont:'resultado-finiquito',netoId:'fr-total-neto',netLabel:'TOTAL NETO',archivo:'finiquito'},
     baja:{title:'Tu prestación por baja (IT)',cont:'resultado-baja',netoId:'br-neto',netLabel:'NETO DE LA BAJA',archivo:'baja-it'}
   }[tipo];
   if(!cfg||!ctxPDF[tipo]){alert('Primero pulsa el botón de calcular.');return;}
   var doc=window.VigilantePDF.create({title:cfg.title,date:hoyLargo(),data:ctxPDF[tipo],netLabel:cfg.netLabel,
     net:document.getElementById(cfg.netoId).textContent,
-    monthly:tipo==='baja'&&informeBaja&&informeBaja.monthly[0].start?informeBaja.monthly.map(function(m){return {label:m.label,period:fechaES(m.start)+' - '+fechaES(m.end),days:String(m.days),gross:fmt(m.gross),ss:fmt(-m.ss),irpf:fmt(-m.irpf),net:fmt(m.net)};}):null,
-    notes:tipo==='baja'&&informeBaja?informeBaja.notes:tipo==='finiquito'?[document.getElementById('f-notas-calculo').textContent]:null,
-    projection:tipo==='baja'&&informeBaja?informeBaja.projection:false,
+    monthly:null,
+    notes:tipo==='finiquito'?[document.getElementById('f-notas-calculo').textContent]:tipo==='baja'?[document.getElementById('b-notas').textContent]:null,
+    projection:false,
     blocks:leerResultado(cfg.cont).map(function(b){return {title:b.titulo,rows:b.filas.map(function(f){return {label:f.c,value:f.v,total:f.total,negative:f.neg,exempt:f.exento};})};}),
     calendar:tipo==='nomina'&&ctxPDF.cuadrante?function(doc,y,M,A,W,C){return dibujarCuadrantePDF(doc,y,M,A,W,ctxPDF.cuadrante.anio,ctxPDF.cuadrante.mes,C);}:null
   });
@@ -645,14 +645,12 @@ function borrarDialogo(){
         document.getElementById('diasVac').value=trasladado.diasVac;
         document.getElementById('switchVac').checked=trasladado.diasVac>0&&cuentaVacacionesActiva;
         document.getElementById('vac-field').style.display=trasladado.diasVac>0&&cuentaVacacionesActiva?'block':'none';
-        document.getElementById('n-diasAlta').value=30;
       }
       invalidarCalculo('nomina');
       MODO_HORAS="manual";
       bm.classList.add("active"); bc.classList.remove("active");
       document.getElementById("campos-manual").style.display="block";
       document.getElementById("campos-cuadrante").style.display="none";
-      document.getElementById("n-diasAlta").disabled=false;
       actualizarComplementoVacaciones();
     });
     bc.addEventListener("click",function(){
@@ -660,7 +658,6 @@ function borrarDialogo(){
       bc.classList.add("active"); bm.classList.remove("active");
       document.getElementById("campos-manual").style.display="none";
       document.getElementById("campos-cuadrante").style.display="block";
-      document.getElementById("n-diasAlta").disabled=true;
       pintarCalendario();
     });
     document.getElementById("cal-prev").addEventListener("click",function(){
@@ -697,594 +694,446 @@ function borrarDialogo(){
   else listo();
 })();
 
-var CATS = {
-  sin_arma:  {salBase:1161.28,pelig:24.08, act:0,     trans:137.81,vest:112.28,nocH:1.26},
-  con_arma:  {salBase:1161.28,pelig:179.90,act:0,     trans:137.81,vest:112.28,nocH:1.26},
-  escolta:   {salBase:1161.28,pelig:177.15,act:0,     trans:137.81,vest:115.67,nocH:1.26,esc:312.99},
-  explosivos:{salBase:1161.28,pelig:210.55,act:40.17, trans:137.81,vest:112.25,nocH:1.26},
-  fondos:    {salBase:1227.74,pelig:179.90,act:210.19,trans:137.81,vest:113.27,nocH:1.27,cBase:1285.55,cVest:114.56,cNoc:1.36},
-  tr_explo:  {salBase:1227.74,pelig:191.59,act:152.44,trans:137.81,vest:113.27,nocH:1.27,cBase:1285.55,cVest:114.56,cNoc:1.36}
-};
-var QUINQUENIO = {sin_arma:45.86,con_arma:45.86,escolta:45.86,explosivos:45.86,fondos:46.59,tr_explo:46.59};
+/* Tablas y motor de cálculo: calculator-engine.js */
+var C=window.VigilanteCalc;
+var CATS=C.CATS,QUINQUENIO=C.QUINQUENIO,JORNADA=C.JORNADA,HORAS_ANUALES=C.HORAS_ANUALES,PLUS_FEST=C.PLUS_FEST;
+var catEf=C.catEf,tienePlusFestivo=C.tienePlusFestivo,r2=C.r2,calcAntig=C.calcAntig,calcHoraExtra=C.calcHoraExtra;
+var calcularNomina=C.calcularNomina,propPaga=C.propPaga,calcularFiniquito=C.calcularFiniquito,calcularBaja=C.calcularBaja;
 
-// Devuelve la categoría efectiva aplicando la variante conductor si procede
-function catEf(k,esCond){
-  var c=CATS[k];
-  if(esCond&&c.cBase){return {salBase:c.cBase,pelig:c.pelig,act:c.act,trans:c.trans,vest:c.cVest,nocH:c.cNoc};}
-  return c;
-}
-var JORNADA=162, HORAS_ANUALES=1782;
-var PLUS_FEST=1.02;
-function tienePlusFestivo(categoria){return !['fondos','tr_explo'].includes(categoria);}
+
+
+
 var catActual="sin_arma", jornActual="completa";
 var fcatActual="sin_arma", fjornActual="completa", bcatActual="sin_arma";
 var cuentaVacacionesActiva=false;
-var vacationPlusesUI=window.VigilanteVacationPluses.mount(function(){
-  var days=MODO_HORAS==='cuadrante'
-    ? (cuentaVacacionesActiva?totalesMes(calAnio,calMes).diasVac:0)
-    : (document.getElementById('switchVac').checked?Number(document.getElementById('diasVac').value)||0:0);
-  return {days:days,nightRate:catEf(catActual,document.getElementById('switchCond').checked).nocH,weekendRate:tienePlusFestivo(catActual)?PLUS_FEST:0};
-});
 
-function r2(n){var centimos=Math.abs(n)*100;return Math.sign(n)*Math.round(centimos+Number.EPSILON*Math.max(1,centimos))/100;}
+
 function fmt(n){return n.toLocaleString("es-ES",{minimumFractionDigits:2,maximumFractionDigits:2})+" €";}
-function calcAntig(a,cat,conductor){return r2(Math.floor(a/5)*(conductor&&CATS[cat].cBase?50.23:QUINQUENIO[cat]));}
-function calcHoraExtra(sb,p,act,ant,esc,peligrosidadExtra){
-  // Art. 53: 12 mensualidades y 3 extras; la peligrosidad de las extras
-  // puede diferir del mínimo fijo. Las horas con arma se abonan aparte.
-  var peligPaga=peligrosidadExtra===undefined?p:peligrosidadExtra;
-  return r2(((sb+p+act+ant)*12+(sb+peligPaga+act+ant)*3+(esc||0)*12)/HORAS_ANUALES);
-}
+function num(n){return String(Math.round(n*100)/100).replace(".",",");}
+
+
 function valor(id){return document.getElementById(id).value;}
 function numero(id){return Number(valor(id))||0;}
+function el(id){return document.getElementById(id);}
 function nochesEspeciales(a,m){
   if(m!==11)return 0;
   var count=0;
   [24,31].forEach(function(d){
     var ini=new Date(a,m,d,22),fin=new Date(a,m,d+1,6),found=false;
     [d,d+1].forEach(function(n){var fecha=new Date(a,m,n),entry=datosDia(fecha.getFullYear(),fecha.getMonth(),fecha.getDate());
-      (entry?.tramos||[]).forEach(function(t){var f=tramoAFechas(fecha.getFullYear(),fecha.getMonth(),fecha.getDate(),t);if(f&&f.ini<fin&&f.fin>ini)found=true;});});
+      (entry&&entry.tramos||[]).forEach(function(t){var f=tramoAFechas(fecha.getFullYear(),fecha.getMonth(),fecha.getDate(),t);if(f&&f.ini<fin&&f.fin>ini)found=true;});});
     if(found)count++;
   });
   return count;
 }
-function actualizarOpcionesCalculo(){
-  var resumenMes=MODO_HORAS==='cuadrante'?totalesMes(calAnio,calMes):null;
-  var diasVacMes=resumenMes?resumenMes.diasVac:(document.getElementById('switchVac').checked?numero('diasVac'):0);
-  var horasTrabajadas=resumenMes?resumenMes.horasTrabajadas:numero('hTTotal');
-  var escoltaMixto=catActual==='escolta'&&diasVacMes>0&&horasTrabajadas>0;
-  document.getElementById('n-escolta-field').hidden=!escoltaMixto;
-  document.getElementById('n-escolta-trabajado').disabled=!escoltaMixto;
-  document.getElementById('n-escolta-trabajado').required=escoltaMixto;
-  document.getElementById('n-arma-fields').hidden=catActual!=='con_arma';
-  document.getElementById('n-arma-horas-field').hidden=valor('n-arma-modo')!=='horas';
-  document.getElementById('n-arma-importe-field').hidden=valor('n-arma-modo')!=='importe';
-  var horasMes=MODO_HORAS==='cuadrante'?totalesMes(calAnio,calMes).horas:numero('hTTotal')+(document.getElementById('switchVac').checked?r2(numero('diasVac')*horasDiaVacaciones()):0);
-  var diasMes=MODO_HORAS==='cuadrante'?30:numero('n-diasAlta');
-  document.getElementById('n-complementarias-field').hidden=jornActual!=='parcial'||horasMes<=numero('hPactadas')*diasMes/30;
-  document.getElementById('n-antig-importe-field').hidden=numero('aniosAntiguedad')<30;
-  var particulares=document.getElementById('switchPlus').checked||catActual==='con_arma'&&valor('n-arma-modo')==='importe';
-  document.getElementById('n-especiales-card').hidden=!particulares;
-  document.getElementById('n-especiales-importes').hidden=!particulares;
-  document.getElementById('hint-extras').textContent=jornActual==='parcial'?'El exceso requiere pacto y valor de hora complementaria.':'Si superas 162 h, el exceso se cobra como hora extra';
-}
-['view-nomina','view-finiquito'].forEach(function(id){
-  ['input','change','click'].forEach(function(event){document.getElementById(id).addEventListener(event,actualizarOpcionesCalculo);});
-});
-document.getElementById('btn-sin_arma').closest('.card').after(document.getElementById('n-arma-fields'));
-document.getElementById('n-arma-fields').after(document.getElementById('n-escolta-field'));
-actualizarOpcionesCalculo();
-
 function showR(rid,lid,vid,lbl,val,cls){
-  var row=document.getElementById(rid);
+  var row=el(rid);
   cls=cls||"up";
   if(val>0.005){
     row.style.display="flex";
-    if(lid)document.getElementById(lid).textContent=lbl;
-    document.getElementById(vid).textContent=(cls==="down"?"-":"+")+fmt(val);
-    document.getElementById(vid).className="res-val "+cls;
+    if(lid)el(lid).textContent=lbl;
+    el(vid).textContent=(cls==="down"?"-":"+")+fmt(val);
+    el(vid).className="res-val "+cls;
   } else {row.style.display="none";}
 }
+function mostrarError(boxId,resultId,tipo,mensaje){
+  var box=el(boxId);box.textContent=mensaje;box.style.display='block';
+  invalidarCalculo(tipo);
+}
+function ocultarError(boxId){el(boxId).style.display='none';}
+function irAResultado(id){setTimeout(function(){el(id).scrollIntoView({behavior:"smooth",block:"nearest"});},60);}
+function tras_calcular(){
+  cargarJsPDF(function(){});
+  window.VigilanteInstall?.calculationCompleted();
+  window.VigilanteAnalytics?.track('calculation_complete');
+}
 
+/* ── Pestañas ── */
 ["nomina","finiquito","baja"].forEach(function(t){
-  document.getElementById("tab-"+t).addEventListener("click",function(){
-    if(t!=="nomina"){
-      if(window.VigilanteAuth) window.VigilanteAuth.require(function(){mostrarVista(t);});
-      return;
-    }
+  el("tab-"+t).addEventListener("click",function(){
+    if(t!=="nomina"&&window.VigilanteAuth){window.VigilanteAuth.require(function(){mostrarVista(t);});return;}
     mostrarVista(t);
   });
 });
 function mostrarVista(t){
-    ["nomina","finiquito","baja"].forEach(function(x){
-      document.getElementById("tab-"+x).classList.toggle("active",x===t);
-      document.getElementById("view-"+x).style.display=x===t?"block":"none";
-    });
+  ["nomina","finiquito","baja"].forEach(function(x){
+    el("tab-"+x).classList.toggle("active",x===t);
+    el("tab-"+x).setAttribute("aria-pressed",String(x===t));
+    el("view-"+x).style.display=x===t?"block":"none";
+  });
 }
 
-function actualizarPlusesCategoria(){
-  var conductor=document.getElementById('switchCond').checked;
-  var a=parseInt(document.getElementById('aniosAntiguedad').value)||0, q=Math.floor(a/5);
-  var importeQuinquenio=calcAntig(5,catActual,conductor);
-  var cat=catEf(catActual,conductor);
-  document.getElementById('badge-noc').textContent='+'+cat.nocH.toFixed(2).replace('.',',')+' €/h';
-  document.getElementById("hint-antiguedad").textContent=a<5
-    ?"Sin antigüedad — el plus aplica cada 5 años ("+fmt(importeQuinquenio)+"/quinquenio)"
-    :q+" quinquenio"+(q>1?"s":"")+" = +"+fmt(calcAntig(a,catActual,conductor))+"/mes";
-  vacationPlusesUI.refresh();
+/* ── Controles compartidos ── */
+function grupoCategorias(prefijo,vista,tarjetaCond,switchCond,alCambiar){
+  Object.keys(CATS).forEach(function(c){
+    el(prefijo+"-"+c).addEventListener("click",function(){
+      document.querySelectorAll("#"+vista+" .cat-btn").forEach(function(b){b.classList.remove("active");});
+      el(prefijo+"-"+c).classList.add("active");
+      var conConductor=!!CATS[c].cBase;
+      el(tarjetaCond).style.display=conConductor?"block":"none";
+      if(!conConductor)el(switchCond).checked=false;
+      alCambiar(c);
+    });
+  });
 }
-document.getElementById('aniosAntiguedad').addEventListener('input',actualizarPlusesCategoria);
-document.getElementById('switchCond').addEventListener('change',actualizarPlusesCategoria);
-document.getElementById('switchResponsable').addEventListener('change',function(){document.getElementById('responsable-field').hidden=!this.checked;});
-document.getElementById("switchPlus").addEventListener("change",function(){
-  document.getElementById("plus-servicio-field").style.display=this.checked?"block":"none";
+function grupoJornada(prefijo,campo,alCambiar){
+  var botones={completa:el(prefijo+"jorn-completa"),parcial:el(prefijo+"jorn-parcial"),dias:el(prefijo+"jorn-dias")};
+  Object.keys(botones).forEach(function(tipo){
+    if(!botones[tipo])return;
+    botones[tipo].addEventListener("click",function(){
+      Object.keys(botones).forEach(function(t){if(botones[t])botones[t].classList.toggle("active",t===tipo);});
+      el(campo).style.display=tipo==="parcial"?"block":"none";alCambiar(tipo);
+    });
+  });
+}
+function grupoPagas(ids,activa,inactiva){
+  ids.forEach(function(id){
+    el(id).addEventListener("click",function(){
+      this.classList.toggle("active");
+      this.setAttribute("aria-pressed",String(this.classList.contains("active")));
+      this.querySelector(".paga-sub").textContent=this.classList.contains("active")?activa:inactiva;
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════════════════
+   NÓMINA
+   ══════════════════════════════════════════════════════════ */
+function actualizarPlusesCategoria(){
+  var conductor=el('switchCond').checked;
+  var a=parseInt(valor('aniosAntiguedad'),10)||0, q=Math.floor(a/5);
+  var cat=catEf(catActual,conductor);
+  el('badge-noc').textContent='+'+cat.nocH.toFixed(2).replace('.',',')+' €/h';
+  el('badge-fest').hidden=!tienePlusFestivo(catActual);
+  el("hint-antiguedad").textContent=q<1
+    ?"Cada 5 años cobras un quinquenio ("+fmt(calcAntig(5,catActual,conductor))+"/mes)"
+    :q+" quinquenio"+(q>1?"s":"")+" = +"+fmt(calcAntig(a,catActual,conductor))+"/mes";
+}
+grupoCategorias("btn","view-nomina","card-cond","switchCond",function(c){catActual=c;actualizarPlusesCategoria();});
+grupoJornada("","parcial-field",function(j){
+  jornActual=j;
+  el("hint-jornada").textContent={
+    completa:"Cobras el sueldo del mes entero. Si pasas de 162 h, el exceso es hora extra.",
+    parcial:"Cobras en proporción a tus horas. Si haces más de las de tu contrato, son horas complementarias."
+  }[j];
+  actualizarHintVac();
+  if(MODO_HORAS==='cuadrante')pintarCalendario();
 });
-document.getElementById("switchVac").addEventListener("change",function(){
+el('hPactadas').addEventListener('input',function(){actualizarHintVac();if(MODO_HORAS==='cuadrante')pintarCalendario();});
+el('aniosAntiguedad').addEventListener('input',actualizarPlusesCategoria);
+el('switchCond').addEventListener('change',actualizarPlusesCategoria);
+el("switchPlus").addEventListener("change",function(){
+  el("plus-servicio-field").style.display=this.checked?"block":"none";
+});
+grupoPagas(["paga-julio","paga-dic","paga-mar"],"activa","inactiva");
+
+/* Vacaciones: función de la cuenta gratuita */
+function solicitarCuentaVacaciones(action){
+  if(window.VigilanteAuth)return window.VigilanteAuth.require(action);
+  var notice=el('account-notice');
+  if(notice)notice.textContent='El acceso a cuentas no está disponible. Para añadir vacaciones necesitas iniciar sesión.';
+}
+el("switchVac").addEventListener("change",function(){
   if(this.checked){
     this.checked=false;
     solicitarCuentaVacaciones(function(){
-      document.getElementById("switchVac").checked=true;
-      document.getElementById("vac-field").style.display="block";
+      el("switchVac").checked=true;
+      el("vac-field").style.display="block";
       actualizarHintVac();
-      document.getElementById("diasVac").focus();
+      el("diasVac").focus();
     });
     return;
   }
-  document.getElementById("vac-field").style.display="none";
-  document.getElementById("diasVac").value="";
+  el("vac-field").style.display="none";
+  el("diasVac").value="";
   actualizarHintVac();
 });
-function solicitarCuentaVacaciones(action){
-  if(window.VigilanteAuth) return window.VigilanteAuth.require(action);
-  var notice=document.getElementById('account-notice');
-  if(notice) notice.textContent='El acceso a cuentas no está disponible. Para añadir vacaciones necesitas iniciar sesión.';
-}
+el("diasVac").addEventListener("input",actualizarHintVac);
 function actualizarAccesoVacaciones(member){
   cuentaVacacionesActiva=member;
   ['vac-access-note','dlg-vac-access-note'].forEach(function(id){
-    var note=document.getElementById(id);
-    if(note) note.textContent=member?'Incluido en tu cuenta':'Disponible con cuenta gratuita';
+    var note=el(id);
+    if(note)note.textContent=member?'Incluido en tu cuenta':'Disponible con registro gratuito';
   });
   if(member){actualizarComplementoVacaciones();return;}
-  document.getElementById('switchVac').checked=false;
-  document.getElementById('vac-field').style.display='none';
-  document.getElementById('diasVac').value='';
+  el('switchVac').checked=false;
+  el('vac-field').style.display='none';
+  el('diasVac').value='';
   actualizarHintVac();
-  // Keep stored calendar days intact. Reusing them in a payroll requires signing in.
-  if(ctxPDF.nomina&&ctxPDF.nomina['Vacaciones disfrutadas']!=='Ninguna'){
+  if(ctxPDF.nomina&&ctxPDF.nomina['Vacaciones']&&ctxPDF.nomina['Vacaciones']!=='Ninguna'){
     ctxPDF.nomina=null;
-    document.getElementById('resultado').style.display='none';
+    el('resultado').style.display='none';
   }
 }
+window.actualizarAccesoVacaciones=actualizarAccesoVacaciones;
+function diasVacSolicitados(){
+  if(MODO_HORAS==='cuadrante')return totalesMes(calAnio,calMes).diasVac;
+  return el('switchVac').checked?numero('diasVac'):0;
+}
+function diasVacacionesMes(){return cuentaVacacionesActiva?diasVacSolicitados():0;}
 function actualizarHintVac(){
   actualizarComplementoVacaciones();
-  var d=parseFloat(document.getElementById("diasVac").value)||0;
-  document.getElementById("hint-vac").textContent = d>0
-    ? d+" día"+(d!==1?"s":"")+" × "+horasDiaVacaciones().toFixed(3).replace(".",",")+" h = "+fmt(r2(d*horasDiaVacaciones())).replace(" €"," h")+" de jornada"
-    : "31 días naturales al año. Cada día computa tu jornada mensual contratada dividida entre 31.";
+  var d=numero("diasVac");
+  el("hint-vac").textContent=d>0
+    ?d+" día"+(d!==1?"s":"")+" × "+horasDiaVacaciones().toFixed(2).replace(".",",")+" h = "+num(d*horasDiaVacaciones())+" h que cuentan como trabajadas"
+    :"Cada día de vacaciones cuenta como horas de tu jornada.";
 }
 function actualizarComplementoVacaciones(){
-  var vacaciones=MODO_HORAS==='manual'
-    ? document.getElementById('switchVac').checked
-    : cuentaVacacionesActiva&&totalesMes(calAnio,calMes).diasVac>0;
-  document.getElementById('vac-plus-field').hidden=!vacaciones;
-  vacationPlusesUI.refresh();
+  var conVacaciones=MODO_HORAS==='manual'?el('switchVac').checked:totalesMes(calAnio,calMes).diasVac>0;
+  el('vac-plus-field').hidden=!(cuentaVacacionesActiva&&conVacaciones);
 }
-document.getElementById("diasVac").addEventListener("input",actualizarHintVac);
-["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
-  document.getElementById("btn-"+c).addEventListener("click",function(){
-    document.querySelectorAll("#view-nomina .cat-btn").forEach(function(b){b.classList.remove("active");});
-    document.getElementById("btn-"+c).classList.add("active");
-    catActual=c;
-    var esC=!!CATS[c].cBase;
-    document.getElementById("card-cond").style.display=esC?"block":"none";
-    if(!esC)document.getElementById("switchCond").checked=false;
-    actualizarPlusesCategoria();
-  });
-});
-document.getElementById("jorn-completa").addEventListener("click",function(){
-  jornActual="completa";
-  document.getElementById("jorn-completa").classList.add("active");
-  document.getElementById("jorn-parcial").classList.remove("active");
-  document.getElementById("parcial-field").style.display="none";
-  document.getElementById("hint-extras").textContent="Si superas 162 h, el exceso se cobra como hora extra";
-});
-document.getElementById("jorn-parcial").addEventListener("click",function(){
-  jornActual="parcial";
-  document.getElementById("jorn-parcial").classList.add("active");
-  document.getElementById("jorn-completa").classList.remove("active");
-  document.getElementById("parcial-field").style.display="block";
-  document.getElementById("hint-extras").textContent="El exceso se estima como horas complementarias. Revisa el pacto y los límites de tu contrato.";
-});
-function actualizarJornada(){actualizarHintVac();if(MODO_HORAS==='cuadrante')pintarCalendario();}
-['jorn-completa','jorn-parcial'].forEach(function(id){document.getElementById(id).addEventListener('click',actualizarJornada);});
-document.getElementById('hPactadas').addEventListener('input',actualizarJornada);
-["paga-julio","paga-dic","paga-mar"].forEach(function(id){
-  document.getElementById(id).addEventListener("click",function(){
-    this.classList.toggle("active");
-    this.querySelector(".paga-sub").textContent=this.classList.contains("active")?"activa":"inactiva";
-  });
-});
-document.getElementById("btnCalc").addEventListener("click",function(){calcNomina();});
+
+el("btnCalc").addEventListener("click",function(){calcNomina();});
 document.querySelectorAll('[data-pdf]').forEach(function(button){
   button.addEventListener('click',function(){exportarPDF(button.dataset.pdf,button);});
 });
 
+/* Motor de la nómina: no lee el DOM, para poder probarlo. */
+
+
 function calcNomina(){
-  var conVacaciones=MODO_HORAS==='cuadrante'
-    ? totalesMes(calAnio,calMes).diasVac>0
-    : document.getElementById('switchVac').checked;
-  if(conVacaciones){
-    var modoSolicitado=MODO_HORAS;
-    var diasSolicitados=document.getElementById('diasVac').value;
-    ctxPDF.nomina=null;
-    document.getElementById('resultado').style.display='none';
-    solicitarCuentaVacaciones(function(){
-      if(modoSolicitado==='manual'&&MODO_HORAS==='manual'){
-        document.getElementById('switchVac').checked=true;
-        document.getElementById('diasVac').value=diasSolicitados;
-        document.getElementById('vac-field').style.display='block';
-        actualizarHintVac();
-      }
-      calcNominaRegistrado();
-    });
+  if(diasVacSolicitados()>0&&!cuentaVacacionesActiva){
+    ctxPDF.nomina=null;el('resultado').style.display='none';
+    solicitarCuentaVacaciones(calcNominaRegistrado);
     return;
   }
   calcNominaRegistrado();
 }
 function calcNominaRegistrado(){
   ctxPDF.nomina=null;
-  actualizarOpcionesCalculo();
-  function fail(message){var e=document.getElementById('errorBox');e.textContent=message;e.style.display='block';invalidarCalculo('nomina');}
-  var anioNomina=MODO_HORAS==='cuadrante'?calAnio:new Date().getFullYear();
-  if(anioNomina!==2026){fail('El cálculo monetario está validado para 2026. Puedes conservar otros años en el calendario, pero requieren sus propias tablas y cotizaciones.');return;}
+  var fail=function(m){mostrarError('errorBox','resultado','nomina',m);};
   if(MODO_HORAS==='cuadrante'){
     var conflicto=validarCuadrante(CUAD,calAnio,calMes);
     if(conflicto){fail(conflicto);return;}
+    volcarTotales(totalesMes(calAnio,calMes));
   }
-  if(MODO_HORAS==='cuadrante')volcarTotales(totalesMes(calAnio,calMes));
-  if(!window.VigilanteSecurity.validateInputs('view-nomina','errorBox','resultado')){ctxPDF.nomina=null;return;}
-  var cat=catEf(catActual,document.getElementById("switchCond").checked);
-  var hT=parseFloat(document.getElementById("hTTotal").value)||0;
-  var hN=parseFloat(document.getElementById("hNoc").value)||0;
-  var hF=parseFloat(document.getElementById("hFest").value)||0;
-  var ip=parseFloat(document.getElementById("irpf").value)||0;
-  var an=parseFloat(document.getElementById("aniosAntiguedad").value)||0;
-  var ps=document.getElementById("switchPlus").checked?(parseFloat(document.getElementById("plusServicio").value)||0):0;
-  var esResponsable=document.getElementById("switchResponsable").checked;
-  var dVac=(MODO_HORAS==="manual"&&document.getElementById("switchVac").checked)
-             ? (parseFloat(document.getElementById("diasVac").value)||0) : 0;
-  var hp=jornActual==="completa"?JORNADA:(parseFloat(document.getElementById("hPactadas").value)||0);
-  if(MODO_HORAS==='cuadrante'){
-    var mesActual=totalesMes(calAnio,calMes);dVac=mesActual.diasVac;hT=mesActual.horasTrabajadas;
-  }
-  var jornadaMes=hp;
-  var hVac=r2(dVac*jornadaMes/31);
-  var err=document.getElementById("errorBox");
-  if(hT<=0&&hVac<=0){err.textContent="Introduce las horas totales trabajadas.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp<=0){err.textContent="Introduce las horas pactadas en tu contrato.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(jornActual==="parcial"&&hp>=JORNADA){err.textContent="Las horas pactadas deben ser menos de 162.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(hN>hT){err.textContent="Las horas nocturnas no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  if(hF>hT){err.textContent="Las horas de fin de semana/festivo no pueden superar el total.";err.style.display="block";document.getElementById("resultado").style.display="none";return;}
-  err.style.display="none";
-
-  /* Las vacaciones computan como jornada, aunque no se hayan trabajado */
-  var hTrab=hT;                 // horas realmente trabajadas
-  var hJor=r2(hT+hVac);         // jornada computable del mes
-  var ratioFijo=hp/JORNADA;
-  // Calendar shifts describe worked hours, not the duration of the contract.
-  // A full monthly salary includes rest days, regardless of the month's length.
-  var diasSalario=MODO_HORAS==='cuadrante'?30:numero('n-diasAlta');
-  if(!Number.isInteger(diasSalario)||diasSalario<1||diasSalario>30){fail('Indica entre 1 y 30 días remunerados de nómina.');return;}
-  if(diasSalario<30&&dVac>diasSalario){fail('Las vacaciones no pueden superar los días remunerados del periodo parcial.');return;}
-  var factorH=diasSalario/30;
-  var labelSufix="";
-  if(factorH<1)labelSufix=" ("+Math.round(factorH*30)+" días remunerados)";
-
-  var sb=r2(cat.salBase*ratioFijo*factorH);
-  var pe=r2(cat.pelig*ratioFijo*factorH);
-  var ac=r2((cat.act||0)*ratioFijo*factorH);
-  var tr=r2(cat.trans*ratioFijo*factorH);
-  var ve=r2(cat.vest*ratioFijo*factorH);
-  var ant=calcAntig(an,catActual,document.getElementById('switchCond').checked);
-  var antigReconocida=an>=30;
-  if(antigReconocida&&valor('n-antig-importe')===''){fail('Indica el plus reconocido en el apartado de antigüedad para conservar tus trienios consolidados.');return;}
-  if(antigReconocida)ant=numero('n-antig-importe');
-  var antM=r2(ant*ratioFijo*factorH);
-  var hResponsable=esResponsable?(document.getElementById('n-horasResponsable').value===''?hT:Number(document.getElementById('n-horasResponsable').value)):0;
-  if(hResponsable>hT){err.textContent='Las horas como responsable de equipo no pueden superar las trabajadas.';err.style.display='block';document.getElementById('resultado').style.display='none';return;}
-  var plusResponsable=r2(cat.salBase*0.10*hResponsable/JORNADA);
-  var vacationSupplement;
-  try{vacationSupplement=vacationPlusesUI.read(dVac);}catch(error){
-    err.textContent=error.message;err.style.display='block';
-    document.getElementById('resultado').style.display='none';return;
-  }
-  var complementoVac=vacationSupplement.amount;
-  var q=Math.floor(an/5);
-  var sbHE=cat.salBase;
-  var peligrosidadPaga=cat.pelig*ratioFijo;
-  if(catActual==='con_arma'){
-    var porHoras=valor('n-arma-modo')==='horas';
-    if((valor('n-arma-paga')===''&&(porHoras||valor('n-base-paga')===''))||valor(porHoras?'n-arma-horas':'n-arma-importe')===''){fail('Completa la peligrosidad: horas con arma o importe reconocido, y la parte incluida en una paga extra.');return;}
-    if(porHoras&&numero('n-arma-horas')>hT){fail('Las horas con arma no pueden superar las horas trabajadas.');return;}
-    if(porHoras&&dVac>0&&valor('n-arma-vac')===''){fail('Indica la peligrosidad de vacaciones reconocida (0 si no corresponde), sin incluirla otra vez en los pluses variables.');return;}
-    pe=porHoras?r2(Math.max(24.08*ratioFijo*factorH,numero('n-arma-horas')*1.11+(dVac>0?numero('n-arma-vac'):0))):numero('n-arma-importe');
-    if(pe<r2(24.08*ratioFijo*factorH)){fail('El importe reconocido no puede estar por debajo de la peligrosidad mínima garantizada para esta jornada.');return;}
-    peligrosidadPaga=numero('n-arma-paga');
-  }
-  // La paga indicada corresponde a la jornada contractual, no a los días
-  // remunerados de este mes. La tarifa anual se calcula a jornada completa.
-  var hev=calcHoraExtra(sbHE,catActual==='con_arma'?24.08:cat.pelig,cat.act||0,ant,cat.esc,catActual==='con_arma'?peligrosidadPaga/ratioFijo:undefined);
-  var plusEscolta=r2((cat.esc||0)*ratioFijo*factorH);
-  if(cat.esc&&dVac>0){
-    if(hT>0&&valor('n-escolta-trabajado')===''){fail('Indica el plus de escolta por el trabajo de este mes, sin incluir vacaciones. Su promedio vacacional se añade por separado.');return;}
-    plusEscolta=hT>0?numero('n-escolta-trabajado'):0;
-  }
-  var objetivo=jornadaMes*factorH;
-  var hEx=Math.max(0,r2(hJor-objetivo));
-  var especiales=ps>0||catActual==='con_arma'&&valor('n-arma-modo')==='importe';
-  if(especiales&&hEx>0&&jornActual==='completa'){
-    if(!(numero('n-valor-extra')>0)){fail('Indica el precio reconocido de hora extra que corresponde a tus complementos o garantía.');return;}
-    hev=numero('n-valor-extra');
-  }
-  if(jornActual==='parcial'&&hEx>0){
-    if(!(numero('n-hora-ordinaria')>0)){fail('Indica el valor de tu hora complementaria en el apartado de jornada parcial.');return;}
-    hev=numero('n-hora-ordinaria');
-  }
-  var festAplicable=tienePlusFestivo(catActual);
-  var pEx=r2(hEx*hev), pN=r2(hN*cat.nocH), pFe=festAplicable?r2(hF*PLUS_FEST):0;
-  var noches=MODO_HORAS==='cuadrante'?nochesEspeciales(calAnio,calMes):0;
-  var pNavidad=r2(noches*83.48);
-  var pa=document.querySelectorAll("#view-nomina .paga-btn.active").length;
-  var bP=r2((cat.salBase+(cat.act||0)+ant)*ratioFijo+peligrosidadPaga);
-  if(ps>0&&valor('n-base-paga')===''){fail('Indica el importe completo de una paga extra para tu jornada: el plus de servicio por sí solo no determina qué conceptos entran en las extras.');return;}
-  if(especiales&&valor('n-base-paga')!=='')bP=numero('n-base-paga');
-  var pP=r2((pa*bP*factorH)/12);
-  var bruto=r2(sb+pe+ac+tr+ve+antM+plusResponsable+ps+plusEscolta+complementoVac+pEx+pN+pFe+pP+pNavidad);
-  var pNP=3-pa;
-  var ssB=r2(bruto+r2(pNP*bP*factorH/12));
-  // Orden PJC/297/2026, arts. 38 y 39: mínimo por hora efectiva en parcial.
-  if(jornActual==='parcial')ssB=Math.max(ssB,r2(hT*8.58));
-  var topeCotizacion=r2(5101.20*factorH);
-  if(ssB>topeCotizacion){fail('La base supera el máximo de '+fmt(topeCotizacion)+' para '+diasSalario+' días de alta en 2026. Este caso requiere calcular topes y cotización de solidaridad con tu nómina real.');return;}
-  var cotExtra=jornActual==='completa'?pEx:0;
-  var cuotas=VigilanteRules.contributions(r2(ssB-cotExtra),ssB,cotExtra,valor('n-contrato')==='temporal');
-  var dSS=cuotas.total, dIP=r2(bruto*ip/100);
-  var neto=r2(bruto-dSS-dIP);
-
-  var suf=jornActual==="parcial"&&labelSufix===""?" ("+hp+"h/162h)":labelSufix;
-  document.getElementById("lbl-base").textContent="Salario base"+suf;
-  document.getElementById("lbl-pelig").textContent="Plus peligrosidad"+suf;
-  document.getElementById("r-base").textContent="+"+fmt(sb);
-  document.getElementById("r-pelig").textContent="+"+fmt(pe);
-  if(hVac>0){
-    document.getElementById("row-vacinfo").style.display="flex";
-    document.getElementById("lbl-vacinfo").textContent="Vacaciones — "+dVac+" día"+(dVac!==1?"s":"")+" × "+(jornadaMes/31).toFixed(3).replace(".",",")+" h";
-    document.getElementById("r-vacinfo").textContent=String(hVac).replace(".",",")+" h de jornada";
-  } else { document.getElementById("row-vacinfo").style.display="none"; }
-  showR("row-act","lbl-act","r-act","Plus de actividad"+suf,ac,"up");
-  showR("row-escolta","lbl-escolta","r-escolta",dVac>0?'Plus escolta por trabajo (sin vacaciones)':'Plus escolta (función todo el mes)',plusEscolta,"up");
-  document.getElementById("r-trans").textContent="+"+fmt(tr);
-  document.getElementById("r-vest").textContent="+"+fmt(ve);
-  if(antM>0){document.getElementById("row-antig").style.display="flex";document.getElementById("lbl-antig").textContent=antigReconocida?'Antigüedad reconocida':"Antigüedad ("+q+" quinquenio"+(q>1?"s":"")+")";document.getElementById("r-antig").textContent="+"+fmt(antM);}
-  else{document.getElementById("row-antig").style.display="none";}
-  showR("row-responsable","lbl-responsable","r-responsable","Responsable de equipo — "+hResponsable+" h",plusResponsable,"up");
-  showR("row-vacplus","lbl-vacplus","r-vacplus",vacationSupplement.mode==='horas'?"Pluses de vacaciones (estimación por horas)":"Promedio de pluses en vacaciones",complementoVac,"up");
-  if(ps>0){document.getElementById("row-plusserv").style.display="flex";document.getElementById("r-plusserv").textContent="+"+fmt(ps);}
-  else{document.getElementById("row-plusserv").style.display="none";}
-  showR("row-extra","lbl-extra","r-extra",(jornActual==="parcial"?"Horas complementarias estimadas — ":"Horas extra — ")+hEx+"h × "+hev.toFixed(2).replace(".",",")+" €",pEx,"up");
-  showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+hN+"h × "+cat.nocH.toFixed(2).replace(".",",")+" €",pN,"up");
-  showR("row-fest","lbl-fest","r-fest","Plus fin de semana/festivo — "+hF+"h × 1,02 €",pFe,"up");
-  showR('row-navidad','lbl-navidad','r-navidad','Nochebuena / Nochevieja — '+noches+' noche(s)',pNavidad,'up');
-  showR("row-prorr","lbl-prorr","r-prorr",pa+" paga"+(pa!==1?"s":"")+" extra prorrateada"+(pa!==1?"s":""),pP,"up");
-  document.getElementById("r-bruto").textContent=fmt(bruto);
-  document.getElementById("r-ss").textContent="-"+fmt(dSS);
-  if(ip>0){document.getElementById("row-irpf").style.display="flex";document.getElementById("row-irpf0").style.display="none";document.getElementById("lbl-irpf").textContent="Retención IRPF ("+ip+"%)";document.getElementById("r-irpf").textContent="-"+fmt(dIP);}
-  else{document.getElementById("row-irpf").style.display="none";document.getElementById("row-irpf0").style.display="flex";}
-  document.getElementById("r-neto").textContent=fmt(neto);
-  document.getElementById("resultado").style.display="block";
-  cargarJsPDF(function(){});
-  window.VigilanteInstall?.calculationCompleted();
-  window.VigilanteAnalytics?.track('calculation_complete');
-  ctxPDF.cuadrante = (MODO_HORAS==="cuadrante") ? {anio:calAnio, mes:calMes} : null;
-  var pdfDiasVac = ctxPDF.cuadrante ? totalesMes(calAnio,calMes).diasVac : dVac;
-  var pdfHorasVac = hVac;
-  ctxPDF.nomina={
-    "Categoría":nombreCat(catActual,document.getElementById("switchCond").checked),
-    "Tipo de jornada":(jornActual==='completa'?'Completa':'Parcial')+' · '+objetivo+' h ordinarias · '+(diasSalario===30?'Mes completo':diasSalario+' días remunerados'),
-    ["Horas trabajadas (sin vacaciones)"]:String(hTrab).replace(".",",")+" h"+(hEx>0?"  ("+String(hEx).replace(".",",")+" h extraordinarias calculadas)":""),
-    "Horas nocturnas":(hN>0?hN+" h  ×  "+cat.nocH.toFixed(2).replace(".",",")+" €":"Ninguna"),
-    "Horas fin de semana / festivo":festAplicable?(hF>0?hF+" h  ×  1,02 €":"Ninguna"):'Sin derecho al plus en el supuesto seleccionado',
-    "Antigüedad":fmt(antM)+' este mes'+(antigReconocida?' · importe reconocido':''),
-    "Vacaciones disfrutadas":(pdfDiasVac>0?pdfDiasVac+" día"+(pdfDiasVac!==1?"s":"")+" = "+String(pdfHorasVac).replace(".",",")+" h de jornada":"Ninguna"),
-    "Jornada computable del mes":String(hJor).replace(".",",")+" h",
-    "Responsable de equipo":(esResponsable?"Sí (10% del salario base)":"No"),
-    "Pagas extra prorrateadas":(pa>0?pa+" de 3":"Ninguna"),
-    "Retención IRPF aplicada":(ip>0?ip+" %":"0 %")
+  if(!window.VigilanteSecurity.validateInputs('view-nomina','errorBox','resultado')){invalidarCalculo('nomina');return;}
+  var conductor=el("switchCond").checked;
+  var mes=MODO_HORAS==='cuadrante'?totalesMes(calAnio,calMes):null;
+  var datos={
+    categoria:catActual,conductor:conductor,jornada:jornActual,horasContrato:numero('hPactadas'),
+    contrato:'indefinido',responsable:el('switchResponsable').checked,
+    plusServicio:el('switchPlus').checked?numero('plusServicio'):0,anios:numero('aniosAntiguedad'),
+    horas:mes?mes.horasTrabajadas:numero('hTTotal'),horasNoche:numero('hNoc'),horasFestivo:numero('hFest'),
+    diasVac:diasVacacionesMes(),mediaPlusVac:0,diasMes:mes?new Date(calAnio,calMes+1,0).getDate():30,
+    nochesEspeciales:mes?nochesEspeciales(calAnio,calMes):0,
+    pagas:document.querySelectorAll("#view-nomina .paga-btn.active").length,irpf:numero('irpf')
   };
-  document.getElementById('r-ss').title='CC '+fmt(cuotas.common)+' · MEI '+fmt(cuotas.mei)+' · Desempleo '+fmt(cuotas.unemployment)+' · Formación '+fmt(cuotas.training)+' · HE '+fmt(cuotas.overtime);
-  if(noches)ctxPDF.nomina['Nochebuena / Nochevieja']=noches+' noche(s) · '+fmt(pNavidad)+' · compensación económica estimada';
-  if(dVac>0&&vacationSupplement.provided){
-    ctxPDF.nomina['Pluses de vacaciones']=(vacationSupplement.mode==='horas'?'Estimación por horas con tarifas de 2026':vacationSupplement.mode==='nominas'?'Media de '+document.getElementById('vac-meses').value+' nóminas':'Media mensual indicada')+' · '+fmt(vacationSupplement.average)+' / 31 × '+dVac+' días = '+fmt(complementoVac)+' brutos';
-  }
-  setTimeout(function(){document.getElementById("resultado").scrollIntoView({behavior:"smooth",block:"nearest"});},60);
+  if(datos.jornada==='parcial'&&!(datos.horasContrato>0)){fail("Escribe las horas al mes que pone tu contrato.");return;}
+  if(datos.jornada==='parcial'&&datos.horasContrato>=JORNADA){fail("A tiempo parcial, las horas de contrato deben ser menos de 162. Si haces 162, elige jornada completa.");return;}
+  if(datos.horas<=0&&datos.diasVac<=0){fail(MODO_HORAS==='cuadrante'?"Añade tus turnos en el cuadrante para calcular.":"Escribe las horas que has trabajado este mes.");return;}
+  if(datos.horasNoche>datos.horas){fail("Las horas nocturnas no pueden ser más que las horas totales.");return;}
+  if(datos.horasFestivo>datos.horas){fail("Las horas de fin de semana o festivo no pueden ser más que las horas totales.");return;}
+  ocultarError('errorBox');
+  var r=calcularNomina(datos);
+
+  var suf=r.factor<1?" ("+num(r.hJor)+" h de "+num(r.hp)+" h)":(jornActual==='parcial'?" ("+num(r.hp)+" h de 162 h)":"");
+  el("lbl-base").textContent="Salario base"+suf;
+  el("lbl-pelig").textContent="Plus peligrosidad"+suf;
+  el("r-base").textContent="+"+fmt(r.base);
+  el("r-pelig").textContent="+"+fmt(r.pelig);
+  showR("row-act","lbl-act","r-act","Plus de actividad"+suf,r.act);
+  showR("row-escolta","lbl-escolta","r-escolta","Plus escolta"+suf,r.escolta);
+  el("lbl-trans").textContent="Plus transporte"+suf;
+  el("lbl-vest").textContent="Plus vestuario"+suf;
+  el("r-trans").textContent="+"+fmt(r.trans);
+  el("r-vest").textContent="+"+fmt(r.vest);
+  showR("row-antig","lbl-antig","r-antig","Antigüedad ("+r.quinquenios+" quinquenio"+(r.quinquenios!==1?"s":"")+")",r.antig);
+  showR("row-responsable","lbl-responsable","r-responsable","Plus de responsable de equipo (10% del salario base)",r.responsable);
+  showR("row-plusserv",null,"r-plusserv","",r.plusServicio);
+  if(r.hVac>0){
+    el("row-vacinfo").style.display="flex";
+    el("lbl-vacinfo").textContent="Vacaciones: "+datos.diasVac+" día"+(datos.diasVac!==1?"s":"");
+    el("r-vacinfo").textContent=num(r.hVac)+" h de jornada";
+  } else el("row-vacinfo").style.display="none";
+  showR("row-vacplus","lbl-vacplus","r-vacplus","Pluses de noches y festivos en vacaciones ("+datos.diasVac+" días)",r.vacPlus);
+  showR("row-extra","lbl-extra","r-extra",(jornActual==="parcial"?"Horas complementarias — ":"Horas extra — ")+num(r.horasExtra)+" h × "+fmt(r.valorHora),r.extra);
+  showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+num(datos.horasNoche)+" h × "+fmt(r.nocheTarifa),r.noche);
+  showR("row-fest","lbl-fest","r-fest","Plus fin de semana y festivos — "+num(datos.horasFestivo)+" h × 1,02 €",r.fest);
+  showR("row-navidad","lbl-navidad","r-navidad","Nochebuena / Nochevieja — "+datos.nochesEspeciales+" noche"+(datos.nochesEspeciales!==1?"s":""),r.navidad);
+  showR("row-prorr","lbl-prorr","r-prorr",datos.pagas+" paga"+(datos.pagas!==1?"s":"")+" extra prorrateada"+(datos.pagas!==1?"s":""),r.prorrata);
+  el("r-bruto").textContent=fmt(r.bruto);
+  el("lbl-ss").textContent="Seguridad Social";
+  el("r-ss").textContent="-"+fmt(r.ss);
+  el('r-ss').title='Contingencias comunes '+fmt(r.cuotas.common)+' · MEI '+fmt(r.cuotas.mei)+' · Desempleo '+fmt(r.cuotas.unemployment)+' · Formación '+fmt(r.cuotas.training)+(r.cuotas.overtime?' · Horas extra '+fmt(r.cuotas.overtime):'');
+  if(datos.irpf>0){el("row-irpf").style.display="flex";el("row-irpf0").style.display="none";el("lbl-irpf").textContent="Retención IRPF ("+num(datos.irpf)+"%)";el("r-irpf").textContent="-"+fmt(r.irpf);}
+  else{el("row-irpf").style.display="none";el("row-irpf0").style.display="flex";}
+  el("r-neto").textContent=fmt(r.neto);
+  el("resultado").style.display="block";
+  tras_calcular();
+  ctxPDF.cuadrante=(MODO_HORAS==="cuadrante")?{anio:calAnio,mes:calMes}:null;
+  ctxPDF.nomina={
+    "Categoría":nombreCat(catActual,conductor),
+    "Jornada":jornActual==='completa'?'Completa (mes entero)':'Parcial ('+num(r.hp)+' h/mes)',
+    "Horas trabajadas":num(datos.horas)+" h"+(r.horasExtra>0?" ("+num(r.horasExtra)+" h "+(jornActual==='parcial'?'complementarias':'extra')+")":""),
+    "Horas nocturnas":datos.horasNoche>0?num(datos.horasNoche)+" h":"Ninguna",
+    "Horas fin de semana / festivo":r.festAplicable?(datos.horasFestivo>0?num(datos.horasFestivo)+" h":"Ninguna"):"Sin plus en esta categoría",
+    "Vacaciones":datos.diasVac>0?datos.diasVac+" día"+(datos.diasVac!==1?"s":"")+" ("+num(r.hVac)+" h)":"Ninguna",
+    "Antigüedad":datos.anios>0?datos.anios+" años ("+r.quinquenios+" quinquenio"+(r.quinquenios!==1?"s":"")+")":"Sin antigüedad",
+    "Responsable de equipo":datos.responsable?"Sí":"No",
+    "Pagas extra prorrateadas":datos.pagas>0?datos.pagas+" de 3":"Ninguna",
+    "Retención IRPF":num(datos.irpf)+" %"
+  };
+  irAResultado("resultado");
 }
 
-["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
-  document.getElementById("fbtn-"+c).addEventListener("click",function(){
-    document.querySelectorAll("#view-finiquito .cat-btn").forEach(function(b){b.classList.remove("active");});
-    document.getElementById("fbtn-"+c).classList.add("active");
-    fcatActual=c;
-    var esCF=!!CATS[c].cBase;
-    document.getElementById("card-condF").style.display=esCF?"block":"none";
-    if(!esCF)document.getElementById("switchCondF").checked=false;
-  });
-});
-document.getElementById("fjorn-completa").addEventListener("click",function(){
-  fjornActual="completa";
-  document.getElementById("fjorn-completa").classList.add("active");
-  document.getElementById("fjorn-parcial").classList.remove("active");
-  document.getElementById("f-parcial-field").style.display="none";
-});
-document.getElementById("fjorn-parcial").addEventListener("click",function(){
-  fjornActual="parcial";
-  document.getElementById("fjorn-parcial").classList.add("active");
-  document.getElementById("fjorn-completa").classList.remove("active");
-  document.getElementById("f-parcial-field").style.display="block";
-});
+/* ══════════════════════════════════════════════════════════
+   FINIQUITO
+   ══════════════════════════════════════════════════════════ */
+grupoCategorias("fbtn","view-finiquito","card-condF","switchCondF",function(c){fcatActual=c;});
+grupoJornada("f","f-parcial-field",function(j){fjornActual=j;});
+grupoPagas(["fpaga-julio","fpaga-dic","fpaga-mar"],"prorrateada","no prorrateada");
+function textoDuracion(si,sf){
+  var dias=VigilanteRules.days(si,sf);
+  // Meses completos desde el inicio y días restantes, con el último día incluido.
+  var a=new Date(si+'T00:00:00Z'),fin=new Date(sf+'T00:00:00Z');fin.setUTCDate(fin.getUTCDate()+1);
+  function sumarMeses(n){var y=a.getUTCFullYear(),m=a.getUTCMonth()+n,ultimo=new Date(Date.UTC(y,m+1,0)).getUTCDate();return new Date(Date.UTC(y,m,Math.min(a.getUTCDate(),ultimo)));}
+  var meses=0;while(sumarMeses(meses+1)<=fin)meses++;
+  var resto=Math.round((fin-sumarMeses(meses))/864e5),anios=Math.floor(meses/12),partes=[];meses%=12;
+  if(anios)partes.push(anios+" año"+(anios>1?"s":""));
+  if(meses)partes.push(meses+" mes"+(meses>1?"es":""));
+  if(resto)partes.push(resto+" día"+(resto>1?"s":""));
+  var texto=partes.length>1?partes.slice(0,-1).join(", ")+" y "+partes[partes.length-1]:partes[0];
+  return texto+" ("+dias+(dias===1?" día natural)":" días naturales)");
+}
 function actuFechas(){
-  var i=document.getElementById("f-inicio").value, f=document.getElementById("f-fin").value;
-  if(!i||!f)return;
-  var d1=new Date(i),d2=new Date(f);
-  if(d2<d1)return;
-  var dias=Math.round((d2-d1)/(864e5));
-  var anosN=Math.floor(dias/365), mesesN=Math.floor((dias%365)/30), diasN=(dias%365)%30;
-  var q=Math.floor(anosN/5);
-  var txt="";
-  if(anosN>0)txt+=anosN+" año"+(anosN>1?"s":"")+" ";
-  if(mesesN>0)txt+=mesesN+" mes"+(mesesN>1?"es":"")+" ";
-  if(diasN>0)txt+=diasN+" día"+(diasN>1?"s":"");
-  if(q>0)txt+=" | "+q+" quinquenio"+(q>1?"s":"")+" de antigüedad";
-  document.getElementById("f-hint-fechas").textContent=txt.trim()||"Menos de un mes";
+  var si=valor("f-inicio"),sf=valor("f-fin");
+  if(!VigilanteRules.validDate(si)||!VigilanteRules.validDate(sf)||sf<si)return;
+  var q=Math.floor(VigilanteRules.seniorityYears(si,sf)/5);
+  el("f-hint-fechas").textContent=textoDuracion(si,sf)+(q>0?" · "+q+" quinquenio"+(q>1?"s":"")+" de antigüedad":"");
 }
-document.getElementById("f-inicio").addEventListener("change",actuFechas);
-document.getElementById("f-fin").addEventListener("change",actuFechas);
-["fpaga-julio","fpaga-dic","fpaga-mar"].forEach(function(id){
-  document.getElementById(id).addEventListener("click",function(){
-    this.classList.toggle("active");
-    this.querySelector(".paga-sub").textContent=this.classList.contains("active")?"prorrateada":"no prorrateada";
-  });
-});
-document.getElementById("btnCalcFiniquito").addEventListener("click",function(){calcFiniquito();});
+el("f-inicio").addEventListener("change",actuFechas);
+el("f-fin").addEventListener("change",actuFechas);
+el("btnCalcFiniquito").addEventListener("click",function(){calcFiniquito();});
 
-function solapamiento(a1,a2,b1,b2){
-  var s=new Date(Math.max(a1.getTime(),b1.getTime()));
-  var e=new Date(Math.min(a2.getTime(),b2.getTime()));
-  if(e<s)return 0;
-  return Math.round((e-s)/864e5)+1;
-}
-function propPaga(d1,d2,paga){
-  var y=d2.getUTCFullYear();
-  // On-time payments are assumed on the last contractual payment day.
-  // Christmas is paid before its accrual ends; an established employee's
-  // payment is not added again. Recognized advance adjustments remain explicit.
-  var pagoNavidad=new Date(Date.UTC(y,11,15));
-  if(paga==='navidad'&&d2>=pagoNavidad&&d1<=pagoNavidad)return 0;
-  var ds,de;
-  if(paga==='julio'){
-    ds=new Date(Date.UTC(d2.getUTCMonth()>=6?y:y-1,6,1));
-    de=new Date(Date.UTC(d2.getUTCMonth()>=6?y+1:y,5,30));
-  }else{ds=new Date(Date.UTC(y,0,1));de=new Date(Date.UTC(y,11,31));}
-  var devDias=Math.round((de-ds)/864e5)+1;
-  var sol=solapamiento(d1,d2,ds,de);
-  var pendiente=0;
-  if((paga==='marzo'&&(d2.getUTCMonth()<2||(d2.getUTCMonth()===2&&d2.getUTCDate()<15)))||
-     (paga==='julio'&&d2.getUTCMonth()===6&&d2.getUTCDate()<15)){
-    var previoInicio=new Date(Date.UTC(ds.getUTCFullYear()-1,ds.getUTCMonth(),ds.getUTCDate()));
-    var previoFin=new Date(ds.getTime()-864e5);
-    pendiente=solapamiento(d1,previoFin,previoInicio,previoFin)/(Math.round((previoFin-previoInicio)/864e5)+1);
-  }
-  return Math.min(1,sol/devDias)+pendiente;
-}
+
+
+
+
 function calcFiniquito(){
-  if(window.VigilanteAuth) window.VigilanteAuth.require(calcFiniquitoRegistrado);
+  if(window.VigilanteAuth){window.VigilanteAuth.require(calcFiniquitoRegistrado);return;}
+  calcFiniquitoRegistrado();
 }
 function calcFiniquitoRegistrado(){
   ctxPDF.finiquito=null;
-  function fail(message){var e=document.getElementById('f-errorBox');e.textContent=message;e.style.display='block';invalidarCalculo('finiquito');}
-  if(!window.VigilanteSecurity.validateInputs('view-finiquito','f-errorBox','resultado-finiquito'))return;
+  var fail=function(m){mostrarError('f-errorBox','resultado-finiquito','finiquito',m);};
+  if(!window.VigilanteSecurity.validateInputs('view-finiquito','f-errorBox','resultado-finiquito')){invalidarCalculo('finiquito');return;}
   var si=valor('f-inicio'),sf=valor('f-fin');
-  if(!si||!sf){fail('Introduce las fechas de inicio y fin del contrato.');return;}
-  if(!VigilanteRules.validDate(si)||!VigilanteRules.validDate(sf)||sf<si){fail('La fecha de fin debe ser igual o posterior a la de inicio.');return;}
-  if(sf.slice(0,4)!=='2026'){fail('Las tablas disponibles son las de 2026. El fin del contrato debe estar en 2026; el inicio puede ser anterior.');return;}
-  if(si<'1997-01-01'){fail('La estimación automática de antigüedad cubre inicios desde 1997. Los trienios anteriores necesitan una revisión individual del finiquito.');return;}
-  var fhp=fjornActual==='completa'?JORNADA:numero('fhPactadas');
-  if(fjornActual==='parcial'&&!(fhp>0&&fhp<JORNADA)){fail('Introduce unas horas pactadas mayores que 0 y menores que 162.');return;}
-  var conductor=document.getElementById('switchCondF').checked,cat=catEf(fcatActual,conductor);
-  var ratio=fhp/JORNADA,dv=numero('f-vacas'),ip=numero('f-irpf'),tipo=valor('f-tipodespido');
-  var dias=VigilanteRules.days(si,sf),anosAnt=VigilanteRules.seniorityYears(si,sf),ant=calcAntig(anosAnt,fcatActual,conductor);
-  var responsable=document.getElementById('switchResponsableF').checked;
-  // Stable-category estimate only: full assigned function throughout the reference
-  // period. Real variable averages and historical armed guarantees are not inferred.
-  var responsableMes=responsable?cat.salBase*.10*ratio:0;
-  var funcionalMes=(cat.esc||0)*ratio+responsableMes;
-  var sMens=r2((cat.salBase+cat.pelig+(cat.act||0)+cat.trans+cat.vest+ant)*ratio);
-  var bPaga=r2((cat.salBase+cat.pelig+(cat.act||0)+ant)*ratio);
-  var anual=r2((cat.salBase+cat.pelig+(cat.act||0)+(cat.esc||0)+ant)*ratio*12+responsableMes*12+bPaga*3);
-  var salReg=anual/12,vDia=sMens/30+funcionalMes/31,totVacas=r2(dv*vDia);
-  var d1=new Date(si),d2=new Date(sf);
-  var pJulio=document.getElementById('fpaga-julio').classList.contains('active');
-  var pDic=document.getElementById('fpaga-dic').classList.contains('active');
-  var pMar=document.getElementById('fpaga-mar').classList.contains('active');
-  var pr=pJulio?0:propPaga(d1,d2,'julio'),pr2=pDic?0:propPaga(d1,d2,'navidad'),pr3=pMar?0:propPaga(d1,d2,'marzo');
-  var impJulio=r2(bPaga*pr),impNavidad=r2(bPaga*pr2),impMarzo=r2(bPaga*pr3);
-  var liqBruta=r2(totVacas+impJulio+impNavidad+impMarzo),irpfLiq=r2(liqBruta*ip/100),liqNeto=r2(liqBruta-irpfLiq);
-  var indem=VigilanteRules.severance(si,sf,tipo,anual),irpfIndem=tipo==='temporal'?r2(indem*ip/100):0;
-  // No L13 amount or tax-exemption declaration is collected in this simple form.
-  // Keep unknown deductions explicit instead of inventing an exact net amount.
-  var faltaSS=dv>0,faltaFiscal=indem>0&&['objetivo','improcedente'].includes(tipo),incompleto=faltaSS||faltaFiscal;
-  var total=r2(liqNeto+indem-irpfIndem);
-  var notas=[
-    'Tablas de 2026. Antigüedad desde la fecha de inicio; categoría y jornada estables.',
-    'Incluye vacaciones pendientes, extras no prorrateadas e indemnización si procede. No incluye la nómina del último mes, otros pluses variables, impagos ni anticipos.',
-    'Las pagas vencidas se consideran cobradas el 15 de marzo, julio y diciembre. Los abonos anticipados y su regularización pueden modificar el resultado.'
-  ];
-  if(faltaSS)notas.push('No se descuenta la Seguridad Social de las vacaciones: el importe queda pendiente de esa cotización.');
-  if(faltaFiscal)notas.push('La indemnización por despido se muestra bruta; su IRPF depende de si cumple los requisitos de exención.');
-  if(fcatActual==='con_arma')notas.push('Con arma: se toma la referencia mensual de 179,90 € durante todo el periodo, incluidas extras y vacaciones. Las horas armadas y garantías reconocidas pueden cambiar este importe.');
-  if(funcionalMes)notas.push('Se supone que las funciones de escolta o responsable se mantuvieron durante todo el periodo de referencia. Su promedio de vacaciones se estima con la mensualidad de esas funciones, dividida entre 31.');
-  document.getElementById('f-errorBox').style.display='none';
-  document.getElementById('f-info-duracion').textContent='Contrato: '+dias+' días naturales. Antigüedad desde '+fechaES(si)+': '+fmt(ant)+'/mes a jornada completa.';
-  var sufRatio=fjornActual==='parcial'?' ('+fhp+' h contratadas)':'';
-  showR('frow-vacas','flbl-vacas','fr-vacas','Vacaciones ('+dv+' días)'+sufRatio,totVacas,'up');
-  showR('frow-julio','flbl-julio','fr-julio','Paga Julio proporcional ('+(pr*100).toFixed(1).replace('.',',')+'% del periodo)',impJulio,'up');
-  showR('frow-navidad','flbl-navidad','fr-navidad','Paga Navidad proporcional ('+(pr2*100).toFixed(1).replace('.',',')+'% del periodo)',impNavidad,'up');
-  showR('frow-marzo','flbl-marzo','fr-marzo','Paga Marzo proporcional ('+(pr3*100).toFixed(1).replace('.',',')+'% del periodo)',impMarzo,'up');
-  showR('frow-irpf-indem',null,'fr-irpf-indem','',irpfIndem,'down');
-  showR('frow-irpf-liq','flbl-irpf-liq','fr-irpf-liq','Retención IRPF ('+ip+'%)',irpfLiq,'down');
-  document.getElementById('fr-liq-bruta').textContent=fmt(liqBruta);
-  document.getElementById('fr-ss-liq').textContent=faltaSS?'No incluida':fmt(0);
-  document.getElementById('fr-liq-neto').textContent=fmt(liqNeto);
-  document.getElementById('f-liq-label').textContent=faltaSS?'Liquidación antes de cotizar vacaciones':'Neto liquidación orientativo';
-  document.getElementById('frow-indem-label').style.display=indem>0?'block':'none';
-  document.getElementById('f-exento-info').style.display=indem>0?'block':'none';
-  var indemLabel=tipo==='improcedente'?'Indemnización bruta (tramos 45/33 días y topes legales)':tipo==='temporal'?'Indemnización bruta fin temporal (12 días/año)':'Indemnización bruta objetivo (20 días/año, máx. 12 meses)';
-  showR('frow-indem','flbl-indem','fr-indem',indemLabel+sufRatio,indem,'up');
-  document.getElementById('fr-salreg').textContent=fmt(salReg);
-  document.getElementById('fr-total-neto').textContent=fmt(total);
-  document.getElementById('f-total-label').textContent=incompleto?'IMPORTE PENDIENTE DE DEDUCCIONES':'NETO ORIENTATIVO';
-  document.getElementById('f-total-hint').textContent=incompleto?'Revisa las deducciones indicadas en el desglose':'Solo los conceptos desglosados';
-  document.getElementById('f-notas-calculo').textContent=notas.join(' ');
+  if(!si||!sf){fail('Escribe la fecha de inicio y el último día de trabajo.');return;}
+  if(!VigilanteRules.validDate(si)||!VigilanteRules.validDate(sf)||sf<si){fail('El último día de trabajo no puede ser anterior a la fecha de inicio.');return;}
+  var conductor=el('switchCondF').checked;
+  var datos={
+    categoria:fcatActual,conductor:conductor,jornada:fjornActual,horasContrato:numero('fhPactadas'),
+    responsable:el('switchResponsableF').checked,inicio:si,fin:sf,diasVac:numero('f-vacas'),
+    prorrateadas:{julio:el('fpaga-julio').classList.contains('active'),navidad:el('fpaga-dic').classList.contains('active'),marzo:el('fpaga-mar').classList.contains('active')},
+    motivo:valor('f-tipodespido'),irpf:numero('f-irpf')
+  };
+  if(datos.jornada==='parcial'&&!(datos.horasContrato>0&&datos.horasContrato<JORNADA)){fail('Escribe las horas al mes de tu contrato (menos de 162).');return;}
+  ocultarError('f-errorBox');
+  var r=calcularFiniquito(datos);
+  var sufRatio=datos.jornada==='parcial'?' ('+num(datos.horasContrato)+' h/mes)':'';
+  var q=Math.floor(r.aniosAnt/5);
+  el('f-info-duracion').innerHTML='';
+  el('f-info-duracion').append(Object.assign(document.createElement('strong'),{textContent:'Duración: '}),textoDuracion(si,sf)+(q>0?' · '+q+' quinquenio'+(q>1?'s':''):''));
+  showR('frow-vacas','flbl-vacas','fr-vacas','Vacaciones no disfrutadas ('+num(datos.diasVac)+' días × '+fmt(r.valorDiaVac)+')'+sufRatio,r.vacaciones);
+  showR('frow-julio','flbl-julio','fr-julio','Paga de julio ('+Math.round(r.pctJulio*100)+'% pendiente)',r.julio);
+  showR('frow-navidad','flbl-navidad','fr-navidad','Paga de Navidad ('+Math.round(r.pctNavidad*100)+'% pendiente)',r.navidad);
+  showR('frow-marzo','flbl-marzo','fr-marzo','Paga de marzo ('+Math.round(r.pctMarzo*100)+'% pendiente)',r.marzo);
+  el('fr-liq-bruta').textContent=fmt(r.liqBruta);
+  showR('frow-ss-liq','flbl-ss-liq','fr-ss-liq','Seguridad Social de las vacaciones',r.ssVac,'down');
+  showR('frow-irpf-liq','flbl-irpf-liq','fr-irpf-liq','Retención IRPF ('+num(datos.irpf)+'%)',r.irpfLiq,'down');
+  el('fr-liq-neto').textContent=fmt(r.liqNeto);
+  var etiquetas={temporal:'Fin de contrato temporal (12 días por año)',objetivo:'Despido objetivo (20 días por año, máx. 12 meses)',improcedente:'Despido improcedente (33 días por año, máx. 24 meses)'};
+  var hayIndem=r.indem>0;
+  el('frow-indem-label').style.display=hayIndem?'block':'none';
+  showR('frow-indem','flbl-indem','fr-indem',(etiquetas[datos.motivo]||'Indemnización')+sufRatio,r.indem,'exento');
+  showR('frow-irpf-indem','flbl-irpf-indem','fr-irpf-indem','Retención IRPF de la indemnización ('+num(datos.irpf)+'%)',r.irpfIndem,'down');
+  var exento=el('f-exento-info');
+  exento.style.display=hayIndem?'block':'none';
+  exento.textContent=hayIndem?(datos.motivo==='temporal'
+    ?'La indemnización por fin de contrato temporal paga IRPF, como el resto del finiquito. Se calcula sobre un salario anual de '+fmt(r.salarioAnual)+'.'
+    :'La indemnización por despido no paga IRPF ni Seguridad Social dentro de los límites legales: te llega entera. Se calcula sobre un salario anual de '+fmt(r.salarioAnual)+'.'):'';
+  el('fr-total-neto').textContent=fmt(r.total);
+  el('f-notas-calculo').textContent='No incluye el sueldo de los días trabajados del último mes, horas extra ni otros pluses variables. Compáralo siempre con el documento de tu empresa.';
   ctxPDF.finiquito={
     'Categoría':nombreCat(fcatActual,conductor),
-    'Tipo de jornada':fjornActual==='completa'?'Jornada completa (162 h/mes)':'Jornada parcial ('+fhp+' h/mes)',
-    'Inicio del contrato':fechaES(si),'Fin del contrato':fechaES(sf),'Duración':dias+' días naturales',
-    'Antigüedad estimada':fechaES(si)+' · '+fmt(ant)+'/mes a jornada completa',
-    'Responsable de equipo':responsable?'10% del salario base; funciones estables':'No',
-    'Días de vacaciones pendientes':dv+' días',
-    'Motivo de la extinción':document.getElementById('f-tipodespido').selectedOptions[0].textContent,
-    'Retención IRPF aplicada':ip+' %',
-    'Pagas extra':'Pagas vencidas abonadas el día 15; solo se incluyen las pendientes.',
-    'Estado del resultado':document.getElementById('f-total-label').textContent,
-    'Deducciones pendientes':faltaSS&&faltaFiscal?'Cotización de vacaciones e IRPF de indemnización':faltaSS?'Cotización de vacaciones':faltaFiscal?'IRPF de indemnización':'Ninguna de los conceptos incluidos'
+    'Jornada':datos.jornada==='completa'?'Completa (162 h/mes)':'Parcial ('+num(datos.horasContrato)+' h/mes)',
+    'Inicio del contrato':fechaES(si),'Último día de trabajo':fechaES(sf),'Duración':textoDuracion(si,sf),
+    'Responsable de equipo':datos.responsable?'Sí':'No',
+    'Vacaciones pendientes':num(datos.diasVac)+' días',
+    'Motivo':el('f-tipodespido').selectedOptions[0].textContent,
+    'Retención IRPF':num(datos.irpf)+' %'
   };
-  if(indem>0)ctxPDF.finiquito['Salario regulador estimado']=fmt(salReg)+'/mes';
-  document.getElementById('resultado-finiquito').style.display='block';
-  cargarJsPDF(function(){});
-  window.VigilanteInstall?.calculationCompleted();
-  window.VigilanteAnalytics?.track('calculation_complete');
-  setTimeout(function(){document.getElementById('resultado-finiquito').scrollIntoView({behavior:'smooth',block:'nearest'});},60);
+  el('resultado-finiquito').style.display='block';
+  tras_calcular();
+  irAResultado('resultado-finiquito');
 }
 
-
-["sin_arma","con_arma","escolta","explosivos","fondos","tr_explo"].forEach(function(c){
-  document.getElementById("bbtn-"+c).addEventListener("click",function(){
-    document.querySelectorAll("#view-baja .cat-btn").forEach(function(b){b.classList.remove("active");});
-    document.getElementById("bbtn-"+c).classList.add("active");
-    bcatActual=c;
-    document.getElementById("b-baseManual").value="";
-    var esCB=!!CATS[c].cBase;
-    document.getElementById("card-condB").style.display=esCB?"block":"none";
-    if(!esCB)document.getElementById("switchCondB").checked=false;
-  });
+/* ══════════════════════════════════════════════════════════
+   BAJA (INCAPACIDAD TEMPORAL)
+   ══════════════════════════════════════════════════════════ */
+grupoCategorias("bbtn","view-baja","card-condB","switchCondB",function(c){bcatActual=c;});
+el("b-tipo").addEventListener("change",function(){
+  el("b-field-nbaja").style.display=this.value==="laboral"?"none":"block";
 });
+el("btnCalcBaja").addEventListener("click",function(){calcBaja();});
+
+
+
+function calcBaja(){
+  if(window.VigilanteAuth){window.VigilanteAuth.require(calcBajaRegistrado);return;}
+  calcBajaRegistrado();
+}
+function calcBajaRegistrado(){
+  ctxPDF.baja=null;
+  var fail=function(m){mostrarError('b-errorBox','resultado-baja','baja',m);};
+  if(!window.VigilanteSecurity.validateInputs('view-baja','b-errorBox','resultado-baja')){invalidarCalculo('baja');return;}
+  var conductor=el('switchCondB').checked;
+  var datos={categoria:bcatActual,conductor:conductor,baseMensual:numero('b-baseManual'),anios:numero('b-anios'),
+    tipo:valor('b-tipo'),nbaja:Number(valor('b-nbaja'))||1,dias:numero('b-dias'),irpf:numero('b-irpf')};
+  if(!(datos.dias>=1)||!Number.isInteger(datos.dias)){fail('Escribe cuántos días ha durado (o va a durar) la baja.');return;}
+  ocultarError('b-errorBox');
+  var r=calcularBaja(datos);
+  var top=el('b-res-top'),fin=el('b-tramos-fin');
+  top.querySelectorAll('.b-tramo').forEach(function(n){n.remove();});
+  r.tramos.forEach(function(t){
+    var row=document.createElement('div');row.className='res-row b-tramo';
+    var c=document.createElement('span');c.className='res-concept';
+    var v=document.createElement('span');
+    var dias=t.desde===t.hasta?'Día '+t.desde:'Días '+t.desde+'–'+t.hasta;
+    var n=t.hasta-t.desde+1;
+    if(t.nota==='nomina'){c.textContent=dias+' · lo paga la empresa en tu nómina';v.className='res-val neu';v.textContent='En nómina';}
+    else{
+      var pctTexto=datos.tipo!=='laboral'?Math.round(t.pct*100)+'%':(r.baseDiaria*0.75>r.tablaDiaria?'75% de tu base':'100% de tu salario de convenio');
+      c.textContent=dias+' · '+pctTexto+' — '+n+' día'+(n>1?'s':'');
+      v.className='res-val '+(t.importe>0?'up':'neu');v.textContent=(t.importe>0?'+':'')+fmt(t.importe);
+    }
+    row.append(c,v);top.insertBefore(row,fin);
+  });
+  el('b-info-base').innerHTML='';
+  el('b-info-base').append(Object.assign(document.createElement('strong'),{textContent:'Base diaria: '}),
+    fmt(r.baseDiaria)+' ('+fmt(r.baseMensual)+' ÷ 30)'+(r.estimada?' · estimada con la base mínima del convenio':''));
+  el('br-total-bruto').textContent=fmt(r.bruto);
+  el('br-ss').textContent='-'+fmt(r.ss);
+  if(datos.irpf>0){el('brow-irpf').style.display='flex';el('brow-irpf0').style.display='none';el('blbl-irpf').textContent='Retención IRPF ('+num(datos.irpf)+'%)';el('br-irpf').textContent='-'+fmt(r.irpf);}
+  else{el('brow-irpf').style.display='none';el('brow-irpf0').style.display='flex';}
+  el('br-neto').textContent=fmt(r.neto);
+  el('b-notas').textContent=(datos.tipo==='laboral'
+    ?'En accidente laboral, el día del accidente se cobra como trabajado y desde el día siguiente el convenio completa hasta el 100% de tu salario de tablas.'
+    :'Si cobras las pagas extra en julio y Navidad, la parte de los días de baja ya va incluida aquí y la empresa la descontará de esas pagas.')+
+    ' Durante la baja sigues cotizando a la Seguridad Social sobre tu base del mes anterior.';
+  ctxPDF.baja={
+    'Categoría':nombreCat(bcatActual,conductor),
+    'Tipo de baja':el('b-tipo').selectedOptions[0].textContent,
+    'Baja del año':datos.tipo==='laboral'?'No aplica':el('b-nbaja').selectedOptions[0].textContent,
+    'Días de baja':datos.dias+' días',
+    'Base de cotización':fmt(r.baseMensual)+'/mes'+(r.estimada?' (mínima de convenio)':''),
+    'Base diaria':fmt(r.baseDiaria),
+    'Retención IRPF':num(datos.irpf)+' %'
+  };
+  el('resultado-baja').style.display='block';
+  tras_calcular();
+  irAResultado('resultado-baja');
+}
+
+actualizarPlusesCategoria();

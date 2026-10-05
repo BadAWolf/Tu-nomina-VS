@@ -96,7 +96,7 @@
         block.rows.forEach(item=>column.push(row(item)));
       });
       // These amounts and rates already appear in the calendar totals or payroll rows.
-      const repeated=new Set(['Horas del cuadrante (incluye vacaciones)','Horas trabajadas (sin vacaciones)','Horas nocturnas','Horas fin de semana / festivo','Jornada computable del mes','Retención IRPF aplicada']);
+      const repeated=new Set(['Horas del cuadrante (incluye vacaciones)','Horas trabajadas (sin vacaciones)','Horas trabajadas','Horas nocturnas','Horas fin de semana / festivo','Jornada computable del mes','Retención IRPF aplicada','Retención IRPF']);
       const details=[heading('Datos del cálculo'),...Object.entries(options.data).filter(([key])=>!repeated.has(key)).map(([key,value])=>detail(key,value))];
       const height=items=>items.reduce((sum,item)=>sum+item.height,0);
       // Use the space under deductions for the inputs if they remain readable.

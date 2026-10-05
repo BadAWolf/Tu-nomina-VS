@@ -26,6 +26,7 @@ function setup(options = {}) {
   if (options.blockedStorage) Object.defineProperty(w, 'localStorage', { get() { throw new Error('storage unavailable'); } });
   if (options.calculator) require('./load-calculator.cjs')(w);
   else w.eval(fs.readFileSync(path.join(root, 'install.js'), 'utf8'));
+  w.eval(fs.readFileSync(path.join(root, 'auth-ui.js'), 'utf8'));
   if (options.analytics) {
     w.localStorage.setItem('vigilante_cookie_preferences_v1', JSON.stringify({ version: 1, analytics: true, savedAt: Date.now() }));
     w.eval(fs.readFileSync(path.join(root, 'cookies.js'), 'utf8'));
