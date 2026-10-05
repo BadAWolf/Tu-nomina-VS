@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="google-adsense-account" content="ca-pub-6334238097806445">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; frame-src https:; script-src 'sha256-qeBrzOmNXNIfuVJmAOhx69F0TGNigiiESpOs9y+D3dI=' 'sha256-AdyJH2OZ6J+IKnpQ71OlHxRXXqDXLkni7JXeCTNGT1A=' 'sha256-AxkbXE3kfBPk+My+AxJhSPLJsowhqKv1rgouLdPmrAM=' 'sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc=' 'sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ=' 'sha256-+IgktOr2ugLg5xbA92Sg52Yyzncu8U+OcMHOHOwLV5I=' 'sha256-7GOFf8mXUjFjRez3aVzOUzXpT7f5saQg3aNN59FEggA=' 'sha256-6RVO6I0olmc5jzj3CU9QigzDKgi7upNpJv91VXnjiZY=' 'sha256-A+2g1HgZ6UbWMEBud7iY6/oWwW5D0lSivHhMpPEE7OI=' 'sha256-o0P2PbDy8PnTqCNyReHZl8SsEoQ+fHd9BabFRQ5wVUI=' 'sha256-WjOFdwh76qd3qzXoj5zVUSbiCbK5a8bdO7pJc7aQeQs=' 'sha256-FNyqvFtv/GNo8RaWj2yZwKUr5n9BZIiuW2XcGJ1Nfew=' 'sha256-RVFyrtW5g06q3T7osnzNG4i3PKxovoLXpaEzGXdtHnI=' 'sha256-ggM7k44IX4ircNgwQPDrmjfsZIXUlRZi3FoDIlt54io=' 'sha256-EDYaHFk2z3pQmPPVacQH8fn4gob5Wh86IwGrop1QsuA=' 'sha256-yIuICnopkNLx9YrqOE2JDGNU42s5P6BKH5nPmSeMrvc=' 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; frame-src https:; script-src 'sha256-qeBrzOmNXNIfuVJmAOhx69F0TGNigiiESpOs9y+D3dI=' 'sha256-AdyJH2OZ6J+IKnpQ71OlHxRXXqDXLkni7JXeCTNGT1A=' 'sha256-AxkbXE3kfBPk+My+AxJhSPLJsowhqKv1rgouLdPmrAM=' 'sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc=' 'sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ=' 'sha256-OzKmFN9s/KObsxAxEVr84sS9a/h5K9y9BZhKZKYLYw8=' 'sha256-Vdp/daJrhuRwZUVp7OwnxO3tgRUaoZ68q6P8TkpHULQ=' 'sha256-6RVO6I0olmc5jzj3CU9QigzDKgi7upNpJv91VXnjiZY=' 'sha256-A+2g1HgZ6UbWMEBud7iY6/oWwW5D0lSivHhMpPEE7OI=' 'sha256-o0P2PbDy8PnTqCNyReHZl8SsEoQ+fHd9BabFRQ5wVUI=' 'sha256-WjOFdwh76qd3qzXoj5zVUSbiCbK5a8bdO7pJc7aQeQs=' 'sha256-FNyqvFtv/GNo8RaWj2yZwKUr5n9BZIiuW2XcGJ1Nfew=' 'sha256-RVFyrtW5g06q3T7osnzNG4i3PKxovoLXpaEzGXdtHnI=' 'sha256-ggM7k44IX4ircNgwQPDrmjfsZIXUlRZi3FoDIlt54io=' 'sha256-EDYaHFk2z3pQmPPVacQH8fn4gob5Wh86IwGrop1QsuA=' 'sha256-yIuICnopkNLx9YrqOE2JDGNU42s5P6BKH5nPmSeMrvc=' 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Calculadora gratis de nómina para vigilantes de seguridad. Convenio 2026 actualizado: salario neto, horas extras, nocturnidad, festivos, finiquito y baja IT.">
@@ -212,7 +212,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 .cal-cell.vacio{background:transparent;border-color:transparent;cursor:default;}
 .cal-cell.hoy{box-shadow:0 0 0 2px var(--goldline);}
 .cal-num{font-family:Arial,Helvetica,sans-serif;font-size:0.62rem;font-weight:600;color:var(--muted);line-height:1.1;}
-.cal-cell.finde .cal-num{color:var(--gold2);}
+.cal-cell.finde{background:#eceeeb;border-color:#d5dad3;}
+.cal-cell.finde .cal-num{color:var(--text2);}
 .cal-tag{font-family:Arial,Helvetica,sans-serif;font-size:0.5rem;font-weight:600;line-height:1.25;text-align:center;margin-top:0.08rem;letter-spacing:-0.02em;}
 .cal-cell.trab{background:var(--greenbg);border-color:#b4d8bc;}
 .cal-cell.trab .cal-tag{color:var(--green);}
@@ -220,15 +221,16 @@ input:checked + .slider:before{transform:translateX(20px);}
 .cal-cell.vac{background:var(--bluebg);border-color:#b4c8e0;}
 .cal-cell.vac .cal-tag{color:var(--blue);font-size:0.7rem;}
 .cal-cell.vac .cal-num{color:#1e3f6a;}
-.cal-cell.festivo{background:var(--goldbg);border-color:var(--goldline);}
-.cal-cell.festivo.trab{background:linear-gradient(135deg,var(--greenbg),var(--goldbg));}
+.cal-cell.festivo{background:#eceeeb;border-color:#d5dad3;}
+.cal-cell.finde.trab,.cal-cell.festivo.trab{background:linear-gradient(135deg,var(--greenbg) 55%,#e2e6e0);border-color:#b4d8bc;}
+.cal-cell.finde.vac,.cal-cell.festivo.vac{background:linear-gradient(135deg,var(--bluebg) 55%,#e2e6e0);}
 .cal-hrs{font-family:Arial,Helvetica,sans-serif;font-size:0.56rem;font-weight:700;color:var(--text2);margin-top:auto;}
 .cal-leyenda{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:0.6rem;}
 .cal-leyenda span{display:flex;align-items:center;gap:0.25rem;font-size:0.6rem;color:var(--muted);font-weight:500;}
 .lg{width:9px;height:9px;border-radius:2px;display:inline-block;border:1px solid;}
 .lg-trab{background:var(--greenbg);border-color:#b4d8bc;}
 .lg-vac{background:var(--bluebg);border-color:#b4c8e0;}
-.lg-fest{background:var(--goldbg);border-color:var(--goldline);}
+.lg-fest{background:#eceeeb;border-color:#d5dad3;}
 .cal-resumen{margin-top:0.75rem;background:var(--card);border:1px solid var(--border);border-radius:9px;padding:0.75rem 0.85rem;}
 .cal-res-row{display:flex;justify-content:space-between;align-items:baseline;padding:0.28rem 0;font-size:0.73rem;}
 .cal-res-row + .cal-res-row{border-top:1px solid var(--border);}
@@ -519,17 +521,13 @@ input:checked + .slider:before{transform:translateX(20px);}
 <div class="cal-leyenda">
 <span><i class="lg lg-trab"></i>Trabajado</span>
 <span><i class="lg lg-vac"></i>Vacaciones</span>
-<span><i class="lg lg-fest"></i>Festivo / finde</span>
+<span><i class="lg lg-fest"></i>Finde o festivo (cuenta solo)</span>
 </div>
 <div class="cal-resumen" id="cal-resumen"></div>
 <details class="field-explanation"><summary><span class="explanation-preview">Pulsa un día para añadir tus turnos.</span><span class="explanation-action"><span class="explanation-show">Ver explicación</span><span class="explanation-hide">Ocultar explicación</span></span></summary><div class="explanation-content"><p>Los turnos que cruzan medianoche reparten cada hora al día real que corresponde. Los festivos nacionales ya vienen marcados; los autonómicos o locales los puedes marcar tú.</p></div></details>
 </div>
 
-<div class="field" id="vac-plus-field" hidden>
-<label class="field-label" for="n-mediaPlusVac">Lo que sueles cobrar al mes en pluses de noche y festivos (€) · Opcional</label>
-<input type="number" id="n-mediaPlusVac" placeholder="Ej.: 120" min="0" max="5000" step="0.01" inputmode="decimal">
-<details class="field-explanation"><summary><span class="explanation-preview">En vacaciones también te corresponden.</span><span class="explanation-action"><span class="explanation-show">Ver explicación</span><span class="explanation-hide">Ocultar explicación</span></span></summary><div class="explanation-content"><p>En vacaciones cobras la media de los pluses de nocturnidad y festivos de los meses anteriores. Escribe lo que sueles cobrar en un mes normal y se reparte por los días de vacaciones (importe ÷ 31 × días).</p><p>Si lo dejas vacío, no se suma nada por este concepto.</p></div></details>
-</div>
+<p class="field-hint" id="vac-plus-field" hidden>En vacaciones también cobras tus pluses de noches y festivos: se calculan solos con los turnos que has hecho este mes.</p>
 </div>
 <div class="card">
 <div class="card-label">Pagas extra prorrateadas</div>
@@ -832,7 +830,7 @@ Estimación con tablas de 2026 — contrasta tu contrato, bases y complementos r
 
 <footer class="legal-footer"><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings="">Configurar cookies</button><a href="guia-nomina-vigilante.html#privacidad-publicitaria" id="privacidad-publicitaria" data-ad-privacy="">Privacidad publicitaria</a></footer>
 <script src="security.js?v=2026100501" integrity="sha256-AxkbXE3kfBPk+My+AxJhSPLJsowhqKv1rgouLdPmrAM="></script>
-<script src="install.js?v=2026100501" integrity="sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc="></script><script src="calculation-rules.js?v=2026100501" integrity="sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ="></script><script src="calculator-engine.js?v=2026100501" integrity="sha256-+IgktOr2ugLg5xbA92Sg52Yyzncu8U+OcMHOHOwLV5I="></script><script src="calculator.js?v=2026100501" integrity="sha256-7GOFf8mXUjFjRez3aVzOUzXpT7f5saQg3aNN59FEggA="></script>
+<script src="install.js?v=2026100501" integrity="sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc="></script><script src="calculation-rules.js?v=2026100501" integrity="sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ="></script><script src="calculator-engine.js?v=2026100501" integrity="sha256-OzKmFN9s/KObsxAxEVr84sS9a/h5K9y9BZhKZKYLYw8="></script><script src="calculator.js?v=2026100501" integrity="sha256-Vdp/daJrhuRwZUVp7OwnxO3tgRUaoZ68q6P8TkpHULQ="></script>
 
 <div id="dlg-overlay" class="dlg-overlay">
   <div class="dlg">

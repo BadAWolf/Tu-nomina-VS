@@ -53,7 +53,14 @@ function calcularNomina(o){
   r.festAplicable=tienePlusFestivo(o.categoria);
   r.fest=r.festAplicable?r2(o.horasFestivo*PLUS_FEST):0;
   r.navidad=r2((o.nochesEspeciales||0)*PLUS_NOCHE_ESPECIAL);
-  r.vacPlus=o.diasVac>0?r2((o.mediaPlusVac||0)/31*o.diasVac):0;
+  // Pluses de vacaciones: si no se indica la media, se estiman con los turnos del mes
+  // (lo cobrado en noches y festivos por cada día no de vacaciones, aplicado a los días de vacaciones).
+  var diasMes=o.diasMes||30;
+  r.vacPlus=0;
+  if(o.diasVac>0){
+    if(o.mediaPlusVac>0)r.vacPlus=r2(o.mediaPlusVac/31*o.diasVac);
+    else if(diasMes>o.diasVac)r.vacPlus=r2((r.noche+r.fest)*o.diasVac/(diasMes-o.diasVac));
+  }
   r.basePaga=r2((cat.salBase+cat.act+ant+cat.pelig)*ratio);
   r.pagasProrrateadas=o.pagas;
   r.prorrata=r2(o.pagas*r.basePaga*factor/12);

@@ -915,7 +915,7 @@ function calcNominaRegistrado(){
     contrato:'indefinido',responsable:el('switchResponsable').checked,
     plusServicio:el('switchPlus').checked?numero('plusServicio'):0,anios:numero('aniosAntiguedad'),
     horas:mes?mes.horasTrabajadas:numero('hTTotal'),horasNoche:numero('hNoc'),horasFestivo:numero('hFest'),
-    diasVac:diasVacacionesMes(),mediaPlusVac:numero('n-mediaPlusVac'),
+    diasVac:diasVacacionesMes(),mediaPlusVac:0,diasMes:mes?new Date(calAnio,calMes+1,0).getDate():30,
     nochesEspeciales:mes?nochesEspeciales(calAnio,calMes):0,
     pagas:document.querySelectorAll("#view-nomina .paga-btn.active").length,irpf:numero('irpf')
   };
@@ -946,7 +946,7 @@ function calcNominaRegistrado(){
     el("lbl-vacinfo").textContent="Vacaciones: "+datos.diasVac+" día"+(datos.diasVac!==1?"s":"");
     el("r-vacinfo").textContent=num(r.hVac)+" h de jornada";
   } else el("row-vacinfo").style.display="none";
-  showR("row-vacplus","lbl-vacplus","r-vacplus","Pluses en vacaciones ("+datos.diasVac+" días)",r.vacPlus);
+  showR("row-vacplus","lbl-vacplus","r-vacplus","Pluses de noches y festivos en vacaciones ("+datos.diasVac+" días)",r.vacPlus);
   showR("row-extra","lbl-extra","r-extra",(jornActual==="parcial"?"Horas complementarias — ":"Horas extra — ")+num(r.horasExtra)+" h × "+fmt(r.valorHora),r.extra);
   showR("row-noc","lbl-noc","r-noc","Plus nocturnidad — "+num(datos.horasNoche)+" h × "+fmt(r.nocheTarifa),r.noche);
   showR("row-fest","lbl-fest","r-fest","Plus fin de semana y festivos — "+num(datos.horasFestivo)+" h × 1,02 €",r.fest);

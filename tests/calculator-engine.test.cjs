@@ -120,3 +120,10 @@ test('Hospitalisation pays 100% for 40 days and then follows the ordinary tranch
   const r=baja({tipo:'hospitalizacion',dias:65});
   assert.deepEqual(r.tramos.map(t=>[t.desde,t.hasta,t.pct]),[[1,40,1],[41,60,.9],[61,65,.8]]);
 });
+
+test('Without a known average, holiday allowances are estimated from the shifts of the month',()=>{
+  const r=nomina({horas:150,horasNoche:40,horasFestivo:20,diasVac:10,diasMes:31});
+  assert.equal(r.noche,50.4);assert.equal(r.fest,20.4);
+  assert.equal(r.vacPlus,33.71,'(50,40 + 20,40) x 10 / 21 days');
+  assert.equal(nomina({horas:0,diasVac:30,diasMes:30}).vacPlus,0);
+});

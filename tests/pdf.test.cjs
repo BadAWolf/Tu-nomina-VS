@@ -45,10 +45,10 @@ test('Payroll PDF keeps overtime, the team leader allowance and holiday allowanc
   w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),text=doc.text.bind(doc);doc.text=(value,x,y,...rest)=>{calls.push({text:[value].flat().join(' '),y,page:doc.internal.getCurrentPageInfo().pageNumber});return text(value,x,y,...rest);};return doc;};
   w.actualizarAccesoVacaciones(true);
   d.getElementById('switchResponsable').checked=true;d.getElementById('switchVac').checked=true;
-  for(const [id,value]of Object.entries({hTTotal:150,diasVac:10,'n-mediaPlusVac':310}))d.getElementById(id).value=value;
+  for(const [id,value]of Object.entries({hTTotal:150,hNoc:40,diasVac:10}))d.getElementById(id).value=value;
   w.calcNominaRegistrado();const doc=w.construirPDF('nomina');
-  assert.equal(d.getElementById('r-vacplus').textContent,'+100,00 €');
-  for(const value of ['+116,13 €','+100,00 €',d.getElementById('r-neto').textContent])assert.ok(calls.some(c=>c.text===value),value+' is exported');
+  assert.equal(d.getElementById('r-vacplus').textContent,'+25,20 €');
+  for(const value of ['+116,13 €','+25,20 €',d.getElementById('r-neto').textContent])assert.ok(calls.some(c=>c.text===value),value+' is exported');
   assert.ok(calls.some(c=>c.text.includes('Responsable de equipo')));
   assert.ok(calls.every(c=>c.y<=289));
  }finally{w.close();}
