@@ -110,7 +110,8 @@ test('Calculator ad placements stay outside result, PDF, account and medical sec
   assert.equal(d.querySelectorAll('[data-ad-placement]').length,2);
   assert.equal(top.closest('#view-nomina')?.id,'view-nomina');assert.equal(bottom.closest('#view-nomina')?.id,'view-nomina');
   assert.equal(d.getElementById('btnCalc').nextElementSibling.id,'resultado');assert.equal(bottom.previousElementSibling.id,'resultado');
-  for(const id of ['resultado','view-baja','view-finiquito','account-section','auth-dialog','marketing-dialog'])assert.equal(d.getElementById(id).querySelector('[data-ad-placement]'),null);
+  for(const id of ['resultado','view-baja','view-finiquito','account-section'])assert.equal(d.getElementById(id).querySelector('[data-ad-placement]'),null);
+  assert.doesNotMatch(read('auth-ui.js'),/data-ad-placement/,'Account dialogs never contain advertising');
   assert.equal(d.querySelector('.ads-placeholder'),null);
   assert.equal(d.querySelector('script[src="vendor/supabase.js"]').type,'module');
   assert.deepEqual([...d.querySelectorAll('[data-ad-slot]')].map(a=>a.dataset.adSlot),['5002757616','1332684927']);

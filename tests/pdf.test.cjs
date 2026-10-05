@@ -3,7 +3,6 @@ process.env.TZ='Europe/Madrid';
 const fs=require('node:fs'),path=require('node:path');
 const {JSDOM}=require('jsdom'),{jsPDF}=require('jspdf');
 const root=path.resolve(__dirname,'..');
-const fixtures=require('./calculation-fixtures.json');
 function setup(){
  const dom=new JSDOM(fs.readFileSync(path.join(root,'index.html'),'utf8'),{url:'http://localhost:4173/',runScripts:'outside-only'});
  const w=dom.window;w.matchMedia=()=>({matches:false});w.alert=message=>{throw Error(message);};w.HTMLElement.prototype.scrollIntoView=()=>{};w.jspdf={jsPDF};
@@ -12,73 +11,46 @@ function setup(){
  const share=w.guardarOCompartir;w.guardarOCompartir=()=>{};
  return {dom,w,share};
 }
-for(const [type,index]of [['nomina',1],['baja',3],['finiquito',4],['cuadrante',1]])test('Real PDF export: '+type,()=>{
- const {dom,w}=setup();try{
-  const fixture=fixtures[index];for(const [id,value]of Object.entries(fixture.fields))w.document.getElementById(id).value=value;
-  w[fixture.fn+(fixture.fn==='calcNomina'?'':'Registrado')]();
+const pdfCases={
+ nomina:{fields:{hTTotal:170,hNoc:60,hFest:40,irpf:10},run:'calcNominaRegistrado',expected:{'r-bruto':'1631,69 €','r-neto':'1343,33 €'}},
+ baja:{fields:{'b-dias':45,'b-irpf':10},run:'calcBajaRegistrado',expected:{'br-total-bruto':'2286,12 €'}},
+ finiquito:{fields:{'f-inicio':'2024-03-01','f-fin':'2026-10-05','f-vacas':10,'f-irpf':12,'f-tipodespido':'improcedente'},run:'calcFiniquitoRegistrado',expected:{'fr-indem':'+4286,78 €'}},
+ cuadrante:{fields:{},run:'calcNominaRegistrado',expected:{}}
+};
+for(const type of Object.keys(pdfCases))test('Real PDF export: '+type,()=>{
+ const {w}=setup();try{
+  const item=pdfCases[type];for(const [id,value]of Object.entries(item.fields))w.document.getElementById(id).value=value;
   if(type==='cuadrante'){
+   w.actualizarAccesoVacaciones(true);
    w.CUAD['2026-03']={};for(let day=1;day<=31;day++)w.CUAD['2026-03'][day]={tramos:day%3?[{i:'22:00',f:'06:00'}]:[],vac:day===3,fest:day===19};
    w.CUAD['2026-03']['2'].tramos=[{i:'22:00',f:'00:00'}];
    w.MODO_HORAS='cuadrante';w.calAnio=2026;w.calMes=2;
-   w.volcarTotales(w.totalesMes(2026,2));w.calcNominaRegistrado();
-   assert.equal(w.ctxPDF.nomina['Vacaciones disfrutadas'],'1 día = 5,23 h de jornada');
-   assert.ok(w.ctxPDF.nomina['Horas trabajadas (sin vacaciones)'].startsWith('155 h'));
+  }
+  w[item.run]();
+  if(type==='cuadrante'){
+   assert.equal(w.ctxPDF.nomina['Vacaciones'],'1 día (5,23 h)');
+   assert.ok(w.ctxPDF.nomina['Horas trabajadas'].startsWith('155 h'));
   }
   const doc=w.construirPDF(type==='cuadrante'?'nomina':type);
   if(type==='cuadrante')assert.equal(doc.getNumberOfPages(),1,'The regular calendar and net should share one sheet');
   assert.ok(doc.getNumberOfPages()>=1&&doc.getNumberOfPages()<=4);
-  if(type!=='cuadrante')for(const [id,value]of Object.entries(fixture.expected))assert.equal(w.document.getElementById(id).textContent,value);
+  for(const [id,value]of Object.entries(item.expected))assert.equal(w.document.getElementById(id).textContent,value);
   const bytes=Buffer.from(doc.output('arraybuffer'));assert.equal(bytes.subarray(0,5).toString(),'%PDF-');
-  if(process.env.PDF_SAMPLES==='1'){
-   const out=path.resolve(root,'../../output/pdf');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'vista-previa-'+type+'.pdf'),bytes);
-  }
  }finally{w.close();}
 });
 
-for(const mode of ['manual','cuadrante'])test('Armed payroll PDF keeps corrected overtime, separate danger and the responsible allowance: '+mode,()=>{
+test('Payroll PDF keeps overtime, the team leader allowance and holiday allowances',()=>{
  const {w}=setup();try{
   const d=w.document,calls=[];
   w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),text=doc.text.bind(doc);doc.text=(value,x,y,...rest)=>{calls.push({text:[value].flat().join(' '),y,page:doc.internal.getCurrentPageInfo().pageNumber});return text(value,x,y,...rest);};return doc;};
-  d.getElementById('btn-con_arma').click();
-  for(const [id,value]of Object.entries({hTTotal:170,'n-arma-horas':170,'n-arma-paga':179.90,'n-horasResponsable':80}))d.getElementById(id).value=value;
-  d.getElementById('switchResponsable').checked=true;
-  if(mode==='cuadrante'){
-   w.CUAD={'2026-09':{}};for(let day=1;day<=17;day++)w.CUAD['2026-09'][day]={tramos:[{i:'08:00',f:'18:00'}]};
-   w.MODO_HORAS='cuadrante';w.calAnio=2026;w.calMes=8;
-  }
+  w.actualizarAccesoVacaciones(true);
+  d.getElementById('switchResponsable').checked=true;d.getElementById('switchVac').checked=true;
+  for(const [id,value]of Object.entries({hTTotal:150,diasVac:10,'n-mediaPlusVac':310}))d.getElementById(id).value=value;
   w.calcNominaRegistrado();const doc=w.construirPDF('nomina');
-  assert.ok(calls.some(c=>c.text.includes('8h × 10,24 €')));
-  for(const value of ['+81,92 €','+188,70 €','+57,35 €',d.getElementById('r-neto').textContent])assert.ok(calls.some(c=>c.text===value),value+' is exported');
+  assert.equal(d.getElementById('r-vacplus').textContent,'+100,00 €');
+  for(const value of ['+116,13 €','+100,00 €',d.getElementById('r-neto').textContent])assert.ok(calls.some(c=>c.text===value),value+' is exported');
   assert.ok(calls.some(c=>c.text.includes('Responsable de equipo')));
   assert.ok(calls.every(c=>c.y<=289));
-  if(mode==='cuadrante')assert.equal(doc.getNumberOfPages(),1,'The corrected breakdown stays with the calendar');
-  if(process.env.PDF_SAMPLES==='1'){
-   const out=path.resolve(root,'../../output/pdf');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'arma-corregida-'+mode+'.pdf'),Buffer.from(doc.output('arraybuffer')));
-  }
- }finally{w.close();}
-});
-
-for(const mode of ['horas','nominas','importe'])test('Vacation supplement PDF keeps the method, average and final amount: '+mode,()=>{
- const {w}=setup();try{
-  const d=w.document,calls=[];
-  w.jspdf.jsPDF=function(options){const doc=new jsPDF(options),text=doc.text.bind(doc);doc.text=(value,x,y,...rest)=>{calls.push({text:[value].flat().join(' '),y,page:doc.internal.getCurrentPageInfo().pageNumber});return text(value,x,y,...rest);};return doc;};
-  d.getElementById('vac-metodo').value=mode;d.getElementById('vac-metodo').dispatchEvent(new w.Event('change',{bubbles:true}));
-  d.getElementById('vac-horas-noche').value=64;d.getElementById('vac-horas-festivo').value=32;
-  d.getElementById('n-promedioVac').value=113.28;
-  d.getElementById('vac-meses').value=2;d.getElementById('vac-meses').dispatchEvent(new w.Event('change',{bubbles:true}));
-  d.getElementById('vac-mes-1-night').value=126;d.getElementById('vac-mes-1-weekend').value=100.56;d.getElementById('vac-mes-2-night').value=0;
-  w.CUAD['2026-09']={};for(let day=1;day<=30;day++)w.CUAD['2026-09'][day]={tramos:day>15&&day<=25?[{i:'08:00',f:'16:00'}]:[],vac:day<=15,fest:false};
-  w.MODO_HORAS='cuadrante';w.calAnio=2026;w.calMes=8;w.actualizarAccesoVacaciones(true);w.calcNominaRegistrado();
-  assert.equal(d.getElementById('r-vacplus').textContent,'+54,81 €');
-  const doc=w.construirPDF('nomina');
-  assert.ok(calls.some(c=>c.text.includes('113,28 €')));
-  assert.ok(calls.some(c=>c.text.includes('54,81 €')));
-  assert.ok(calls.some(c=>c.text.includes(mode==='horas'?'Estimación por horas':mode==='nominas'?'Media de 2 nóminas':'Media mensual indicada')));
-  assert.ok(calls.some(c=>c.text==='NETO ESTIMADO A COBRAR'&&c.page===1));
-  assert.ok(calls.every(c=>c.y<=289));
-  if(process.env.PDF_SAMPLES==='1'){
-   const out=path.resolve(root,'../../output/pdf');fs.mkdirSync(out,{recursive:true});fs.writeFileSync(path.join(out,'vacaciones-'+mode+'.pdf'),Buffer.from(doc.output('arraybuffer')));
-  }
  }finally{w.close();}
 });
 

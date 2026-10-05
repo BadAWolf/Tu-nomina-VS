@@ -7,7 +7,6 @@ async function setup(state={}){
   const dom=new JSDOM(read(state.page||'index.html'),{url:state.url||'http://localhost:4173/',runScripts:'outside-only'});
   const w=dom.window,d=w.document;w.alert=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.matchMedia=()=>({matches:false,addListener(){},addEventListener(){}});
-  for (const dialog of d.querySelectorAll('dialog')) {dialog.showModal=function(){this.open=true;};dialog.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};}
   const calls=[];let callback;
   const auth={
     getUser:async()=>{state.verifications=(state.verifications||0)+1;return state.networkError?Promise.reject(new Error('offline')):{data:{user:state.user||null},error:null};},
@@ -44,6 +43,8 @@ async function setup(state={}){
     w.VIGILANTE_AUTH_CONFIG={...w.VIGILANTE_AUTH_CONFIG,captcha:{enabled:true,siteKey:'unit-test-only'}};
     w.VigilanteCaptcha={show(){},close(){},reset(){state.captchaToken=null;},take(){if(!state.captchaToken)throw Object.assign(new Error('captcha'),{code:'captcha_required'});return state.captchaToken;}};
   }
+  w.eval(read('auth-ui.js'));
+  for (const dialog of d.querySelectorAll('dialog')) {dialog.showModal=function(){this.open=true;};dialog.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};}
   w.eval(read('marketing.js'));
   state.analytics=[];w.VigilanteAnalytics={track:(...args)=>state.analytics.push(args)};
   if(state.page==='comunidad.html'){w.__navigate=url=>{state.navigation=url;};w.eval(read('community.js').replace('location.assign(url.href)','window.__navigate(url.href)'));}
@@ -79,13 +80,13 @@ test('Signing in resumes the requested vacation switch; logging out locks it and
   assert.equal(x.d.getElementById('vac-field').style.display,'block');
   assert.equal(x.d.getElementById('vac-plus-field').hidden,false);
   x.fill('hTTotal','150');x.fill('diasVac','5');x.click('btnCalc');await tick();
-  assert.equal(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],'5 días = 26,13 h de jornada');
+  assert.equal(x.w.ctxPDF.nomina['Vacaciones'],'5 días (26,13 h)');
   x.click('account-signout');await tick();
   assert.equal(x.d.getElementById('switchVac').checked,false);
   assert.equal(x.d.getElementById('vac-field').style.display,'none');
   assert.equal(x.d.getElementById('vac-plus-field').hidden,true);
   assert.equal(x.d.getElementById('resultado').style.display,'none');assert.equal(x.w.ctxPDF.nomina,null);
-  x.click('btnCalc');assert.ok(x.w.ctxPDF.nomina);assert.equal(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],'Ninguna');
+  x.click('btnCalc');assert.ok(x.w.ctxPDF.nomina);assert.equal(x.w.ctxPDF.nomina['Vacaciones'],'Ninguna');
  }finally{x.close();}
 });
 
@@ -107,7 +108,7 @@ test('Calendar vacation creation requires an account while ordinary shifts remai
   x.d.querySelector('[data-auth-open="signin"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.submit();await tick();await tick();
   assert.equal(x.d.getElementById('dlg-vac').checked,true);x.click('dlg-guardar');await tick();assert.equal(x.w.CUAD[key]['5'].vac,true);
   assert.equal(x.d.getElementById('vac-plus-field').hidden,false);
-  x.click('btnCalc');await tick();assert.match(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],/^1 día/);
+  x.click('btnCalc');await tick();assert.match(x.w.ctxPDF.nomina['Vacaciones'],/^1 día/);
   const saved=x.w.localStorage.getItem('cuadrante_vigilante');x.click('account-signout');await tick();
   assert.equal(x.w.localStorage.getItem('cuadrante_vigilante'),saved);
   assert.equal(x.d.getElementById('vac-plus-field').hidden,true);
@@ -133,7 +134,7 @@ test('An expired session preserves requested manual vacation days when the perso
   assert.equal(x.w.ctxPDF.nomina,null);assert.equal(x.d.getElementById('auth-dialog').open,true);
   x.d.querySelector('[data-auth-open="signin"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.submit();await tick();await tick();
   assert.equal(x.d.getElementById('diasVac').value,'7');assert.equal(x.d.getElementById('switchVac').checked,true);
-  assert.match(x.w.ctxPDF.nomina['Vacaciones disfrutadas'],/^7 días/);
+  assert.match(x.w.ctxPDF.nomina['Vacaciones'],/^7 días/);
  }finally{x.close();}
 });
 
@@ -154,7 +155,7 @@ test('Confirmed user can leave without accepting terms or unlocking tools',async
  assert.equal(x.d.getElementById('account-member').hidden,false);
  assert.equal(x.d.getElementById('account-title').textContent,'Has iniciado sesión');
  let unlocked=false;await x.w.VigilanteAuth.require(()=>{unlocked=true;});
- assert.equal(unlocked,false);assert.equal(x.d.getElementById('auth-title').textContent,'Antes de continuar');
+ assert.equal(unlocked,false);assert.equal(x.d.getElementById('auth-title').textContent,'Último paso');
  x.click('auth-close');x.click('account-signout');await tick();
  assert.equal(x.d.getElementById('account-member').hidden,true);
  assert.equal(x.calls.some(c=>c[0]==='accept'),false);
@@ -184,11 +185,11 @@ test('Stalled auth requests abort and caller cancellation is preserved',async()=
 });
 test('Signup requires matching passwords and unchecked-by-default conditions',async()=>{
  const x=await setup();try{x.d.querySelector('[data-auth-open="signup"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.fill('auth-confirm','different-password');x.d.getElementById('auth-terms').checked=true;x.submit();await tick();assert.equal(x.calls.length,0);
- x.fill('auth-confirm','test-password-123');x.d.getElementById('auth-confirm').dispatchEvent(new x.w.Event('input'));x.submit();await tick();assert.equal(x.calls[0][0],'signup');assert.match(x.d.getElementById('auth-status').textContent,/Revisa tu correo/);assert.equal(x.d.getElementById('account-member').hidden,true);
+ x.fill('auth-confirm','test-password-123');x.d.getElementById('auth-confirm').dispatchEvent(new x.w.Event('input'));x.submit();await tick();assert.equal(x.calls[0][0],'signup');assert.match(x.d.getElementById('auth-status').textContent,/confirmar tu cuenta/);assert.equal(x.d.getElementById('account-member').hidden,true);
  }finally{x.close();}
 });
 test('Verified user must accept terms before restricted actions; server acceptance resumes requested tab',async()=>{
- const x=await setup({user:member});try{x.click('tab-baja');await tick();assert.equal(x.d.getElementById('auth-title').textContent,'Antes de continuar');assert.equal(x.d.getElementById('auth-terms').checked,false);
+ const x=await setup({user:member});try{x.click('tab-baja');await tick();assert.equal(x.d.getElementById('auth-title').textContent,'Último paso');assert.equal(x.d.getElementById('auth-terms').checked,false);
  x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();assert.equal(x.calls[0][0],'accept');assert.equal(x.d.getElementById('view-baja').style.display,'block');assert.equal(x.d.getElementById('account-member').hidden,false);
  }finally{x.close();}
 });
@@ -236,41 +237,57 @@ test('Cookies do not load analytics until explicit acceptance; rejection persist
  }finally{x.close();}
 });
 
-test('Marketing permissions start empty, are independent and never gate account activation',async()=>{
+test('The last activation step offers both email categories unticked and saves the choice with the account',async()=>{
  for(const [own,partners] of [[false,false],[true,false],[false,true],[true,true]]){
   const x=await setup({user:member});try{
    x.click('tab-baja');await tick();
-   assert.equal(x.d.getElementById('marketing-dialog').open,false);
-   x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();
-   assert.equal(x.d.getElementById('marketing-dialog').open,true);
-   assert.equal(x.d.getElementById('view-baja').style.display,'block');
-   for(const id of ['auth-marketing-own','auth-marketing-partners']){
-    assert.equal(x.d.getElementById(id).checked,false);assert.equal(x.d.getElementById(id).required,false);
-   }
-   x.d.getElementById('auth-marketing-own').checked=own;x.d.getElementById('auth-marketing-partners').checked=partners;
-   x.click('marketing-welcome-save');await tick();await tick();
+   assert.equal(x.d.getElementById('auth-title').textContent,'Último paso');
+   assert.equal(x.d.getElementById('auth-marketing-step').hidden,false);
+   for(const id of ['signup-own','signup-partners']){assert.equal(x.d.getElementById(id).checked,false);assert.equal(x.d.getElementById(id).required,false);}
+   x.d.getElementById('signup-own').checked=own;x.d.getElementById('signup-partners').checked=partners;
+   x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();await tick();
    const saved=x.calls.find(c=>c[0]==='marketing')[1];
-   assert.equal(saved.own_news,own);assert.equal(saved.partner_offers,partners);
-   assert.equal(saved.email_at_consent,undefined);assert.equal(saved.recorded_at,undefined);
-   assert.equal(x.d.getElementById('marketing-dialog').open,false);
+   assert.equal(saved.own_news,own);assert.equal(saved.partner_offers,partners);assert.equal(saved.source,'account_activation');
+   assert.equal(x.d.getElementById('marketing-dialog').open,false,'No second window after activation');
+   assert.equal(x.d.getElementById('view-baja').style.display,'block');
    assert.equal(x.state.analytics.filter(c=>c[0]==='marketing_own_opt_in').length,Number(own));
    assert.equal(x.state.analytics.filter(c=>c[0]==='marketing_partner_opt_in').length,Number(partners));
-   assert.equal(x.d.getElementById('view-baja').style.display,'block');
    assert.equal(x.state.analytics.filter(c=>c[0]==='sign_up').length,1);
-   await x.w.VigilanteAuth.require(()=>{});assert.equal(x.state.analytics.filter(c=>c[0]==='sign_up').length,1);
   }finally{x.close();}
  }
 });
 test('Marketing outage does not take away an activated account or report a successful subscription',async()=>{
  const x=await setup({user:member,marketingError:true});try{
-  x.click('tab-baja');await tick();x.d.getElementById('auth-terms').checked=true;
-  x.submit();await tick();await tick();
-  x.d.getElementById('auth-marketing-own').checked=true;x.click('marketing-welcome-save');await tick();await tick();
+  x.click('tab-baja');await tick();x.d.getElementById('signup-own').checked=true;x.d.getElementById('auth-terms').checked=true;
+  x.submit();await tick();await tick();await tick();
   assert.equal(x.d.getElementById('account-title').textContent,'Tu cuenta está activa');
-  assert.match(x.d.getElementById('marketing-welcome-status').textContent,/No se pudo guardar/);
-  assert.equal(x.d.getElementById('marketing-dialog').open,true);
   assert.equal(x.state.analytics.filter(c=>c[0].startsWith('marketing_')).length,0);
-  x.click('marketing-close');let used=false;await x.w.VigilanteAuth.require(()=>used=true);assert.equal(used,true);
+  let used=false;await x.w.VigilanteAuth.require(()=>used=true);assert.equal(used,true);
+ }finally{x.close();}
+});
+test('Email sign-up keeps the choice with the account and applies it, with the conditions, after confirmation',async()=>{
+ const x=await setup();try{
+  x.d.querySelector('[data-auth-open="signup"]').click();x.fill('auth-email','test@example.test');x.fill('auth-password','test-password-123');x.fill('auth-confirm','test-password-123');
+  x.click('signup-partners');x.click('signup-personalize');x.fill('signup-province','12');x.d.getElementById('auth-terms').checked=true;
+  x.submit();await tick();
+  const data=x.calls.find(c=>c[0]==='signup')[1].options.data.nv_signup;
+  assert.deepEqual({...data},{terms:'2026-09-15',own:false,partners:true,personalize:true,province:'12'});
+ }finally{x.close();}
+ const confirmed={...member,user_metadata:{nv_signup:{terms:'2026-09-15',own:false,partners:true,personalize:true,province:'12'}}};
+ const y=await setup({user:confirmed});try{
+  await tick();await tick();
+  assert.equal(y.calls.filter(c=>c[0]==='accept').length,1);
+  const saved=y.calls.find(c=>c[0]==='marketing')[1];assert.equal(saved.partner_offers,true);assert.equal(saved.personalize,true);
+  assert.equal(y.state.rpcArgs.p_province_code,'12');assert.equal(y.state.rpcArgs.p_age_band,null);
+  assert.ok(y.calls.some(c=>c[0]==='update'&&c[1].data.nv_signup===null));
+  assert.equal(y.d.getElementById('auth-dialog').open,false);assert.equal(y.d.getElementById('marketing-dialog').open,false);
+  assert.equal(y.d.getElementById('account-title').textContent,'Tu cuenta está activa');
+ }finally{y.close();}
+});
+test('An empty activation choice never overwrites an earlier subscription',async()=>{
+ const x=await setup({user:member,historicalAcceptance:true,preferences:{email_at_consent:member.email,own_news:true,partner_offers:true}});try{
+  x.click('tab-baja');await tick();x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();await tick();
+  assert.equal(x.calls.filter(c=>c[0]==='marketing').length,0);assert.equal(x.state.preferences.own_news,true);
  }finally{x.close();}
 });
 test('Existing members are not subscribed retroactively and can withdraw both categories without losing tools',async()=>{
@@ -372,49 +389,27 @@ test('Logout during a pending preference read prevents both the offer and a stal
  }finally{y.close();}
 });
 
-test('Profile is optional, separately consented and saved with the selected advertising categories',async()=>{
+test('Province is optional, needs its own permission and is only saved with an email category',async()=>{
  const x=await setup({user:member,accepted:true});try{
-  assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,false);
-  assert.equal(x.d.getElementById('auth-marketing-profile-fields').hidden,false);
-  assert.equal(x.d.getElementById('auth-marketing-profile-fields').disabled,true);
-  x.click('auth-marketing-partners');assert.equal(x.d.getElementById('auth-marketing-targeting').hidden,false);
-  assert.equal(x.d.getElementById('auth-marketing-personalize').checked,false);
-  x.click('auth-marketing-personalize');x.fill('auth-marketing-age','25-34');x.fill('auth-marketing-province','12');x.fill('auth-marketing-city','  Burriana  ');
-  x.click('marketing-welcome-save');await tick();await tick();
-  assert.equal(x.state.rpcArgs.p_user_id,member.id);assert.equal(x.state.preferences.personalize,true);
-  assert.equal(x.state.preferences.own_news,false);assert.equal(x.state.preferences.partner_offers,true);
-  assert.equal(x.state.profile.city,'Burriana');assert.equal(x.state.profile.age_band,'25-34');assert.equal(x.state.profile.province_code,'12');
-  assert.equal(JSON.stringify(x.state.analytics).includes('Burriana'),false);
-  assert.equal(JSON.stringify(x.state.analytics).includes('25-34'),false);
- }finally{x.close();}
-});
-
-test('Age-only and province-only profiles work without requiring the other optional fields',async()=>{
- for(const field of ['age','province']){
-  const x=await setup({user:member,accepted:true});try{
-   x.click('auth-marketing-own');x.click('auth-marketing-personalize');x.fill('auth-marketing-'+field,field==='age'?'35-44':'28');
-   x.click('marketing-welcome-save');await tick();await tick();assert.equal(x.d.getElementById('marketing-dialog').open,false);
-   assert.equal(x.state.profile.city,null);assert.equal(x.state.profile[field==='age'?'province_code':'age_band'],null);
-  }finally{x.close();}
- }
-});
-
-test('City requires a province, city validation prevents formula/markup input, and declining bypasses incomplete profile',async()=>{
- const x=await setup({user:member,accepted:true});try{
-  x.click('auth-marketing-own');x.click('auth-marketing-personalize');x.fill('auth-marketing-city','Burriana');
+  assert.equal(x.d.getElementById('marketing-dialog').open,true);
+  assert.equal(x.d.getElementById('auth-marketing-zone').hidden,true);
+  x.click('auth-marketing-own');assert.equal(x.d.getElementById('auth-marketing-zone').hidden,false);
+  assert.equal(x.d.getElementById('auth-marketing-province').disabled,true);
+  x.click('auth-marketing-personalize');assert.equal(x.d.getElementById('auth-marketing-province').required,true);
   x.d.getElementById('marketing-welcome-form').dispatchEvent(new x.w.Event('submit',{bubbles:true,cancelable:true}));await tick();
-  assert.equal(x.calls.length,0);assert.equal(x.d.getElementById('auth-marketing-province').validity.valid,false);
-  for(const city of ['=IMPORTDATA(1)','<script>alert(1)</script>']){
-   x.fill('auth-marketing-province','12');x.d.getElementById('auth-marketing-province').dispatchEvent(new x.w.Event('input'));
-   x.fill('auth-marketing-city',city);x.d.getElementById('marketing-welcome-form').dispatchEvent(new x.w.Event('submit',{bubbles:true,cancelable:true}));await tick();
-   assert.equal(x.calls.length,0);assert.equal(x.d.getElementById('auth-marketing-city').validity.valid,false);
-  }
-  x.click('marketing-skip');await tick();await tick();
-  assert.equal(x.state.preferences.personalize,false);assert.equal(x.state.profile,null);
-  for(const name of ['p_age_band','p_province_code','p_city'])assert.equal(x.state.rpcArgs[name],null);
+  assert.equal(x.calls.filter(c=>c[0]==='marketing').length,0,'A ticked permission needs a province');
+  x.fill('auth-marketing-province','12');x.click('marketing-welcome-save');await tick();await tick();
+  assert.equal(x.state.rpcArgs.p_personalize,true);assert.equal(x.state.rpcArgs.p_province_code,'12');
+  assert.equal(x.state.rpcArgs.p_age_band,null);assert.equal(x.state.rpcArgs.p_city,null);
+  assert.equal(x.d.getElementById('marketing-dialog').open,false);
  }finally{x.close();}
+ const y=await setup({user:member,accepted:true});try{
+  y.click('auth-marketing-own');y.click('auth-marketing-personalize');y.fill('auth-marketing-province','12');y.click('auth-marketing-own');
+  assert.equal(y.d.getElementById('auth-marketing-personalize').checked,false);
+  y.click('marketing-welcome-save');await tick();await tick();
+  assert.equal(y.state.rpcArgs.p_personalize,false);assert.equal(y.state.rpcArgs.p_province_code,null);
+ }finally{y.close();}
 });
-
 test('Personalization can be erased without withdrawing advertising, and saved profiles load only for the matching email',async()=>{
  const profile={email_at_consent:member.email,age_band:'25-34',province_code:'12',city:'Burriana'};
  const x=await setup({user:member,accepted:true,profile,preferences:{email_at_consent:member.email,own_news:true,partner_offers:true,personalize:true}});try{
@@ -438,24 +433,18 @@ test('Changing only an existing profile is not an extra advertising subscription
 });
 
 
-test('Restored email and Google accounts finish activation before seeing the optional profile',async()=>{
- for(const provider of ['email','google']){
-  const x=await setup({user:{...member,app_metadata:{provider}}});try{
-   assert.equal(x.d.getElementById('auth-dialog').open,true);
-   assert.equal(x.d.getElementById('auth-title').textContent,'Antes de continuar');
-   assert.equal(x.d.getElementById('marketing-dialog').open,false);
-   x.d.getElementById('auth-terms').checked=true;x.submit();await tick();await tick();
-   assert.equal(x.d.getElementById('marketing-dialog').open,true);
-   assert.equal(x.d.getElementById('auth-marketing-profile-fields').hidden,false);
-   assert.equal(x.d.getElementById('auth-marketing-profile-fields').disabled,true);
-   for(const id of ['auth-marketing-own','auth-marketing-partners','auth-marketing-personalize'])assert.equal(x.d.getElementById(id).checked,false);
-   x.click('marketing-skip');await tick();await tick();
-   assert.equal(x.state.profile,null);assert.equal(x.state.preferences.own_news,false);
-   assert.equal(x.d.getElementById('marketing-dialog').open,false);
-  }finally{x.close();}
- }
+test('Google sign-in returns to the last step with the choice already ticked',async()=>{
+ const x=await setup();try{
+  x.d.querySelector('[data-auth-open="signup"]').click();x.click('signup-own');x.click('auth-google');await tick();
+  assert.equal(x.calls[0][0],'google');
+  assert.equal(JSON.parse(x.w.sessionStorage.getItem('nv_pending_signup')).own,true);
+ }finally{x.close();}
+ const y=await setup({user:{...member,app_metadata:{provider:'google'}}});try{
+  await tick();
+  assert.equal(y.d.getElementById('auth-dialog').open,true);assert.equal(y.d.getElementById('auth-title').textContent,'Último paso');
+  assert.equal(y.d.getElementById('auth-marketing-step').hidden,false);
+ }finally{y.close();}
 });
-
 test('Community guests register before any invitation fetch, with no public invite',async()=>{
  const x=await setup({page:'comunidad.html'});try{
   assert.doesNotMatch(x.d.documentElement.innerHTML,/chat\.whatsapp\.com\//);
