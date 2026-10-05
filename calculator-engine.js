@@ -30,11 +30,12 @@ function calcHoraExtra(sb,p,act,ant,esc){
 }
 function calcularNomina(o){
   var cat=catEf(o.categoria,o.conductor);
-  var hp=o.jornada==='completa'?JORNADA:o.horasContrato;
+  var hp=o.jornada==='parcial'?o.horasContrato:JORNADA;
   var ratio=hp/JORNADA;
   var hVac=r2(o.diasVac*hp/31);
   var hJor=r2(o.horas+hVac);                       // jornada computable del mes
-  var factor=hJor<hp?hJor/hp:1;                    // menos horas que el contrato: en proporción
+  // Jornada completa: mes entero. Parcial y días sueltos: en proporción a las horas.
+  var factor=o.jornada!=='completa'&&hJor<hp?hJor/hp:1;
   var f=ratio*factor;
   var ant=calcAntig(o.anios,o.categoria,o.conductor);
   var r={hp:hp,ratio:ratio,factor:factor,hVac:hVac,hJor:hJor,quinquenios:Math.floor(o.anios/5)};

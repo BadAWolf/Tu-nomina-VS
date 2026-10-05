@@ -261,3 +261,5 @@ html:not(.guide-gated) .guide-gate{display:none!important;}
 .legal-content button[data-cookie-settings],p button[data-cookie-settings]{font:inherit;}
 #cookie-banner a{color:var(--gold);}
 .neto-box{gap:.75rem;}.neto-val{white-space:nowrap;}
+.jornada-toggle.jornada-toggle-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+#hint-jornada{margin-top:.1rem;}

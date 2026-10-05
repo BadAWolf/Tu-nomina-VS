@@ -33,8 +33,15 @@ test('Part-time: extra hours become complementary hours, never an error asking f
 test('Working fewer hours than the contract pays in proportion (loose days)',()=>{
   const r=nomina({jornada:'parcial',horasContrato:80,horas:24});
   assert.equal(r.factor,24/80);assert.equal(r.base,172.04);assert.equal(r.horasExtra,0);
-  const full=nomina({horas:81});
-  assert.equal(full.base,580.64);
+  const loose=nomina({jornada:'dias',horas:81});
+  assert.equal(loose.base,580.64);assert.equal(loose.horasExtra,0);
+  const looseOver=nomina({jornada:'dias',horas:170});
+  assert.equal(looseOver.factor,1);assert.equal(looseOver.horasExtra,8);
+});
+
+test('Full time is always paid as a whole month, even with fewer hours',()=>{
+  const r=nomina({horas:150});
+  assert.equal(r.factor,1);assert.equal(r.bruto,1435.45);
 });
 
 test('Holidays count as worked hours and their usual allowances are spread over 31 days',()=>{

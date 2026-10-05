@@ -777,14 +777,13 @@ function grupoCategorias(prefijo,vista,tarjetaCond,switchCond,alCambiar){
   });
 }
 function grupoJornada(prefijo,campo,alCambiar){
-  var completa=el(prefijo+"jorn-completa"),parcial=el(prefijo+"jorn-parcial");
-  completa.addEventListener("click",function(){
-    completa.classList.add("active");parcial.classList.remove("active");
-    el(campo).style.display="none";alCambiar("completa");
-  });
-  parcial.addEventListener("click",function(){
-    parcial.classList.add("active");completa.classList.remove("active");
-    el(campo).style.display="block";alCambiar("parcial");
+  var botones={completa:el(prefijo+"jorn-completa"),parcial:el(prefijo+"jorn-parcial"),dias:el(prefijo+"jorn-dias")};
+  Object.keys(botones).forEach(function(tipo){
+    if(!botones[tipo])return;
+    botones[tipo].addEventListener("click",function(){
+      Object.keys(botones).forEach(function(t){if(botones[t])botones[t].classList.toggle("active",t===tipo);});
+      el(campo).style.display=tipo==="parcial"?"block":"none";alCambiar(tipo);
+    });
   });
 }
 function grupoPagas(ids,activa,inactiva){
@@ -813,9 +812,11 @@ function actualizarPlusesCategoria(){
 grupoCategorias("btn","view-nomina","card-cond","switchCond",function(c){catActual=c;actualizarPlusesCategoria();});
 grupoJornada("","parcial-field",function(j){
   jornActual=j;
-  el("hint-extras").textContent=j==="completa"
-    ?"Si pasas de 162 h, el exceso se cobra como hora extra"
-    :"Si pasas de tus horas de contrato, el exceso se paga como horas complementarias";
+  el("hint-jornada").textContent={
+    completa:"Cobras el sueldo del mes entero. Si pasas de 162 h, el exceso es hora extra.",
+    parcial:"Cobras en proporción a tus horas. Si haces más de las de tu contrato, son horas complementarias.",
+    dias:"Cobras cada hora trabajada (sueldo del mes ÷ 162 h). Marca tus días en el cuadrante o escribe el total de horas."
+  }[j];
   actualizarHintVac();
   if(MODO_HORAS==='cuadrante')pintarCalendario();
 });
@@ -912,7 +913,7 @@ function calcNominaRegistrado(){
   var mes=MODO_HORAS==='cuadrante'?totalesMes(calAnio,calMes):null;
   var datos={
     categoria:catActual,conductor:conductor,jornada:jornActual,horasContrato:numero('hPactadas'),
-    contrato:valor('n-contrato'),responsable:el('switchResponsable').checked,
+    contrato:'indefinido',responsable:el('switchResponsable').checked,
     plusServicio:el('switchPlus').checked?numero('plusServicio'):0,anios:numero('aniosAntiguedad'),
     horas:mes?mes.horasTrabajadas:numero('hTTotal'),horasNoche:numero('hNoc'),horasFestivo:numero('hFest'),
     diasVac:diasVacacionesMes(),mediaPlusVac:numero('n-mediaPlusVac'),
@@ -953,7 +954,7 @@ function calcNominaRegistrado(){
   showR("row-navidad","lbl-navidad","r-navidad","Nochebuena / Nochevieja — "+datos.nochesEspeciales+" noche"+(datos.nochesEspeciales!==1?"s":""),r.navidad);
   showR("row-prorr","lbl-prorr","r-prorr",datos.pagas+" paga"+(datos.pagas!==1?"s":"")+" extra prorrateada"+(datos.pagas!==1?"s":""),r.prorrata);
   el("r-bruto").textContent=fmt(r.bruto);
-  el("lbl-ss").textContent="Seguridad Social ("+(datos.contrato==='temporal'?'contrato temporal':'contrato indefinido')+")";
+  el("lbl-ss").textContent="Seguridad Social";
   el("r-ss").textContent="-"+fmt(r.ss);
   el('r-ss').title='Contingencias comunes '+fmt(r.cuotas.common)+' · MEI '+fmt(r.cuotas.mei)+' · Desempleo '+fmt(r.cuotas.unemployment)+' · Formación '+fmt(r.cuotas.training)+(r.cuotas.overtime?' · Horas extra '+fmt(r.cuotas.overtime):'');
   if(datos.irpf>0){el("row-irpf").style.display="flex";el("row-irpf0").style.display="none";el("lbl-irpf").textContent="Retención IRPF ("+num(datos.irpf)+"%)";el("r-irpf").textContent="-"+fmt(r.irpf);}
@@ -964,8 +965,7 @@ function calcNominaRegistrado(){
   ctxPDF.cuadrante=(MODO_HORAS==="cuadrante")?{anio:calAnio,mes:calMes}:null;
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,conductor),
-    "Jornada":jornActual==='completa'?'Completa (162 h/mes)':'Parcial ('+num(r.hp)+' h/mes)',
-    "Contrato":datos.contrato==='temporal'?'Temporal':'Indefinido',
+    "Jornada":jornActual==='completa'?'Completa (mes entero)':jornActual==='dias'?'Días sueltos (por horas)':'Parcial ('+num(r.hp)+' h/mes)',
     "Horas trabajadas":num(datos.horas)+" h"+(r.horasExtra>0?" ("+num(r.horasExtra)+" h "+(jornActual==='parcial'?'complementarias':'extra')+")":""),
     "Horas nocturnas":datos.horasNoche>0?num(datos.horasNoche)+" h":"Ninguna",
     "Horas fin de semana / festivo":r.festAplicable?(datos.horasFestivo>0?num(datos.horasFestivo)+" h":"Ninguna"):"Sin plus en esta categoría",
