@@ -814,8 +814,7 @@ grupoJornada("","parcial-field",function(j){
   jornActual=j;
   el("hint-jornada").textContent={
     completa:"Cobras el sueldo del mes entero. Si pasas de 162 h, el exceso es hora extra.",
-    parcial:"Cobras en proporción a tus horas. Si haces más de las de tu contrato, son horas complementarias.",
-    dias:"Cobras cada hora trabajada (sueldo del mes ÷ 162 h). Marca tus días en el cuadrante o escribe el total de horas."
+    parcial:"Cobras en proporción a tus horas. Si haces más de las de tu contrato, son horas complementarias."
   }[j];
   actualizarHintVac();
   if(MODO_HORAS==='cuadrante')pintarCalendario();
@@ -965,7 +964,7 @@ function calcNominaRegistrado(){
   ctxPDF.cuadrante=(MODO_HORAS==="cuadrante")?{anio:calAnio,mes:calMes}:null;
   ctxPDF.nomina={
     "Categoría":nombreCat(catActual,conductor),
-    "Jornada":jornActual==='completa'?'Completa (mes entero)':jornActual==='dias'?'Días sueltos (por horas)':'Parcial ('+num(r.hp)+' h/mes)',
+    "Jornada":jornActual==='completa'?'Completa (mes entero)':'Parcial ('+num(r.hp)+' h/mes)',
     "Horas trabajadas":num(datos.horas)+" h"+(r.horasExtra>0?" ("+num(r.horasExtra)+" h "+(jornActual==='parcial'?'complementarias':'extra')+")":""),
     "Horas nocturnas":datos.horasNoche>0?num(datos.horasNoche)+" h":"Ninguna",
     "Horas fin de semana / festivo":r.festAplicable?(datos.horasFestivo>0?num(datos.horasFestivo)+" h":"Ninguna"):"Sin plus en esta categoría",

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="google-adsense-account" content="ca-pub-6334238097806445">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; frame-src https:; script-src 'sha256-qeBrzOmNXNIfuVJmAOhx69F0TGNigiiESpOs9y+D3dI=' 'sha256-AdyJH2OZ6J+IKnpQ71OlHxRXXqDXLkni7JXeCTNGT1A=' 'sha256-AxkbXE3kfBPk+My+AxJhSPLJsowhqKv1rgouLdPmrAM=' 'sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc=' 'sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ=' 'sha256-+IgktOr2ugLg5xbA92Sg52Yyzncu8U+OcMHOHOwLV5I=' 'sha256-t8wM7QQxB26sr6KmHhaSDvi0xxcRzLlhlthM/AOuN8A=' 'sha256-6RVO6I0olmc5jzj3CU9QigzDKgi7upNpJv91VXnjiZY=' 'sha256-A+2g1HgZ6UbWMEBud7iY6/oWwW5D0lSivHhMpPEE7OI=' 'sha256-o0P2PbDy8PnTqCNyReHZl8SsEoQ+fHd9BabFRQ5wVUI=' 'sha256-WjOFdwh76qd3qzXoj5zVUSbiCbK5a8bdO7pJc7aQeQs=' 'sha256-FNyqvFtv/GNo8RaWj2yZwKUr5n9BZIiuW2XcGJ1Nfew=' 'sha256-RVFyrtW5g06q3T7osnzNG4i3PKxovoLXpaEzGXdtHnI=' 'sha256-ggM7k44IX4ircNgwQPDrmjfsZIXUlRZi3FoDIlt54io=' 'sha256-EDYaHFk2z3pQmPPVacQH8fn4gob5Wh86IwGrop1QsuA=' 'sha256-yIuICnopkNLx9YrqOE2JDGNU42s5P6BKH5nPmSeMrvc=' 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; connect-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; frame-src https:; script-src 'sha256-qeBrzOmNXNIfuVJmAOhx69F0TGNigiiESpOs9y+D3dI=' 'sha256-AdyJH2OZ6J+IKnpQ71OlHxRXXqDXLkni7JXeCTNGT1A=' 'sha256-AxkbXE3kfBPk+My+AxJhSPLJsowhqKv1rgouLdPmrAM=' 'sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc=' 'sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ=' 'sha256-+IgktOr2ugLg5xbA92Sg52Yyzncu8U+OcMHOHOwLV5I=' 'sha256-7GOFf8mXUjFjRez3aVzOUzXpT7f5saQg3aNN59FEggA=' 'sha256-6RVO6I0olmc5jzj3CU9QigzDKgi7upNpJv91VXnjiZY=' 'sha256-A+2g1HgZ6UbWMEBud7iY6/oWwW5D0lSivHhMpPEE7OI=' 'sha256-o0P2PbDy8PnTqCNyReHZl8SsEoQ+fHd9BabFRQ5wVUI=' 'sha256-WjOFdwh76qd3qzXoj5zVUSbiCbK5a8bdO7pJc7aQeQs=' 'sha256-FNyqvFtv/GNo8RaWj2yZwKUr5n9BZIiuW2XcGJ1Nfew=' 'sha256-RVFyrtW5g06q3T7osnzNG4i3PKxovoLXpaEzGXdtHnI=' 'sha256-ggM7k44IX4ircNgwQPDrmjfsZIXUlRZi3FoDIlt54io=' 'sha256-EDYaHFk2z3pQmPPVacQH8fn4gob5Wh86IwGrop1QsuA=' 'sha256-yIuICnopkNLx9YrqOE2JDGNU42s5P6BKH5nPmSeMrvc=' 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Calculadora gratis de nómina para vigilantes de seguridad. Convenio 2026 actualizado: salario neto, horas extras, nocturnidad, festivos, finiquito y baja IT.">
@@ -431,10 +431,9 @@ input:checked + .slider:before{transform:translateX(20px);}
 </div>
 <div class="card">
 <div class="card-label">Tipo de jornada</div>
-<div class="jornada-toggle jornada-toggle-3">
-<button type="button" class="jorn-btn active" id="jorn-completa">Completa<span class="jorn-sub">Mes entero</span></button>
-<button type="button" class="jorn-btn" id="jorn-parcial">Parcial<span class="jorn-sub">Menos horas</span></button>
-<button type="button" class="jorn-btn" id="jorn-dias">Días sueltos<span class="jorn-sub">Por horas</span></button>
+<div class="jornada-toggle">
+<button type="button" class="jorn-btn active" id="jorn-completa">Jornada completa<span class="jorn-sub">Mes entero</span></button>
+<button type="button" class="jorn-btn" id="jorn-parcial">Jornada parcial<span class="jorn-sub">Indica tus horas</span></button>
 </div>
 <div class="field-hint" id="hint-jornada">Cobras el sueldo del mes entero. Si pasas de 162 h, el exceso es hora extra.</div>
 <div id="parcial-field" class="field" style="display:none;margin:0.8rem 0 0">
@@ -833,7 +832,7 @@ Estimación con tablas de 2026 — contrasta tu contrato, bases y complementos r
 
 <footer class="legal-footer"><a href="condiciones.html">Condiciones y aviso legal</a><a href="privacidad.html">Privacidad y cookies</a><button type="button" data-cookie-settings="">Configurar cookies</button><a href="guia-nomina-vigilante.html#privacidad-publicitaria" id="privacidad-publicitaria" data-ad-privacy="">Privacidad publicitaria</a></footer>
 <script src="security.js?v=2026100501" integrity="sha256-AxkbXE3kfBPk+My+AxJhSPLJsowhqKv1rgouLdPmrAM="></script>
-<script src="install.js?v=2026100501" integrity="sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc="></script><script src="calculation-rules.js?v=2026100501" integrity="sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ="></script><script src="calculator-engine.js?v=2026100501" integrity="sha256-+IgktOr2ugLg5xbA92Sg52Yyzncu8U+OcMHOHOwLV5I="></script><script src="calculator.js?v=2026100501" integrity="sha256-t8wM7QQxB26sr6KmHhaSDvi0xxcRzLlhlthM/AOuN8A="></script>
+<script src="install.js?v=2026100501" integrity="sha256-wopYZQJJ1M7AgQAS+sEV9kTyObaHF31ZzJ4sw5YaZLc="></script><script src="calculation-rules.js?v=2026100501" integrity="sha256-J1nK2STm3vQpZy6I5K67qmJLDk2xcmdSs1VkGzn/SIQ="></script><script src="calculator-engine.js?v=2026100501" integrity="sha256-+IgktOr2ugLg5xbA92Sg52Yyzncu8U+OcMHOHOwLV5I="></script><script src="calculator.js?v=2026100501" integrity="sha256-7GOFf8mXUjFjRez3aVzOUzXpT7f5saQg3aNN59FEggA="></script>
 
 <div id="dlg-overlay" class="dlg-overlay">
   <div class="dlg">
@@ -851,14 +850,14 @@ Estimación con tablas de 2026 — contrasta tu contrato, bases y complementos r
         <div class="switch-row">
           <div>
             <div class="switch-text" id="dlg-vac-label">Día de vacaciones</div><div class="switch-sub vacation-account-note" id="dlg-vac-access-note">Disponible con cuenta gratuita</div>
-            <div class="switch-sub">Computa 5,226 h de jornada</div>
+            <div class="switch-sub">Cuenta como horas de tu jornada</div>
           </div>
           <label class="switch"><input type="checkbox" id="dlg-vac" aria-labelledby="dlg-vac-label" aria-describedby="dlg-vac-access-note"><span class="slider"></span></label>
         </div>
         <div class="switch-row" style="margin-top:0.7rem">
           <div>
             <div class="switch-text">Día festivo</div>
-            <div class="switch-sub">Autonómico o local (los nacionales ya van marcados)</div>
+            <div class="switch-sub">Autonómico o local. Los nacionales, sábados y domingos ya cuentan solos</div>
           </div>
           <label class="switch"><input type="checkbox" id="dlg-fest"><span class="slider"></span></label>
         </div>
