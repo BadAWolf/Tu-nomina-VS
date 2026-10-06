@@ -29,8 +29,9 @@
     setUser(user,eligible){
       const changed=user?.id!==account?.id || user?.email!==account?.email || member!==eligible;
       account=user;member=Boolean(user&&eligible);
-      if(changed){generation++;busy=false;button.disabled=false;status.textContent=member?'Tu cuenta está activa. El botón te lleva directamente a WhatsApp.':'';}
-      button.textContent='Abrir comunidad en WhatsApp';
+      if(changed){generation++;busy=false;button.disabled=false;status.textContent=member?'Tu cuenta está activa: el botón te lleva directamente al grupo.':'';}
+      const label=button.querySelector('.community-cta-label');
+      if(label)label.textContent=member?'Entrar en WhatsApp':'Entrar en la comunidad';
     }
   };
   button.addEventListener('click',()=>window.VigilanteAuth?.require(reveal));
