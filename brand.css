@@ -168,17 +168,11 @@ body{font-size:var(--type-body);}
 .resource-community div{flex:1;min-width:0;}
 .resource-community strong,.resource-community span{display:block;}
 .resource-community .resource-arrow{font-size:1.6rem;}
-.partner-page .partner-intro,.partner-contact{background:var(--card);border:1px solid var(--border);padding:1.5rem;border-radius:16px;margin:1.5rem 0;}
-.partner-page .partner-intro p{margin:.8rem 0;}
+.partner-contact{background:var(--card);border:1px solid var(--border);padding:1.5rem;border-radius:16px;margin:1.5rem 0;}
 .partner-page h3{margin:1.5rem 0 .6rem;}
 .partner-page .partner-contact{background:var(--goldbg);}
 .partner-contact a{color:var(--gold);overflow-wrap:anywhere;font-size:var(--type-body);}
 .partner-page .partner-contact h2{margin:0 0 .7rem;}
-.community-access{padding:1.25rem;border:1px solid var(--goldline);border-radius:12px;background:var(--goldbg);margin:1.5rem 0;}
-.community-access h3{margin-top:0;}
-.community-access button,.community-access>a{display:inline-flex;align-items:center;justify-content:center;min-height:44px;white-space:normal;text-decoration:none;margin:.35rem 0;font-size:var(--type-body);}
-.community-access [hidden]{display:none!important;}
-.community-access .community-note{color:var(--muted);}
 .field-explanation{margin-top:.25rem;font-size:var(--type-note);line-height:1.6;}
 .field-explanation>summary{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.15rem .8rem;min-height:44px;padding:.35rem 0;cursor:pointer;list-style:none;}
 .field-explanation>summary::-webkit-details-marker{display:none;}
@@ -207,8 +201,7 @@ body{font-size:var(--type-body);}
   .resource-links{--type-body:.907742rem;--type-note:.842742rem;--type-section:1.167742rem;}
   .resource-grid{grid-template-columns:1fr;}
   .resource-card{padding:1rem;}
-  .partner-page .partner-intro,.partner-contact{padding:1.1rem;}
-  .community-access{padding:1rem;}
+  .partner-contact{padding:1.1rem;}
   .content-page .topbar-inner{flex-wrap:nowrap;}
   .content-page .topbar-inner .brand{min-width:0;flex:1;}
   .content-page .brand-name{white-space:normal;}
