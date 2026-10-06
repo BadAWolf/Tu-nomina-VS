@@ -164,3 +164,5 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 .community-checklist svg{flex-shrink:0;margin-top:.2rem;color:var(--gold);}
 .content-page .wrap .community-start{margin:1rem 0 0;padding-top:.9rem;border-top:1px solid var(--goldline);font-size:var(--type-note);color:var(--text2);}
 @media(max-width:640px){.community-grid{grid-template-columns:1fr;}.community-tile{display:grid;grid-template-columns:44px 1fr;column-gap:.85rem;align-items:start;}.community-tile-icon{grid-row:span 2;margin:0;}.community-hero{padding:1.6rem 1.1rem;}.community-cta{width:100%;}}
+.community-hero-icon img{display:block;width:34px;height:34px;}
+.community-cta img{display:block;width:26px;height:26px;flex-shrink:0;}
