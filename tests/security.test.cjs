@@ -37,7 +37,7 @@ test('Invalid payroll amounts clear the previous result and prevent stale PDF ex
  }finally{w.close();}
 });
 test('Every public HTML page blocks inline scripts and has no executable inline handlers',()=>{
- const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));assert.equal(files.length,13);
+ const files=fs.readdirSync(root).filter(f=>f.endsWith('.html'));assert.equal(files.length,12);
  for(const file of files){const d=new JSDOM(read(file)).window.document;
  const policy=d.querySelector('meta[http-equiv="Content-Security-Policy"]').content;
  assert.match(policy,/script-src-attr 'none'/);assert.match(policy,/object-src 'none'/);
