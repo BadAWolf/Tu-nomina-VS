@@ -191,14 +191,21 @@ test('Unavailable or malformed storage never breaks calculation or floods the cu
 });
 test('Only successful payroll, schedule, severance and sick-leave calculations advance the shared counter', () => {
   const x = setup({ legacy: 'visto', calculator: true }); try {
-    const fixtures = require('./calculation-fixtures.json');
-    for (const item of fixtures) {
+    const fixtures = [
+      { fn: 'calcNomina', fields: { hTTotal: '162', irpf: '10' } },
+      { fn: 'calcNomina', fields: { hTTotal: '172', hNoc: '40', hFest: '16', irpf: '10' } },
+      { fn: 'calcNomina', click: 'jorn-parcial', fields: { hPactadas: '80', hTTotal: '80', irpf: '2' } },
+      { fn: 'calcBaja', fields: { 'b-dias': '30', 'b-baseManual': '1800', 'b-irpf': '10' } },
+      { fn: 'calcFiniquito', fields: { 'f-inicio': '2025-10-01', 'f-fin': '2026-09-30', 'f-vacas': '10', 'f-irpf': '10' } }
+    ];
+    for (const [index, item] of fixtures.entries()) {
       if (item.click) x.d.getElementById(item.click).click();
       for (const [id, value] of Object.entries(item.fields)) {
         x.d.getElementById(id).value = value;
         x.d.getElementById(id).dispatchEvent(new x.w.Event('change'));
       }
       x.w[item.fn + (item.fn === 'calcNomina' ? '' : 'Registrado')]();
+      if (index === 0) assert.equal(x.d.getElementById('r-bruto').textContent.trim(), '1435,45 €');
     }
     assert.equal(JSON.parse(x.w.localStorage.getItem(KEY)).count, fixtures.length);
     x.d.getElementById('hTTotal').value = '-1'; x.w.calcNomina();
