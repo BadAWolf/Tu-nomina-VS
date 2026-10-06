@@ -4,6 +4,7 @@ function setup(enabled=true){
  const w=new JSDOM(fs.readFileSync(path.join(root,'index.html'),'utf8'),{url:'http://localhost:4173/',runScripts:'outside-only'}).window;
  const state={callbacks:[],resets:0,removes:0};
  w.VIGILANTE_AUTH_CONFIG={captcha:{enabled,siteKey:'unit-test-only'}};
+ w.eval(fs.readFileSync(path.join(root,'auth-ui.js'),'utf8'));
  w.turnstile={render:(_host,options)=>{state.callbacks.push(options);return 'test-widget';},reset:()=>state.resets++,remove:()=>state.removes++};
  w.eval(fs.readFileSync(path.join(root,'captcha.js'),'utf8'));return {w,state,api:w.VigilanteCaptcha};
 }

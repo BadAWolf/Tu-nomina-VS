@@ -127,7 +127,8 @@ test('Public ad pages have exact SRI hashes in strict CSP; other pages retain th
     assert.match(scriptPolicy,/'strict-dynamic'/);assert.doesNotMatch(scriptPolicy,/nonce-|script-src 'self'|script-src https:|'unsafe-inline'/);
     for(const script of d.querySelectorAll('script[src]')){const src=script.getAttribute('src').split('?')[0],hash='sha256-'+crypto.createHash('sha256').update(fs.readFileSync(path.join(root,src))).digest('base64');assert.equal(script.integrity||script.getAttribute('integrity'),hash,file+' '+src);assert.ok(csp.includes("'"+hash+"'"));}
     assert.equal(d.querySelectorAll('[data-ad-placement]').length,file==='index.html'?2:1);
-    assert.equal(d.querySelectorAll('script[src^="auth.js"]').length,file==='index.html'?1:0);
+    // Las guías solo se leen completas con cuenta: cargan el acceso igual que la calculadora.
+    assert.equal(d.querySelectorAll('script[src^="auth.js"]').length,1,file);
    }else{assert.equal(d.querySelector('meta[name="referrer"]').content,'no-referrer');assert.doesNotMatch(csp,/unsafe-eval|unsafe-inline(?=[^;]*; script-src)/);assert.equal(d.querySelector('[data-ad-placement]'),null);assert.equal(d.querySelector('script[src^="adsense.js"]'),null);}
   }finally{w.close();}
  }

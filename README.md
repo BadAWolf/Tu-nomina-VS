@@ -9,11 +9,15 @@ La nómina básica permite cálculos sin cuenta. Supabase gestiona cuentas verif
 | Ubicación | Contenido |
 | --- | --- |
 | `*.html` | Calculadora, guías, colaboradores y páginas legales con sus URL públicas estables. |
-| `*.js`, `*.css` | Funcionalidad y estilos de la aplicación. |
+| `*.js` | Funcionalidad de la aplicación. `calculator-engine.js` y `calculation-rules.js` contienen todos los cálculos, sin acceso a la página. |
+| `brand.css` | Identidad común: colores, letra y una sola escala de tamaños para todas las páginas. |
+| `calculator.css`, `pages.css` | Estructura de la calculadora y de las páginas de contenido. Las páginas no llevan estilos incrustados. |
+| `legal.css`, `legal-navigation.css`, `auth.css`, `install.css`, `ad-layout.css` | Páginas legales, cuenta, instalación y espacios publicitarios. |
 | `brand.svg`, `favicon*`, `icon-*`, `apple-touch-icon.png` | La identidad verde actual, en los formatos que necesita cada navegador. |
 | `manifest.json`, `robots.txt`, `sitemap.xml`, `CNAME` | Instalación, indexación y dominio. |
 | `admin/` | Consultas del propietario y herramientas de construcción; excluidas de la web publicada. |
 | `tests/` | Pruebas automáticas y verificaciones de permisos; excluidas de la publicación. |
+| `.github/workflows/` | Ejecuta todas las pruebas y comprueba las huellas SRI en cada cambio. |
 | `email-templates/` | Plantillas de los correos; excluidas de la publicación. |
 | `vendor/` | Bibliotecas distribuidas con la web y sus licencias. |
 | `*-schema.sql` | Esquemas versionados para mantenimiento; excluidos de la publicación. |
@@ -22,7 +26,7 @@ La rama de trabajo y publicación es `main`. No se mantienen ramas ni carpetas d
 
 ## Desarrollo local
 
-Node.js 22. Instalar dependencias con `npm ci`; ejecutar `npm test`. `npm run build:auth` reconstruye el cliente de Supabase. Servir la raíz con un servidor HTTP local. Las claves publicables están en `auth-config.js`; los secretos SMTP, OAuth y CAPTCHA pertenecen a los paneles de los proveedores y nunca al repositorio.
+Node.js 22. Instalar dependencias con `npm ci`; ejecutar `npm test`. Después de modificar cualquier script, ejecutar `node admin/build-ad-csp.cjs` para actualizar sus huellas SRI y la CSP, y subir el número `?v=` de los archivos cambiados para que los navegadores no usen la copia antigua. `npm run build:auth` reconstruye el cliente de Supabase. Servir la raíz con un servidor HTTP local. Las claves publicables están en `auth-config.js`; los secretos SMTP, OAuth y CAPTCHA pertenecen a los paneles de los proveedores y nunca al repositorio.
 
 Los esquemas SQL y las consultas administrativas están versionados para revisión; no se ejecutan automáticamente al publicar. `_config.yml` excluye código de desarrollo, consultas y plantillas del sitio servido por GitHub Pages. Las cabeceras de `_headers` solo se aplican en alojamientos compatibles; Pages usa las políticas CSP incluidas en el HTML y protección de interfaz contra marcos.
 

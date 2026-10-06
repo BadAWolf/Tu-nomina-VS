@@ -10,8 +10,3 @@ exclude:
   - marketing-profile-schema.sql
   - security-policy.json
   - README.md
-  - SEGURIDAD.md
-  - CONFIGURACION-SERVICIOS.md
-  - ESTADO-VISTA-PREVIA.md
-  - GUIA-REGISTROS-Y-PUBLICIDAD.md
-  - INSTALACION-Y-ACTUALIZACIONES.md
