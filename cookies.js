@@ -29,7 +29,7 @@
     script.src='https://www.googletagmanager.com/gtag/js?id=G-NMM3MRRZ6B';document.head.appendChild(script);
   }
   const sections=Object.freeze({
-    '/':'calculadora','/index.html':'calculadora','/sindicatos-formacion.html':'colaboradores',
+    '/':'calculadora','/index.html':'calculadora',
     '/sindicatos.html':'sindicatos','/formacion.html':'formacion','/material.html':'material',
     '/comunidad.html':'comunidad','/convenio-2026.html':'convenio','/derechos-vigilante.html':'derechos',
     '/guia-nomina-vigilante.html':'guia_nomina','/preguntas-frecuentes.html':'preguntas_frecuentes',

@@ -87,7 +87,6 @@ tbody td:first-child{font-weight:700;color:var(--text);}
 }
 /* Colaboradores: filtro, fichas y estado vacío */
 .item{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1rem 1.1rem;margin-bottom:.6rem;}
-.item.destacado{border-color:var(--goldline);background:var(--goldbg);}
 .vacio{background:var(--surface);border:1px dashed var(--border2);border-radius:14px;padding:1rem;text-align:center;color:var(--muted);}
 .preparando{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:1.6rem 1.3rem;text-align:center;}
 .preparando h2{margin:0 0 .6rem;display:block;}

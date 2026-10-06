@@ -55,7 +55,7 @@ test('A missing Google consent panel gives feedback and keeps the slot hidden',(
  }finally{w.close();}
 });
 test('Ad loading is excluded from auth callbacks, legal pages, previews and private URL parameters',()=>{
- for(const url of ['https://calculadoravigilante.com/?code=secret','https://calculadoravigilante.com/index.html#access_token=secret','https://calculadoravigilante.com/privacidad.html','https://calculadoravigilante.com/sindicatos-formacion.html','http://localhost:4173/guia-nomina-vigilante.html','https://evil.test/guia-nomina-vigilante.html','https://calculadoravigilante.com/guia-nomina-vigilante.html?code=secret','https://calculadoravigilante.com/guia-nomina-vigilante.html?email=private','https://calculadoravigilante.com/guia-nomina-vigilante.html#access_token=secret']){
+ for(const url of ['https://calculadoravigilante.com/?code=secret','https://calculadoravigilante.com/index.html#access_token=secret','https://calculadoravigilante.com/privacidad.html','https://calculadoravigilante.com/sindicatos.html','http://localhost:4173/guia-nomina-vigilante.html','https://evil.test/guia-nomina-vigilante.html','https://calculadoravigilante.com/guia-nomina-vigilante.html?code=secret','https://calculadoravigilante.com/guia-nomina-vigilante.html?email=private','https://calculadoravigilante.com/guia-nomina-vigilante.html#access_token=secret']){
   const w=setup(url);try{assert.equal(w.document.querySelector('script'),null);assert.equal(w.adsbygoogle,undefined);}finally{w.close();}
  }
 });

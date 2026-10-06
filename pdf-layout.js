@@ -25,7 +25,7 @@
   }
   function create(options) {
     const doc = new window.jspdf.jsPDF({unit:'mm',format:'a4',compress:true});
-    const W=210, H=297, M=18, A=W-2*M, bottom=265;
+    const W=210, M=18, A=W-2*M, bottom=265;
     let y=0;
     doc.setProperties({title:clean(options.title)+' - Nómina Vigilante',author:'Nómina Vigilante',creator:'calculadoravigilante.com',subject:'Estimación orientativa'});
     function font(size, weight='normal', color=C.TXT) {

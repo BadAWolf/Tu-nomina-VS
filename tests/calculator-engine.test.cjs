@@ -138,3 +138,13 @@ test('Vacation days generated in the final calendar year: 31 natural days a year
   assert.equal(c.vacacionesGeneradas('2026-05-01','2026-04-01'),null);
   assert.equal(c.vacacionesGeneradas('','2026-04-01'),null);
 });
+
+test('Category buttons show the gross of a full month, as the payroll calculates it',()=>{
+  const html=require('node:fs').readFileSync(require('node:path').join(__dirname,'..','index.html'),'utf8');
+  const euros=n=>n.toFixed(2).replace('.',',').replace(/\B(?=(\d{3})+,)/g,'.');
+  for(const prefix of ['btn','fbtn','bbtn'])for(const categoria of Object.keys(c.CATS)){
+    const shown=html.match(new RegExp('id="'+prefix+'-'+categoria+'">[^<]*<span class="cat-salary">([^<]*)</span>'));
+    assert.ok(shown,prefix+'-'+categoria);
+    assert.equal(shown[1],euros(nomina({categoria}).bruto)+' € brutos/mes',prefix+'-'+categoria);
+  }
+});

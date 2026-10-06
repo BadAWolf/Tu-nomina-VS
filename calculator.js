@@ -696,9 +696,9 @@ function borrarDialogo(){
 
 /* Tablas y motor de cálculo: calculator-engine.js */
 var C=window.VigilanteCalc;
-var CATS=C.CATS,QUINQUENIO=C.QUINQUENIO,JORNADA=C.JORNADA,HORAS_ANUALES=C.HORAS_ANUALES,PLUS_FEST=C.PLUS_FEST;
-var catEf=C.catEf,tienePlusFestivo=C.tienePlusFestivo,r2=C.r2,calcAntig=C.calcAntig,calcHoraExtra=C.calcHoraExtra;
-var calcularNomina=C.calcularNomina,propPaga=C.propPaga,calcularFiniquito=C.calcularFiniquito,calcularBaja=C.calcularBaja;
+var CATS=C.CATS,JORNADA=C.JORNADA;
+var catEf=C.catEf,tienePlusFestivo=C.tienePlusFestivo,calcAntig=C.calcAntig;
+var calcularNomina=C.calcularNomina,calcularFiniquito=C.calcularFiniquito,calcularBaja=C.calcularBaja;
 
 
 

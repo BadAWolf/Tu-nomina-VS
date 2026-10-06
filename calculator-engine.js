@@ -158,7 +158,6 @@ function calcularBaja(o){
   r.baseDiaria=r2(r.baseMensual/30);
   r.tablaDiaria=r2(tabla/30);
   r.tramos=[];
-  var bruto=0;
   for(var day=1;day<=o.dias;day++){
     var pct,importe,nota='';
     if(o.tipo==='laboral'){
@@ -168,7 +167,6 @@ function calcularBaja(o){
     var ultimo=r.tramos[r.tramos.length-1];
     if(ultimo&&ultimo.pct===pct&&ultimo.nota===nota){ultimo.hasta=day;ultimo.importe+=importe;}
     else r.tramos.push({desde:day,hasta:day,pct:pct,nota:nota,importe:importe});
-    bruto+=importe;
   }
   r.tramos.forEach(function(t){t.importe=r2(t.importe);});
   r.bruto=r2(r.tramos.reduce(function(s,t){return s+t.importe;},0));
@@ -179,9 +177,7 @@ function calcularBaja(o){
   return r;
 }
 
-var api={CATS:CATS,QUINQUENIO:QUINQUENIO,JORNADA:JORNADA,HORAS_ANUALES:HORAS_ANUALES,PLUS_FEST:PLUS_FEST,
-  PLUS_NOCHE_ESPECIAL:PLUS_NOCHE_ESPECIAL,BASE_MAXIMA:BASE_MAXIMA,BASE_MINIMA_HORA_PARCIAL:BASE_MINIMA_HORA_PARCIAL,
-  catEf:catEf,tienePlusFestivo:tienePlusFestivo,r2:r2,calcAntig:calcAntig,calcHoraExtra:calcHoraExtra,
-  calcularNomina:calcularNomina,propPaga:propPaga,calcularFiniquito:calcularFiniquito,vacacionesGeneradas:vacacionesGeneradas,porcentajeBaja:porcentajeBaja,calcularBaja:calcularBaja};
+var api={CATS:CATS,JORNADA:JORNADA,catEf:catEf,tienePlusFestivo:tienePlusFestivo,calcAntig:calcAntig,
+  calcularNomina:calcularNomina,calcularFiniquito:calcularFiniquito,vacacionesGeneradas:vacacionesGeneradas,calcularBaja:calcularBaja};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.VigilanteCalc=Object.freeze(api);
 })(typeof window==='object'?window:globalThis);
