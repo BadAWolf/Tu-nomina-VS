@@ -516,9 +516,9 @@ function filaTramo(i,f){
   i=window.VigilanteSecurity.validTime(i)?i:'';
   f=window.VigilanteSecurity.validTime(f)?f:'';
   return '<div class="tramo">'+
-    '<input type="time" class="t-ini" value="'+(i||"")+'" step="300">'+
+    '<input type="time" class="t-ini" aria-label="Hora de entrada" value="'+(i||"")+'" step="300">'+
     '<span class="tramo-sep">a</span>'+
-    '<input type="time" class="t-fin" value="'+(f||"")+'" step="300">'+
+    '<input type="time" class="t-fin" aria-label="Hora de salida" value="'+(f||"")+'" step="300">'+
     '<button type="button" class="tramo-del" aria-label="Quitar tramo">×</button></div>';
 }
 function engancharBorrarTramo(){

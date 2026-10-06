@@ -26,7 +26,7 @@
   const titles = {signup:'Crea tu cuenta gratis',signin:'Te damos la bienvenida',reset:'Recupera tu contraseña',recovery:'Elige una contraseña nueva',consent:'Último paso'};
   const buttons = {signup:'Crear cuenta gratis',signin:'Iniciar sesión',reset:'Enviar enlace de recuperación',recovery:'Guardar contraseña',consent:'Activar mi cuenta'};
   const intros = {
-    signup:'Accede a las guías del sector, los PDF, la baja, el finiquito y las vacaciones.',
+    signup:'Calcula la baja y el finiquito, añade vacaciones, descarga tus PDF y accede a las guías del sector.',
     signin:'Entra con tu cuenta para usar todas las herramientas.',
     reset:'Te enviaremos un enlace para elegir una nueva contraseña.',
     recovery:'Usa al menos 12 caracteres y una contraseña que no utilices en otras webs.',
@@ -59,7 +59,7 @@
       }
     }
     if ($('account-title')) $('account-title').textContent = member ? 'Tu cuenta está activa' : 'Has iniciado sesión';
-    if ($('account-benefits')) $('account-benefits').textContent = member ? 'Ya tienes acceso a las guías del sector, los PDF, las vacaciones, la baja y el finiquito.'
+    if ($('account-benefits')) $('account-benefits').textContent = member ? 'Ya puedes calcular la baja y el finiquito, añadir vacaciones, descargar tus PDF y leer las guías del sector.'
       : recovery ? 'Completa el cambio de contraseña para continuar.' : 'Acepta las condiciones para activar tu cuenta. También puedes cerrar la sesión.';
     if ($('account-email')) $('account-email').textContent = user ? user.email : '';
     window.VigilanteMarketing?.setUser(recovery ? null : user, member);
