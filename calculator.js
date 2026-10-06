@@ -1004,6 +1004,23 @@ function actuFechas(){
 }
 el("f-inicio").addEventListener("change",actuFechas);
 el("f-fin").addEventListener("change",actuFechas);
+
+/* «No he disfrutado vacaciones este año»: la calculadora pone los días generados. */
+function fechaCorta(iso){return iso.slice(8,10)+"/"+iso.slice(5,7)+"/"+iso.slice(0,4);}
+function actuVacAuto(){
+  var auto=el("switchVacAuto").checked,campo=el("f-vacas"),nota=el("f-vac-auto-nota");
+  campo.readOnly=auto;campo.classList.toggle("vac-auto-valor",auto);
+  if(!auto){nota.hidden=true;nota.textContent="";return;}
+  var v=C.vacacionesGeneradas(valor("f-inicio"),valor("f-fin"));
+  nota.hidden=false;
+  if(!v){campo.value="";nota.textContent="Escribe la fecha de inicio y el último día de trabajo y calculamos tus días.";return;}
+  campo.value=String(v.dias);
+  nota.textContent="Te corresponden "+num(v.dias)+" días: 31 días al año en proporción a los "+v.diasTrabajados+" días trabajados desde el "+fechaCorta(v.desde)+
+    ". Si te quedan días de años anteriores, desactívalo y escribe el total.";
+}
+el("switchVacAuto").addEventListener("change",actuVacAuto);
+el("f-inicio").addEventListener("change",actuVacAuto);
+el("f-fin").addEventListener("change",actuVacAuto);
 el("btnCalcFiniquito").addEventListener("click",function(){calcFiniquito();});
 
 
@@ -1021,6 +1038,7 @@ function calcFiniquitoRegistrado(){
   var si=valor('f-inicio'),sf=valor('f-fin');
   if(!si||!sf){fail('Escribe la fecha de inicio y el último día de trabajo.');return;}
   if(!VigilanteRules.validDate(si)||!VigilanteRules.validDate(sf)||sf<si){fail('El último día de trabajo no puede ser anterior a la fecha de inicio.');return;}
+  if(el('switchVacAuto').checked)actuVacAuto();
   var conductor=el('switchCondF').checked;
   var datos={
     categoria:fcatActual,conductor:conductor,jornada:fjornActual,horasContrato:numero('fhPactadas'),

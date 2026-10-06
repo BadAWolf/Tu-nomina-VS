@@ -298,3 +298,9 @@ html.nv-signed-in .topbar-member{display:inline-flex;}
 @media(max-width:340px){
   .calculator-page .brand-name{display:none;}
 }
+
+/* Finiquito: vacaciones calculadas solas. */
+.vac-auto-row{margin:.35rem 0 .9rem;padding:.75rem .9rem;border:1px solid var(--goldline);border-radius:12px;background:var(--goldbg);}
+#f-vacas.vac-auto-valor{background:var(--goldbg);border-color:var(--goldline);color:var(--gold);font-weight:700;cursor:default;}
+.vac-auto-nota{margin:.6rem 0 0;padding-left:.8rem;border-left:2px solid var(--goldline);color:var(--text2);font-size:var(--type-note);line-height:1.6;}
+.vac-auto-nota[hidden]{display:none;}
