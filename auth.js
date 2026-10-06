@@ -70,6 +70,7 @@
     });
     if (!member) $('tab-nomina')?.click();
     document.documentElement.classList.toggle('nv-member', member);
+    document.documentElement.classList.toggle('nv-signed-in', Boolean(user));
     document.dispatchEvent(new CustomEvent('vigilante:account', {detail: {member, signedIn: Boolean(user)}}));
   }
   function open(nextMode) {

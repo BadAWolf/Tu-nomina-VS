@@ -276,3 +276,25 @@ input[type=number],input[type=date],select{padding:.8rem;border-radius:10px;min-
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{scroll-behavior:auto!important;transition:none!important;}
 }
+
+/* Acceso a la cuenta en la barra superior: siempre visible al hacer scroll.
+   Sin sesión: «Iniciar sesión». Con sesión: «Mi cuenta» lleva a la tarjeta de la cuenta. */
+.calculator-page .topbar-inner{flex-wrap:nowrap;}
+.calculator-page .topbar-inner .brand{min-width:0;}
+.topbar-account{margin-left:auto;flex-shrink:0;display:flex;}
+.topbar-login,.topbar-member{display:inline-flex;align-items:center;justify-content:center;gap:.45rem;min-height:44px;padding:.5rem 1rem;border:1px solid var(--goldline);border-radius:999px;background:var(--card);color:var(--gold);font-family:inherit;font-size:var(--type-note);font-weight:700;line-height:1.2;white-space:nowrap;text-decoration:none;cursor:pointer;transition:background .15s,border-color .15s;}
+.topbar-login:hover,.topbar-member:hover{background:var(--goldbg);border-color:var(--gold);}
+.topbar-login svg,.topbar-member svg{flex-shrink:0;}
+.topbar-member,html.nv-signed-in .topbar-login{display:none;}
+html.nv-signed-in .topbar-member{display:inline-flex;}
+#account-section{scroll-margin-top:5.5rem;}
+@media(max-width:400px){
+  .calculator-page .topbar-inner{gap:.5rem;padding-left:.75rem;padding-right:.75rem;}
+  .calculator-page .brand{gap:.45rem;}
+  .calculator-page .brand-icon{width:2rem;height:2rem;}
+  .calculator-page .brand-name{font-size:.8rem;line-height:1.15;}
+  .topbar-login,.topbar-member{padding:.45rem .7rem;gap:.3rem;}
+}
+@media(max-width:340px){
+  .calculator-page .brand-name{display:none;}
+}
