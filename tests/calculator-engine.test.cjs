@@ -127,3 +127,14 @@ test('Without a known average, holiday allowances are estimated from the shifts 
   assert.equal(r.vacPlus,33.71,'(50,40 + 20,40) x 10 / 21 days');
   assert.equal(nomina({horas:0,diasVac:30,diasMes:30}).vacPlus,0);
 });
+
+test('Vacation days generated in the final calendar year: 31 natural days a year, prorated',()=>{
+  assert.deepEqual(c.vacacionesGeneradas('2026-10-07','2026-10-16'),{desde:'2026-10-07',diasTrabajados:10,dias:0.85});
+  assert.equal(c.vacacionesGeneradas('2026-10-07','2026-11-05').dias,2.55);
+  // Contrato iniciado el año anterior: solo cuenta el año natural del fin.
+  assert.deepEqual(c.vacacionesGeneradas('2024-03-01','2026-06-30'),{desde:'2026-01-01',diasTrabajados:181,dias:15.37});
+  assert.equal(c.vacacionesGeneradas('2026-01-01','2026-12-31').dias,31);
+  assert.equal(c.vacacionesGeneradas('2028-01-01','2028-12-31').dias,31);
+  assert.equal(c.vacacionesGeneradas('2026-05-01','2026-04-01'),null);
+  assert.equal(c.vacacionesGeneradas('','2026-04-01'),null);
+});

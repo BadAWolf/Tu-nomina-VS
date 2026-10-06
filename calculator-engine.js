@@ -134,6 +134,15 @@ function calcularFiniquito(o){
   r.total=r2(r.liqNeto+r.indem-r.irpfIndem);
   return r;
 }
+// Vacaciones generadas y no disfrutadas en el año natural en que acaba el contrato:
+// 31 días naturales al año (convenio), en proporción a los días trabajados ese año.
+function vacacionesGeneradas(inicio,fin){
+  if(!VigilanteRules.validDate(inicio)||!VigilanteRules.validDate(fin)||fin<inicio)return null;
+  var anio=fin.slice(0,4),desde=inicio>anio+'-01-01'?inicio:anio+'-01-01';
+  var diasAnio=VigilanteRules.days(anio+'-01-01',anio+'-12-31');
+  var trabajados=VigilanteRules.days(desde,fin);
+  return {desde:desde,diasTrabajados:trabajados,dias:r2(31*trabajados/diasAnio)};
+}
 // Porcentaje de cada día (art. 51 del convenio). day = día de la baja, empezando en 1.
 function porcentajeBaja(day,tipo,nbaja){
   if(tipo==='hospitalizacion'&&day<=40)return 1;
@@ -173,6 +182,6 @@ function calcularBaja(o){
 var api={CATS:CATS,QUINQUENIO:QUINQUENIO,JORNADA:JORNADA,HORAS_ANUALES:HORAS_ANUALES,PLUS_FEST:PLUS_FEST,
   PLUS_NOCHE_ESPECIAL:PLUS_NOCHE_ESPECIAL,BASE_MAXIMA:BASE_MAXIMA,BASE_MINIMA_HORA_PARCIAL:BASE_MINIMA_HORA_PARCIAL,
   catEf:catEf,tienePlusFestivo:tienePlusFestivo,r2:r2,calcAntig:calcAntig,calcHoraExtra:calcHoraExtra,
-  calcularNomina:calcularNomina,propPaga:propPaga,calcularFiniquito:calcularFiniquito,porcentajeBaja:porcentajeBaja,calcularBaja:calcularBaja};
+  calcularNomina:calcularNomina,propPaga:propPaga,calcularFiniquito:calcularFiniquito,vacacionesGeneradas:vacacionesGeneradas,porcentajeBaja:porcentajeBaja,calcularBaja:calcularBaja};
 if(typeof module==='object'&&module.exports)module.exports=api;else root.VigilanteCalc=Object.freeze(api);
 })(typeof window==='object'?window:globalThis);
