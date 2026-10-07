@@ -19,7 +19,7 @@ test('Every indexable page shares its own title, description and URL with the pr
    pages++;
   }finally{w.close();}
  }
- assert.equal(pages,10);
+ assert.equal(pages,7);
 });
 
 test('The preview image is a 1200 x 630 PNG small enough for WhatsApp',()=>{

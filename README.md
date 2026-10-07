@@ -64,3 +64,8 @@ Las guías del sector (convenio, derechos, cómo leer la nómina y preguntas fre
 La web no puede sustituir directamente la imagen guardada por el sistema de un visitante. Google vuelve a rastrear y procesar el favicon a su ritmo; una solicitud en Search Console no garantiza una fecha. Chrome en Android puede actualizar una instalación WebAPK al detectar cambios en el manifiesto; un acceso directo o una instalación de otro navegador puede comportarse de otra manera. No se deben borrar datos o desinstalar para forzar una actualización desde el código.
 
 Referencias: [Favicon en Google Search](https://developers.google.com/search/docs/appearance/favicon-in-search), [actualización de manifiestos en Chrome](https://web.dev/articles/manifest-updates).
+
+## Comunidad y buscadores
+
+- La comunidad de WhatsApp es abierta: `community.js` pide la invitación a `community_links` al pulsar el botón, sin cuenta, y solo abre enlaces `https://chat.whatsapp.com/…`. La invitación nunca está en el HTML ni en Git (`admin/community-access.sql`, comprobado por `tests/community-rls.sql`). Para frenar el spam, conviene activar en el grupo de WhatsApp la aprobación de nuevos participantes.
+- `sitemap.xml` incluye solo las páginas indexables, con la fecha real del último cambio. Las páginas «Próximamente» (formación, material y sindicatos) llevan `noindex, follow` hasta que tengan contenido; al publicarlo, quitar esa etiqueta y añadirlas al sitemap. Condiciones y privacidad no se indexan.
