@@ -157,6 +157,8 @@ body{font-size:var(--type-body);}
 .resource-links{width:100%;box-sizing:border-box;}
 .wrap>.resource-links{padding:0;}
 .resource-links h2{font-size:var(--type-section);line-height:1.35;margin:0 0 1rem;font-weight:700;color:var(--text);}
+/* «Redes» y «Colaboradores» son apartados distintos: cada uno con su título y aire entre ellos. */
+.resource-group+.resource-group{margin-top:2rem;}
 .resource-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.8rem;}
 .resource-grid-pair{grid-template-columns:repeat(2,minmax(0,1fr));}
 .resource-card{display:flex;flex-direction:column;gap:.5rem;padding:1.1rem;background:var(--card);border:1px solid var(--border);border-radius:14px;text-decoration:none;color:var(--text);min-width:0;}
@@ -164,7 +166,7 @@ body{font-size:var(--type-body);}
 .resource-card strong{font-size:var(--type-body);font-weight:600;line-height:1.5;}
 .resource-card span{font-size:var(--type-note);line-height:1.65;color:var(--muted);}
 .resource-card .content-icon{width:24px;height:24px;}
-.resource-community{flex-direction:row;align-items:center;gap:.9rem;margin-top:.8rem;background:var(--goldbg);border-color:var(--goldline);}
+.resource-community{flex-direction:row;align-items:center;gap:.9rem;background:var(--goldbg);border-color:var(--goldline);}
 .resource-community div{flex:1;min-width:0;}
 .resource-community strong,.resource-community span{display:block;}
 .resource-community .resource-arrow{font-size:1.6rem;}
