@@ -291,7 +291,9 @@ function descargarBlobDirecto(blob, filename, tipo){
    Calcula totales y los vuelca a los campos de horas.
    No toca el motor de nómina: solo lo alimenta.
    ══════════════════════════════════════════════════════════ */
-var CUAD = {};                 // { "2026-09": { "1": {tramos:[...], vac:bool, fest:bool} } }
+var CUAD = {};                 // { "2026-09": { "1": {tramos:[...], vac:bool, fest:bool, nofest:bool} } }
+                               // fest: festivo autonómico o local marcado a mano.
+                               // nofest: sábado, domingo o festivo nacional que el usuario quita.
 var calAnio, calMes;           // mes visible (mes 0-11)
 var dlgClave = null;           // "2026-09|1" del día que se está editando
 var MODO_HORAS = "manual";
@@ -343,17 +345,22 @@ function cargarCuad(){
   }catch(e){ CUAD=Object.create(null); }
 }
 
-/* ── ¿Este día concreto genera plus de fin de semana / festivo? ── */
-function diaConPlus(fecha){
+/* ── Sábados, domingos y festivos nacionales cuentan solos para el plus ── */
+function festivoAutomatico(fecha){
   var dow=fecha.getDay();                    // 0 domingo, 6 sábado
-  if(dow===0||dow===6) return true;
-  if(esFestivoNacional(fecha)) return true;
+  return dow===0||dow===6||esFestivoNacional(fecha);
+}
+/* ── ¿Este día concreto genera plus de fin de semana / festivo? ──
+   Los automáticos cuentan salvo que el usuario los quite; los demás, si los marca. */
+function diaConPlus(fecha){
   var dd=datosDia(fecha.getFullYear(),fecha.getMonth(),fecha.getDate());
-  return !!(dd&&dd.fest);
+  return festivoAutomatico(fecha)?!(dd&&dd.nofest):!!(dd&&dd.fest);
 }
 
-/* ── Trocea un tramo en minutos y los reparte por día natural y franja ── */
-function trocearTramo(inicio, fin){
+/* ── Trocea un tramo en minutos y los reparte por día natural y franja ──
+   conPlus decide qué días llevan plus (por defecto, lo guardado en el cuadrante). */
+function trocearTramo(inicio, fin, conPlus){
+  conPlus=conPlus||diaConPlus;
   var res={total:0,noct:0,plus:0};
   var cur=new Date(inicio.getTime()), FIN=fin.getTime();
   var guardia=0;
@@ -366,7 +373,7 @@ function trocearTramo(inicio, fin){
     if(mins>0){
       res.total+=mins;
       if(h<6||h>=22) res.noct+=mins;
-      if(diaConPlus(cur)) res.plus+=mins;
+      if(conPlus(cur)) res.plus+=mins;
     }
     cur=new Date(next);
   }
@@ -438,11 +445,9 @@ function resumenDia(a,m,d){
     var mins=tramos.reduce(function(total,tr){return total+(tr.fin-tr.ini)/60000;},0);
     var hora=function(fecha){return +fecha===+new Date(a,m,d+1)?'24:00':String(fecha.getHours()).padStart(2,'0')+':'+String(fecha.getMinutes()).padStart(2,'0');};
     var lineas=tramos.length===1?[hora(tramos[0].ini),hora(tramos[0].fin)]:[tramos.length+' tramos'];
-    return {tipo:'trab',lineas:lineas,horas:Math.round(mins/60*100)/100,fest:!!(dd&&dd.fest),continua:tramos.some(function(tr){return tr.continua;})};
+    return {tipo:'trab',lineas:lineas,horas:Math.round(mins/60*100)/100,continua:tramos.some(function(tr){return tr.continua;})};
   }
-  if(!dd)return null;
-  if(dd.vac) return {tipo:"vac", lineas:["V"], horas:horasDiaVacaciones(), fest:!!dd.fest};
-  if(dd.fest) return {tipo:"libre", lineas:[], horas:0, fest:true};
+  if(dd&&dd.vac) return {tipo:"vac", lineas:["V"], horas:horasDiaVacaciones()};
   return null;
 }
 
@@ -465,7 +470,6 @@ function pintarCalendario(){
     if(diaConPlus(fecha)) cls+=" finde";
     if(r&&r.tipo==="trab") cls+=" trab";
     else if(r&&r.tipo==="vac") cls+=" vac";
-    if((r&&r.fest)||esFestivoNacional(fecha)) cls+=" festivo";
     if(fecha.toDateString()===hoy.toDateString()) cls+=" hoy";
     h+='<div class="'+cls+'" data-dia="'+d+'"'+(r&&r.continua?' title="Incluye la continuación del turno del día anterior"':'')+'>';
     h+='<span class="cal-num">'+d+'</span>';
@@ -540,11 +544,13 @@ function actualizarNotaDlg(){
   var a=parseInt(pm[0],10), m=parseInt(pm[1],10)-1, d=parseInt(p[1],10);
   var tramos=leerTramosDlg();
   if(!tramos.length){ document.getElementById("dlg-nota").innerHTML=""; return; }
+  var marcado=document.getElementById("dlg-fest").checked;
+  var conPlus=function(f){return f.getFullYear()===a&&f.getMonth()===m&&f.getDate()===d?marcado:diaConPlus(f);};
   var tot=0,noc=0,plus=0;
   tramos.forEach(function(tr){
     var ff=tramoAFechas(a,m,d,tr);
     if(!ff) return;
-    var r=trocearTramo(ff.ini,ff.fin);
+    var r=trocearTramo(ff.ini,ff.fin,conPlus);
     tot+=r.total; noc+=r.noct; plus+=r.plus;
   });
   var hh=function(n){ return String(Math.round(n/60*100)/100).replace(".",","); };
@@ -587,7 +593,13 @@ function abrirDialogo(d){
     cont.innerHTML=filaTramo("","");
   }
   document.getElementById("dlg-vac").checked = !!(dd&&dd.vac);
-  document.getElementById("dlg-fest").checked = !!(dd&&dd.fest);
+  // Sábados, domingos y festivos nacionales salen activados; se pueden quitar.
+  var auto=festivoAutomatico(fecha);
+  document.getElementById("dlg-fest").checked = auto ? !(dd&&dd.nofest) : !!(dd&&dd.fest);
+  document.getElementById("dlg-fest-label").textContent = esFestivoNacional(fecha) ? "Festivo nacional" : auto ? "Fin de semana" : "Día festivo";
+  document.getElementById("dlg-fest-note").textContent = auto
+    ? "Ya cuenta para el plus de fin de semana y festivos. Si lo quitas, este día se calcula como uno normal."
+    : "Autonómico o local. Los nacionales, sábados y domingos ya salen activados.";
   engancharBorrarTramo(); actualizarNotaDlg();
   document.getElementById("dlg-overlay").classList.add("abierto");
 }
@@ -610,17 +622,19 @@ function guardarDialogoRegistrado(){
   var p=dlgClave.split("|"), mk=p[0], d=p[1];
   var tramos=leerTramosDlg();
   var vac=document.getElementById("dlg-vac").checked;
-  var fest=document.getElementById("dlg-fest").checked;
+  var marcado=document.getElementById("dlg-fest").checked;
+  var auto=festivoAutomatico(new Date(Number(mk.slice(0,4)),Number(mk.slice(5))-1,Number(d)));
+  var dia={tramos:tramos,vac:vac,fest:!auto&&marcado,nofest:auto&&!marcado};
   var incompleto=Array.from(document.querySelectorAll('#dlg-tramos .tramo')).some(function(row){return !!row.querySelector('.t-ini').value!==!!row.querySelector('.t-fin').value;});
   if(incompleto){document.getElementById('dlg-nota').textContent='Completa el inicio y el final de cada tramo.';return;}
   var candidato=JSON.parse(JSON.stringify(CUAD));
   if(!candidato[mk])candidato[mk]={};
-  candidato[mk][d]={tramos:tramos,vac:vac,fest:fest};
+  candidato[mk][d]=dia;
   var conflicto=validarCuadrante(candidato,Number(mk.slice(0,4)),Number(mk.slice(5))-1);
   if(conflicto){document.getElementById('dlg-nota').textContent=conflicto;return;}
   if(!CUAD[mk]) CUAD[mk]={};
-  if(!tramos.length&&!vac&&!fest){ delete CUAD[mk][d]; }
-  else { CUAD[mk][d]={tramos:tramos, vac:vac, fest:fest}; }
+  if(!tramos.length&&!vac&&!dia.fest&&!dia.nofest){ delete CUAD[mk][d]; }
+  else { CUAD[mk][d]=dia; }
   if(!Object.keys(CUAD[mk]).length) delete CUAD[mk];
   guardarCuad(); cerrarDialogo(); pintarCalendario();
 }

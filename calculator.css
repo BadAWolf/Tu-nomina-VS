@@ -128,9 +128,8 @@ input:checked + .slider:before{transform:translateX(20px);}
 .cal-cell.vac{background:var(--bluebg);border-color:#b4c8e0;}
 .cal-cell.vac .cal-tag{color:var(--blue);font-size:0.7rem;}
 .cal-cell.vac .cal-num{color:#1e3f6a;}
-.cal-cell.festivo{background:#eceeeb;border-color:#d5dad3;}
-.cal-cell.finde.trab,.cal-cell.festivo.trab{background:linear-gradient(135deg,var(--greenbg) 55%,#e2e6e0);border-color:#b4d8bc;}
-.cal-cell.finde.vac,.cal-cell.festivo.vac{background:linear-gradient(135deg,var(--bluebg) 55%,#e2e6e0);}
+.cal-cell.finde.trab{background:linear-gradient(135deg,var(--greenbg) 55%,#e2e6e0);border-color:#b4d8bc;}
+.cal-cell.finde.vac{background:linear-gradient(135deg,var(--bluebg) 55%,#e2e6e0);}
 .cal-hrs{font-family:Arial,Helvetica,sans-serif;font-size:0.56rem;font-weight:700;color:var(--text2);margin-top:auto;}
 .cal-leyenda{display:flex;gap:0.75rem;justify-content:center;flex-wrap:wrap;margin-top:0.6rem;}
 .cal-leyenda span{display:flex;align-items:center;gap:0.25rem;font-size:0.6rem;color:var(--muted);font-weight:500;}

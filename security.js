@@ -25,7 +25,7 @@
           if(!t||!validTime(t.i)||!validTime(t.f)){rejected=true;return;}
           tramos.push({i:t.i,f:t.f});
         });
-        days[day]={tramos,vac:entry.vac===true,fest:entry.fest===true};
+        days[day]={tramos,vac:entry.vac===true,fest:entry.fest===true,nofest:entry.nofest===true};
       });
       result[month]=days;
     });
