@@ -4,9 +4,9 @@ window.VIGILANTE_AUTH_CONFIG = Object.freeze({
   captcha: Object.freeze({enabled:true,siteKey:'0x4AAAAAAE0rliZ9aRi-6KG2'}),
   url: 'https://qhqbrtxzbfokqdlhstuo.supabase.co',
   publishableKey: 'sb_publishable_JtRLC4nuT_2iwwWCwJiDEA_TaucuC2N',
-  // Return to the page that started the sign-in: the community or a guide.
+  // Return to the page that started the sign-in: a guide or the calculator.
   redirectTo: (location.origin === 'http://localhost:4173'
     ? 'http://localhost:4173' : 'https://calculadoravigilante.com') +
-    (['/comunidad.html','/convenio-2026.html','/derechos-vigilante.html','/guia-nomina-vigilante.html','/preguntas-frecuentes.html']
+    (['/convenio-2026.html','/derechos-vigilante.html','/guia-nomina-vigilante.html','/preguntas-frecuentes.html']
       .includes(location.pathname) ? location.pathname : '/')
 });

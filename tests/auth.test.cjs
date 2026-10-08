@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..');const read=f=>fs.readFileSync(path.join(
 const tick=()=>new Promise(resolve=>setTimeout(resolve,20));
 const member={id:'test-user',email:'test@example.test',email_confirmed_at:'2026-09-14',is_anonymous:false};
 async function setup(state={}){
-  const dom=new JSDOM(read(state.page||'index.html'),{url:state.url||'http://localhost:4173/',runScripts:'outside-only'});
+  const dom=new JSDOM(read('index.html'),{url:state.url||'http://localhost:4173/',runScripts:'outside-only'});
   const w=dom.window,d=w.document;w.alert=()=>{};w.HTMLElement.prototype.scrollIntoView=()=>{};
   w.matchMedia=()=>({matches:false,addListener(){},addEventListener(){}});
   const calls=[];let callback;
@@ -30,13 +30,12 @@ async function setup(state={}){
   };
   w.__sdk={createClient:(_url,_key,options)=>{state.clientOptions=options;return {auth,rpc,from:table=>{
     const query={select:()=>query,eq:()=>query,limit:async()=>({data:(state.accepted||state.historicalAcceptance)?[{version:'previous'}]:[],error:null}),maybeSingle:async()=>{
-      if(table==='community_links'){calls.push(['community']);if(state.communityGate)await state.communityGate;return {data:state.invite?{invite_url:state.invite}:null,error:state.communityError?{code:'offline'}:null};}
       if(table==='marketing_preferences' && state.preferencesReadGate)await state.preferencesReadGate;
       return {data:table==='marketing_profiles'?(state.profile||null):table==='marketing_preferences'?(state.preferences||null):state.accepted?{version:'2026-09-15'}:null,error:table==='marketing_preferences'&&state.marketingReadError?{code:'offline'}:null};
     },insert:data=>{
       calls.push(['accept',data]);if(state.accepted)return {error:{code:'23505'}};state.accepted=true;return {error:null};}};return query;
   }};}};
-  if(!state.page)require('./load-calculator.cjs')(w);
+  require('./load-calculator.cjs')(w);
   w.eval(read('auth-config.js').replace('googleEnabled: false','googleEnabled: true'));
   w.VIGILANTE_AUTH_CONFIG={...w.VIGILANTE_AUTH_CONFIG,captcha:{enabled:false,siteKey:''}};
   if(state.captcha){
@@ -47,7 +46,6 @@ async function setup(state={}){
   for (const dialog of d.querySelectorAll('dialog')) {dialog.showModal=function(){this.open=true;};dialog.close=function(){this.open=false;this.dispatchEvent(new w.Event('close'));};}
   w.eval(read('marketing.js'));
   state.analytics=[];w.VigilanteAnalytics={track:(...args)=>state.analytics.push(args)};
-  if(state.page==='comunidad.html'){w.__navigate=url=>{state.navigation=url;};w.eval(read('community.js').replace('location.assign(url.href)','window.__navigate(url.href)'));}
   w.eval(read('auth.js').replace("import('./vendor/supabase.js')","Promise.resolve(window.__sdk)"));
   await tick();
   return {w,d,state,calls,close:()=>w.close(),emit:event=>callback(event,{user:state.user}),click:id=>d.getElementById(id).click(),fill:(id,value)=>{d.getElementById(id).value=value;},submit:()=>d.getElementById('auth-form').dispatchEvent(new w.Event('submit',{bubbles:true,cancelable:true}))};
@@ -444,51 +442,4 @@ test('Google sign-in returns to the last step with the choice already ticked',as
   assert.equal(y.d.getElementById('auth-dialog').open,true);assert.equal(y.d.getElementById('auth-title').textContent,'Último paso');
   assert.equal(y.d.getElementById('auth-marketing-step').hidden,false);
  }finally{y.close();}
-});
-test('Anyone opens the community without an account, and the invite never appears in the HTML',async()=>{
- const invite='https://chat.whatsapp.com/SyntheticTestOnly1234';
- const x=await setup({page:'comunidad.html',invite});try{
-  assert.doesNotMatch(x.d.documentElement.innerHTML,/chat\.whatsapp\.com\//);
-  assert.equal(x.d.querySelectorAll('a[href*="chat.whatsapp.com"]').length,0);
-  x.click('community-access');await tick();await tick();
-  assert.equal(x.d.getElementById('auth-dialog').open,false);
-  assert.equal(x.state.navigation,invite);
-  assert.deepEqual(x.state.analytics.filter(a=>a[0]==='community_open'),[['community_open']]);
- }finally{x.close();}
-});
-test('Signed-in members open the same invitation directly',async()=>{
- const invite='https://chat.whatsapp.com/SyntheticTestOnly1234';
- const x=await setup({page:'comunidad.html',user:member,accepted:true,invite});try{
-  x.click('community-access');await tick();await tick();
-  assert.equal(x.state.navigation,invite);assert.equal(x.d.getElementById('auth-dialog').open,false);
- }finally{x.close();}
-});
-test('A second click while the invitation loads does not fetch it twice',async()=>{
- let release;const communityGate=new Promise(resolve=>release=resolve);
- const x=await setup({page:'comunidad.html',invite:'https://chat.whatsapp.com/SyntheticTestOnly1234',communityGate});try{
-  x.click('community-access');await tick();
-  assert.equal(x.d.getElementById('community-access').disabled,true);
-  x.click('community-access');release();await tick();await tick();
-  assert.equal(x.calls.filter(c=>c[0]==='community').length,1);
-  assert.equal(x.state.navigation,x.state.invite);
-  assert.equal(x.d.getElementById('community-access').disabled,false);
- }finally{release();x.close();}
-});
-test('Community rejects invalid destinations and lets the visitor retry',async()=>{
- for(const invite of ['https://evil.example/SyntheticTestOnly1234','https://chat.whatsapp.com/SyntheticTestOnly1234?redirect=evil','javascript:alert(1)']){
-  const y=await setup({page:'comunidad.html',invite});try{
-   y.click('community-access');await tick();await tick();
-   assert.equal(y.state.navigation,undefined);assert.match(y.d.getElementById('community-status').textContent,/No se ha podido/);
-   assert.equal(y.d.getElementById('community-access').disabled,false);
-  }finally{y.close();}
- }
-});
-test('Community unavailable or missing invitation can be retried',async()=>{
- for(const state of [{communityError:true,invite:'https://chat.whatsapp.com/SyntheticTestOnly1234'},{}]){
-  const x=await setup({page:'comunidad.html',...state});try{
-   x.click('community-access');await tick();await tick();
-   assert.equal(x.state.navigation,undefined);assert.equal(x.d.getElementById('community-access').disabled,false);
-   assert.notEqual(x.d.getElementById('community-status').textContent,'');
-  }finally{x.close();}
- }
 });

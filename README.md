@@ -67,5 +67,5 @@ Referencias: [Favicon en Google Search](https://developers.google.com/search/doc
 
 ## Comunidad y buscadores
 
-- La comunidad de WhatsApp es abierta: `community.js` pide la invitación a `community_links` al pulsar el botón, sin cuenta, y solo abre enlaces `https://chat.whatsapp.com/…`. La invitación nunca está en el HTML ni en Git (`admin/community-access.sql`, comprobado por `tests/community-rls.sql`). Para frenar el spam, conviene activar en el grupo de WhatsApp la aprobación de nuevos participantes.
+- La comunidad de WhatsApp es abierta: `community.js` pide la invitación a `community_links` al pulsar el botón, con la clave publicable de `auth-config.js` y sin cuenta, y solo abre enlaces `https://chat.whatsapp.com/…`. La página de la comunidad no carga el sistema de cuentas ni muestra el bloque de registro. La invitación nunca está en el HTML ni en Git (`admin/community-access.sql`, comprobado por `tests/community-rls.sql`). Para frenar el spam, conviene activar en el grupo de WhatsApp la aprobación de nuevos participantes.
 - `sitemap.xml` incluye solo las páginas indexables, con la fecha real del último cambio. Las páginas «Próximamente» (formación, material y sindicatos) llevan `noindex, follow` hasta que tengan contenido; al publicarlo, quitar esa etiqueta y añadirlas al sitemap. Condiciones y privacidad no se indexan.
