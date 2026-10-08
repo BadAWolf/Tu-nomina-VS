@@ -16,7 +16,7 @@ function build(){
   // Script execution is limited to these exact files and their dependency tree.
   // AdSense needs dynamic cross-origin resources; legal pages do not load it.
   const resources=page==='index.html'?"default-src 'self'; connect-src 'self' https:; img-src 'self' https: data:; style-src 'self' 'unsafe-inline' https:; font-src 'self' https: data:; frame-src https:; ":'';
-  // Community has no advertising: preserve the narrower account-only policy.
+  // Community has no advertising or accounts: same policy as the other content pages.
   const policy=page==='comunidad.html'?JSON.parse(fs.readFileSync(path.join(root,'security-policy.json'),'utf8')).csp:resources+"script-src "+[...new Set(hashes)].join(' ')+" 'strict-dynamic' 'unsafe-eval'; script-src-attr 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; upgrade-insecure-requests";
   html=html.replace(/(<meta http-equiv="Content-Security-Policy" content=")[^"]*(">)/,(_,a,b)=>a+policy+b);
   fs.writeFileSync(file,html);

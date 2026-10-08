@@ -63,7 +63,6 @@
       : recovery ? 'Completa el cambio de contraseña para continuar.' : 'Acepta las condiciones para activar tu cuenta. También puedes cerrar la sesión.';
     if ($('account-email')) $('account-email').textContent = user ? user.email : '';
     window.VigilanteMarketing?.setUser(recovery ? null : user, member);
-    window.VigilanteCommunity?.setUser(recovery ? null : user, member);
     window.actualizarAccesoVacaciones?.(member);
     ['Nomina','Finiquito','Baja'].forEach(kind => {
       if ($('btnPdf'+kind)) $('btnPdf'+kind).textContent = member ? 'Compartir / Descargar PDF' : 'Regístrate gratis para descargar el PDF';
@@ -296,7 +295,6 @@
       // Persist across visits and refresh short-lived access tokens. Never sign out on tab close.
       client=sdk.createClient(config.url,config.publishableKey,{global:{fetch:authFetch},auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
       window.VigilanteMarketing?.init(client, verifiedUser);
-      window.VigilanteCommunity?.init(client, verifiedUser);
       client.auth.onAuthStateChange((event,session)=>{
         invalidate();
         if(event==='PASSWORD_RECOVERY'){accepted=false;recovery=true;setTimeout(()=>open('recovery'),0);return;}
